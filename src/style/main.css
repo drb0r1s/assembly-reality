@@ -44,6 +44,17 @@ body {
   background-color: black;
 }
 
+main {
+  height: 100dvh;
+  width: 100vw;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 header {
   height: 38px;
   width: 100%;

@@ -10,4 +10,12 @@ body {
     background-color: black;
 }
 
+main {
+    height: 100dvh;
+    width: 100vw;
+    background-color: black;
+    @include center(column);
+    justify-content: flex-start
+}
+
 @import "./components/main";
