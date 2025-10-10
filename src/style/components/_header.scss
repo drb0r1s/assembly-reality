@@ -1,0 +1,62 @@
+header {
+    height: 38px;
+    width: 100%;
+    @include center;
+    justify-content: space-between;
+    background-color: #0F0F0F;
+    padding: 0 12px;
+
+    .header-left-group {
+        @include center;
+        gap: 7px;
+
+        .header-left-group-divider {
+            height: 19px;
+            width: 1px;
+            background-color: rgba($color: #F4F4F4, $alpha: .3);
+        }
+        
+        .header-buttons {
+            @include center;
+            gap: 3px;
+
+            button {
+                @include center;
+                gap: 4px;
+                background-color: transparent;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                padding: 5px;
+                transition: 300ms;
+
+                &:hover {
+                    background-color: #405a85;
+                }
+
+                p {
+                    color: #F4F4F4;
+                    font-size: 14px;
+                    font-family: Roboto-Regular;
+                }
+            }
+        }
+
+        .header-regular-buttons {
+            gap: 7px;
+            
+            button img {
+                height: 22px;
+                width: 22px;
+                object-fit: contain;
+            }
+        }
+    }
+
+    .header-title {
+        color: white;
+        font-size: 16px;
+        font-family: Roboto-Medium;
+        font-weight: normal;
+    }
+}
