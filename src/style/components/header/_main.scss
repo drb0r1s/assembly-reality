@@ -6,6 +6,8 @@ header {
     background-color: #0F0F0F;
     padding: 0 12px;
 
+    @import "./header-dropdown";
+
     .header-left-group {
         @include center;
         gap: 7px;
@@ -20,7 +22,8 @@ header {
             @include center;
             gap: 3px;
 
-            button {
+            .header-regular-button,
+            .header-dropdown-button {
                 @include center;
                 gap: 4px;
                 background-color: transparent;
@@ -42,10 +45,14 @@ header {
             }
         }
 
+        .header-dropdown-buttons .header-dropdown-button {
+            position: relative;
+        }
+
         .header-regular-buttons {
             gap: 7px;
             
-            button img {
+            .header-regular-button img {
                 height: 22px;
                 width: 22px;
                 object-fit: contain;

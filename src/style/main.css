@@ -55,6 +55,43 @@ header {
   background-color: #0F0F0F;
   padding: 0 12px;
 }
+header .header-dropdown {
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  background-color: #0F0F0F;
+  border-radius: 5px;
+  opacity: 0;
+  padding: 7px;
+  position: absolute;
+  left: 0;
+  top: 48px;
+  transition: 300ms;
+}
+header .header-dropdown button {
+  width: 100%;
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: Roboto-Regular;
+  text-align: left !important;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+  transition: 300ms;
+}
+header .header-dropdown button:hover {
+  background-color: #405a85;
+}
+header .active-dropdown {
+  opacity: 1;
+  top: 38px;
+}
 header .header-left-group {
   display: flex;
   align-items: center;
@@ -74,7 +111,8 @@ header .header-left-group .header-buttons {
   flex-direction: row;
   gap: 3px;
 }
-header .header-left-group .header-buttons button {
+header .header-left-group .header-buttons .header-regular-button,
+header .header-left-group .header-buttons .header-dropdown-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,18 +125,23 @@ header .header-left-group .header-buttons button {
   padding: 5px;
   transition: 300ms;
 }
-header .header-left-group .header-buttons button:hover {
+header .header-left-group .header-buttons .header-regular-button:hover,
+header .header-left-group .header-buttons .header-dropdown-button:hover {
   background-color: #405a85;
 }
-header .header-left-group .header-buttons button p {
+header .header-left-group .header-buttons .header-regular-button p,
+header .header-left-group .header-buttons .header-dropdown-button p {
   color: #F4F4F4;
   font-size: 14px;
   font-family: Roboto-Regular;
 }
+header .header-left-group .header-dropdown-buttons .header-dropdown-button {
+  position: relative;
+}
 header .header-left-group .header-regular-buttons {
   gap: 7px;
 }
-header .header-left-group .header-regular-buttons button img {
+header .header-left-group .header-regular-buttons .header-regular-button img {
   height: 22px;
   width: 22px;
   -o-object-fit: contain;
