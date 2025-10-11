@@ -470,8 +470,72 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 10px;
   position: absolute;
   bottom: 0;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 18px;
+  padding: 0 12px;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register strong {
+  width: 26px;
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: Roboto-Medium;
+  font-weight: normal;
+  padding-right: 8px;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register p {
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: SourceCodePro-Regular;
+  background-color: #0F0F0F;
+  border-left: 2px solid #2F3336;
+  padding: 0 4px;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register .cpu-registers-row-sr-values {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  border-left: 2px solid #2F3336;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register .cpu-registers-row-sr-values .cpu-registers-row-sr-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register .cpu-registers-row-sr-values .cpu-registers-row-sr-value p {
+  font-size: 11px;
+  border-left: none;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-ip-register p {
+  background-color: #2F608B;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-sp-register p {
+  background-color: #BB3071;
 }
 
 .mini-header {
