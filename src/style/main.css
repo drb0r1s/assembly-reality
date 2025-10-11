@@ -34,6 +34,28 @@
   font-family: Roboto-Thin;
   src: url("../fonts/Roboto-Thin.ttf");
 }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 100, 100, 0.5);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 100, 100, 0.8);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 100, 100, 0.5) transparent;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -42,6 +64,7 @@
 
 body {
   background-color: black;
+  overflow: hidden;
 }
 
 main {
@@ -53,6 +76,16 @@ main {
   justify-content: center;
   flex-direction: column;
   justify-content: flex-start;
+  overflow: hidden;
+}
+main .display {
+  height: calc(100dvh - 38px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
 header {
@@ -97,7 +130,7 @@ header .header-dropdown button {
   transition: 300ms;
 }
 header .header-dropdown button:hover {
-  background-color: #405a85;
+  background-color: #405A85;
 }
 header .active-dropdown {
   opacity: 1;
@@ -138,7 +171,7 @@ header .header-left-group .header-buttons .header-dropdown-button {
 }
 header .header-left-group .header-buttons .header-regular-button:hover,
 header .header-left-group .header-buttons .header-dropdown-button:hover {
-  background-color: #405a85;
+  background-color: #405A85;
 }
 header .header-left-group .header-buttons .header-regular-button p,
 header .header-left-group .header-buttons .header-dropdown-button p {
@@ -163,4 +196,130 @@ header .header-title {
   font-size: 16px;
   font-family: Roboto-Medium;
   font-weight: normal;
+}
+
+.editor {
+  width: 40%;
+  min-width: 670px;
+}
+
+.memory {
+  height: calc(100dvh - 38px);
+  width: 20%;
+  min-width: 430px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.memory .memory-header {
+  height: 27px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #0F0F0F;
+  padding: 0 12px;
+}
+.memory .memory-header strong {
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: Roboto-SemiBold;
+  font-weight: normal;
+}
+.memory .memory-header button {
+  color: #F4F4F4;
+  font-size: 12px;
+  font-family: Roboto-Regular;
+  background-color: transparent;
+  border: 1px solid #F4F4F4;
+  border-radius: 5px;
+  padding: 3px 12px;
+  cursor: pointer;
+  transition: 300ms;
+}
+.memory .memory-header button:hover {
+  background-color: #405A85;
+  border: 1px solid transparent;
+}
+.memory .memory-map {
+  height: calc(100dvh - 38px - 27px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.memory .memory-map .memory-map-columns {
+  height: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  border-top: 1px solid #2F3336;
+  border-bottom: 1px solid #2F3336;
+}
+.memory .memory-map .memory-map-columns p {
+  height: 20px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  color: #D8D8D8;
+  font-size: 13px;
+  font-family: Roboto-Medium;
+  border-left: 1px solid #2F3336;
+  padding: 5px;
+}
+.memory .memory-map .memory-map-columns p:first-child {
+  width: 28px;
+  border-left: none;
+}
+.memory .memory-map .memory-map-columns p:last-child {
+  border-right: 1px solid #2F3336;
+}
+.memory .memory-map .memory-map-content {
+  height: calc(100dvh - 38px - 27px - 20px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.memory .memory-map .memory-map-content .memory-map-rows {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.memory .memory-map .memory-map-content .memory-map-rows p {
+  height: 20px;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  color: #D8D8D8;
+  font-size: 13px;
+  font-family: Roboto-Regular;
+  border-bottom: 1px solid #2F3336;
+  padding: 5px;
+}
+.memory .memory-map .memory-map-content .memory-map-rows p:last-child {
+  border-bottom: none;
+}
+
+.right-group {
+  width: 20%;
+  min-width: 430px;
 }/*# sourceMappingURL=main.css.map */
