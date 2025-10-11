@@ -1,13 +1,19 @@
-import RightGroupIODisplay from "./RightGroupIODisplay";
+import MiniHeader from "../MiniHeader";
+import IODevices from "./IODevices";
+import CPURegisters from "./CPURegisters";
 
 const RightGroup = () => {
     return(
         <div className="right-group">
-            <div className="right-group-header">
-                <strong>Input / Output Devices</strong>
-            </div>
+            <MiniHeader
+                title="Input / Output Devices"
+                style={{ borderTop: "none" }}
+            />
 
-            <RightGroupIODisplay />
+            <div className="right-group-content">
+                <IODevices />
+                <CPURegisters />
+            </div>
         </div>
     );
 }
