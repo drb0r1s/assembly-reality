@@ -34,6 +34,10 @@
   font-family: Roboto-Thin;
   src: url("../fonts/Roboto-Thin.ttf");
 }
+@font-face {
+  font-family: SourceCodePro-Regular;
+  src: url("../fonts/SourceCodePro-Regular.ttf");
+}
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -212,6 +216,8 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   justify-content: flex-start;
+  border-left: 1px solid #2F3336;
+  border-right: 1px solid #2F3336;
 }
 .memory .memory-header {
   height: 27px;
@@ -312,11 +318,39 @@ header .header-title {
   color: #D8D8D8;
   font-size: 13px;
   font-family: Roboto-Regular;
-  border-bottom: 1px solid #2F3336;
   padding: 5px;
 }
-.memory .memory-map .memory-map-content .memory-map-rows p:last-child {
-  border-bottom: none;
+.memory .memory-map .memory-map-content .memory-map-matrix {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.memory .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-row {
+  height: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.memory .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-row .memory-map-matrix-column {
+  height: 20px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  color: #D4D4D4;
+  font-size: 14px;
+  font-family: SourceCodePro-Regular;
+  border-left: 1px solid #2F3336;
+  padding: 5px;
+}
+.memory .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-row .memory-map-matrix-column:last-child {
+  border-right: 1px solid #2F3336;
 }
 
 .right-group {

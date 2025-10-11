@@ -4,6 +4,8 @@
     min-width: 430px;
     @include center(column);
     justify-content: flex-start;
+    border-left: 1px solid #2F3336;
+    border-right: 1px solid #2F3336;
 
     .memory-header {
         height: 27px;
@@ -91,11 +93,34 @@
                     color: #D8D8D8;
                     font-size: 13px;
                     font-family: Roboto-Regular;
-                    border-bottom: 1px solid #2F3336;
                     padding: 5px;
+                }
+            }
 
-                    &:last-child {
-                        border-bottom: none;
+            .memory-map-matrix {
+                width: 100%;
+                @include center(column);
+                
+                .memory-map-matrix-row {
+                    height: 20px;
+                    width: 100%;
+                    @include center;
+                    justify-content: flex-start;
+                    
+
+                    .memory-map-matrix-column {
+                        height: 20px;
+                        width: 24px;
+                        @include center;
+                        color: #D4D4D4;
+                        font-size: 14px;
+                        font-family: SourceCodePro-Regular;
+                        border-left: 1px solid #2F3336;
+                        padding: 5px;
+
+                        &:last-child {
+                            border-right: 1px solid #2F3336;
+                        }
                     }
                 }
             }

@@ -12,6 +12,8 @@ const Memory = () => {
         return hexNumber;
     });
 
+    const memoryMapMatrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"));
+
     return(
         <div className="memory">
             <div className="memory-header">
@@ -31,6 +33,22 @@ const Memory = () => {
                     <div className="memory-map-rows">
                         {memoryMapRows.map(row => {
                             return <p key={row}>{row}</p>;
+                        })}
+                    </div>
+
+                    <div className="memory-map-matrix">
+                        {memoryMapMatrix.map((row, rowIndex) => {
+                            return <div
+                                key={`row-${rowIndex}`}
+                                className="memory-map-matrix-row"
+                            >
+                                {row.map((column, columnIndex) => {
+                                    return <p
+                                        key={`column-${columnIndex}`}
+                                        className="memory-map-matrix-column"
+                                    >{column}</p>;
+                                })}
+                            </div>;
                         })}
                     </div>
                 </div>
