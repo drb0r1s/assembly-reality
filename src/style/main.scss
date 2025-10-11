@@ -8,6 +8,7 @@
 
 body {
     background-color: black;
+    overflow: hidden;
 }
 
 main {
@@ -15,7 +16,15 @@ main {
     width: 100vw;
     background-color: black;
     @include center(column);
-    justify-content: flex-start
+    justify-content: flex-start;
+    overflow: hidden;
+
+    .display {
+        height: calc(100dvh - 38px); // 38px is header height
+        width: 100%;
+        @include center;
+        align-items: flex-start;
+    }
 }
 
 @import "./components/main";
