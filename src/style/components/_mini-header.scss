@@ -1,0 +1,18 @@
+.mini-header {
+    height: 27px;
+    width: 100%;
+    @include center;
+    flex-shrink: 0;
+    justify-content: space-between;
+    background-color: #0F0F0F;
+    border-top: 1px solid #2F3336;
+    border-bottom: 1px solid #2F3336;
+    padding: 0 12px;
+
+    strong {
+        color: #F4F4F4;
+        font-size: 14px;
+        font-family: Roboto-SemiBold;
+        font-weight: normal;
+    }
+}
