@@ -464,12 +464,13 @@ header .header-title {
   border: 1px solid #405A85;
 }
 .right-group .right-group-content .cpu-registers {
-  height: 500px;
+  height: 300px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  justify-content: flex-start;
   gap: 10px;
   position: absolute;
   bottom: 0;
@@ -536,6 +537,66 @@ header .header-title {
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-sp-register p {
   background-color: #BB3071;
+}
+.right-group .right-group-content .io-registers {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: absolute;
+  bottom: 0;
+}
+.right-group .right-group-content .io-registers .io-registers-map {
+  height: calc(100% - 27px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  border-bottom: 1px solid #2F3336;
+}
+.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row:last-child {
+  border-bottom: none;
+}
+.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row p {
+  height: 28px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: SourceCodePro-Regular;
+  border-right: 1px solid #2F3336;
+  padding-left: 10px;
+}
+.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row p:last-child {
+  border-right: none;
+}
+.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-header {
+  background-color: #0A0A0A;
+  position: sticky;
+  top: 0;
+}
+.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-header p {
+  justify-content: center;
+  font-family: Roboto-Medium;
+  padding-left: none;
 }
 
 .mini-header {

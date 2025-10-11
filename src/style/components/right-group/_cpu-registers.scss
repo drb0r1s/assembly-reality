@@ -1,7 +1,8 @@
 .cpu-registers {
-    height: 500px;
+    height: 300px;
     width: 100%;
     @include center(column);
+    justify-content: flex-start;
     gap: 10px;
     position: absolute;
     bottom: 0;

@@ -1,0 +1,55 @@
+.io-registers {
+    height: 200px;
+    width: 100%;
+    @include center(column);
+    justify-content: flex-start;
+    position: absolute;
+    bottom: 0;
+
+    .io-registers-map {
+        height: calc(100% - 27px); // 27px (MiniHeader)
+        width: 100%;
+        @include center(column);
+        justify-content: flex-start;
+        overflow-x: hidden;
+        overflow-y: auto;
+        
+        .io-registers-map-row {
+            width: 100%;
+            @include center;
+            border-bottom: 1px solid #2F3336;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            p {
+                height: 28px;
+                width: 100%;
+                @include center;
+                justify-content: flex-start;
+                color: #F4F4F4;
+                font-size: 14px;
+                font-family: SourceCodePro-Regular;
+                border-right: 1px solid #2F3336;
+                padding-left: 10px;
+
+                &:last-child {
+                    border-right: none;
+                }
+            }
+        }
+        
+        .io-registers-map-header {
+            background-color: #0A0A0A;
+            position: sticky;
+            top: 0;
+
+            p {
+                justify-content: center;
+                font-family: Roboto-Medium;
+                padding-left: none;
+            }
+        }
+    }
+}
