@@ -1,0 +1,7 @@
+.cpu-registers {
+    height: 500px;
+    width: 100%;
+    @include center(column);
+    position: absolute;
+    bottom: 0;
+}
