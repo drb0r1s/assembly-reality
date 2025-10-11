@@ -2,7 +2,7 @@ const HeaderDropdown = ({ type, ref }) => {
     const dropdownButtons = getDropdownButtons();
 
     function getDropdownButtons() {
-        if(type === "view") return ["Memory", "I/O Registers"];
+        if(type === "view") return ["Memory", "I/O Devices", "CPU Registers", "I/O Registers"];
         else return ["4Hz", "1kHz", "5kHz", "10kHz", "20kHz", "50kHz"];
     }
     
