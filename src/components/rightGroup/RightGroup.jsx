@@ -1,4 +1,4 @@
-import RightGroupDisplay from "./RightGroupDisplay";
+import RightGroupIODisplay from "./RightGroupIODisplay";
 
 const RightGroup = () => {
     return(
@@ -7,7 +7,7 @@ const RightGroup = () => {
                 <strong>Input / Output Devices</strong>
             </div>
 
-            <RightGroupDisplay />
+            <RightGroupIODisplay />
         </div>
     );
 }

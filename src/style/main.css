@@ -379,7 +379,7 @@ header .header-title {
   font-family: Roboto-SemiBold;
   font-weight: normal;
 }
-.right-group .right-group-display {
+.right-group .right-group-io-devices {
   width: 100%;
   display: flex;
   align-items: center;
@@ -388,20 +388,20 @@ header .header-title {
   gap: 10px;
   padding-top: 10px;
 }
-.right-group .right-group-display canvas {
+.right-group .right-group-io-devices canvas {
   height: 256px;
   width: 256px;
   background-color: black;
   border: 1px solid #2F3336;
 }
-.right-group .right-group-display .right-group-mini-display {
+.right-group .right-group-io-devices .right-group-io-devices-mini-display {
   width: 256px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-.right-group .right-group-display .right-group-mini-display .right-group-mini-display-row {
+.right-group .right-group-io-devices .right-group-io-devices-mini-display .right-group-io-devices-mini-display-row {
   height: 20px;
   width: 100%;
   display: flex;
@@ -410,16 +410,16 @@ header .header-title {
   flex-direction: row;
   justify-content: space-between;
 }
-.right-group .right-group-display .right-group-mini-display .right-group-mini-display-row:first-child {
+.right-group .right-group-io-devices .right-group-io-devices-mini-display .right-group-io-devices-mini-display-row:first-child {
   border-bottom: 4px solid black;
 }
-.right-group .right-group-display .right-group-mini-display .right-group-mini-display-row .right-group-mini-display-column {
+.right-group .right-group-io-devices .right-group-io-devices-mini-display .right-group-io-devices-mini-display-row .right-group-io-devices-mini-display-column {
   height: 20px;
   width: 16px;
   background-color: #2F3336;
   border-left: 2px solid black;
 }
-.right-group .right-group-display .right-group-display-keyboard {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard {
   width: 256px;
   display: flex;
   align-items: center;
@@ -434,40 +434,40 @@ header .header-title {
   cursor: pointer;
   transition: 300ms;
 }
-.right-group .right-group-display .right-group-display-keyboard:hover {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard:hover {
   border: 1px solid #405A85;
 }
-.right-group .right-group-display .right-group-display-keyboard .right-group-display-keyboard-left-group {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard .right-group-io-devices-keyboard-left-group {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   gap: 8px;
 }
-.right-group .right-group-display .right-group-display-keyboard .right-group-display-keyboard-left-group .right-group-display-keyboard-image-holder {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard .right-group-io-devices-keyboard-left-group .right-group-io-devices-keyboard-image-holder {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   position: relative;
 }
-.right-group .right-group-display .right-group-display-keyboard .right-group-display-keyboard-left-group .right-group-display-keyboard-image-holder img {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard .right-group-io-devices-keyboard-left-group .right-group-io-devices-keyboard-image-holder img {
   transition: 300ms;
 }
-.right-group .right-group-display .right-group-display-keyboard .right-group-display-keyboard-left-group .right-group-display-keyboard-image-holder img:last-child {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard .right-group-io-devices-keyboard-left-group .right-group-io-devices-keyboard-image-holder img:last-child {
   opacity: 0;
   position: absolute;
   left: 0;
 }
-.right-group .right-group-display .right-group-display-keyboard p {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard p {
   color: #F4F4F4;
   font-size: 14px;
   font-family: SourceCodePro-Regular;
 }
-.right-group .right-group-display .right-group-display-keyboard .right-group-display-keyboard-key {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard .right-group-io-devices-keyboard-key {
   opacity: 0;
   transition: 300ms;
 }
-.right-group .right-group-display .right-group-display-keyboard-active {
+.right-group .right-group-io-devices .right-group-io-devices-keyboard-active {
   border: 1px solid #405A85;
 }/*# sourceMappingURL=main.css.map */

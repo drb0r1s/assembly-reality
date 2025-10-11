@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { images } from "../../data/images";
 
-const RightGroupDisplay = () => {
+const RightGroupIODevices = () => {
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
     
     const miniDisplayMatrix = Array.from({ length: 2 }, () => Array.from({ length: 16 }, () => ""));
@@ -27,19 +27,19 @@ const RightGroupDisplay = () => {
     }, [keyboard.isActive]);
 
     return(
-        <div className="right-group-display">
+        <div className="right-group-io-devices">
             <canvas></canvas>
 
-            <div className="right-group-mini-display">
+            <div className="right-group-io-devices-mini-display">
                 {miniDisplayMatrix.map((row, rowIndex) => {
                     return <div
                         key={`row-${rowIndex}`}
-                        className="right-group-mini-display-row"
+                        className="right-group-io-devices-mini-display-row"
                     >
                         {row.map((column, columnIndex) => {
                             return <p
                                 key={`column-${columnIndex}`}
-                                className="right-group-mini-display-column"
+                                className="right-group-io-devices-mini-display-column"
                             >{column}</p>;
                         })}
                     </div>;
@@ -47,11 +47,11 @@ const RightGroupDisplay = () => {
             </div>
 
             <button
-                className={`right-group-display-keyboard ${keyboard.isActive ? "right-group-display-keyboard-active" : ""}`}
+                className={`right-group-io-devices-keyboard ${keyboard.isActive ? "right-group-io-devices-keyboard-active" : ""}`}
                 onClick={() => setKeyboard(prevKeyboard => { return {...prevKeyboard, isActive: !prevKeyboard.isActive} })}
             >
-                <div className="right-group-display-keyboard-left-group">
-                    <div className="right-group-display-keyboard-image-holder">
+                <div className="right-group-io-devices-keyboard-left-group">
+                    <div className="right-group-io-devices-keyboard-image-holder">
                         <img
                             src={images.keyboardIcon}
                             alt="KEYBOARD"
@@ -69,7 +69,7 @@ const RightGroupDisplay = () => {
                 </div>
 
                 <p
-                    className="right-group-display-keyboard-key"
+                    className="right-group-io-devices-keyboard-key"
                     style={keyboard.activeCharacter ? { opacity: "1" } : {}}
                 >{keyboard.activeCharacter}</p>
             </button>
@@ -77,4 +77,4 @@ const RightGroupDisplay = () => {
     );
 }
 
-export default RightGroupDisplay;
+export default RightGroupIODevices;
