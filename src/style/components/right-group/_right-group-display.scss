@@ -1,0 +1,88 @@
+.right-group-display {
+    width: 100%;
+    @include center(column);
+    gap: 10px;
+    padding-top: 10px;
+
+    canvas {
+        height: 256px;
+        width: 256px;
+        background-color: black;
+        border: 1px solid #2F3336;
+    }
+
+    .right-group-mini-display {
+        width: 256px;
+        @include center(column);
+
+        .right-group-mini-display-row {
+            height: 20px;
+            width: 100%;
+            @include center;
+            justify-content: space-between;
+            
+            &:first-child {
+                border-bottom: 4px solid black;
+            }
+
+            .right-group-mini-display-column {
+                height: 20px;
+                width: 16px;
+                background-color: #2F3336;
+                border-left: 2px solid black;
+            }
+        }
+    }
+
+    .right-group-display-keyboard {
+        width: 256px;
+        @include center;
+        justify-content: space-between;
+        background-color: transparent;
+        border: 1px solid #2F3336;
+        border-radius: 5px;
+        outline: none;
+        padding: 5px 12px;
+        cursor: pointer;
+        transition: 300ms;
+
+        &:hover {
+            border: 1px solid $blue;
+        }
+
+        .right-group-display-keyboard-left-group {
+            @include center;
+            gap: 8px;
+            
+            .right-group-display-keyboard-image-holder {
+                @include center;
+                position: relative;
+
+                img {
+                    transition: 300ms;
+
+                    &:last-child {
+                        opacity: 0;
+                        position: absolute;
+                        left: 0;
+                    }
+                }
+            }
+        }
+
+        p {
+            color: #F4F4F4;
+            font-size: 14px;
+            font-family: SourceCodePro-Regular;
+        }
+
+        .right-group-display-keyboard-key {
+            opacity: 0;
+            transition: 300ms;
+        }
+    }
+
+    .right-group-display-keyboard-active {
+        border: 1px solid $blue;
+    }
+}
