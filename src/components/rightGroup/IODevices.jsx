@@ -28,7 +28,10 @@ const IODevices = () => {
 
     return(
         <div className="io-devices">
-            <canvas></canvas>
+            <div className="io-devices-canvas-holder">
+                <canvas></canvas>
+                <strong>Assembly Simulator</strong>
+            </div>
 
             <div className="io-devices-mini-display">
                 {miniDisplayMatrix.map((row, rowIndex) => {

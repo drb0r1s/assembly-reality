@@ -6,8 +6,9 @@ import stepIcon from "../images/step-icon.svg";
 import resetIcon from "../images/reset-icon.svg";
 import keyboardIcon from "../images/keyboard-icon.svg";
 import keyboardBlueIcon from "../images/keyboard-blue-icon.svg";
+import checkIcon from "../images/check-icon.svg";
 
 export const images = {
     // GENERAL
-    arrowDownIcon, assembleIcon, runIcon, stepIcon, resetIcon, keyboardIcon, keyboardBlueIcon
+    arrowDownIcon, assembleIcon, runIcon, stepIcon, resetIcon, keyboardIcon, keyboardBlueIcon, checkIcon
 };
