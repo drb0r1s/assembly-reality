@@ -1,4 +1,25 @@
 .right-group {
-    width: 20%;
-    min-width: 430px;
+    height: calc(100dvh - 38px); // 38px is height of header
+    width: 430px;
+    @include center(column);
+    justify-content: flex-start;
+
+    .right-group-header {
+        height: 27px;
+        width: 100%;
+        @include center;
+        justify-content: space-between;
+        background-color: #0F0F0F;
+        border-bottom: 1px solid #2F3336;
+        padding: 0 12px;
+
+        strong {
+            color: #F4F4F4;
+            font-size: 14px;
+            font-family: Roboto-SemiBold;
+            font-weight: normal;
+        }
+    }
+
+    @import "./right-group-display";
 }
