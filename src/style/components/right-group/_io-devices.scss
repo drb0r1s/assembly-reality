@@ -1,0 +1,88 @@
+.io-devices {
+    width: 100%;
+    @include center(column);
+    gap: 10px;
+    padding-top: 10px;
+
+    canvas {
+        height: 256px;
+        width: 256px;
+        background-color: black;
+        border: 1px solid #2F3336;
+    }
+
+    .io-devices-mini-display {
+        width: 256px;
+        @include center(column);
+
+        .io-devices-mini-display-row {
+            height: 20px;
+            width: 100%;
+            @include center;
+            justify-content: space-between;
+            
+            &:first-child {
+                border-bottom: 4px solid black;
+            }
+
+            .io-devices-mini-display-column {
+                height: 20px;
+                width: 16px;
+                background-color: #2F3336;
+                border-left: 2px solid black;
+            }
+        }
+    }
+
+    .io-devices-keyboard {
+        width: 256px;
+        @include center;
+        justify-content: space-between;
+        background-color: transparent;
+        border: 1px solid #2F3336;
+        border-radius: 5px;
+        outline: none;
+        padding: 5px 12px;
+        cursor: pointer;
+        transition: 300ms;
+
+        &:hover {
+            border: 1px solid $blue;
+        }
+
+        .io-devices-keyboard-left-group {
+            @include center;
+            gap: 8px;
+            
+            .io-devices-keyboard-image-holder {
+                @include center;
+                position: relative;
+
+                img {
+                    transition: 300ms;
+
+                    &:last-child {
+                        opacity: 0;
+                        position: absolute;
+                        left: 0;
+                    }
+                }
+            }
+        }
+
+        p {
+            color: #F4F4F4;
+            font-size: 14px;
+            font-family: SourceCodePro-Regular;
+        }
+
+        .io-devices-keyboard-key {
+            opacity: 0;
+            transition: 300ms;
+        }
+    }
+
+    .io-devices-keyboard-active {
+        border: 1px solid $blue;
+    }
+}
