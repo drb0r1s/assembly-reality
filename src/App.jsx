@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import Header from "./components/header/Header";
 import Editor from "./components/Editor";
-import Memory from "./components/Memory";
+import Memory from "./components/memory/Memory";
 import RightGroup from "./components/rightGroup/RightGroup";
 
 const App = () => {
