@@ -398,6 +398,26 @@ header .header-title {
   justify-content: flex-start;
   position: relative;
 }
+.right-group .right-group-content .signature {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+}
+.right-group .right-group-content .signature strong {
+  color: #2F3336;
+  font-size: 24px;
+  font-family: SourceCodePro-Regular;
+  font-weight: normal;
+}
+.right-group .right-group-content .signature p {
+  color: #2F3336;
+  font-size: 14px;
+  font-family: SourceCodePro-Regular;
+}
 .right-group .right-group-content .io-devices {
   height: 100%;
   width: 100%;
@@ -407,6 +427,7 @@ header .header-title {
   flex-direction: column;
   justify-content: flex-start;
   gap: 10px;
+  background-color: black;
   position: absolute;
   bottom: 0;
 }

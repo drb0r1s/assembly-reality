@@ -1,0 +1,19 @@
+.signature {
+    height: 100%;
+    width: 100%;
+    @include center(column);
+    gap: 7px;
+
+    strong {
+        color: #2F3336;
+        font-size: 24px;
+        font-family: SourceCodePro-Regular;
+        font-weight: normal;
+    }
+
+    p {
+        color: #2F3336;
+        font-size: 14px;
+        font-family: SourceCodePro-Regular;
+    }
+}
