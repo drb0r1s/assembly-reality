@@ -399,12 +399,15 @@ header .header-title {
   position: relative;
 }
 .right-group .right-group-content .io-devices {
+  height: 390px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .right-group .right-group-content .io-devices .io-devices-canvas-holder {
   display: flex;
@@ -513,6 +516,7 @@ header .header-title {
   flex-direction: column;
   justify-content: flex-start;
   gap: 10px;
+  background-color: black;
   position: absolute;
   bottom: 0;
 }
@@ -587,6 +591,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   justify-content: flex-start;
+  background-color: black;
   position: absolute;
   bottom: 0;
 }

@@ -1,8 +1,12 @@
 import { useRef } from "react";
 import MiniHeader from "../MiniHeader";
+import { useExpand } from "../../hooks/useExpand";
 import { registers } from "../../data/IORegisters";
 
 const IORegisters = () => {
+    const headerRef = useRef(null);
+    const ioRegistersRef = useRef(null);
+    
     const registersValueRef = useRef({
         "0000": "0000",
         "0001": "0000",
@@ -16,12 +20,15 @@ const IORegisters = () => {
         "0009": "0000",
         "000A": "0000"
     });
+
+    useExpand({ headerRef, elementRef: ioRegistersRef });
     
     return(
-        <div className="io-registers">
+        <div className="io-registers" ref={ioRegistersRef}>
             <MiniHeader
                 title="Input / Output Registers"
                 style={{ cursor: "ns-resize" }}
+                ref={headerRef}
             />
 
             <div className="io-registers-map">

@@ -1,7 +1,10 @@
 .io-devices {
+    height: 390px;
     width: 100%;
     @include center(column);
     gap: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
 
     .io-devices-canvas-holder {
         @include center;
