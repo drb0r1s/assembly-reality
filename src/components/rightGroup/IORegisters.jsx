@@ -3,9 +3,8 @@ import MiniHeader from "../MiniHeader";
 import { useExpand } from "../../hooks/useExpand";
 import { registers } from "../../data/IORegisters";
 
-const IORegisters = () => {
+const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const headerRef = useRef(null);
-    const ioRegistersRef = useRef(null);
     
     const registersValueRef = useRef({
         "0000": "0000",
@@ -21,13 +20,17 @@ const IORegisters = () => {
         "000A": "0000"
     });
 
-    useExpand({ headerRef, elementRef: ioRegistersRef });
+    useExpand({
+        headerRef,
+        elementRef: ioRegistersRef,
+        holderRef: rightGroupRef,
+        collisionRefs: { prev: cpuRegistersRef, doublePrev: ioDevicesRef }
+    });
     
     return(
         <div className="io-registers" ref={ioRegistersRef}>
             <MiniHeader
                 title="Input / Output Registers"
-                style={{ cursor: "ns-resize" }}
                 ref={headerRef}
             />
 

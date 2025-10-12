@@ -2,9 +2,8 @@ import { useRef } from "react";
 import MiniHeader from "../MiniHeader";
 import { useExpand } from "../../hooks/useExpand";
 
-const CPURegisters = () => {
+const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const headerRef = useRef(null);
-    const cpuRegistersRef = useRef(null);
     
     const registersRef = useRef({
         A: "0000", B: "0000", C: "0000", D: "0000",
@@ -12,13 +11,17 @@ const CPURegisters = () => {
         SR: { M: "0", C: "0", Z: "0", F: "0", H: "0" }
     });
 
-    useExpand({ headerRef, elementRef: cpuRegistersRef });
+    useExpand({
+        headerRef,
+        elementRef: cpuRegistersRef,
+        holderRef: rightGroupRef,
+        collisionRefs: { prev: ioDevicesRef, next: ioRegistersRef }
+    });
     
     return(
         <div className="cpu-registers" ref={cpuRegistersRef}>
             <MiniHeader
                 title="CPU Registers"
-                style={{ cursor: "ns-resize" }}
                 ref={headerRef}
             />
 

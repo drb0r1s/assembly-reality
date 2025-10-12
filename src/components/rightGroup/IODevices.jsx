@@ -1,12 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import MiniHeader from "../MiniHeader";
+import { useExpand } from "../../hooks/useExpand";
 import { images } from "../../data/images";
 
-const IODevices = () => {
+const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
     
+    const headerRef = useRef(null);
+
     const miniDisplayMatrix = Array.from({ length: 2 }, () => Array.from({ length: 16 }, () => ""));
     
+    useExpand({
+        headerRef,
+        elementRef: ioDevicesRef,
+        holderRef: rightGroupRef,
+        collisionRefs: { next: cpuRegistersRef, doubleNext: ioRegistersRef }
+    });
+
     useEffect(() => {
         const handleKeydown = e => {
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
@@ -28,10 +38,10 @@ const IODevices = () => {
     }, [keyboard.isActive]);
 
     return(
-        <div className="io-devices">
+        <div className="io-devices" ref={ioDevicesRef}>
             <MiniHeader
                 title="Input / Output Devices"
-                style={{ borderTop: "none" }}
+                ref={headerRef}
             />
             
             <div className="io-devices-canvas-holder">

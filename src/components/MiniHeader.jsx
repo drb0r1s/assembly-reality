@@ -1,6 +1,6 @@
-const MiniHeader = ({ title, style, ref }) => {
+const MiniHeader = ({ title, ref }) => {
     return(
-        <div className="mini-header" style={style} ref={ref}>
+        <div className="mini-header" ref={ref}>
             <strong>{title}</strong>
         </div>
     );
