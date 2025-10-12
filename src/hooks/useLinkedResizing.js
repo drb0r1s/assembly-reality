@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-export const useExpand = ({ headerRef, elementRef, holderRef, collisionRefs }) => {
+export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionRefs }) => {
     const headerHeight = 27;
     
     useEffect(() => {

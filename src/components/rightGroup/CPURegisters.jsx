@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import MiniHeader from "../MiniHeader";
-import { useExpand } from "../../hooks/useExpand";
+import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 
 const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const headerRef = useRef(null);
@@ -11,7 +11,7 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
         SR: { M: "0", C: "0", Z: "0", F: "0", H: "0" }
     });
 
-    useExpand({
+    useLinkedResizing({
         headerRef,
         elementRef: cpuRegistersRef,
         holderRef: rightGroupRef,

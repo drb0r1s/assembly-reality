@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import MiniHeader from "../MiniHeader";
-import { useExpand } from "../../hooks/useExpand";
+import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { images } from "../../data/images";
 
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
@@ -10,7 +10,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
 
     const miniDisplayMatrix = Array.from({ length: 2 }, () => Array.from({ length: 16 }, () => ""));
     
-    useExpand({
+    useLinkedResizing({
         headerRef,
         elementRef: ioDevicesRef,
         holderRef: rightGroupRef,
