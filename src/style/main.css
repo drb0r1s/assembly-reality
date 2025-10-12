@@ -123,10 +123,11 @@ header .header-dropdown {
 }
 header .header-dropdown button {
   width: 100%;
-  color: #F4F4F4;
-  font-size: 14px;
-  font-family: Roboto-Regular;
-  text-align: left !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   background-color: transparent;
   border: none;
   border-radius: 5px;
@@ -136,6 +137,15 @@ header .header-dropdown button {
 }
 header .header-dropdown button:hover {
   background-color: #405A85;
+}
+header .header-dropdown button p {
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: Roboto-Regular;
+}
+header .header-dropdown button img {
+  opacity: 0;
+  transition: 300ms;
 }
 header .active-dropdown {
   opacity: 1;
@@ -204,7 +214,8 @@ header .header-title {
 }
 
 .editor {
-  width: calc(100vw - 860px);
+  width: 100%;
+  min-width: calc(100vw - 860px);
 }
 
 .memory {
@@ -216,7 +227,6 @@ header .header-title {
   flex-direction: column;
   justify-content: flex-start;
   border-left: 1px solid #2F3336;
-  border-right: 1px solid #2F3336;
 }
 .memory .memory-header {
   height: 27px;
@@ -359,7 +369,9 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  flex-shrink: 0;
   justify-content: flex-start;
+  border-left: 1px solid #2F3336;
 }
 .right-group .right-group-content {
   height: 100%;
@@ -378,7 +390,6 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   gap: 10px;
-  padding-top: 10px;
 }
 .right-group .right-group-content .io-devices .io-devices-canvas-holder {
   display: flex;

@@ -2,7 +2,6 @@
     width: 100%;
     @include center(column);
     gap: 10px;
-    padding-top: 10px;
 
     .io-devices-canvas-holder {
         @include center;

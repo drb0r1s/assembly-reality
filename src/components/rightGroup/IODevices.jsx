@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import MiniHeader from "../MiniHeader";
 import { images } from "../../data/images";
 
 const IODevices = () => {
@@ -28,6 +29,11 @@ const IODevices = () => {
 
     return(
         <div className="io-devices">
+            <MiniHeader
+                title="Input / Output Devices"
+                style={{ borderTop: "none" }}
+            />
+            
             <div className="io-devices-canvas-holder">
                 <canvas></canvas>
                 <strong>Assembly Simulator</strong>

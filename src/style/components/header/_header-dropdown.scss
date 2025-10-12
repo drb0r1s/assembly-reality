@@ -14,10 +14,8 @@
 
     button {
         width: 100%;
-        color: #F4F4F4;
-        font-size: 14px;
-        font-family: Roboto-Regular;
-        text-align: left !important;
+        @include center;
+        justify-content: space-between;
         background-color: transparent;
         border: none;
         border-radius: 5px;
@@ -27,6 +25,17 @@
 
         &:hover {
             background-color: $blue;
+        }
+
+        p {
+            color: #F4F4F4;
+            font-size: 14px;
+            font-family: Roboto-Regular;
+        }
+
+        img {
+            opacity: 0;
+            transition: 300ms;
         }
     }
 }

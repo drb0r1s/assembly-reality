@@ -2,7 +2,9 @@
     height: calc(100dvh - 38px); // 38px is height of header
     width: 430px;
     @include center(column);
+    flex-shrink: 0;
     justify-content: flex-start;
+    border-left: 1px solid #2F3336;
 
     .right-group-content {
         height: 100%;

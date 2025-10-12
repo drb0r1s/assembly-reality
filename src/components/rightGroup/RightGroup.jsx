@@ -1,20 +1,17 @@
-import MiniHeader from "../MiniHeader";
+import { useSelector } from "react-redux";
 import IODevices from "./IODevices";
 import CPURegisters from "./CPURegisters";
 import IORegisters from "./IORegisters";
 
 const RightGroup = () => {
+    const mainReducer = useSelector(state => state.main);
+    
     return(
         <div className="right-group">
-            <MiniHeader
-                title="Input / Output Devices"
-                style={{ borderTop: "none" }}
-            />
-
             <div className="right-group-content">
-                <IODevices />
-                <CPURegisters />
-                <IORegisters />
+                {mainReducer.view.ioDevices && <IODevices />}
+                {mainReducer.view.cpuRegisters && <CPURegisters />}
+                {mainReducer.view.ioRegisters && <IORegisters />}
             </div>
         </div>
     );
