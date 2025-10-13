@@ -4,16 +4,30 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
     const headerHeight = 27;
     
     useEffect(() => {
-        let startY = 0;
+        const y = { start: 0, last: 0 };
+        const heights = { start: 0, holder: 0 };
 
-        let startHeight = 0;
-        let holderHeight = 0;
-        
-        const handleMouseDown = e => {  
-            startY = e.clientY;
+        const tops = {
+            element: null,
+            prev: null,
+            doublePrev: null,
+            next: null,
+            doubleNext: null
+        };
 
-            startHeight = elementRef.current.offsetHeight;
-            holderHeight = holderRef.current.offsetHeight;
+        let lockElement = [];
+
+        const handleMouseDown = e => {
+            y.start = e.clientY;
+
+            heights.start = elementRef.current.offsetHeight;
+            heights.holder = holderRef.current.offsetHeight;
+
+            tops.element = elementRef.current.offsetTop;
+            tops.prev = collisionRefs?.prev?.current.offsetTop;
+            tops.doublePrev = collisionRefs?.doublePrev?.current.offsetTop;
+            tops.next = collisionRefs?.next?.current.offsetTop;
+            tops.doubleNext = collisionRefs?.doubleNext?.current.offsetTop;
 
             document.body.style.userSelect = "none";
             
@@ -22,84 +36,88 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
         }
 
         const handleMouseMove = e => {
-            const deltaY = (e.clientY - startY) * -1;
+            const deltaY = (e.clientY - y.start) * -1;
+            const direction = e.clientY > y.last ? "down" : "up";
+
+            y.last = e.clientY;
             
-            const currentTop = elementRef.current.getBoundingClientRect().top;
-            let blockCurrent = false;
-
             if(collisionRefs.prev) {
-                const prevTop = collisionRefs.prev.current.getBoundingClientRect().top;
-                let blockPrev = false;
-
                 if(collisionRefs.doublePrev) {
-                    const doublePrevTop = collisionRefs.doublePrev.current.getBoundingClientRect().top;
-                    
-                    if(prevTop < doublePrevTop + headerHeight) {
-                        let newHeight = startHeight + deltaY + 2 * headerHeight;
-                        
-                        if(newHeight > holderHeight) {
-                            newHeight = holderHeight;
-                            blockPrev = true;
-                        }
+                    if(lockElement.includes("doublePrev") && direction === "down") unlock("doublePrev");
+
+                    else if(lockElement.includes("doublePrev") || (tops.prev < tops.doublePrev + headerHeight)) {
+                        let newHeight = heights.start + deltaY + 2 * headerHeight;
+                        lockElement.push("doublePrev");
+
+                        if(newHeight > heights.holder) newHeight = heights.holder;
 
                         collisionRefs.doublePrev.current.style.height = `${newHeight}px`;
+                        tops.doublePrev = collisionRefs.doublePrev.current.offsetTop;
                     }
                 }
+                
+                if(lockElement.includes("prev") && direction === "down") unlock("prev");
+                
+                else if(lockElement.includes("prev") || (tops.element < tops.prev + headerHeight)) {
+                    let newHeight = heights.start + deltaY + headerHeight;
+                    lockElement.push("prev");
 
-                if(blockPrev) blockCurrent = true;
-
-                if(!blockPrev && (currentTop < prevTop + headerHeight)) {
-                    let newHeight = startHeight + deltaY + headerHeight;
-
-                    if(newHeight > holderHeight) {
-                        newHeight = holderHeight;
-                        blockCurrent = true;
-                    }
+                    const multiply = collisionRefs.doublePrev ? 1 : 0;
+                    if(newHeight > heights.holder - multiply * headerHeight) newHeight = heights.holder - multiply * headerHeight;
 
                     collisionRefs.prev.current.style.height = `${newHeight}px`;
+                    tops.prev = collisionRefs.prev.current.offsetTop;
                 }
             }
 
             if(collisionRefs.next) {
-                const nextTop = collisionRefs.next.current.getBoundingClientRect().top;
-                let blockNext = false;
-
                 if(collisionRefs.doubleNext) {
-                    const doubleNextTop = collisionRefs.doubleNext.current.getBoundingClientRect().top;
-                    
-                    if(nextTop + headerHeight > doubleNextTop) {
-                        let newHeight = startHeight + deltaY - 2 * headerHeight;
+                    if(lockElement.includes("doubleNext") && direction === "up") unlock("doubleNext");
 
-                        if(newHeight < headerHeight) {
-                            newHeight = headerHeight;
-                            blockNext = true;
-                        }
-                        
+                    else if(lockElement.includes("doubleNext") || (tops.next + headerHeight > tops.doubleNext)) {
+                        let newHeight = heights.start + deltaY - 2 * headerHeight;
+                        lockElement.push("doubleNext");
+
+                        if(newHeight < headerHeight) newHeight = headerHeight;
+
                         collisionRefs.doubleNext.current.style.height = `${newHeight}px`;
+                        tops.doubleNext = collisionRefs.doubleNext.current.offsetTop;
                     }
                 }
+                
+                if(lockElement.includes("next") && direction === "up") unlock("next");
 
-                if(blockNext) blockCurrent = true;
+                else if(lockElement.includes("next") || (tops.element + headerHeight > tops.next)) {
+                    let newHeight = heights.start + deltaY - headerHeight;
+                    lockElement.push("next");
 
-                if(!blockNext && (currentTop + headerHeight > nextTop)) {
-                    let newHeight = startHeight + deltaY - headerHeight;
+                    const multiply = collisionRefs.doubleNext ? 2 : 1;
+                    if(newHeight < multiply * headerHeight) newHeight = multiply * headerHeight;
 
-                    if(newHeight < headerHeight) {
-                        newHeight = headerHeight;
-                        blockCurrent = true;
-                    }
-                    
                     collisionRefs.next.current.style.height = `${newHeight}px`;
+                    tops.next = collisionRefs.next.current.offsetTop;
                 }
             }
 
-            if(!blockCurrent) {
-                let newHeight = startHeight + deltaY;
+            let newHeight = heights.start + deltaY;
 
-                if(newHeight > holderHeight) newHeight = holderHeight;
-                if(newHeight < headerHeight) newHeight = headerHeight;
+            const multiplyPrev = collisionRefs.doublePrev ? 2 : 1;
+            const multiplyNext = collisionRefs.doubleNext ? 3 : 2;
+            
+            if(newHeight > heights.holder - multiplyPrev * headerHeight) newHeight = heights.holder - multiplyPrev * headerHeight;
+            if(newHeight < multiplyNext * headerHeight) newHeight = multiplyNext * headerHeight;
 
-                elementRef.current.style.height = `${newHeight}px`;
+            elementRef.current.style.height = `${newHeight}px`;
+            tops.element = elementRef.current.offsetTop;
+
+            function unlock(type) {
+                const newLockElement = [];
+
+                for(let i = 0; i < lockElement.length; i++) {
+                    if(lockElement[i] !== type) newLockElement.push(lockElement[i]);
+                }
+
+                lockElement = newLockElement;
             }
         }
 
