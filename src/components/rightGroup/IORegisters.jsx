@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useSelector } from "react-redux";
 import MiniHeader from "../MiniHeader";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { registers } from "../../data/IORegisters";
@@ -20,11 +21,13 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
         "000A": "0000"
     });
 
+    const mainReducer = useSelector(state => state.main);
+
     useLinkedResizing({
         headerRef,
         elementRef: ioRegistersRef,
         holderRef: rightGroupRef,
-        collisionRefs: { prev: cpuRegistersRef, doublePrev: ioDevicesRef }
+        collisionRefs: { prev: mainReducer.view.cpuRegisters ? cpuRegistersRef : ioDevicesRef, doublePrev: mainReducer.view.cpuRegisters ? ioDevicesRef : { current: null } }
     });
     
     return(

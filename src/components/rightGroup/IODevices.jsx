@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import MiniHeader from "../MiniHeader";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { images } from "../../data/images";
@@ -8,13 +9,15 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     
     const headerRef = useRef(null);
 
+    const mainReducer = useSelector(state => state.main);
+
     const miniDisplayMatrix = Array.from({ length: 2 }, () => Array.from({ length: 16 }, () => ""));
     
     useLinkedResizing({
         headerRef,
         elementRef: ioDevicesRef,
         holderRef: rightGroupRef,
-        collisionRefs: { next: cpuRegistersRef, doubleNext: ioRegistersRef }
+        collisionRefs: { next: mainReducer.view.cpuRegisters ? cpuRegistersRef : ioRegistersRef, doubleNext: mainReducer.view.cpuRegisters ? ioRegistersRef : { current: null } }
     });
 
     useEffect(() => {

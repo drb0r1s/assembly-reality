@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import IODevices from "./IODevices";
 import CPURegisters from "./CPURegisters";
@@ -12,6 +12,12 @@ const RightGroup = () => {
     const ioRegistersRef = useRef(null);
     
     const mainReducer = useSelector(state => state.main);
+
+    useEffect(() => {
+        if(ioDevicesRef.current) ioDevicesRef.current.style.height = "";
+        if(cpuRegistersRef.current) cpuRegistersRef.current.style.height = "";
+        if(ioRegistersRef.current) ioRegistersRef.current.style.height = "";
+    }, [mainReducer.view]);
     
     return(
         <div className="right-group" ref={rightGroupRef}>

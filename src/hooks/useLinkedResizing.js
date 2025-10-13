@@ -1,6 +1,9 @@
-import { useEffect } from "react"
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionRefs }) => {
+    const mainReducer = useSelector(state => state.main);
+    
     const headerHeight = 27;
     
     useEffect(() => {
@@ -24,10 +27,10 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
             heights.holder = holderRef.current.offsetHeight;
 
             tops.element = elementRef.current.offsetTop;
-            tops.prev = collisionRefs?.prev?.current.offsetTop;
-            tops.doublePrev = collisionRefs?.doublePrev?.current.offsetTop;
-            tops.next = collisionRefs?.next?.current.offsetTop;
-            tops.doubleNext = collisionRefs?.doubleNext?.current.offsetTop;
+            tops.prev = collisionRefs?.prev?.current?.offsetTop;
+            tops.doublePrev = collisionRefs?.doublePrev?.current?.offsetTop;
+            tops.next = collisionRefs?.next?.current?.offsetTop;
+            tops.doubleNext = collisionRefs?.doubleNext?.current?.offsetTop;
 
             document.body.style.userSelect = "none";
             
@@ -62,7 +65,7 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
                     let newHeight = heights.start + deltaY + headerHeight;
                     lockElement.push("prev");
 
-                    const multiply = collisionRefs.doublePrev ? 1 : 0;
+                    const multiply = collisionRefs?.doublePrev?.current ? 1 : 0;
                     if(newHeight > heights.holder - multiply * headerHeight) newHeight = heights.holder - multiply * headerHeight;
 
                     collisionRefs.prev.current.style.height = `${newHeight}px`;
@@ -91,7 +94,7 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
                     let newHeight = heights.start + deltaY - headerHeight;
                     lockElement.push("next");
 
-                    const multiply = collisionRefs.doubleNext ? 2 : 1;
+                    const multiply = collisionRefs?.doubleNext?.current ? 2 : 1;
                     if(newHeight < multiply * headerHeight) newHeight = multiply * headerHeight;
 
                     collisionRefs.next.current.style.height = `${newHeight}px`;
@@ -101,9 +104,9 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
 
             let newHeight = heights.start + deltaY;
 
-            const multiplyPrev = collisionRefs.doublePrev ? 2 : 1;
-            const multiplyNext = collisionRefs.doubleNext ? 3 : 2;
-            
+            const multiplyPrev = getMultiply("prev");
+            const multiplyNext = getMultiply("next");
+
             if(newHeight > heights.holder - multiplyPrev * headerHeight) newHeight = heights.holder - multiplyPrev * headerHeight;
             if(newHeight < multiplyNext * headerHeight) newHeight = multiplyNext * headerHeight;
 
@@ -119,6 +122,26 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
 
                 lockElement = newLockElement;
             }
+
+            function getMultiply(type) {
+                if(type === "prev") {
+                    if(!collisionRefs?.prev?.current) return 0;
+                    
+                    else {
+                        if(!collisionRefs?.doublePrev?.current) return 1;
+                        return 2;
+                    }
+                }
+
+                else {
+                    if(!collisionRefs?.next?.current) return 1;
+
+                    else {
+                        if(!collisionRefs?.doubleNext?.current) return 2;
+                        return 3;
+                    }
+                }
+            }
         }
 
         const handleMouseUp = () => {
@@ -130,5 +153,5 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
         
         headerRef.current.addEventListener("mousedown", handleMouseDown);
         return () => { if(headerRef.current) headerRef.current.removeEventListener("mousedown", handleMouseDown) }
-    }, [headerRef]);
+    }, [headerRef, mainReducer.view]);
 }
