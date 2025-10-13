@@ -3,12 +3,14 @@
     width: 430px;
     @include center(column);
     justify-content: flex-start;
+    border-top: 1px solid #2F3336;
     border-left: 1px solid #2F3336;
 
     .memory-header {
         height: 27px;
         width: 100%;
         @include center;
+        flex-shrink: 0;
         justify-content: space-between;
         background-color: #0F0F0F;
         border-bottom: 1px solid #2F3336;

@@ -101,7 +101,6 @@ header {
   flex-direction: row;
   justify-content: space-between;
   background-color: #0F0F0F;
-  border-bottom: 1px solid #2F3336;
   padding: 0 12px;
 }
 header .header-dropdown {
@@ -216,6 +215,7 @@ header .header-title {
 .editor {
   width: 100%;
   min-width: calc(100vw - 860px);
+  border-top: 1px solid #2F3336;
 }
 
 .memory {
@@ -226,6 +226,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   justify-content: flex-start;
+  border-top: 1px solid #2F3336;
   border-left: 1px solid #2F3336;
 }
 .memory .memory-header {
@@ -235,6 +236,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
+  flex-shrink: 0;
   justify-content: space-between;
   background-color: #0F0F0F;
   border-bottom: 1px solid #2F3336;
@@ -647,9 +649,6 @@ header .header-title {
   justify-content: center;
   flex-direction: row;
   border-bottom: 1px solid #2F3336;
-}
-.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row:last-child {
-  border-bottom: none;
 }
 .right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row p {
   height: 28px;

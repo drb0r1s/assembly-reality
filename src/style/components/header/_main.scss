@@ -4,7 +4,6 @@ header {
     @include center;
     justify-content: space-between;
     background-color: #0F0F0F;
-    border-bottom: 1px solid #2F3336;
     padding: 0 12px;
 
     @import "./header-dropdown";
