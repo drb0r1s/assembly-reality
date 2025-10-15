@@ -1,60 +1,22 @@
-import { useEffect, useRef } from "react";
-import Editor, { useMonaco } from "@monaco-editor/react";
+import Editor from "@monaco-editor/react";
+import { useRichEditor } from "../hooks/useRichEditor";
 
 const RichEditor = ({ code, onChange }) => {
-    const editorRef = useRef(null);
-    const monaco = useMonaco();
-
-    useEffect(() => {
-        if(!monaco) return;
-
-        monaco.languages.register({ id: "assembly" });
-
-        monaco.languages.setMonarchTokensProvider("assembly", {
-            tokenizer: {
-                root: [
-                    [/[;].*$/, "comment"],             // Comments
-                    [/\b(MOV|ADD|SUB|MUL|DIV|JMP|CMP|JE|JNE|CALL|RET)\b/, "keyword"],
-                    [/\b(R[0-9]+)\b/, "variable"],     // Registers
-                    [/\b(0x[0-9A-Fa-f]+|\d+)\b/, "number"], // Numbers
-                    [/"[^"]*"/, "string"],
-                ]
-            }
-        });
-
-        monaco.editor.defineTheme("assembly-dark", {
-            base: "vs-dark",
-            inherit: true,
-            rules: [
-                { token: "keyword", foreground: "ff7b72" },
-                { token: "variable", foreground: "7cdfff" },
-                { token: "number", foreground: "c8ff8c" },
-                { token: "comment", foreground: "6a9955", fontStyle: "italic" },
-            ],
-            colors: {
-                "editor.background": "#000000",
-                "editorLineNumber.foreground": "#000000",
-                "editorCursor.foreground": "#000000",
-                "editor.selectionBackground": "#264f78",
-            },
-        });
-
-        monaco.editor.setTheme("assembly-dark");
-    }, [monaco]);
-
-    function handleEditorDidMount(editor) {
-        editorRef.current = editor;
-    }
+    const handleEditorDidMount = useRichEditor();
     
     return(
-        <div className="editor">
+        <div className="rich-editor" style={{ height: "100%" }}>
             <Editor
-                height="400px"
+                height="100%"
                 defaultLanguage="assembly"
-                value={code}
-                onMount={handleEditorDidMount}
                 theme="assembly-dark"
+                value={code}
                 onChange={onChange}
+                onMount={handleEditorDidMount}
+                options={{
+                    fontSize: 14,
+                    fontFamily: "SourceCodePro-Regular"
+                }}
             />
         </div>
     );

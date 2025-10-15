@@ -119,7 +119,7 @@ header .header-dropdown {
   left: 0;
   top: 48px;
   transition: 300ms;
-  z-index: 1;
+  z-index: 5;
 }
 header .header-dropdown button {
   width: 100%;
@@ -214,6 +214,7 @@ header .header-title {
 }
 
 .editor {
+  height: 100%;
   width: 100%;
   min-width: calc(100vw - 860px);
   border-top: 1px solid #2F3336;
