@@ -7,7 +7,7 @@ export const keywords = [
 ];
 
 // .sort() is needed here to fix the common issue of matching "keywordB" without considering "B".
-export const keywordsRegex = new RegExp(`(\\b${[...keywords].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`);
+export const keywordsRegex = new RegExp(`(${[...keywords].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`);
 
 export const labelKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
-export const labelKeywordsRegex = new RegExp(`(\\b${labelKeywords.join("|")})(?=\\s)`);
+export const labelKeywordsRegex = new RegExp(`(${labelKeywords.join("|")})(?=\\s)`);
