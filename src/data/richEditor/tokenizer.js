@@ -8,8 +8,7 @@ export const tokenizer = {
         [keywordsRegex, "keyword"],
         
         // Labels
-        [/^[a-zA-Z0-9_]+(?=:)/, "label"], // Default labels
-        [/\[[a-zA-Z0-9_]+\]/, "label"], // Calling labels
+        [/^[a-zA-Z0-9_]+(?=:)/, "label"],
         
         // Registers
         [registersRegex, "register"],
