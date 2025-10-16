@@ -9,7 +9,7 @@ export const colors = {
 
 export const rules = [
     { token: "keyword", foreground: "C586C0" },
-    { token: "variable", foreground: "9CDCFE" },
+    { token: "label", foreground: "9CDCFE" },
     { token: "register", foreground: "4EC9B0" },
     { token: "number", foreground: "B5CEA8" },
     { token: "string", foreground: "CE9178" },

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { useMonaco } from "@monaco-editor/react";
 import { tokenizer } from "../data/richEditor/tokenizer";
 import { colors, rules } from "../data/richEditor/style";
-import { keywords, variableKeywords } from "../data/richEditor/keywords";
+import { keywords, labelKeywords } from "../data/richEditor/keywords";
 
 export const useRichEditor = () => {
     const editorRef = useRef(null);
@@ -26,15 +26,15 @@ export const useRichEditor = () => {
                         documentation: `Assembly instruction: ${keyword}.`
                     })),
 
-                    variable: getVariable(text).map(variable => ({
-                        label: variable,
+                    label: getLabel(text).map(label => ({
+                        label,
                         kind: monaco.languages.CompletionItemKind.Variable,
-                        insertText: variable,
-                        documentation: "User-defined variable."
+                        insertText: label,
+                        documentation: "User-defined label."
                     }))
                 };
 
-                const suggestionsArray = [...suggestions.keyword, ...removeDuplicates(suggestions.variable)];
+                const suggestionsArray = [...suggestions.keyword, ...removeDuplicates(suggestions.label)];
                 return { suggestions: suggestionsArray };
             }
         });
@@ -53,9 +53,9 @@ export const useRichEditor = () => {
         editorRef.current = editor;
     }
 
-    function getVariable(text) {
-        const variableRegex = /^[a-zA-Z0-9_]+(?=:)/gm;
-        const matches = [...text.matchAll(variableRegex)];
+    function getLabel(text) {
+        const labelRegex = /^[a-zA-Z0-9_]+(?=:)/gm;
+        const matches = [...text.matchAll(labelRegex)];
         
         return matches.map(match => match[0]);
     }

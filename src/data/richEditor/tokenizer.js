@@ -1,15 +1,15 @@
-import { keywordsRegex, variableKeywordsRegex } from "./keywords";
+import { keywordsRegex, labelKeywordsRegex } from "./keywords";
 import { registersRegex } from "./registers";
 
 export const tokenizer = {
     root: [
         // Keywords
-        [variableKeywordsRegex, { token: "keyword", next: "@variable" }], // Using keywords that are followed by a variable (e.g. JMP variable)
+        [labelKeywordsRegex, { token: "keyword", next: "@label" }], // Using keywords that are followed by a label (e.g. JMP label)
         [keywordsRegex, "keyword"],
         
-        // Variables
-        [/^[a-zA-Z0-9_]+(?=:)/, "variable"], // Default variables
-        [/\[[a-zA-Z0-9_]+\]/, "variable"], // Calling variables
+        // Labels
+        [/^[a-zA-Z0-9_]+(?=:)/, "label"], // Default labels
+        [/\[[a-zA-Z0-9_]+\]/, "label"], // Calling labels
         
         // Registers
         [registersRegex, "register"],
@@ -27,8 +27,8 @@ export const tokenizer = {
         [/\/\/.*$|;.*$/, "comment"] // Comment
     ],
 
-    variable: [
-        [/([a-zA-Z0-9_]*)(?=(\s+$)|$)/, "variable", "@pop"]
+    label: [
+        [/([a-zA-Z0-9_]*)(?=(\s+$)|$)/, "label", "@pop"]
     ],
 
     // Here we need to move * character to the end of the array, so that * isn't confused for */.
