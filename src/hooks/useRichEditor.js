@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { useMonaco } from "@monaco-editor/react";
 import { tokenizer } from "../data/richEditor/tokenizer";
 import { colors, rules } from "../data/richEditor/style";
-import { keywords } from "../data/richEditor/keywords";
+import { keywords, variableKeywords } from "../data/richEditor/keywords";
 
 export const useRichEditor = () => {
     const editorRef = useRef(null);
@@ -34,9 +34,7 @@ export const useRichEditor = () => {
                     }))
                 };
 
-                let suggestionsArray = suggestions.keyword;
-                if(suggestions.variable.length > 1) suggestionsArray = [...suggestionsArray, ...removeDuplicates(suggestions.variable)];
-
+                const suggestionsArray = [...suggestions.keyword, ...removeDuplicates(suggestions.variable)];
                 return { suggestions: suggestionsArray };
             }
         });
@@ -56,7 +54,7 @@ export const useRichEditor = () => {
     }
 
     function getVariable(text) {
-        const variableRegex = /[a-zA-Z0-9_]+/g;
+        const variableRegex = /^[a-zA-Z0-9_]+(?=:)/gm;
         const matches = [...text.matchAll(variableRegex)];
         
         return matches.map(match => match[0]);

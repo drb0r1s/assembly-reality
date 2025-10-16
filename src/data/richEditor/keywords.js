@@ -9,5 +9,5 @@ export const keywords = [
 // .sort() is needed here to fix the common issue of matching "keywordB" without considering "B".
 export const keywordsRegex = new RegExp(`(\\b${[...keywords].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`);
 
-const variableKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
+export const variableKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
 export const variableKeywordsRegex = new RegExp(`(\\b${variableKeywords.join("|")})(?=\\s)`);
