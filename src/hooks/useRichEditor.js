@@ -34,7 +34,9 @@ export const useRichEditor = () => {
                     }))
                 };
 
-                const suggestionsArray = [...suggestions.keyword, ...suggestions.variable];
+                let suggestionsArray = suggestions.keyword;
+                if(suggestions.variable.length > 1) suggestionsArray = [...suggestionsArray, ...removeDuplicates(suggestions.variable)];
+
                 return { suggestions: suggestionsArray };
             }
         });
@@ -58,6 +60,22 @@ export const useRichEditor = () => {
         const matches = [...text.matchAll(variableRegex)];
         
         return matches.map(match => match[0]);
+    }
+
+    // If one label appears multiple times in the code, it will appear the same amount of times in the suggestions, as well.
+    // That is why this function is needed, to get rid of duplicated suggestions.
+    function removeDuplicates(array) {
+        const newArray = [];
+        const labels = [];
+
+        for(let i = 0; i < array.length; i++) {
+            if(labels.indexOf(array[i].label) === -1) {
+                newArray.push(array[i]);
+                labels.push(array[i].label);
+            }
+        }
+
+        return newArray;
     }
 
     return handleEditorDidMount;
