@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { useMonaco } from "@monaco-editor/react";
 import { tokenizer } from "../data/richEditor/tokenizer";
 import { colors, rules } from "../data/richEditor/style";
-import { keywords, labelKeywords } from "../data/richEditor/keywords";
+import { keywords } from "../data/richEditor/keywords";
 
 export const useRichEditor = () => {
     const editorRef = useRef(null);
@@ -14,7 +14,9 @@ export const useRichEditor = () => {
         monaco.languages.register({ id: "assembly" });
         monaco.languages.setMonarchTokensProvider("assembly", { tokenizer });
 
-        monaco.languages.registerCompletionItemProvider("assembly", {
+        let provider;
+
+        if(!editorRef.current?.providerRegistered) provider = monaco.languages.registerCompletionItemProvider("assembly", {
             provideCompletionItems: model => {
                 const text = model.getValue();
 
@@ -47,6 +49,10 @@ export const useRichEditor = () => {
         });
 
         monaco.editor.setTheme("assembly-dark");
+
+        return () => {
+            provider?.dispose();
+        }
     }, [monaco]);
 
     function handleEditorDidMount(editor) {
