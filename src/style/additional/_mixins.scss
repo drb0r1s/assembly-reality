@@ -4,3 +4,14 @@
     justify-content: center;
     flex-direction: $direction;
 }
+
+@mixin cut-text($lines: 2) {
+    display: -webkit-box;
+    text-align: left;
+    -webkit-box-orient: vertical;
+    line-clamp: $lines;
+    -webkit-line-clamp: $lines;
+    overflow: hidden;
+    //word-break: break-all;
+    overflow-wrap: break-word;
+}

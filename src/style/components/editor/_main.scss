@@ -3,4 +3,7 @@
     width: 100%;
     min-width: calc(100vw - 2 * 430px);
     border-top: 1px solid #2F3336;
+    position: relative;
+
+    @import "./editor-error";
 }

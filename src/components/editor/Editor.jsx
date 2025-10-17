@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import RichEditor from "./RichEditor";
-import { mainActions } from "../state/reducers/mainSlice";
-import { Assembler } from "../assembler/Assembler";
+import RichEditor from "../RichEditor";
+import EditorError from "./EditorError";
+import { mainActions } from "../../state/reducers/mainSlice";
+import { Assembler } from "../../assembler/Assembler";
 
 const Editor = () => {
     const [code, setCode] = useState("");
+    const [isError, setIsError] = useState(true);
 
     const { assemble } = useSelector(state => state.main);
     const dispatch = useDispatch();
@@ -20,6 +22,7 @@ const Editor = () => {
     return(
         <div className="editor">
             <RichEditor code={code} onChange={setCode} />
+            {isError && <EditorError setIsError={setIsError} />}
         </div>
     );
 }
