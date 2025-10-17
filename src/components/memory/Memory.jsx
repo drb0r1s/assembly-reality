@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MemoryMap from "./MemoryMap";
 
-const Memory = () => {
+const Memory = ({ assembler }) => {
+    const [memoryMatrix, setMemoryMatrix] = useState(assembler.memory.matrix);
     const [isSplitActive, setIsSplitActive] = useState(false);
+    
+    useEffect(() => {
+        assembler.onMemoryChange = matrix => { setMemoryMatrix([...matrix]) }
+    }, []);
 
     return(
         <div className="memory">
@@ -16,8 +21,14 @@ const Memory = () => {
             </div>
 
             <div className="memory-map-holder">
-                <MemoryMap isSplitActive={isSplitActive} />
-                {isSplitActive && <MemoryMap isSplitActive={isSplitActive} />}
+                <MemoryMap
+                    memoryMatrix={memoryMatrix}
+                    isSplitActive={isSplitActive}
+                />
+                {isSplitActive && <MemoryMap
+                    memoryMatrix={memoryMatrix}
+                    isSplitActive={isSplitActive}
+                />}
             </div>
         </div>
     );

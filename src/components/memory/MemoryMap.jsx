@@ -1,4 +1,4 @@
-const MemoryMap = ({ isSplitActive }) => {
+const MemoryMap = ({ memoryMatrix, isSplitActive }) => {
     const memoryMapColumns = ["empty", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
     
     const memoryMapRows = Array.from({ length: 0x102 }, (_, i) => {
@@ -9,8 +9,6 @@ const MemoryMap = ({ isSplitActive }) => {
 
         return hexNumber;
     });
-
-    const memoryMapMatrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"));
 
     return (
         <div
@@ -32,7 +30,7 @@ const MemoryMap = ({ isSplitActive }) => {
                 </div>
 
                 <div className="memory-map-matrix">
-                    {memoryMapMatrix.map((row, rowIndex) => {
+                    {memoryMatrix.map((row, rowIndex) => {
                         return <div
                             key={`row-${rowIndex}`}
                             className="memory-map-matrix-row"
