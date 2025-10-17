@@ -14,9 +14,10 @@ class InstructionNode {
 }
 
 class OperandNode {
-    constructor(value) {
+    constructor(value, type) {
         this.type = "Operand";
-        this.value = value;
+        this.value = value
+        this.valueType = type;
     }
 }
 
@@ -80,6 +81,6 @@ export const AST = {
 
     parseOperand: token => {
         if(token.value === ",") return new SeparatorNode(token.value);
-        return new OperandNode(token.value);
+        return new OperandNode(token.value, token.type);
     }
 };
