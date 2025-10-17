@@ -7,7 +7,7 @@ import { Assembler } from "../../assembler/Assembler";
 
 const Editor = () => {
     const [code, setCode] = useState("");
-    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState({ type: "", content: "" });
 
     const { assemble } = useSelector(state => state.main);
     const dispatch = useDispatch();
@@ -15,14 +15,16 @@ const Editor = () => {
     useEffect(() => {
         if(!assemble) return;
 
-        Assembler.assemble(code);
+        const memoryMapMatrix = Assembler.assemble(code);
+        if(memoryMapMatrix.error) setError(memoryMapMatrix.error);
+
         dispatch(mainActions.updateAssemble(false));
     }, [assemble]);
     
     return(
         <div className="editor">
             <RichEditor code={code} onChange={setCode} />
-            {isError && <EditorError setIsError={setIsError} />}
+            {error.type && <EditorError error={error} setError={setError} />}
         </div>
     );
 }
