@@ -7,8 +7,8 @@ export const Tokenizer = {
         label: /^[a-zA-Z0-9_]+(?=:)/g,
         register: new RegExp(registersRegex.source, "g"),
         symbol: /[,:\[\]\(\)]/g,
-        "number.decimal": /\s([0-9]+)(?=\s|,|$)/g,
-        "number.hex": /\s(0x[0-9A-Fa-f]+)(?=\s|,|$)/g,
+        "number.decimal": /(?<=\s)([0-9]+)(?=\s|,|$)/g,
+        "number.hex": /(?<=\s)(0x[0-9A-Fa-f]+)(?=\s|,|$)/g,
         "string.doubleQuoted": /\"([^"\\]|\\.)*\"/g,
         "string.singleQuoted": /\'([^'\\]|\\.)*\'/g,
         comment: /\/\/.*$|;.*$/g
