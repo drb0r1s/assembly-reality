@@ -7,7 +7,7 @@ import { Assembler } from "../../assembler/Assembler";
 
 const Editor = () => {
     const [code, setCode] = useState("");
-    const [isError, setIsError] = useState(true);
+    const [isError, setIsError] = useState(false);
 
     const { assemble } = useSelector(state => state.main);
     const dispatch = useDispatch();
