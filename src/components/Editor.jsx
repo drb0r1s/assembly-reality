@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RichEditor from "./RichEditor";
 import { mainActions } from "../state/reducers/mainSlice";
-import { Compiler } from "../compiler/compiler";
+import { Assembler } from "../assembler/Assembler";
 
 const Editor = () => {
     const [code, setCode] = useState("");
@@ -13,7 +13,7 @@ const Editor = () => {
     useEffect(() => {
         if(!assemble) return;
 
-        Compiler.assemble(code);
+        Assembler.assemble(code);
         dispatch(mainActions.updateAssemble(false));
     }, [assemble]);
     
