@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import RichEditor from "../RichEditor";
 import EditorError from "./EditorError";
 import { mainActions } from "../../state/reducers/mainSlice";
-import { Assembler } from "../../assembler/Assembler";
 
-const Editor = () => {
+const Editor = ({ assembler }) => {
     const [code, setCode] = useState("");
     const [error, setError] = useState({ type: "", content: "" });
 
@@ -15,8 +14,8 @@ const Editor = () => {
     useEffect(() => {
         if(!assemble) return;
 
-        const memoryMapMatrix = Assembler.assemble(code);
-        if(memoryMapMatrix.error) setError(memoryMapMatrix.error);
+        const memoryMatrix = assembler.assemble(code);
+        if(memoryMatrix.error) setError(memoryMatrix.error);
 
         dispatch(mainActions.updateAssemble(false));
     }, [assemble]);
