@@ -1,10 +1,14 @@
-import { keywordsRegex, middleKeywordsRegex, labelKeywordsRegex } from "./keywords";
+import { keywordsRegex, middleKeywordsRegex, labelKeywordsRegex, middleLabelKeywordsRegex } from "./keywords";
 import { registersRegex, memoryRegistersRegex } from "./registers";
 
 export const tokenizer = {
     root: [
         // Keywords
-        [labelKeywordsRegex, { token: "keyword", next: "@label" }], // Using keywords that are followed by a label (e.g. JMP label)
+
+        // Using keywords that are followed by a label (e.g. JMP label)
+        [labelKeywordsRegex, { token: "keyword", next: "@label" }], 
+        [middleLabelKeywordsRegex, { token: "keyword", next: "@label" }],
+        
         [keywordsRegex, "keyword"],
         [middleKeywordsRegex, "keyword"],
 
@@ -13,15 +17,15 @@ export const tokenizer = {
 
         // Memory registers
         [memoryRegistersRegex, "memoryRegister"],
-        
-        // Labels
-        [/^[a-zA-Z0-9_]+(?=:)/, "label"],
-        [/\s\[([a-zA-Z0-9_]+)\](?=\s|,|$)/, "memoryLabel"], // Memory label
-        
+
         // Numbers
         [/\s([0-9]+)(?=\s|,|$)/, "number"], // Decimal
         [/\s(0x[0-9A-Fa-f]+)(?=\s|,|$)/, "number"], // Hexadecimal
         [/\s\[(0x[0-9A-Fa-f]+)\](?=\s|,|$)/, "memoryNumber"], // Memory hexadecimal
+        
+        // Labels
+        [/^[a-zA-Z0-9_]+(?=:)/, "label"],
+        [/\s\[([a-zA-Z0-9_]+)\](?=\s|,|$)/, "memoryLabel"], // Memory label
         
         // Strings
         [/\"([^"\\]|\\.)*\"/, "string"], // Double-quoted strings

@@ -15,4 +15,10 @@ export const keywordsRegex = new RegExp(`^${rootKeywordsExpression}`);
 export const middleKeywordsRegex = new RegExp(`\\s${rootKeywordsExpression}`);
 
 export const labelKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
-export const labelKeywordsRegex = new RegExp(`(${labelKeywords.join("|")})(?=\\s)`);
+
+const rootLabelKeywordsExpression = `(${labelKeywords.join("|")})(?=\\s)`;
+
+// This is a default keyword regex, requiring a keyword to be at the beginning of the line.
+export const labelKeywordsRegex = new RegExp(`^${rootLabelKeywordsExpression}`);
+// This is a special (middle) keyword regex, in case there are tab spaces in front of the keyword.
+export const middleLabelKeywordsRegex = new RegExp(`\\s${rootLabelKeywordsExpression}`);
