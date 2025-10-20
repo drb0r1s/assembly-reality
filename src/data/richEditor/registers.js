@@ -6,4 +6,7 @@ for(let i = 0; i < defaultRegisters.length; i++) {
 }
 
 // .sort() is needed here to fix the common issue of matching "registerL" or "registerH" without considering "L" or "H".
-export const registersRegex = new RegExp(`(${[...registers].sort((a, b) => b.length - a.length).join("|")})(?=\\s|,|]|$)`);
+export const registersString = [...registers].sort((a, b) => b.length - a.length).join("|");
+
+export const registersRegex = new RegExp(`(${registersString})(?=\\s|,|$)`);
+export const memoryRegistersRegex = new RegExp(`\\[(${registersString})\\](?=\\s|,|$)`);
