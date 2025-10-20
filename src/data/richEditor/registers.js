@@ -8,5 +8,5 @@ for(let i = 0; i < defaultRegisters.length; i++) {
 // .sort() is needed here to fix the common issue of matching "registerL" or "registerH" without considering "L" or "H".
 export const registersString = [...registers].sort((a, b) => b.length - a.length).join("|");
 
-export const registersRegex = new RegExp(`(${registersString})(?=\\s|,|$)`);
-export const memoryRegistersRegex = new RegExp(`\\[(${registersString})\\](?=\\s|,|$)`);
+export const registersRegex = new RegExp(`\\s(${registersString})(?=\\s|,|$)`);
+export const memoryRegistersRegex = new RegExp(`\\s\\[(${registersString})\\](?=\\s|,|$)`);

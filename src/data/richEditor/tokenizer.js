@@ -6,16 +6,16 @@ export const tokenizer = {
         // Keywords
         [labelKeywordsRegex, { token: "keyword", next: "@label" }], // Using keywords that are followed by a label (e.g. JMP label)
         [keywordsRegex, "keyword"],
-        
-        // Labels
-        [/^[a-zA-Z0-9_]+(?=:)/, "label"],
-        [/\s\[([a-zA-Z0-9_]+)\](?=\s|,|$)/, "memoryLabel"], // Memory label
-        
+
         // Registers
         [registersRegex, "register"],
 
         // Memory registers
         [memoryRegistersRegex, "memoryRegister"],
+        
+        // Labels
+        [/^[a-zA-Z0-9_]+(?=:)/, "label"],
+        [/\s\[([a-zA-Z0-9_]+)\](?=\s|,|$)/, "memoryLabel"], // Memory label
         
         // Numbers
         [/\s([0-9]+)(?=\s|,|$)/, "number"], // Decimal
