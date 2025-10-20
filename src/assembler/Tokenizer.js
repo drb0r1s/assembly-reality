@@ -24,6 +24,8 @@ export const Tokenizer = {
         const lines = text.split(/\r?\n/).filter(line => line.length > 0);
 
         for(let i = 0; i < lines.length; i++) {
+            const lineTokens = []; // This variable will store all matched tokens from the specific line.
+
             for(const [type, pattern] of Object.entries(Tokenizer.patterns)) {
                 pattern.lastIndex = 0; // We need to restart the pointer, because it is no longer relevant for the new matches.
 
@@ -31,7 +33,7 @@ export const Tokenizer = {
                 
                 // Here, we are using .exec() instead of .matchAll(), because it can process one match at a time, making it more memory-efficient.
                 // .exec() returns only one match per pattern, it also leaves .lastIndex pointer, so it can continue scanning from where it left (the last match).
-                while((match = pattern.exec(lines[i])) !== null) tokens.push({
+                while((match = pattern.exec(lines[i])) !== null) lineTokens.push({
                     type,
                     value: match[0],
                     line: i,
@@ -39,6 +41,10 @@ export const Tokenizer = {
                     end: match.index + match[0].length
                 });
             }
+
+            // Because tokens in lineTokens are added based on the order of Tokenizer.patterns, we need to sort them based on their starting position, in order to get the correct order of tokens.
+            lineTokens.sort((a, b) => a.start - b.start);
+            tokens.push(...lineTokens);
         }
 
         return tokens;
