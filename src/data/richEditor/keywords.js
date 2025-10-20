@@ -7,7 +7,12 @@ export const keywords = [
 ];
 
 // .sort() is needed here to fix the common issue of matching "keywordB" without considering "B".
-export const keywordsRegex = new RegExp(`(${[...keywords].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`);
+const rootKeywordsExpression = `(${[...keywords].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`;
+
+// This is a default keyword regex, requiring a keyword to be at the beginning of the line.
+export const keywordsRegex = new RegExp(`^${rootKeywordsExpression}`);
+// This is a special (middle) keyword regex, in case keyword is located in the middle of the line. (e.g. DW)
+export const middleKeywordsRegex = new RegExp(`\\s${rootKeywordsExpression}`);
 
 export const labelKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
 export const labelKeywordsRegex = new RegExp(`(${labelKeywords.join("|")})(?=\\s)`);

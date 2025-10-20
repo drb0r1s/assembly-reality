@@ -1,4 +1,4 @@
-import { keywordsRegex, labelKeywordsRegex } from "./keywords";
+import { keywordsRegex, middleKeywordsRegex, labelKeywordsRegex } from "./keywords";
 import { registersRegex, memoryRegistersRegex } from "./registers";
 
 export const tokenizer = {
@@ -6,6 +6,7 @@ export const tokenizer = {
         // Keywords
         [labelKeywordsRegex, { token: "keyword", next: "@label" }], // Using keywords that are followed by a label (e.g. JMP label)
         [keywordsRegex, "keyword"],
+        [middleKeywordsRegex, "keyword"],
 
         // Registers
         [registersRegex, "register"],
