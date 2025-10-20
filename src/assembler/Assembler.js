@@ -1,6 +1,6 @@
 import { Tokenizer } from "./Tokenizer";
 import { AST } from "./AST";
-import { instructionSet } from "./instructionSet";
+import { InstructionSet } from "./InstructionSet";
 import { registerIndexes } from "./registerIndexes";
 
 class AssemblerError {
@@ -39,14 +39,13 @@ export class Assembler {
     }
 
     assembleInstruction(instruction) {
-        const instructionCode = instructionSet[instruction.name];
+        const operands = instruction.operands.filter(operand => operand.type !== "Separator");
+        if(operands.length !== 2) throw new AssemblerError("InvalidOperands", `Instruction ${instruction.name} requires 2 operands!`);
+
+        const instructionCode = InstructionSet[instruction.name](operands);
         if(!instructionCode) throw new AssemblerError("UnknownInstruction", `${instruction.name} is an unknown instruction!`);
 
         if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", `The separator is missing for the ${instruction.name} instruction!`);
-
-        const operands = instruction.operands.filter(operand => operand.type !== "Separator");
-
-        if(operands.length !== 2) throw new AssemblerError("InvalidOperands", `Instruction ${instruction.name} requires 2 operands!`);
 
         const dest = operands[0];
         const src = operands[1];
