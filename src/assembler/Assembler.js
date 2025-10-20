@@ -23,6 +23,8 @@ export class Assembler {
         const ast = AST.build(tokens);
         console.log(ast)
 
+        this.memoryReset(); // We need to clean the memory before assembling the code.
+
         for(let i = 0; i < ast.instructions.length; i++) {
             try {
                 this.assembleInstruction(ast.instructions[i]);
@@ -65,7 +67,7 @@ export class Assembler {
         for(let k = 0; k < hexCells.length; k++) {
             this.memory.matrix[i][j] = hexCells[k];
 
-            if(j === 16) {
+            if(j === 15) {
                 i++;
                 j = 0;
             }
@@ -75,6 +77,15 @@ export class Assembler {
             if(i > this.memory.matrix.length) throw new AssemblerError("OutOfMemory", "Memory limit exceeded!");
         }
 
+        this.memory.free = { i, j }; // Updating last memory-free coordinates globally.
+
         if(this.onMemoryChange) this.onMemoryChange(this.memory.matrix);
+    }
+
+    memoryReset() {
+        this.memory = {
+            matrix: Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00")),
+            free: { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
+        }
     }
 };
