@@ -15,7 +15,9 @@ const Header = () => {
                 break;
             case "Run": break;
             case "Step": break;
-            case "Reset": break;
+            case "Reset":
+                dispatch(mainActions.updateReset(true));
+                break;
         }
     }
 

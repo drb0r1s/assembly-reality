@@ -4,7 +4,8 @@ const mainSlice = createSlice({
     name: "main",
     initialState: {
         view: { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true },
-        assemble: false
+        assemble: false,
+        reset: false
     },
 
     reducers: {
@@ -14,6 +15,10 @@ const mainSlice = createSlice({
 
         updateAssemble: (state, action) => {
             state.assemble = action.payload;
+        },
+
+        updateReset: (state, action) => {
+            state.reset = action.payload;
         }
     }
 });
