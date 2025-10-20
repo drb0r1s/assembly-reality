@@ -1,14 +1,14 @@
 import { keywordsRegex } from "../data/richEditor/keywords";
-import { registersString, registersRegex } from "../data/richEditor/registers";
+import { rootRegistersExpression } from "../data/richEditor/registers";
 
 export const Tokenizer = {
     patterns: {
         keyword: new RegExp(keywordsRegex.source, "g"),
-        register: new RegExp(registersRegex.source, "g"),
+        register: new RegExp(`(?<=\\s)(${rootRegistersExpression})(?=\\s|,|$)`, "g"),
         label: /^[a-zA-Z0-9_]+(?=:)/g,
         symbol: /[,:\(\)]/g,
         "memory.label": /(?<=\s\[)([a-zA-Z0-9_]+)(?=\](\s|,|$))/g,
-        "memory.register": new RegExp(`(?<=\\[)(${registersString})(?=\\](\\s|,|$))`, "g"),
+        "memory.register": new RegExp(`(?<=\\[)(${rootRegistersExpression})(?=\\](\\s|,|$))`, "g"),
         "number.decimal": /(?<=\s)([0-9]+)(?=\s|,|$)/g,
         "number.hex": /(?<=\s)(0x[0-9A-Fa-f]+)(?=\s|,|$)/g,
         "memory.number.hex": /(?<=\s\[)(0x[0-9A-Fa-f]+)(?=\](\s|,|$))/g,
