@@ -38,6 +38,9 @@ export class Assembler {
             case "MOV":
                 assembledCode = Instructions.MOV(instruction);
                 break;
+            case "MOVB":
+                assembledCode = Instructions.MOVB(instruction);
+                break;
             default: throw new AssemblerError("UnknownInstruction", { name: instruction.name });
         }
 
@@ -84,7 +87,10 @@ export class AssemblerError {
         switch(this.type) {
             case "UnknownInstruction": return `${attributes.name} is an unknown instruction!`;
             case "InvalidOperands": return `Instruction ${attributes.name} requires ${attributes.operands} operands!`;
+            case "InvalidOperand": return `Operand ${attributes.operand} is invalid for the ${attributes.instruction} instruction!`;
             case "MissingSeparator": return `The separator is missing for the ${attributes.name} instruction!`;
+            case "DecimalLimit16": return "16-bit operand must have a value between 0 and 65535!";
+            case "DecimalLimit8": return "8-bit operand must have a value between 0 and 255!";
             case "OutOfMemory": return "Memory limit exceeded!";
         }
     }
