@@ -1,9 +1,8 @@
 import { Tokenizer } from "./Tokenizer";
 import { AST } from "./AST";
-import { InstructionSet } from "./InstructionSet";
-import { registerIndexes } from "./registerIndexes";
+import { Instructions } from "./Instructions";
 
-class AssemblerError {
+export class AssemblerError {
     constructor(type, content) {
         this.type = type;
         this.content = content;
@@ -39,24 +38,16 @@ export class Assembler {
     }
 
     assembleInstruction(instruction) {
-        const operands = instruction.operands.filter(operand => operand.type !== "Separator");
-        if(operands.length !== 2) throw new AssemblerError("InvalidOperands", `Instruction ${instruction.name} requires 2 operands!`);
+        let assembledCode = "";
+        
+        switch(instruction.name) {
+            case "MOV":
+                assembledCode = Instructions.MOV(instruction);
+                break;
+            default:
+        }
 
-        const instructionCode = InstructionSet[instruction.name](operands);
-        if(!instructionCode) throw new AssemblerError("UnknownInstruction", `${instruction.name} is an unknown instruction!`);
-
-        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", `The separator is missing for the ${instruction.name} instruction!`);
-
-        const dest = operands[0];
-        const src = operands[1];
-
-        let destCode = parseInt(dest.value).toString(16).toUpperCase().padStart(4, "0");
-        let srcCode = parseInt(src.value).toString(16).toUpperCase().padStart(4, "0");
-
-        if(dest.valueType === "register") destCode = registerIndexes[dest.value];
-        if(src.valueType === "register") srcCode = registerIndexes[src.value];
-
-        this.memoryWrite(instructionCode + destCode + srcCode);
+        this.memoryWrite(assembledCode);
     }
 
     memoryWrite(hex) {
