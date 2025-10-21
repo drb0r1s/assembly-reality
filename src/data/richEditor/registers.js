@@ -1,12 +1,19 @@
+// DEFAULT REGISTERS
 const defaultRegisters = ["A", "B", "C", "D"];
-const registers = [];
+
+export const rootDefaultRegistersExpression = defaultRegisters.join("|");
+
+export const defaultRegistersRegex = new RegExp(`\\s(${rootDefaultRegistersExpression})(?=\\s|,|$)`);
+export const memoryDefaultRegistersRegex = new RegExp(`\\s\\[(${rootDefaultRegistersExpression})\\](?=\\s|,|$)`);
+
+// HALF REGISTERS
+const halfRegisters = [];
 
 for(let i = 0; i < defaultRegisters.length; i++) {
-    registers.push(defaultRegisters[i], `${defaultRegisters[i]}L`, `${defaultRegisters[i]}H`);
+    halfRegisters.push(`${defaultRegisters[i]}L`, `${defaultRegisters[i]}H`);
 }
 
-// .sort() is needed here to fix the common issue of matching "registerL" or "registerH" without considering "L" or "H".
-export const rootRegistersExpression = [...registers].sort((a, b) => b.length - a.length).join("|");
+export const rootHalfRegistersExpression = halfRegisters.join("|");
 
-export const registersRegex = new RegExp(`\\s(${rootRegistersExpression})(?=\\s|,|$)`);
-export const memoryRegistersRegex = new RegExp(`\\s\\[(${rootRegistersExpression})\\](?=\\s|,|$)`);
+export const halfRegistersRegex = new RegExp(`\\s(${rootHalfRegistersExpression})(?=\\s|,|$)`);
+export const memoryHalfRegistersRegex = new RegExp(`\\s\\[(${rootHalfRegistersExpression})\\](?=\\s|,|$)`);

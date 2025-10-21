@@ -1,5 +1,5 @@
 import { keywordsRegex, middleKeywordsRegex, labelKeywordsRegex, middleLabelKeywordsRegex } from "./keywords";
-import { registersRegex, memoryRegistersRegex } from "./registers";
+import { defaultRegistersRegex, memoryDefaultRegistersRegex, halfRegistersRegex, memoryHalfRegistersRegex } from "./registers";
 
 export const tokenizer = {
     root: [
@@ -13,10 +13,14 @@ export const tokenizer = {
         [middleKeywordsRegex, "keyword"],
 
         // Registers
-        [registersRegex, "register"],
 
-        // Memory registers
-        [memoryRegistersRegex, "memoryRegister"],
+        // Default registers
+        [defaultRegistersRegex, "register"],
+        [memoryDefaultRegistersRegex, "memoryRegister"], // Memory default registers
+
+        // Half registers
+        [halfRegistersRegex, "halfRegister"],
+        [memoryHalfRegistersRegex, "memoryHalfRegister"], // Memory half registers
 
         // Numbers
         [/\s([0-9]+)(?=\s|,|$)/, "number"], // Decimal
