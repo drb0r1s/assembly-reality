@@ -24,6 +24,23 @@ export const InstructionSet = {
             case "memory.register number.*": return "07";
             case "memory.number.hex number.*": return "08";
         }
+    },
+
+    MOVB: operands => {
+        const [first, second] = operands;
+
+        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
+
+        switch(valueTypes) {
+            case "half.register half.register": return "09";
+            case "half.register memory.half.register": return "0A";
+            case "half.register memory.number.hex": return "0B";
+            case "memory.half.register half.register": return "0C";
+            case "memory.number.hex half.register": return "0D";
+            case "half.register number.*": return "0E";
+            case "memory.half.register number.*": return "0F";
+            case "memory.number.hex number.*": return "10";
+        }
     }
 };
 
