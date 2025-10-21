@@ -1,5 +1,5 @@
 import { keywordsRegex } from "../data/richEditor/keywords";
-import { rootRegistersExpression } from "../data/richEditor/registers";
+import { rootDefaultRegistersExpression, rootHalfRegistersExpression } from "../data/richEditor/registers";
 
 export const Tokenizer = {
     // Patterns are ordered from the highest to the lowest priority.
@@ -8,10 +8,12 @@ export const Tokenizer = {
         "string.double": /\"([^"\\]|\\.)*\"/g,
         "string.single": /\'([^'\\]|\\.)*\'/g,
         "memory.number.hex": /(?<=\s\[0x)([0-9A-Fa-f]+)(?=\](\s|,|$))/g,
-        "memory.register": new RegExp(`(?<=\\[)(${rootRegistersExpression})(?=\\](\\s|,|$))`, "g"),
+        "memory.half.register": new RegExp(`(?<=\\[)(${rootHalfRegistersExpression})(?=\\](\\s|,|$))`, "g"),
+        "memory.register": new RegExp(`(?<=\\[)(${rootDefaultRegistersExpression})(?=\\](\\s|,|$))`, "g"),
         "memory.label": /(?<=\s\[)([a-zA-Z0-9_]+)(?=\](\s|,|$))/g,
         keyword: new RegExp(keywordsRegex.source, "g"),
-        register: new RegExp(`(?<=\\s)(${rootRegistersExpression})(?=\\s|,|$)`, "g"),
+        "half.register": new RegExp(`(?<=\\s)(${rootHalfRegistersExpression})(?=\\s|,|$)`, "g"),
+        register: new RegExp(`(?<=\\s)(${rootDefaultRegistersExpression})(?=\\s|,|$)`, "g"),
         label: /^[a-zA-Z0-9_]+(?=:)/g,
         "number.hex": /(?<=\s0x)([0-9A-Fa-f]+)(?=\s|,|$)/g,
         "number.decimal": /(?<=\s)([0-9]+)(?=\s|,|$)/g,
@@ -23,9 +25,11 @@ export const Tokenizer = {
         "string.double",
         "string.single",
         "memory.number.hex",
+        "memory.half.register",
         "memory.register",
         "memory.label",
         "keyword",
+        "half.register",
         "register",
         "label",
         "number.hex",
