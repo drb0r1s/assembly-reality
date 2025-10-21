@@ -2,13 +2,6 @@ import { Tokenizer } from "./Tokenizer";
 import { AST } from "./AST";
 import { Instructions } from "./Instructions";
 
-export class AssemblerError {
-    constructor(type, content) {
-        this.type = type;
-        this.content = content;
-    }
-}
-
 export class Assembler {
     constructor() {
         this.memory = {
@@ -31,6 +24,7 @@ export class Assembler {
 
             catch(error) {
                 if(error instanceof AssemblerError) return { error };
+                else console.error(error);
             }
         }
 
@@ -44,10 +38,10 @@ export class Assembler {
             case "MOV":
                 assembledCode = Instructions.MOV(instruction);
                 break;
-            default:
+            default: throw new AssemblerError("UnknownInstruction", { name: instruction.name });
         }
 
-        this.memoryWrite(assembledCode);
+        if(assembledCode) this.memoryWrite(assembledCode);
     }
 
     memoryWrite(hex) {
@@ -64,7 +58,7 @@ export class Assembler {
 
             else j++;
 
-            if(i > this.memory.matrix.length) throw new AssemblerError("OutOfMemory", "Memory limit exceeded!");
+            if(i > this.memory.matrix.length) throw new AssemblerError("OutOfMemory");
         }
 
         this.memory.free = { i, j }; // Updating last memory-free coordinates globally.
@@ -76,6 +70,22 @@ export class Assembler {
         this.memory = {
             matrix: Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00")),
             free: { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
+        }
+    }
+};
+
+export class AssemblerError {
+    constructor(type, attributes) {
+        this.type = type;
+        this.content = this.getContent(attributes);
+    }
+
+    getContent(attributes) {
+        switch(this.type) {
+            case "UnknownInstruction": return `${attributes.name} is an unknown instruction!`;
+            case "InvalidOperands": return `Instruction ${attributes.name} requires ${attributes.operands} operands!`;
+            case "MissingSeparator": return `The separator is missing for the ${attributes.name} instruction!`;
+            case "OutOfMemory": return "Memory limit exceeded!";
         }
     }
 };
