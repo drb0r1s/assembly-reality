@@ -12,8 +12,8 @@ export const Tokenizer = {
         "number.decimal": /(?<=\s)([0-9]+)(?=\s|,|$)/g,
         "number.hex": /(?<=\s)(0x[0-9A-Fa-f]+)(?=\s|,|$)/g,
         "memory.number.hex": /(?<=\s\[)(0x[0-9A-Fa-f]+)(?=\](\s|,|$))/g,
-        "string.doubleQuoted": /\"([^"\\]|\\.)*\"/g,
-        "string.singleQuoted": /\'([^'\\]|\\.)*\'/g,
+        "string.double": /\"([^"\\]|\\.)*\"/g,
+        "string.single": /\'([^'\\]|\\.)*\'/g,
         comment: /\/\/.*$|;.*$/g
     },
     
