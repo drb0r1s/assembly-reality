@@ -19,6 +19,7 @@ export const InstructionSet = {
         switch(valueTypes) {
             case "register register": return "01";
             case "register memory.register": return "02";
+            case "register memory.half.register": return "02";
             case "register memory.number.hex": return "03";
             case "memory.register register": return "04";
             case "memory.number.hex register": return "05";
@@ -37,6 +38,7 @@ export const InstructionSet = {
         switch(valueTypes) {
             case "half.register half.register": return "09";
             case "half.register memory.half.register": return "0A";
+            case "half.register memory.register": return "0A";
             case "half.register memory.number.hex": return "0B";
             case "memory.half.register half.register": return "0C";
             case "memory.number.hex half.register": return "0D";
