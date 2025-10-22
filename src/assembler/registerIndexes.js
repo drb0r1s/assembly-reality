@@ -9,9 +9,9 @@ export const registerIndexes = {
     AH: "07",
     AL: "08",
     BH: "09",
-    BL: "A",
-    CH: "B",
-    CL: "C",
-    DH: "D",
-    DL: "E"
+    BL: "0A",
+    CH: "0B",
+    CL: "0C",
+    DH: "0D",
+    DL: "0E"
 };
