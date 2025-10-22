@@ -23,6 +23,7 @@ export const Instructions = {
             switch(operand.valueType) {
                 case "register": return registerIndexes[operand.value];
                 case "memory.register": return "00" + registerIndexes[operand.value];
+                case "memory.half.register": return registerIndexes[operand.value];
                 case "memory.number.hex": return operand.value.toUpperCase().padStart(4, "0");
                 case "number.decimal":
                     if(operand.value > 65535) throw new AssemblerError("DecimalLimit16", {}, instruction.line);
@@ -54,6 +55,7 @@ export const Instructions = {
         function parseType(operand) {
             switch(operand.valueType) {
                 case "half.register": return registerIndexes[operand.value];
+                case "memory.register": return "00" + registerIndexes[operand.value];
                 case "memory.half.register": return registerIndexes[operand.value];
                 case "memory.number.hex": return operand.value.toUpperCase().padStart(4, "0");
                 case "number.decimal":
