@@ -5,11 +5,11 @@ import { registerIndexes } from "./registerIndexes";
 export const Instructions = {
     MOV: instruction => {
         const operands = instruction.operands.filter(operand => operand.type !== "Separator");
-        if(operands.length !== 2) throw new AssemblerError("InvalidOperands", { name: instruction.name, operands: 2 });
+        if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
 
-        const instructionCode = InstructionSet[instruction.name](operands);
+        const instructionCode = InstructionSet[instruction.name](instruction, operands);
 
-        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name });
+        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name }, instruction.line);
 
         const dest = operands[0];
         const src = operands[1];
@@ -25,23 +25,23 @@ export const Instructions = {
                 case "memory.register": return "00" + registerIndexes[operand.value];
                 case "memory.number.hex": return operand.value.toUpperCase().padStart(4, "0");
                 case "number.decimal":
-                    if(operand.value > 65535) throw new AssemblerError("DecimalLimit16");
+                    if(operand.value > 65535) throw new AssemblerError("DecimalLimit16", {}, instruction.line);
                     return parseInt(operand.value).toString(16).toUpperCase().padStart(4, "0");
                 case "number.hex":
-                    if(parseInt(`0x${operand.value}`) > 65535) throw new AssemblerError("HexLimit16");
+                    if(parseInt(`0x${operand.value}`) > 65535) throw new AssemblerError("HexLimit16", {}, instruction.line);
                     return operand.value.toUpperCase().padStart(4, "0");
-                default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name });
+                default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name }, instruction.line);
             }
         }
     },
 
     MOVB: instruction => {
         const operands = instruction.operands.filter(operand => operand.type !== "Separator");
-        if(operands.length !== 2) throw new AssemblerError("InvalidOperands", { name: instruction.name, operands: 2 });
+        if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
 
-        const instructionCode = InstructionSet[instruction.name](operands);
+        const instructionCode = InstructionSet[instruction.name](instruction, operands);
 
-        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name });
+        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name }, instruction.line);
 
         const dest = operands[0];
         const src = operands[1];
@@ -57,14 +57,14 @@ export const Instructions = {
                 case "memory.half.register": return registerIndexes[operand.value];
                 case "memory.number.hex": return operand.value.toUpperCase().padStart(4, "0");
                 case "number.decimal":
-                    if(operand.value > 255) throw new AssemblerError("DecimalLimit8");
+                    if(operand.value > 255) throw new AssemblerError("DecimalLimit8", {}, instruction.line);
                     return parseInt(operand.value).toString(16).toUpperCase().padStart(2, "0");
                 case "number.hex":
-                    if(parseInt(`0x${operand.value}`) > 255) throw new AssemblerError("HexLimit8");
+                    if(parseInt(`0x${operand.value}`) > 255) throw new AssemblerError("HexLimit8", {}, instruction.line);
                     
                     if(operand.value.length > 2) return operand.value.substring(2).toUpperCase(); // Edge case: 0x00FF
                     return operand.value.toUpperCase().padStart(2, "0");
-                default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name });
+                default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name }, instruction.line);
             }
         }
     }

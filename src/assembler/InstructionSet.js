@@ -1,3 +1,5 @@
+import { AssemblerError } from "./Assembler";
+
 /*
     Type examples:
 
@@ -9,7 +11,7 @@
 
 export const InstructionSet = {
     // MOV operands: REG (register) || IND (memory.register) || DIR (memory.number.hex) || IMD (number.*)
-    MOV: operands => {
+    MOV: (instruction, operands) => {
         const [first, second] = operands;
 
         const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
@@ -23,10 +25,11 @@ export const InstructionSet = {
             case "register number.*": return "06";
             case "memory.register number.*": return "07";
             case "memory.number.hex number.*": return "08";
+            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
         }
     },
 
-    MOVB: operands => {
+    MOVB: (instruction, operands) => {
         const [first, second] = operands;
 
         const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
@@ -40,6 +43,7 @@ export const InstructionSet = {
             case "half.register number.*": return "0E";
             case "memory.half.register number.*": return "0F";
             case "memory.number.hex number.*": return "10";
+            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
         }
     }
 };
