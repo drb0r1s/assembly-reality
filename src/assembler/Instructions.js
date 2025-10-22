@@ -3,6 +3,11 @@ import { InstructionSet } from "./InstructionSet";
 import { registerIndexes } from "./registerIndexes";
 
 export const Instructions = {
+    HLT: instruction => {
+        const instructionCode = InstructionSet[instruction.name]();
+        return instructionCode;
+    },
+
     MOV: instruction => {
         const operands = instruction.operands.filter(operand => operand.type !== "Separator");
         if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);

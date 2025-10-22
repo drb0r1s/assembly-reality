@@ -8,6 +8,8 @@ export class Assembler {
             matrix: Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00")),
             free: { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
         };
+
+        this.halted = false; // End the assembling of the code.
     }
     
     assemble(text) {
@@ -35,6 +37,9 @@ export class Assembler {
         let assembledCode = "";
         
         switch(instruction.name) {
+            case "HLT":
+                assembledCode = Instructions.HLT(instruction);
+                break;
             case "MOV":
                 assembledCode = Instructions.MOV(instruction);
                 break;

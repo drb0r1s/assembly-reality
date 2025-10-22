@@ -10,6 +10,10 @@ import { AssemblerError } from "./Assembler";
 */
 
 export const InstructionSet = {
+    HLT: () => {
+        return "00";
+    },
+    
     // MOV operands: REG (register) || IND (memory.register) || DIR (memory.number.hex) || IMD (number.*)
     MOV: (instruction, operands) => {
         const [first, second] = operands;
@@ -30,6 +34,7 @@ export const InstructionSet = {
         }
     },
 
+    // MOVB operands: REG (register) || IND (memory.register) || DIR (memory.number.hex) || IMD (number.*)
     MOVB: (instruction, operands) => {
         const [first, second] = operands;
 
