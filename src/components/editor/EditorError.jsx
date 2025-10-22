@@ -21,7 +21,7 @@ const EditorError = ({ error, setError }) => {
     return(
         <div className="editor-error" ref={editorErrorRef}>
             <button onClick={disableEditorError}><img src={images.xIcon} alt="X" /></button>
-            <p>ERROR ({error.type}): {error.content}</p>
+            <p>ERROR ({error.type}): {error.content}{error.line ? ` @ line ${error.line}` : ""}</p>
         </div>
     );
 }

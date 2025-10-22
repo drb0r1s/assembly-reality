@@ -41,9 +41,11 @@ export const Tokenizer = {
         const tokens = [];
 
         // \r may exist at the end of the line, because of Monaco editor
-        const lines = text.split(/\r?\n/).filter(line => line.length > 0);
+        const lines = text.split(/\r?\n/);
 
         for(let i = 0; i < lines.length; i++) {
+            if(lines[i].length === 0) continue;
+            
             const lineTokens = []; // This variable will store all matched tokens from the specific line.
             const taken = Array(lines[i].length).fill(false);
 
@@ -67,7 +69,7 @@ export const Tokenizer = {
                     lineTokens.push({
                         type,
                         value: match[0],
-                        line: i,
+                        line: i + 1,
                         start,
                         end
                     });

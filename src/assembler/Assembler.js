@@ -41,7 +41,7 @@ export class Assembler {
             case "MOVB":
                 assembledCode = Instructions.MOVB(instruction);
                 break;
-            default: throw new AssemblerError("UnknownInstruction", { name: instruction.name });
+            default: throw new AssemblerError("UnknownInstruction", { name: instruction.name }, instruction.line);
         }
 
         if(assembledCode) this.memoryWrite(assembledCode);
@@ -78,16 +78,18 @@ export class Assembler {
 };
 
 export class AssemblerError {
-    constructor(type, attributes) {
+    constructor(type, attributes, line) {
         this.type = type;
         this.content = this.getContent(attributes);
+        this.line = line ? line : null;
     }
 
     getContent(attributes) {
         switch(this.type) {
             case "UnknownInstruction": return `${attributes.name} is an unknown instruction!`;
-            case "InvalidOperands": return `Instruction ${attributes.name} requires ${attributes.operands} operands!`;
+            case "InvalidOperandsCombination": return `Combination of ${attributes.operands[0]} and ${attributes.operands[1]} operands is invalid for the ${attributes.instruction} instruction!`;
             case "InvalidOperand": return `Operand ${attributes.operand} is invalid for the ${attributes.instruction} instruction!`;
+            case "InvalidNumberOfOperands": return `Instruction ${attributes.name} requires ${attributes.operands} operands!`;
             case "MissingSeparator": return `The separator is missing for the ${attributes.name} instruction!`;
             case "DecimalLimit16": return "16-bit operand must have a value between 0 and 65535!";
             case "DecimalLimit8": return "8-bit operand must have a value between 0 and 255!";
