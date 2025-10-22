@@ -34,7 +34,7 @@ export const InstructionSet = {
         }
     },
 
-    // MOVB operands: REG (register) || IND (memory.register) || DIR (memory.number.hex) || IMD (number.*)
+    // MOVB operands: REG (register) || IND (memory.register. memory.half.register) || DIR (memory.number.hex) || IMD (number.*)
     MOVB: (instruction, operands) => {
         const [first, second] = operands;
 
@@ -42,14 +42,47 @@ export const InstructionSet = {
 
         switch(valueTypes) {
             case "half.register half.register": return "09";
-            case "half.register memory.half.register": return "0A";
             case "half.register memory.register": return "0A";
+            case "half.register memory.half.register": return "0A";
             case "half.register memory.number.hex": return "0B";
+            case "memory.register half.register": return "0C";
             case "memory.half.register half.register": return "0C";
             case "memory.number.hex half.register": return "0D";
             case "half.register number.*": return "0E";
+            case "memory.register number.*": return "0F";
             case "memory.half.register number.*": return "0F";
             case "memory.number.hex number.*": return "10";
+            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
+        }
+    },
+
+    // ADD operands: REG (register) || IND (memory.register) || DIR (memory.number.hex) || IMD (number.*)
+    ADD: (instruction, operands) => {
+        const [first, second] = operands;
+
+        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
+
+        switch(valueTypes) {
+            case "register register": return "11";
+            case "register memory.register": return "12";
+            case "register memory.number.hex": return "13";
+            case "register number.*": return "14";
+            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
+        }
+    },
+
+    // ADDB operands: REG (register) || IND (memory.register, memory.half.register) || DIR (memory.number.hex) || IMD (number.*)
+    ADDB: (instruction, operands) => {
+        const [first, second] = operands;
+
+        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
+
+        switch(valueTypes) {
+            case "half.register half.register": return "15";
+            case "half.register memory.register": return "16";
+            case "half.register memory.half.register": return "16";
+            case "half.register memory.number.hex": return "17";
+            case "half.register number.*": return "18";
             default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
         }
     }
