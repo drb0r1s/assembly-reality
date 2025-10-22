@@ -27,7 +27,9 @@ export const Instructions = {
                 case "number.decimal":
                     if(operand.value > 65535) throw new AssemblerError("DecimalLimit16");
                     return parseInt(operand.value).toString(16).toUpperCase().padStart(4, "0");
-                case "number.hex": return operand.value.toUpperCase().padStart(4, "0");
+                case "number.hex":
+                    if(parseInt(`0x${operand.value}`) > 65535) throw new AssemblerError("HexLimit16");
+                    return operand.value.toUpperCase().padStart(4, "0");
                 default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name });
             }
         }
@@ -53,11 +55,15 @@ export const Instructions = {
             switch(operand.valueType) {
                 case "half.register": return registerIndexes[operand.value];
                 case "memory.half.register": return registerIndexes[operand.value];
-                case "memory.number.hex": return operand.value.toUpperCase().padStart(2, "0");
+                case "memory.number.hex": return operand.value.toUpperCase().padStart(4, "0");
                 case "number.decimal":
                     if(operand.value > 255) throw new AssemblerError("DecimalLimit8");
                     return parseInt(operand.value).toString(16).toUpperCase().padStart(2, "0");
-                case "number.hex": return operand.value.toUpperCase().padStart(2, "0");
+                case "number.hex":
+                    if(parseInt(`0x${operand.value}`) > 255) throw new AssemblerError("HexLimit8");
+                    
+                    if(operand.value.length > 2) return operand.value.substring(2).toUpperCase(); // Edge case: 0x00FF
+                    return operand.value.toUpperCase().padStart(2, "0");
                 default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name });
             }
         }
