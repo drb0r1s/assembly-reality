@@ -35,19 +35,10 @@ export class Assembler {
 
     assembleInstruction(instruction) {
         let assembledCode = "";
-        
-        switch(instruction.name) {
-            case "HLT":
-                assembledCode = Instructions.HLT(instruction);
-                break;
-            case "MOV":
-                assembledCode = Instructions.MOV(instruction);
-                break;
-            case "MOVB":
-                assembledCode = Instructions.MOVB(instruction);
-                break;
-            default: throw new AssemblerError("UnknownInstruction", { name: instruction.name }, instruction.line);
-        }
+        const instructionMethod = Instructions[instruction.name];
+
+        if(instructionMethod) assembledCode = instructionMethod(instruction);
+        else throw new AssemblerError("UnknownInstruction", { name: instruction.name }, instruction.line);
 
         if(assembledCode) this.memoryWrite(assembledCode);
     }
