@@ -85,7 +85,38 @@ export const InstructionSet = {
             case "half.register number.*": return "18";
             default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
         }
-    }
+    },
+
+    // SUB operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    SUB: (instruction, operands) => {
+        const [first, second] = operands;
+
+        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
+
+        switch(valueTypes) {
+            case "register register": return "19";
+            case "register memory.register": return "1A";
+            case "register memory.number.*": return "1B";
+            case "register number.*": return "1C";
+            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
+        }
+    },
+
+    // SUBB operands: REG (register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    SUBB: (instruction, operands) => {
+        const [first, second] = operands;
+
+        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
+
+        switch(valueTypes) {
+            case "half.register half.register": return "1D";
+            case "half.register memory.register": return "1E";
+            case "half.register memory.half.register": return "1F";
+            case "half.register memory.number.*": return "20";
+            case "half.register number.*": return "21";
+            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
+        }
+    },
 };
 
 // number.hex => number.*

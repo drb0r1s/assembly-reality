@@ -24,7 +24,11 @@ export const Instructions = {
     },
 
     SUB: instruction => {
+        return Perform.twoOperands(instruction);
+    },
 
+    SUBB: instruction => {
+        return Perform.twoOperands(instruction, { isHalf: true });
     }
 };
 
