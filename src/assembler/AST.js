@@ -6,10 +6,11 @@ class ProgramNode {
 }
 
 class InstructionNode {
-    constructor(name, line, operands) {
+    constructor(name, line, isHalf, operands) {
         this.type = "Instruction";
         this.name = name;
         this.line = line;
+        this.isHalf = isHalf;
         this.operands = operands;
     }
 }
@@ -69,7 +70,7 @@ export const AST = {
         const firstToken = tokens[0];
 
         if(firstToken.type === "keyword") {
-            const instructionNode = new InstructionNode(firstToken.value, firstToken.line, []);
+            const instructionNode = new InstructionNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
             
             for(let i = 1; i < tokens.length; i++) {
                 if(tokens[i].type === "comment") continue; // AST ignores the comments.

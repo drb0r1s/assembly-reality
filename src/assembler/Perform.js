@@ -1,95 +1,43 @@
 import { AssemblerError } from "./Assembler";
-import { InstructionSet } from "./InstructionSet";
 import { registerIndexes } from "./registerIndexes";
 
-export const Instructions = {
-    HLT: instruction => {
-        return Perform.noOperands(instruction);
-    },
-
-    MOV: instruction => {
-        return Perform.twoOperands(instruction);
-    },
-
-    MOVB: instruction => {
-        return Perform.twoOperands(instruction, { isHalf: true });
-    },
-
-    ADD: instruction => {
-        return Perform.twoOperands(instruction);
-    },
-
-    ADDB: instruction => {
-        return Perform.twoOperands(instruction, { isHalf: true });
-    },
-
-    SUB: instruction => {
-        return Perform.twoOperands(instruction);
-    },
-
-    SUBB: instruction => {
-        return Perform.twoOperands(instruction, { isHalf: true });
-    },
-
-    INC: instruction => {
-        return Perform.oneOperand(instruction);
-    },
-
-    INCB: instruction => {
-        return Perform.oneOperand(instruction, { isHalf: true });
-    },
-
-    DEC: instruction => {
-        return Perform.oneOperand(instruction);
-    },
-
-    DECB: instruction => {
-        return Perform.oneOperand(instruction, { isHalf: true });
-    }
-};
-
-const Perform = {
-    noOperands: instruction => {
-        const instructionCode = InstructionSet[instruction.name]();
-        return instructionCode;
-    },
-
-    oneOperand: (instruction, options) => {
+export const Perform = {
+    oneOperand: (instruction, combinations) => {
         if(instruction.operands.length !== 1) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
 
-        const instructionCode = InstructionSet[instruction.name](instruction, instruction.operands);
+        const instructionCode = getInstructionCode(instruction, instruction.operands, combinations);
         
         const dest = instruction.operands[0];
-        const destCode = parseType(instruction, dest, { isHalf: options?.isHalf ? options.isHalf : false });
+        const destCode = parseType(instruction, dest);
 
         return instructionCode + destCode;
     },
     
-    twoOperands: (instruction, options) => {
+    twoOperands: (instruction, combinations) => {
         const operands = instruction.operands.filter(operand => operand.type !== "Separator");
         if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
 
-        const instructionCode = InstructionSet[instruction.name](instruction, operands);
+        const instructionCode = getInstructionCode(instruction, operands, combinations);
 
         if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name }, instruction.line);
 
         const dest = operands[0];
         const src = operands[1];
 
-        const destCode = parseType(instruction, dest, { isHalf: options?.isHalf ? options.isHalf : false });
-        const srcCode = parseType(instruction, src, { isHalf: options?.isHalf ? options.isHalf : false });
+        const destCode = parseType(instruction, dest);
+        const srcCode = parseType(instruction, src);
 
         return instructionCode + destCode + srcCode;
     }
 };
 
-function parseType(instruction, operand, options) {
+function parseType(instruction, operand) {
     // isHalf is used for 8-bit instructions
     const data = {
-        codeLength: options?.isHalf ? 2 : 4,
-        maxValue: options?.isHalf ? 255 : 65535,
+        codeLength: instruction.isHalf ? 2 : 4,
+        maxValue: instruction.isHalf ? 255 : 65535,
         maxMemoryValue: 4127,
-        bits: options?.isHalf ? 8 : 16
+        bits: instruction.isHalf ? 8 : 16
     };
     
     switch(operand.valueType) {
@@ -110,5 +58,41 @@ function parseType(instruction, operand, options) {
             if(parseInt(operand.value) > data.maxValue) throw new AssemblerError(`DecimalLimit${data.bits}`, {}, instruction.line);
             return parseInt(operand.value).toString(16).toUpperCase().padStart(data.codeLength, "0");
         default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name }, instruction.line);
+    }
+}
+
+function getInstructionCode(instruction, operands, combinations) {
+    // ONE OPERAND
+    if(operands.length === 1) {
+        const [first] = operands;
+        const instructionCode = combinations[first.valueType];
+
+        if(!instructionCode) throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
+        return instructionCode;
+    }
+    
+    // TWO OPERANDS
+    else {
+        const [first, second] = operands;
+        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
+
+        return extractInstructionCode();
+
+        function extractInstructionCode() {
+            const instructionCode = combinations[valueTypes];
+            
+            if(!instructionCode) throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
+            return instructionCode;
+        }
+
+        // number.hex => number.*
+        function generalizeType(valueType) {
+            if(!valueType.startsWith("number") && !valueType.startsWith("memory.number")) return valueType; // Currently only used for number type.
+            
+            const parts = valueType.split(".");
+
+            if(parts[0] === "memory") return `memory.${parts[1]}.*`;
+            return `${parts[0]}.*`;
+        }
     }
 }

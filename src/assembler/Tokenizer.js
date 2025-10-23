@@ -67,14 +67,18 @@ export const Tokenizer = {
 
                     if(taken.slice(start, end).some(Boolean)) continue;
                     for(let k = start; k < end; k++) taken[k] = true;
-                    
-                    lineTokens.push({
+
+                    const token = {
                         type,
                         value: match[0],
                         line: i + 1,
                         start,
                         end
-                    });
+                    };
+
+                    if(token.type === "keyword") token.isHalf = Tokenizer.isKeywordHalf(token.value);
+                    
+                    lineTokens.push(token);
                 }
             }
 
@@ -84,5 +88,14 @@ export const Tokenizer = {
         }
 
         return tokens;
+    },
+
+    isKeywordHalf: keyword => {
+        if(keyword === "SUB") return false; // This is the edge case, the only keyword ending with "B" that should not be considered half.
+
+        const last = keyword.slice(-1);
+        if(last === "B") return true;
+
+        return false;
     }
 };

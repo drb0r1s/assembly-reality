@@ -1,4 +1,4 @@
-import { AssemblerError } from "./Assembler";
+import { Perform } from "./Perform";
 
 /*
     Type examples:
@@ -10,153 +10,87 @@ import { AssemblerError } from "./Assembler";
 */
 
 export const InstructionSet = {
-    HLT: () => {
-        return "00";
-    },
+    HLT: () => "00",
     
     // MOV operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    MOV: (instruction, operands) => {
-        const [first, second] = operands;
-
-        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
-
-        switch(valueTypes) {
-            case "register register": return "01";
-            case "register memory.register": return "02";
-            case "register memory.half.register": return "02";
-            case "register memory.number.*": return "03";
-            case "memory.register register": return "04";
-            case "memory.number.* register": return "05";
-            case "register number.*": return "06";
-            case "memory.register number.*": return "07";
-            case "memory.number.* number.*": return "08";
-            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
-        }
-    },
+    MOV: instruction => Perform.twoOperands(instruction, {
+        "register register": "01",
+        "register memory.register": "02",
+        "register memory.half.register": "02",
+        "register memory.number.*": "03",
+        "memory.register register": "04",
+        "memory.number.* register": "05",
+        "register number.*": "06",
+        "memory.register number.*": "07",
+        "memory.number.* number.*": "08"
+    }),
 
     // MOVB operands: REG (half.register) || IND (memory.register. memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    MOVB: (instruction, operands) => {
-        const [first, second] = operands;
-
-        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
-
-        switch(valueTypes) {
-            case "half.register half.register": return "09";
-            case "half.register memory.register": return "0A";
-            case "half.register memory.half.register": return "0A";
-            case "half.register memory.number.*": return "0B";
-            case "memory.register half.register": return "0C";
-            case "memory.half.register half.register": return "0C";
-            case "memory.number.* half.register": return "0D";
-            case "half.register number.*": return "0E";
-            case "memory.register number.*": return "0F";
-            case "memory.half.register number.*": return "0F";
-            case "memory.number.* number.*": return "10";
-            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
-        }
-    },
+    MOVB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "09",
+        "half.register memory.register": "0A",
+        "half.register memory.half.register": "0A",
+        "half.register memory.number.*": "0B",
+        "memory.register half.register": "0C",
+        "memory.half.register half.register": "0C",
+        "memory.number.* half.register": "0D",
+        "half.register number.*": "0E",
+        "memory.register number.*": "0F",
+        "memory.half.register number.*": "0F",
+        "memory.number.* number.*": "10"
+    }),
 
     // ADD operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    ADD: (instruction, operands) => {
-        const [first, second] = operands;
-
-        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
-
-        switch(valueTypes) {
-            case "register register": return "11";
-            case "register memory.register": return "12";
-            case "register memory.number.*": return "13";
-            case "register number.*": return "14";
-            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
-        }
-    },
+    ADD: instruction => Perform.twoOperands(instruction, {
+        "register register": "11",
+        "register memory.register": "12",
+        "register memory.number.*": "13",
+        "register number.*": "14"
+    }),
 
     // ADDB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    ADDB: (instruction, operands) => {
-        const [first, second] = operands;
-
-        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
-
-        switch(valueTypes) {
-            case "half.register half.register": return "15";
-            case "half.register memory.register": return "16";
-            case "half.register memory.half.register": return "16";
-            case "half.register memory.number.*": return "17";
-            case "half.register number.*": return "18";
-            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
-        }
-    },
+    ADDB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "15",
+        "half.register memory.register": "16",
+        "half.register memory.half.register": "16",
+        "half.register memory.number.*": "17",
+        "half.register number.*": "18"
+    }),
 
     // SUB operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    SUB: (instruction, operands) => {
-        const [first, second] = operands;
-
-        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
-
-        switch(valueTypes) {
-            case "register register": return "19";
-            case "register memory.register": return "1A";
-            case "register memory.number.*": return "1B";
-            case "register number.*": return "1C";
-            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
-        }
-    },
+    SUB: instruction => Perform.twoOperands(instruction, {
+        "register register": "19",
+        "register memory.register": "1A",
+        "register memory.number.*": "1B",
+        "register number.*": "1C"
+    }),
 
     // SUBB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    SUBB: (instruction, operands) => {
-        const [first, second] = operands;
-
-        const valueTypes = `${generalizeType(first.valueType)} ${generalizeType(second.valueType)}`;
-
-        switch(valueTypes) {
-            case "half.register half.register": return "1D";
-            case "half.register memory.register": return "1E";
-            case "half.register memory.half.register": return "1E";
-            case "half.register memory.number.*": return "1F";
-            case "half.register number.*": return "20";
-            default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
-        }
-    },
+    SUBB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "1D",
+        "half.register memory.register": "1E",
+        "half.register memory.half.register": "1E",
+        "half.register memory.number.*": "1F",
+        "half.register number.*": "20"
+    }),
 
     // INC operand: REG (register)
-    INC: (instruction, operand) => {
-        const [first] = operand;
-
-        if(first.valueType === "register") return "21";
-        else throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
-    },
+    INC: instruction => Perform.oneOperand(instruction, {
+        "register": "21"
+    }),
 
     // INCB operand: REG (half.register)
-    INCB: (instruction, operand) => {
-        const [first] = operand;
-
-        if(first.valueType === "half.register") return "22";
-        else throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
-    },
+    INCB: instruction => Perform.oneOperand(instruction, {
+        "half.register": "22"
+    }),
 
     // DEC operand: REG (register)
-    DEC: (instruction, operand) => {
-        const [first] = operand;
-
-        if(first.valueType === "register") return "23";
-        else throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
-    },
+    DEC: instruction => Perform.oneOperand(instruction, {
+        "register": "23"
+    }),
 
     // DECB operand: REG (half.register)
-    DECB: (instruction, operand) => {
-        const [first] = operand;
-
-        if(first.valueType === "half.register") return "24";
-        else throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
-    }
+    DECB: instruction => Perform.oneOperand(instruction, {
+        "half.register": "24"
+    })
 };
-
-// number.hex => number.*
-function generalizeType(valueType) {
-    if(!valueType.startsWith("number") && !valueType.startsWith("memory.number")) return valueType; // Currently only used for number type.
-    
-    const parts = valueType.split(".");
-
-    if(parts[0] === "memory") return `memory.${parts[1]}.*`;
-    return `${parts[0]}.*`;
-}
