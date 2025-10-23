@@ -82,6 +82,7 @@ function parseType(instruction, operand, options) {
     const data = {
         codeLength: options?.isHalf ? 2 : 4,
         maxValue: options?.isHalf ? 255 : 65535,
+        maxMemoryValue: 4127,
         bits: options?.isHalf ? 8 : 16
     };
     
@@ -90,13 +91,17 @@ function parseType(instruction, operand, options) {
         case "half.register": return registerIndexes[operand.value];
         case "memory.register": return "00" + registerIndexes[operand.value];
         case "memory.half.register": return registerIndexes[operand.value];
-        case "memory.number.hex": return operand.value.toUpperCase().padStart(4, "0");
-        case "memory.number.decimal": return parseInt(operand.value).toString(16).toUpperCase().padStart(4, "0");
+        case "memory.number.hex":
+            if(parseInt(`0x${operand.value}`) > data.maxMemoryValue) throw new AssemblerError("HexMemoryLimit", {}, instruction.line);
+            return operand.value.toUpperCase().padStart(4, "0");
+        case "memory.number.decimal":
+            if(parseInt(operand.value) > data.maxMemoryValue) throw new AssemblerError("DecimalMemoryLimit", {}, instruction.line);
+            return parseInt(operand.value).toString(16).toUpperCase().padStart(4, "0");
         case "number.hex":
             if(parseInt(`0x${operand.value}`) > data.maxValue) throw new AssemblerError(`HexLimit${data.bits}`, {}, instruction.line);
             return operand.value.toUpperCase().padStart(data.codeLength, "0");
         case "number.decimal":
-            if(operand.value > data.maxValue) throw new AssemblerError(`DecimalLimit${data.bits}`, {}, instruction.line);
+            if(parseInt(operand.value) > data.maxValue) throw new AssemblerError(`DecimalLimit${data.bits}`, {}, instruction.line);
             return parseInt(operand.value).toString(16).toUpperCase().padStart(data.codeLength, "0");
         default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name }, instruction.line);
     }

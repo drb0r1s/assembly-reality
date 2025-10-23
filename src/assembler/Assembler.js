@@ -89,8 +89,10 @@ export class AssemblerError {
             case "MissingSeparator": return `The separator is missing for the ${attributes.name} instruction!`;
             case "DecimalLimit16": return "16-bit operand must have a value between 0 and 65535!";
             case "DecimalLimit8": return "8-bit operand must have a value between 0 and 255!";
+            case "DecimalMemoryLimit": return "Decimal memory pointer operand must have a value between 0 and 4127!";
             case "HexLimit16": return "16-bit operand must have a value between 0x0000 and 0xFFFF!";
             case "HexLimit8": return "8-bit operand must have a value between 0x00 and 0xFF!";
+            case "HexMemoryLimit": return "Hex memory pointer operand must have a value between 0x0000 and 0x101F!";
             case "OutOfMemory": return "Memory limit exceeded!";
         }
     }
