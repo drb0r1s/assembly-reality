@@ -4,62 +4,37 @@ import { registerIndexes } from "./registerIndexes";
 
 export const Instructions = {
     HLT: instruction => {
-        const instructionCode = InstructionSet[instruction.name]();
-        return instructionCode;
+        return Perform.noOperands(instruction);
     },
 
     MOV: instruction => {
-        const operands = instruction.operands.filter(operand => operand.type !== "Separator");
-        if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
-
-        const instructionCode = InstructionSet[instruction.name](instruction, operands);
-
-        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name }, instruction.line);
-
-        const dest = operands[0];
-        const src = operands[1];
-
-        const destCode = parseType(instruction, dest);
-        const srcCode = parseType(instruction, src);
-
-        return instructionCode + destCode + srcCode;
+        return Perform.twoOperands(instruction);
     },
 
     MOVB: instruction => {
-        const operands = instruction.operands.filter(operand => operand.type !== "Separator");
-        if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
-
-        const instructionCode = InstructionSet[instruction.name](instruction, operands);
-
-        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name }, instruction.line);
-
-        const dest = operands[0];
-        const src = operands[1];
-
-        const destCode = parseType(instruction, dest, { isHalf: true });
-        const srcCode = parseType(instruction, src, { isHalf: true });
-
-        return instructionCode + destCode + srcCode;
+        return Perform.twoOperands(instruction, { isHalf: true });
     },
 
     ADD: instruction => {
-        const operands = instruction.operands.filter(operand => operand.type !== "Separator");
-        if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
-
-        const instructionCode = InstructionSet[instruction.name](instruction, operands);
-
-        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name }, instruction.line);
-
-        const dest = operands[0];
-        const src = operands[1];
-
-        const destCode = parseType(instruction, dest);
-        const srcCode = parseType(instruction, src);
-
-        return instructionCode + destCode + srcCode;
+        return Perform.twoOperands(instruction);
     },
 
     ADDB: instruction => {
+        return Perform.twoOperands(instruction, { isHalf: true });
+    },
+
+    SUB: instruction => {
+
+    }
+};
+
+const Perform = {
+    noOperands: instruction => {
+        const instructionCode = InstructionSet[instruction.name]();
+        return instructionCode;
+    },
+    
+    twoOperands: (instruction, options) => {
         const operands = instruction.operands.filter(operand => operand.type !== "Separator");
         if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
 
@@ -70,8 +45,8 @@ export const Instructions = {
         const dest = operands[0];
         const src = operands[1];
 
-        const destCode = parseType(instruction, dest, { isHalf: true });
-        const srcCode = parseType(instruction, src, { isHalf: true });
+        const destCode = parseType(instruction, dest, { isHalf: options?.isHalf ? options.isHalf : false });
+        const srcCode = parseType(instruction, src, { isHalf: options?.isHalf ? options.isHalf : false });
 
         return instructionCode + destCode + srcCode;
     }
