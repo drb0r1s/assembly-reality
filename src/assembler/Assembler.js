@@ -85,7 +85,7 @@ export class AssemblerError {
             case "UnknownInstruction": return `${attributes.name} is an unknown instruction!`;
             case "InvalidOperandsCombination": return `Combination of ${attributes.operands[0]} and ${attributes.operands[1]} operands is invalid for the ${attributes.instruction} instruction!`;
             case "InvalidOperand": return `Operand ${attributes.operand} is invalid for the ${attributes.instruction} instruction!`;
-            case "InvalidNumberOfOperands": return `Instruction ${attributes.name} requires ${attributes.operands} operands!`;
+            case "InvalidNumberOfOperands": return `Instruction ${attributes.name} requires ${attributes.operands} operand${attributes.operands !== 1 ? "s" : ""}!`;
             case "MissingSeparator": return `The separator is missing for the ${attributes.name} instruction!`;
             case "DecimalLimit16": return "16-bit operand must have a value between 0 and 65535!";
             case "DecimalLimit8": return "8-bit operand must have a value between 0 and 255!";

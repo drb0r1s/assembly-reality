@@ -29,6 +29,22 @@ export const Instructions = {
 
     SUBB: instruction => {
         return Perform.twoOperands(instruction, { isHalf: true });
+    },
+
+    INC: instruction => {
+        return Perform.oneOperand(instruction);
+    },
+
+    INCB: instruction => {
+        return Perform.oneOperand(instruction, { isHalf: true });
+    },
+
+    DEC: instruction => {
+        return Perform.oneOperand(instruction);
+    },
+
+    DECB: instruction => {
+        return Perform.oneOperand(instruction, { isHalf: true });
     }
 };
 
@@ -36,6 +52,17 @@ const Perform = {
     noOperands: instruction => {
         const instructionCode = InstructionSet[instruction.name]();
         return instructionCode;
+    },
+
+    oneOperand: (instruction, options) => {
+        if(instruction.operands.length !== 1) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
+
+        const instructionCode = InstructionSet[instruction.name](instruction, instruction.operands);
+        
+        const dest = instruction.operands[0];
+        const destCode = parseType(instruction, dest, { isHalf: options?.isHalf ? options.isHalf : false });
+
+        return instructionCode + destCode;
     },
     
     twoOperands: (instruction, options) => {

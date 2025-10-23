@@ -34,7 +34,7 @@ export const InstructionSet = {
         }
     },
 
-    // MOVB operands: REG (register) || IND (memory.register. memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    // MOVB operands: REG (half.register) || IND (memory.register. memory.half.register) || DIR (memory.number.*) || IMD (number.*)
     MOVB: (instruction, operands) => {
         const [first, second] = operands;
 
@@ -71,7 +71,7 @@ export const InstructionSet = {
         }
     },
 
-    // ADDB operands: REG (register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    // ADDB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
     ADDB: (instruction, operands) => {
         const [first, second] = operands;
 
@@ -102,7 +102,7 @@ export const InstructionSet = {
         }
     },
 
-    // SUBB operands: REG (register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    // SUBB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
     SUBB: (instruction, operands) => {
         const [first, second] = operands;
 
@@ -111,12 +111,44 @@ export const InstructionSet = {
         switch(valueTypes) {
             case "half.register half.register": return "1D";
             case "half.register memory.register": return "1E";
-            case "half.register memory.half.register": return "1F";
-            case "half.register memory.number.*": return "20";
-            case "half.register number.*": return "21";
+            case "half.register memory.half.register": return "1E";
+            case "half.register memory.number.*": return "1F";
+            case "half.register number.*": return "20";
             default: throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
         }
     },
+
+    // INC operand: REG (register)
+    INC: (instruction, operand) => {
+        const [first] = operand;
+
+        if(first.valueType === "register") return "21";
+        else throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
+    },
+
+    // INCB operand: REG (half.register)
+    INCB: (instruction, operand) => {
+        const [first] = operand;
+
+        if(first.valueType === "half.register") return "22";
+        else throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
+    },
+
+    // DEC operand: REG (register)
+    DEC: (instruction, operand) => {
+        const [first] = operand;
+
+        if(first.valueType === "register") return "23";
+        else throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
+    },
+
+    // DECB operand: REG (half.register)
+    DECB: (instruction, operand) => {
+        const [first] = operand;
+
+        if(first.valueType === "half.register") return "24";
+        else throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
+    }
 };
 
 // number.hex => number.*
