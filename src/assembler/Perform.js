@@ -65,7 +65,7 @@ function getInstructionCode(instruction, operands, combinations) {
     // ONE OPERAND
     if(operands.length === 1) {
         const [first] = operands;
-        const instructionCode = combinations[first.valueType];
+        const instructionCode = combinations[generalizeType(first.valueType)];
 
         if(!instructionCode) throw new AssemblerError("InvalidOperand", { operand: first.value, instruction: instruction.name }, instruction.line);
         return instructionCode;
@@ -84,15 +84,15 @@ function getInstructionCode(instruction, operands, combinations) {
             if(!instructionCode) throw new AssemblerError("InvalidOperandsCombination", { operands: [first.value, second.value], instruction: instruction.name }, instruction.line);
             return instructionCode;
         }
+    }
 
-        // number.hex => number.*
-        function generalizeType(valueType) {
-            if(!valueType.startsWith("number") && !valueType.startsWith("memory.number")) return valueType; // Currently only used for number type.
+    // number.hex => number.*
+    function generalizeType(valueType) {
+        if(!valueType.startsWith("number") && !valueType.startsWith("memory.number")) return valueType; // Currently only used for number type.
             
-            const parts = valueType.split(".");
+        const parts = valueType.split(".");
 
-            if(parts[0] === "memory") return `memory.${parts[1]}.*`;
-            return `${parts[0]}.*`;
-        }
+        if(parts[0] === "memory") return `memory.${parts[1]}.*`;
+        return `${parts[0]}.*`;
     }
 }
