@@ -3,7 +3,7 @@ import { registerIndexes } from "./registerIndexes";
 
 export const Perform = {
     oneOperand: (instruction, combinations) => {
-        if(instruction.operands.length !== 1) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
+        if(instruction.operands.length !== 1) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 1 }, instruction.line);
 
         const instructionCode = getInstructionCode(instruction, instruction.operands, combinations);
         
@@ -53,7 +53,9 @@ function parseType(instruction, operand) {
             return parseInt(operand.value).toString(16).toUpperCase().padStart(4, "0");
         case "number.hex":
             if(parseInt(`0x${operand.value}`) > data.maxValue) throw new AssemblerError(`HexLimit${data.bits}`, {}, instruction.line);
-            return operand.value.toUpperCase().padStart(data.codeLength, "0");
+            // Here we firstly convert hexadecimal number back to decimal number, in order to escape the edge case (e.g. 0x0012), which can lead to 16-bit numbers in 8-bit instructions.
+            // We use parseInt() here to get rid of starting zeros (if they exist).
+            return parseInt(`0x${operand.value}`).toString(16).toUpperCase().padStart(data.codeLength, "0");
         case "number.decimal":
             if(parseInt(operand.value) > data.maxValue) throw new AssemblerError(`DecimalLimit${data.bits}`, {}, instruction.line);
             return parseInt(operand.value).toString(16).toUpperCase().padStart(data.codeLength, "0");
