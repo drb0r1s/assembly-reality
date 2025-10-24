@@ -47,8 +47,8 @@ export const tokenizer = {
         [memoryHalfRegistersRegex, "memoryHalfRegister", "@pop"], // Memory half registers
 
         // Numbers
-        [/\s\[([0-9]+)\](?=\s|,|$)/, "memoryNumber", "@pop"], // Memory decimal
-        [/\s\[(0x[0-9A-Fa-f]+)\](?=\s|,|$)/, "memoryNumber", "@pop"], // Memory hexadecimal
+        [/\s([0-9]+)(?=\s|,|$)/, "number", "@pop"], // Decimal
+        [/\s(0x[0-9A-Fa-f]+)(?=\s|,|$)/, "number", "@pop"], // Hexadecimal
 
         // Labels
         [/([a-zA-Z0-9_]*)(?=(\s+$)|$)/, "label", "@pop"]
