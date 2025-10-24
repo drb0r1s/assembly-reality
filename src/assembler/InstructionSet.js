@@ -92,5 +92,24 @@ export const InstructionSet = {
     // DECB operand: REG (half.register)
     DECB: instruction => Perform.oneOperand(instruction, {
         "half.register": "24"
-    })
+    }),
+
+    // CMP operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    CMP: instruction => Perform.twoOperands(instruction, {
+        "register register": "25",
+        "register memory.register": "26",
+        "register memory.number.*": "27",
+        "register number.*": "28"
+    }),
+
+    // CMPB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    CMPB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "29",
+        "half.register memory.register": "2A",
+        "half.register memory.half.register": "2A",
+        "half.register memory.number.*": "2B",
+        "half.register number.*": "2C"
+    }),
+
+    
 };
