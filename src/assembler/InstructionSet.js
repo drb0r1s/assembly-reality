@@ -267,4 +267,70 @@ export const InstructionSet = {
         "half.register memory.number.*": "6E",
         "half.register number.*": "6F"
     }),
+
+    // NOT operand: REG (register)
+    NOT: instruction => Perform.oneOperand(instruction, {
+        "register": "70"
+    }),
+
+    // NOTB operand: REG (half.register)
+    NOTB: instruction => Perform.oneOperand(instruction, {
+        "half.register": "71"
+    }),
+
+    // SHL operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    SHL: instruction => Perform.twoOperands(instruction, {
+        "register register": "72",
+        "register memory.register": "73",
+        "register memory.number.*": "74",
+        "register number.*": "75"
+    }),
+
+    // SHLB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    SHLB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "76",
+        "half.register memory.register": "77",
+        "half.register memory.half.register": "77",
+        "half.register memory.number.*": "78",
+        "half.register number.*": "79"
+    }),
+
+    // SHR operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    SHR: instruction => Perform.twoOperands(instruction, {
+        "register register": "7A",
+        "register memory.register": "7B",
+        "register memory.number.*": "7C",
+        "register number.*": "7D"
+    }),
+
+    // SHRB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    SHRB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "7E",
+        "half.register memory.register": "7F",
+        "half.register memory.half.register": "7F",
+        "half.register memory.number.*": "80",
+        "half.register number.*": "81"
+    }),
+
+    CLI: () => "82",
+
+    STI: () => "83",
+
+    IRET: () => "84",
+
+    // IN operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    IN: instruction => Perform.oneOperand(instruction, {
+        "register": "87",
+        "memory.register": "88",
+        "memory.number.*": "89",
+        "number.*": "8A"
+    }),
+
+    // OUT operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    OUT: instruction => Perform.oneOperand(instruction, {
+        "register": "8B",
+        "memory.register": "8C",
+        "memory.number.*": "8D",
+        "number.*": "8E"
+    })
 };
