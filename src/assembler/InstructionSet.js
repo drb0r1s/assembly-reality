@@ -164,4 +164,56 @@ export const InstructionSet = {
         "half.register": "3F",
         "number.*": "40"
     }),
+
+    // POP operand: REG (register)
+    POP: instruction => Perform.oneOperand(instruction, {
+        "register": "43"
+    }),
+
+    // POPB operand: REG (half.register)
+    POPB: instruction => Perform.oneOperand(instruction, {
+        "half.register": "44"
+    }),
+
+    // CALL operand: IND (memory.register) || IMD (number.*)
+    CALL: instruction => Perform.oneOperand(instruction, {
+        "memory.register": "45",
+        "number.*": "46"
+    }),
+
+    RET: () => "47",
+
+    // MUL operand: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    MUL: instruction => Perform.oneOperand(instruction, {
+        "register": "48",
+        "memory.register": "49",
+        "memory.number.*": "4A",
+        "number.*": "4B"
+    }),
+
+    // MULB operand: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    MULB: instruction => Perform.oneOperand(instruction, {
+        "half.register": "4C",
+        "memory.register": "4D",
+        "memory.half.register": "4D",
+        "memory.number.*": "4E",
+        "number.*": "4F"
+    }),
+
+    // DIV operand: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    DIV: instruction => Perform.oneOperand(instruction, {
+        "register": "50",
+        "memory.register": "51",
+        "memory.number.*": "52",
+        "number.*": "53"
+    }),
+
+    // DIVB operand: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    DIVB: instruction => Perform.oneOperand(instruction, {
+        "half.register": "54",
+        "memory.register": "55",
+        "memory.half.register": "55",
+        "memory.number.*": "56",
+        "number.*": "57"
+    }),
 };
