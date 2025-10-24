@@ -14,11 +14,11 @@ export const keywordsRegex = new RegExp(`^${rootKeywordsExpression}`);
 // This is a special (middle) keyword regex, in case keyword is located in the middle of the line. (e.g. DW)
 export const middleKeywordsRegex = new RegExp(`\\s${rootKeywordsExpression}`);
 
-export const labelKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
+export const jumpKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
 
-const rootLabelKeywordsExpression = `(${labelKeywords.join("|")})(?=\\s)`;
+const rootJumpKeywordsExpression = `(${jumpKeywords.join("|")})(?=\\s)`;
 
 // This is a default keyword regex, requiring a keyword to be at the beginning of the line.
-export const labelKeywordsRegex = new RegExp(`^${rootLabelKeywordsExpression}`);
+export const jumpKeywordsRegex = new RegExp(`^${rootJumpKeywordsExpression}`);
 // This is a special (middle) keyword regex, in case there are tab spaces in front of the keyword.
-export const middleLabelKeywordsRegex = new RegExp(`\\s${rootLabelKeywordsExpression}`);
+export const middleJumpKeywordsRegex = new RegExp(`\\s${rootJumpKeywordsExpression}`);
