@@ -111,5 +111,57 @@ export const InstructionSet = {
         "half.register number.*": "2C"
     }),
 
-    
+    // JMP operand: IND (memoy.register) || IMD (number.*)
+    JMP: instruction => Perform.oneOperand(instruction, {
+        "memory.register": "2D",
+        "number.*": "2E"
+    }),
+
+    // JC operand: IND (memoy.register) || IMD (number.*)
+    JC: instruction => Perform.oneOperand(instruction, {
+        "memory.register": "2F",
+        "number.*": "30"
+    }),
+
+    // JNC operand: IND (memoy.register) || IMD (number.*)
+    JNC: instruction => Perform.oneOperand(instruction, {
+        "memory.register": "31",
+        "number.*": "32"
+    }),
+
+    // JZ operand: IND (memoy.register) || IMD (number.*)
+    JZ: instruction => Perform.oneOperand(instruction, {
+        "memory.register": "33",
+        "number.*": "34"
+    }),
+
+    // JNZ operand: IND (memoy.register) || IMD (number.*)
+    JNZ: instruction => Perform.oneOperand(instruction, {
+        "memory.register": "35",
+        "number.*": "36"
+    }),
+
+    // JA operand: IND (memoy.register) || IMD (number.*)
+    JA: instruction => Perform.oneOperand(instruction, {
+        "memory.register": "37",
+        "number.*": "38"
+    }),
+
+    // JNA operand: IND (memoy.register) || IMD (number.*)
+    JNA: instruction => Perform.oneOperand(instruction, {
+        "memory.register": "39",
+        "number.*": "3A"
+    }),
+
+    // PUSH operand: REG (register) || IMD (number.*)
+    PUSH: instruction => Perform.oneOperand(instruction, {
+        "register": "3B",
+        "number.*": "3C"
+    }),
+
+    // PUSHB operand: REG (half.register) || IMD (number.*)
+    PUSHB: instruction => Perform.oneOperand(instruction, {
+        "half.register": "3F",
+        "number.*": "40"
+    }),
 };
