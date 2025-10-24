@@ -9,7 +9,7 @@ import { Perform } from "./Perform";
     IMD (Immediate value): 10
 */
 
-export const InstructionSet = {
+export const Instructions = {
     HLT: () => "00",
     
     // MOV operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)

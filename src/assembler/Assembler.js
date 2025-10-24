@@ -1,6 +1,6 @@
 import { Tokenizer } from "./Tokenizer";
 import { AST } from "./AST";
-import { InstructionSet } from "./InstructionSet";
+import { Instructions } from "./Instructions";
 
 export class Assembler {
     constructor() {
@@ -35,7 +35,7 @@ export class Assembler {
 
     assembleInstruction(instruction) {
         let assembledCode = "";
-        const instructionMethod = InstructionSet[instruction.name];
+        const instructionMethod = Instructions[instruction.name];
 
         if(instructionMethod) assembledCode = instructionMethod(instruction);
         else throw new AssemblerError("UnknownInstruction", { name: instruction.name }, instruction.line);
