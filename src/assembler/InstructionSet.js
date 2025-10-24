@@ -216,4 +216,55 @@ export const InstructionSet = {
         "memory.number.*": "56",
         "number.*": "57"
     }),
+
+    // AND operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    AND: instruction => Perform.twoOperands(instruction, {
+        "register register": "58",
+        "register memory.register": "59",
+        "register memory.number.*": "5A",
+        "register number.*": "5B"
+    }),
+
+    // ANDB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    ANDB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "5C",
+        "half.register memory.register": "5D",
+        "half.register memory.half.register": "5D",
+        "half.register memory.number.*": "5E",
+        "half.register number.*": "5F"
+    }),
+
+    // OR operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    OR: instruction => Perform.twoOperands(instruction, {
+        "register register": "60",
+        "register memory.register": "61",
+        "register memory.number.*": "62",
+        "register number.*": "63"
+    }),
+
+    // ORB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    ORB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "64",
+        "half.register memory.register": "65",
+        "half.register memory.half.register": "65",
+        "half.register memory.number.*": "66",
+        "half.register number.*": "67"
+    }),
+
+    // XOR operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
+    XOR: instruction => Perform.twoOperands(instruction, {
+        "register register": "68",
+        "register memory.register": "69",
+        "register memory.number.*": "6A",
+        "register number.*": "6B"
+    }),
+
+    // XORB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
+    XORB: instruction => Perform.twoOperands(instruction, {
+        "half.register half.register": "6C",
+        "half.register memory.register": "6D",
+        "half.register memory.half.register": "6D",
+        "half.register memory.number.*": "6E",
+        "half.register number.*": "6F"
+    }),
 };
