@@ -5,7 +5,7 @@ import CPURegisters from "./CPURegisters";
 import IORegisters from "./IORegisters";
 import Signature from "./Signature";
 
-const RightGroup = () => {
+const RightGroup = ({ assembler }) => {
     const rightGroupRef = useRef(null);
     const ioDevicesRef = useRef(null);
     const cpuRegistersRef = useRef(null);
@@ -36,6 +36,7 @@ const RightGroup = () => {
                     ioDevicesRef={ioDevicesRef}
                     cpuRegistersRef={cpuRegistersRef}
                     ioRegistersRef={ioRegistersRef}
+                    assembler={assembler}
                 />}
                 
                 {mainReducer.view.ioRegisters && <IORegisters

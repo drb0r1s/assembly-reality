@@ -7,7 +7,7 @@ import RightGroup from "./components/rightGroup/RightGroup";
 import { Assembler } from "./assembler/Assembler";
 
 const App = () => {
-    const assemblerRef = useRef(new Assembler());
+    const assembler = useRef(new Assembler()).current;
     const mainReducer = useSelector(state => state.main);
 
     return(
@@ -15,9 +15,9 @@ const App = () => {
             <Header />
 
             <div className="display">
-                <Editor assembler={assemblerRef.current} />
-                {mainReducer.view.memory && <Memory assembler={assemblerRef.current} />}
-                {(mainReducer.view.ioDevices || mainReducer.view.cpuRegisters || mainReducer.view.ioRegisters) && <RightGroup />}
+                <Editor assembler={assembler} />
+                {mainReducer.view.memory && <Memory assembler={assembler} />}
+                {(mainReducer.view.ioDevices || mainReducer.view.cpuRegisters || mainReducer.view.ioRegisters) && <RightGroup assembler={assembler} />}
             </div>
         </main>
     );
