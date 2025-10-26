@@ -4,6 +4,7 @@ export class Memory {
     constructor() {
         this.matrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00")),
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
+        this.execution = { i: 0, j: 0 } // Pointers to the last executed coordinates.
         this.onChange = null;
     }
 

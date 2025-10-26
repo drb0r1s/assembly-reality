@@ -1,5 +1,5 @@
 import { AssemblerError } from "./Assembler";
-import { registerIndexes } from "./registerIndexes";
+import { Registers } from "./Registers";
 
 export const Perform = {
     oneOperand: (instruction, combinations) => {
@@ -41,10 +41,10 @@ function parseType(instruction, operand) {
     };
     
     switch(operand.valueType) {
-        case "register": return registerIndexes[operand.value];
-        case "half.register": return registerIndexes[operand.value];
-        case "memory.register": return "00" + registerIndexes[operand.value];
-        case "memory.half.register": return registerIndexes[operand.value];
+        case "register": return Registers.getIndex(operand.value);
+        case "half.register": return Registers.getIndex(operand.value);
+        case "memory.register": return "00" + Registers.getIndex(operand.value);
+        case "memory.half.register": return Registers.getIndex(operand.value);
         case "memory.number.hex":
             if(parseInt(`0x${operand.value}`) > data.maxMemoryValue) throw new AssemblerError("HexMemoryLimit", {}, instruction.line);
             return operand.value.toUpperCase().padStart(4, "0");
