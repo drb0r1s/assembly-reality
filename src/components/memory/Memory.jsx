@@ -11,13 +11,13 @@ const Memory = ({ assembler }) => {
     const dispatch = useDispatch();
     
     useEffect(() => {
-        assembler.onMemoryChange = matrix => { setMemoryMatrix([...matrix]) }
+        assembler.memory.onChange = matrix => { setMemoryMatrix([...matrix]) }
     }, []);
 
     useEffect(() => {
         if(!mainReducer.reset) return;
 
-        assembler.memoryReset();
+        assembler.memory.reset();
         setMemoryMatrix(assembler.memory.matrix);
 
         dispatch(mainActions.updateReset(false));

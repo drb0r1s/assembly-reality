@@ -1,14 +1,11 @@
 import { Tokenizer } from "./Tokenizer";
 import { AST } from "./AST";
 import { Instructions } from "./Instructions";
+import { Memory } from "./Memory";
 
 export class Assembler {
     constructor() {
-        this.memory = {
-            matrix: Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00")),
-            free: { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
-        };
-
+        this.memory = new Memory();
         this.halted = false; // End the assembling of the code.
     }
     
@@ -17,7 +14,7 @@ export class Assembler {
         const ast = AST.build(tokens);
         console.log(ast)
 
-        this.memoryReset(); // We need to clean the memory before assembling the code.
+        if(this.memory.free.i !== 0 || this.memory.free.j !== 0) this.memory.reset(); // We need to clean the memory before assembling the code.
 
         for(let i = 0; i < ast.instructions.length; i++) {
             try {
@@ -40,36 +37,7 @@ export class Assembler {
         if(instructionMethod) assembledCode = instructionMethod(instruction);
         else throw new AssemblerError("UnknownInstruction", { name: instruction.name }, instruction.line);
 
-        if(assembledCode) this.memoryWrite(assembledCode);
-    }
-
-    memoryWrite(hex) {
-        let { i, j } = this.memory.free;
-        const hexCells = hex.match(/.{1,2}/g); // Breaking hex string into groups of two digit numbers, to fit memory cells.
-
-        for(let k = 0; k < hexCells.length; k++) {
-            this.memory.matrix[i][j] = hexCells[k];
-
-            if(j === 15) {
-                i++;
-                j = 0;
-            }
-
-            else j++;
-
-            if(i > this.memory.matrix.length) throw new AssemblerError("OutOfMemory");
-        }
-
-        this.memory.free = { i, j }; // Updating last memory-free coordinates globally.
-
-        if(this.onMemoryChange) this.onMemoryChange(this.memory.matrix);
-    }
-
-    memoryReset() {
-        this.memory = {
-            matrix: Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00")),
-            free: { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
-        }
+        if(assembledCode) this.memory.write(assembledCode);
     }
 };
 
