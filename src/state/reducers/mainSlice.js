@@ -5,6 +5,7 @@ const mainSlice = createSlice({
     initialState: {
         view: { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true },
         assemble: false,
+        run: false,
         reset: false
     },
 
@@ -15,6 +16,10 @@ const mainSlice = createSlice({
 
         updateAssemble: (state, action) => {
             state.assemble = action.payload;
+        },
+
+        updateRun: (state, action) => {
+            state.run = action.payload;
         },
 
         updateReset: (state, action) => {

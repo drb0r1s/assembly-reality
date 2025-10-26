@@ -13,7 +13,9 @@ const Header = () => {
             case "Assemble":
                 dispatch(mainActions.updateAssemble(true));
                 break;
-            case "Run": break;
+            case "Run":
+                dispatch(mainActions.updateRun(true));
+                break;
             case "Step": break;
             case "Reset":
                 dispatch(mainActions.updateReset(true));

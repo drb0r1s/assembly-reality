@@ -8,17 +8,26 @@ const Editor = ({ assembler }) => {
     const [code, setCode] = useState("");
     const [error, setError] = useState({ type: "", content: "" });
 
-    const { assemble } = useSelector(state => state.main);
+    const { assemble, run } = useSelector(state => state.main);
     const dispatch = useDispatch();
 
     useEffect(() => {
         if(!assemble) return;
 
         const memoryMatrix = assembler.assemble(code);
-        if(memoryMatrix.error) setError(memoryMatrix.error);
+        if(memoryMatrix?.error) setError(memoryMatrix.error);
 
         dispatch(mainActions.updateAssemble(false));
     }, [assemble]);
+
+    useEffect(() => {
+        if(!run) return;
+
+        const result = assembler.execute();
+        if(result?.error) setError(result.error);
+
+        dispatch(mainActions.updateRun(false));
+    }, [run]);
     
     return(
         <div className="editor">
