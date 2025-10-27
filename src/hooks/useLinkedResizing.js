@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { Manager } from "../Manager";
+import { useManagerValue } from "./useManagerValue";
 
-export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionRefs }) => {
-    const mainReducer = useSelector(state => state.main);
-    
+export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionRefs }) => {    
     const headerHeight = 27;
+
+    const view = useManagerValue("view");
     
     useEffect(() => {
         const y = { start: 0, last: 0 };
@@ -153,5 +154,5 @@ export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionR
         
         headerRef.current.addEventListener("mousedown", handleMouseDown);
         return () => { if(headerRef.current) headerRef.current.removeEventListener("mousedown", handleMouseDown) }
-    }, [headerRef, mainReducer.view]);
+    }, [headerRef, view]);
 }

@@ -1,33 +1,28 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import RichEditor from "../RichEditor";
 import EditorError from "./EditorError";
-import { mainActions } from "../../state/reducers/mainSlice";
+import { Manager } from "../../Manager";
 
 const Editor = ({ assembler }) => {
     const [code, setCode] = useState("");
     const [error, setError] = useState({ type: "", content: "" });
 
-    const { assemble, run } = useSelector(state => state.main);
-    const dispatch = useDispatch();
-
     useEffect(() => {
-        if(!assemble) return;
+        const unsubscribeAssemble = Manager.subscribe("assemble", () => {
+            const memoryMatrix = assembler.assemble(code);
+            if(memoryMatrix?.error) setError(memoryMatrix.error);
+        });
 
-        const memoryMatrix = assembler.assemble(code);
-        if(memoryMatrix?.error) setError(memoryMatrix.error);
+        const unsubscribeRun = Manager.subscribe("run", () => {
+            const result = assembler.execute();
+            if(result?.error) setError(result.error);
+        });
 
-        dispatch(mainActions.updateAssemble(false));
-    }, [assemble]);
-
-    useEffect(() => {
-        if(!run) return;
-
-        const result = assembler.execute();
-        if(result?.error) setError(result.error);
-
-        dispatch(mainActions.updateRun(false));
-    }, [run]);
+        return () => {
+            unsubscribeAssemble();
+            unsubscribeRun();
+        };
+    }, [code]);
     
     return(
         <div className="editor">

@@ -1,5 +1,6 @@
 import { AssemblerError } from "./Assembler";
 import { Registers } from "./Registers";
+import { Manager } from "../Manager";
 
 export const Executor = {
     codes: {
@@ -17,5 +18,6 @@ export const Executor = {
         const value = args[1] + args[2];
 
         assembler.registers = {...assembler.registers, [register]: value};
+        Manager.trigger("registerUpdate", assembler.registers);
     }
 };

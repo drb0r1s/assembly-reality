@@ -1,11 +1,9 @@
-import { useSelector, useDispatch } from "react-redux";
-import { mainActions } from "../../state/reducers/mainSlice";
+import { useManagerValue } from "../../hooks/useManagerValue";
+import { Manager } from "../../Manager";
 import { images } from "../../data/images";
 
 const HeaderDropdown = ({ type, ref }) => {
-    const mainReducer = useSelector(state => state.main);
-    const dispatch = useDispatch();
-    
+    const view = useManagerValue("view");
     const dropdownButtons = getDropdownButtons();
 
     function getDropdownButtons() {
@@ -15,10 +13,10 @@ const HeaderDropdown = ({ type, ref }) => {
 
     function getView(button) {
         switch(button) {
-            case "Memory": return mainReducer.view.memory;
-            case "I/O Devices": return mainReducer.view.ioDevices;
-            case "CPU Registers": return mainReducer.view.cpuRegisters;
-            case "I/O Registers": return mainReducer.view.ioRegisters;
+            case "Memory": return view.memory;
+            case "I/O Devices": return view.ioDevices;
+            case "CPU Registers": return view.cpuRegisters;
+            case "I/O Registers": return view.ioRegisters;
         }
     }
 
@@ -40,7 +38,7 @@ const HeaderDropdown = ({ type, ref }) => {
                 break;
         }
 
-        dispatch(mainActions.updateView({...mainReducer.view, [key]: !mainReducer.view[key]}));
+        Manager.set("view", {...view, [key]: !view[key]});
     }
     
     return(

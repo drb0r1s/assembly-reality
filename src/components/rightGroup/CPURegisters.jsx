@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import MiniHeader from "../MiniHeader";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
+import { Manager } from "../../Manager";
 
 const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef, assembler }) => {
     const [registers, setRegisters] = useState({
@@ -11,7 +12,10 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
     
     const headerRef = useRef(null);
 
-    useEffect(() => { setRegisters(assembler.registers) }, [assembler.registers]);
+    useEffect(() => {
+        const unsubscribe = Manager.subscribe("registerUpdate", newRegisters => setRegisters(newRegisters));
+        return unsubscribe;
+    }, []);
 
     useLinkedResizing({
         headerRef,

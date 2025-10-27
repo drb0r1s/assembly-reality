@@ -1,24 +1,22 @@
-import { useDispatch } from "react-redux";
 import HeaderDropdown from "./HeaderDropdown";
-import { mainActions } from "../../state/reducers/mainSlice";
 import { useDropdown } from "../../hooks/useDropdown";
 import { headerButtons } from "../../data/headerButtons";
+import { Manager } from "../../Manager";
 
 const Header = () => {
-    const dispatch = useDispatch();
     const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ view: false, speed: false });
 
     function handleButton(button) {
         switch(button) {
             case "Assemble":
-                dispatch(mainActions.updateAssemble(true));
+                Manager.trigger("assemble");
                 break;
             case "Run":
-                dispatch(mainActions.updateRun(true));
+                Manager.trigger("run");
                 break;
             case "Step": break;
             case "Reset":
-                dispatch(mainActions.updateReset(true));
+                Manager.trigger("reset");
                 break;
         }
     }

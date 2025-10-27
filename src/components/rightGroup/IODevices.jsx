@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
 import MiniHeader from "../MiniHeader";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
+import { useManagerValue } from "../../hooks/useManagerValue";
 import { images } from "../../data/images";
 
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
@@ -11,7 +11,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     
     const headerRef = useRef(null);
 
-    const mainReducer = useSelector(state => state.main);
+    const view = useManagerValue("view");
 
     const miniDisplayMatrix = Array.from({ length: 2 }, () => Array.from({ length: 16 }, () => ""));
     
@@ -22,13 +22,13 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         headerRef,
         elementRef: ioDevicesRef,
         holderRef: rightGroupRef,
-        collisionRefs: { next: mainReducer.view.cpuRegisters ? cpuRegistersRef : ioRegistersRef, doubleNext: mainReducer.view.cpuRegisters ? ioRegistersRef : { current: null } }
+        collisionRefs: { next: view.cpuRegisters ? cpuRegistersRef : ioRegistersRef, doubleNext: view.cpuRegisters ? ioRegistersRef : { current: null } }
     });
 
     useEffect(() => {
         const ref = cpuRegistersRef?.current ? cpuRegistersRef : ioRegistersRef;
         setLowerSection({ ref })
-    }, [mainReducer.view]);
+    }, [view]);
     
     useEffect(() => {
         const handleKeydown = e => {

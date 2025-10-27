@@ -1,27 +1,21 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import MemoryMap from "./MemoryMap";
-import { mainActions } from "../../state/reducers/mainSlice";
+import { Manager } from "../../Manager";
 
 const Memory = ({ assembler }) => {
     const [memoryMatrix, setMemoryMatrix] = useState(assembler.memory.matrix);
     const [isSplitActive, setIsSplitActive] = useState(false);
-
-    const mainReducer = useSelector(state => state.main);
-    const dispatch = useDispatch();
     
     useEffect(() => {
         assembler.memory.onChange = matrix => { setMemoryMatrix([...matrix]) }
+
+        const unsubscribe = Manager.subscribe("reset", () => {
+            assembler.memory.reset();
+            setMemoryMatrix(assembler.memory.matrix);
+        });
+    
+        return unsubscribe;
     }, []);
-
-    useEffect(() => {
-        if(!mainReducer.reset) return;
-
-        assembler.memory.reset();
-        setMemoryMatrix(assembler.memory.matrix);
-
-        dispatch(mainActions.updateReset(false));
-    }, [mainReducer.reset]);
 
     return(
         <div className="memory">
