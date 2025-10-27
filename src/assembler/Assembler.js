@@ -106,6 +106,14 @@ export class Assembler {
         args.shift(); // We want to remove the first argument, because it is the instruction code, which is already known.
         return args;
     }
+
+    resetRegisters() {
+        this.registers = {
+            A: "0000", B: "0000", C: "0000", D: "0000",
+            IP: "0000", SP: "0000",
+            SR: { M: "0", C: "0", Z: "0", F: "0", H: "0" }
+        };
+    }
 };
 
 export class AssemblerError {

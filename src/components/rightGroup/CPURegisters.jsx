@@ -13,8 +13,17 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
     const headerRef = useRef(null);
 
     useEffect(() => {
-        const unsubscribe = Manager.subscribe("registerUpdate", newRegisters => setRegisters(newRegisters));
-        return unsubscribe;
+        const unsubscribeRegisterUpdate = Manager.subscribe("registerUpdate", newRegisters => setRegisters(newRegisters));
+
+        const unsubscribeReset = Manager.subscribe("reset", () => {
+            assembler.resetRegisters();
+            Manager.trigger("registerUpdate", assembler.registers);
+        });
+
+        return () => {
+            unsubscribeRegisterUpdate();
+            unsubscribeReset();
+        };
     }, []);
 
     useLinkedResizing({
