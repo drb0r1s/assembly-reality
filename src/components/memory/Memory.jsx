@@ -8,11 +8,7 @@ const Memory = ({ assembler }) => {
     
     useEffect(() => {
         const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", newMatrix => setMemoryMatrix([...newMatrix]));
-
-        const unsubscribeReset = Manager.subscribe("reset", () => {
-            assembler.memory.reset();
-            setMemoryMatrix(assembler.memory.matrix);
-        });
+        const unsubscribeReset = Manager.subscribe("reset", () => setMemoryMatrix(Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"))));
     
         return () => {
             unsubscribeMemoryUpdate();

@@ -15,10 +15,11 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
     useEffect(() => {
         const unsubscribeRegisterUpdate = Manager.subscribe("registerUpdate", newRegisters => setRegisters(newRegisters));
 
-        const unsubscribeReset = Manager.subscribe("reset", () => {
-            assembler.resetRegisters();
-            Manager.trigger("registerUpdate", assembler.registers);
-        });
+        const unsubscribeReset = Manager.subscribe("reset", () => setRegisters({
+            A: "0000", B: "0000", C: "0000", D: "0000",
+            IP: "0000", SP: "0000",
+            SR: { M: "0", C: "0", Z: "0", F: "0", H: "0" }
+        }));
 
         return () => {
             unsubscribeRegisterUpdate();
