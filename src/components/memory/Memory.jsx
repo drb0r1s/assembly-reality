@@ -7,14 +7,17 @@ const Memory = ({ assembler }) => {
     const [isSplitActive, setIsSplitActive] = useState(false);
     
     useEffect(() => {
-        assembler.memory.onChange = matrix => { setMemoryMatrix([...matrix]) }
+        const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", newMatrix => setMemoryMatrix([...newMatrix]));
 
-        const unsubscribe = Manager.subscribe("reset", () => {
+        const unsubscribeReset = Manager.subscribe("reset", () => {
             assembler.memory.reset();
             setMemoryMatrix(assembler.memory.matrix);
         });
     
-        return unsubscribe;
+        return () => {
+            unsubscribeMemoryUpdate();
+            unsubscribeReset();
+        };
     }, []);
 
     return(
