@@ -1,4 +1,5 @@
 import { AssemblerError } from "./Assembler";
+import { Manager } from "../Manager";
 
 export class Memory {
     constructor() {
@@ -27,29 +28,45 @@ export class Memory {
 
         this.free = { i, j }; // Updating last memory-free coordinates globally.
 
-        if(this.onChange) this.onChange(this.matrix);
+        Manager.trigger("memoryUpdate", this.matrix);
     }
 
-    rewrite(address) {
-        
-    }
+    rewrite(address, value) {
+        // If value is greater than 255, it should use two memory cells for representing a value that is greater than 8-bits.
+        if(parseInt(value, 16) > 255) {
+            const firstCell = value.slice(0, 2);
 
-    reset() {
-        this.matrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"));
-        this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
+            const [row, column] = this.getLocation(address);
+            this.matrix[row][column] = firstCell;
+        }
+
+        const secondCell = value.slice(-2);
+
+        const [row, column] = this.getLocation((parseInt(address, 16) + 1).toString(16).toUpperCase());
+        this.matrix[row][column] = secondCell;
     }
 
     get(address) {
+        const [row, column] = this.getLocation(address);
+        return this.matrix[row][column];
+    }
+
+    getLocation(address) {
         const index = parseInt(address, 16);
 
         const row = Math.floor(index / 16);
         const column = index % 16;
 
-        return this.matrix[row][column];
+        return [row, column];
     }
 
     point(address) {
         const nextAddress = (parseInt(address, 16) + 1).toString().toUpperCase();
         return this.get(address) + this.get(nextAddress);
+    }
+
+    reset() {
+        this.matrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"));
+        this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
     }
 };
