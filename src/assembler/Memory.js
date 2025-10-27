@@ -30,8 +30,26 @@ export class Memory {
         if(this.onChange) this.onChange(this.matrix);
     }
 
+    rewrite(address) {
+        
+    }
+
     reset() {
         this.matrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"));
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
+    }
+
+    get(address) {
+        const index = parseInt(address, 16);
+
+        const row = Math.floor(index / 16);
+        const column = index % 16;
+
+        return this.matrix[row][column];
+    }
+
+    point(address) {
+        const nextAddress = (parseInt(address, 16) + 1).toString().toUpperCase();
+        return this.get(address) + this.get(nextAddress);
     }
 };
