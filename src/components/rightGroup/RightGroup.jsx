@@ -36,7 +36,6 @@ const RightGroup = ({ assembler }) => {
                     ioDevicesRef={ioDevicesRef}
                     cpuRegistersRef={cpuRegistersRef}
                     ioRegistersRef={ioRegistersRef}
-                    assembler={assembler}
                 />}
                 
                 {view.ioRegisters && <IORegisters

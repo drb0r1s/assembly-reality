@@ -3,7 +3,7 @@ import MiniHeader from "../MiniHeader";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { Manager } from "../../Manager";
 
-const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef, assembler }) => {
+const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const [registers, setRegisters] = useState({
         A: "0000", B: "0000", C: "0000", D: "0000",
         IP: "0000", SP: "0000",
@@ -13,7 +13,7 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
     const headerRef = useRef(null);
 
     useEffect(() => {
-        const unsubscribeRegisterUpdate = Manager.subscribe("registerUpdate", newRegisters => setRegisters(newRegisters));
+        const unsubscribeRegisterUpdate = Manager.subscribe("registerUpdate", newRegisters => setRegisters({...newRegisters}));
 
         const unsubscribeReset = Manager.subscribe("reset", () => setRegisters({
             A: "0000", B: "0000", C: "0000", D: "0000",
