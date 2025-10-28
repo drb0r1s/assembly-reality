@@ -1,4 +1,4 @@
-import { AssemblerError } from "./Assembler";
+import { AssemblerError } from "./AssemblerError";
 import { Manager } from "../Manager";
 
 export class Memory {
@@ -43,6 +43,8 @@ export class Memory {
 
         const [row, column] = this.getLocation((parseInt(address, 16) + 1).toString(16).toUpperCase());
         this.matrix[row][column] = secondCell;
+
+        Manager.trigger("memoryUpdate", this.matrix);
     }
 
     get(address) {
