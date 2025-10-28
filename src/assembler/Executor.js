@@ -19,8 +19,8 @@ export const Executor = {
         "0C": { instruction: "MOVB", type: "memory.register half.register", length: 4 },
         "0D": { instruction: "MOVB", type: "memory.number.* half.register", length: 4 },
         "0E": { instruction: "MOVB", type: "half.register number.*", length: 3 },
-        "0F": { instruction: "MOVB", type: "memory.register number.*", length: 5 },
-        "10": { instruction: "MOVB", type: "memory.number.* number.*", length: 5 },
+        "0F": { instruction: "MOVB", type: "memory.register number.*", length: 4 },
+        "10": { instruction: "MOVB", type: "memory.number.* number.*", length: 4 },
     },
 
     MOV: (assembler, executable, args) => {
@@ -71,7 +71,7 @@ export const Executor = {
                 first = assembler.registers.get(args[0]);
                 second = args[1] + args[2];
 
-                assembler.memory.rewrite(first, second);
+                assembler.registers.update(first, second);
 
                 break;
             case "memory.register number.*":
@@ -129,11 +129,32 @@ export const Executor = {
                 assembler.memory.rewrite(first, second);
 
                 break;
+            case "memory.number.* half.register":
+                first = args[0] + args[1];
+                second = assembler.registers.getValueByIndex(args[2]);
+
+                assembler.memory.rewrite(first, second);
+
+                break;
             case "half.register number.*":
                 first = assembler.registers.get(args[0]);
                 second = args[1];
 
                 assembler.registers.update(first, second);
+
+                break;
+            case "memory.register number.*":
+                first = assembler.registers.getValueByIndex(args[1]);
+                second = args[2];
+
+                assembler.memory.rewrite(first, second);
+
+                break;
+            case "memory.number.* number.*":
+                first = args[0] + args[1];
+                second = args[2];
+
+                assembler.memory.rewrite(first, second);
 
                 break;
             default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
