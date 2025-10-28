@@ -1,6 +1,4 @@
-import { AssemblerError } from "./Assembler";
-import { Registers } from "./Registers";
-import { Manager } from "../Manager";
+import { AssemblerError } from "./AssemblerError";
 
 export const Executor = {
     codes: {
@@ -20,7 +18,7 @@ export const Executor = {
         "0B": { instruction: "MOVB", type: "half.register memory.number.*", length: 4 },
         "0C": { instruction: "MOVB", type: "memory.register half.register", length: 4 },
         "0D": { instruction: "MOVB", type: "memory.number.* half.register", length: 4 },
-        "0E": { instruction: "MOVB", type: "half.register number.*", length: 4 },
+        "0E": { instruction: "MOVB", type: "half.register number.*", length: 3 },
         "0F": { instruction: "MOVB", type: "memory.register number.*", length: 5 },
         "10": { instruction: "MOVB", type: "memory.number.* number.*", length: 5 },
     },
@@ -33,61 +31,61 @@ export const Executor = {
 
         switch(executable.type) {
             case "register register":
-                first = Registers.getRegister(args[0]);
-                second = assembler.registers[Registers.getRegister(args[1])];
+                first = assembler.registers.get(args[0]);
+                second = assembler.registers.getValueByIndex(args[1]);
 
-                updateRegisters(assembler, first, second);
+                assembler.registers.update(first, second);
 
                 break;
             case "register memory.register":
-                first = Registers.getRegister(args[0]);
+                first = assembler.registers.get(args[0]);
                 
-                const registerValue = assembler.registers[Registers.getRegister(args[1])];
+                const registerValue = assembler.registers.getValueByIndex(args[1]);
                 second = assembler.memory.point(registerValue);
 
-                updateRegisters(assembler, first, second);
+                assembler.registers.update(first, second);
 
                 break;
             case "register memory.number.*":
-                first = Registers.getRegister(args[0]);
+                first = assembler.registers.get(args[0]);
                 second = assembler.memory.point(args[1] + args[2]);
 
-                updateRegisters(assembler, first, second);
+                assembler.registers.update(first, second);
 
                 break;
             case "memory.register register":
-                first = assembler.registers[Registers.getRegister(args[1])];
-                second = assembler.registers[Registers.getRegister(args[2])];
+                first = assembler.registers.getValueByIndex(args[1]);
+                second = assembler.registers.getValueByIndex(args[2]);
 
-                updateMemory(assembler, first, second);
+                assembler.memory.rewrite(first, second);
 
                 break;
             case "memory.number.* register":
                 first = args[0] + args[1];
-                second = assembler.registers[Registers.getRegister(args[2])];
+                second = assembler.registers.getValueByIndex(args[2]);
 
-                updateMemory(assembler, first, second);
+                assembler.memory.rewrite(first, second);
 
                 break;
             case "register number.*":
-                first = Registers.getRegister(args[0]);
+                first = assembler.registers.get(args[0]);
                 second = args[1] + args[2];
 
-                updateRegisters(assembler, first, second);
+                assembler.memory.rewrite(first, second);
 
                 break;
             case "memory.register number.*":
-                first = assembler.registers[Registers.getRegister(args[1])];
+                first = assembler.registers.getValueByIndex(args[1]);
                 second = args[2] + args[3];
 
-                updateMemory(assembler, first, second);
+                assembler.memory.rewrite(first, second);
 
                 break;
             case "memory.number.* number.*":
                 first = args[0] + args[1];
                 second = args[2] + args[3];
 
-                updateMemory(assembler, first, second);
+                assembler.memory.rewrite(first, second);
 
                 break;
             default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
@@ -102,19 +100,40 @@ export const Executor = {
 
         switch(executable.type) {
             case "half.register half.register":
-                first = Registers.getRegister(args[0]);
-                second = assembler.registers[Registers.getRegister(args[1])];
+                first = assembler.registers.get(args[0]);
+                second = assembler.registers.getValueByIndex(args[1]);
 
-                updateRegisters(assembler, first, second);
+                assembler.registers.update(first, second);
 
                 break;
             case "half.register memory.register":
-                first = Registers.getRegister(args[0]);
+                first = assembler.registers.get(args[0]);
                 
-                const registerValue = assembler.registers[Registers.getRegister(args[1])];
+                const registerValue = assembler.registers.getValueByIndex(args[2]);
                 second = assembler.memory.point(registerValue);
 
-                updateRegisters(assembler, first, second);
+                assembler.registers.update(first, second);
+
+                break;
+            case "half.register memory.number.*":
+                first = assembler.registers.get(args[0]);
+                second = assembler.memory.point(args[1] + args[2]);
+
+                assembler.registers.update(first, second);
+
+                break;
+            case "memory.register half.register":
+                first = assembler.registers.getValueByIndex(args[1]);
+                second = assembler.registers.getValueByIndex(args[2]);
+
+                assembler.memory.rewrite(first, second);
+
+                break;
+            case "half.register number.*":
+                first = assembler.registers.get(args[0]);
+                second = args[1];
+
+                assembler.registers.update(first, second);
 
                 break;
             default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
@@ -128,14 +147,4 @@ function argumentsCheck(executable, args) {
         required: executable.length - 1,
         received: args.length
     });
-}
-
-function updateRegisters(assembler, first, second) {
-    assembler.registers = {...assembler.registers, [first]: second};
-    Manager.trigger("registerUpdate", assembler.registers);
-}
-
-function updateMemory(assembler, first, second) {
-    assembler.memory.rewrite(first, second);
-    Manager.trigger("memoryUpdate", assembler.memory.matrix);
 }
