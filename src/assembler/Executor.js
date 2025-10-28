@@ -21,6 +21,12 @@ export const Executor = {
         "0E": { instruction: "MOVB", type: "half.register number.*", length: 3 },
         "0F": { instruction: "MOVB", type: "memory.register number.*", length: 4 },
         "10": { instruction: "MOVB", type: "memory.number.* number.*", length: 4 },
+        
+        // ADD
+        "11": { instruction: "ADD", type: "register register", length: 3 },
+        "12": { instruction: "ADD", type: "register memory.register", length: 4 },
+        "13": { instruction: "ADD", type: "register memory.number.*", length: 4 },
+        "14": { instruction: "ADD", type: "register number.*", length: 4 },
     },
 
     MOV: (assembler, executable, args) => {
@@ -158,6 +164,61 @@ export const Executor = {
 
                 break;
             default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
+        }
+    },
+
+    ADD: (assembler, executable, args) => {
+        argumentsCheck(executable, args);
+
+        let first = null;
+        let second = null;
+        let firstRegisterValue = null;
+        let secondRegisterValue = null;
+        let sum = null;
+
+        switch(executable.type) {
+            case "register register":
+                first = assembler.registers.get(args[0]);
+
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+                secondRegisterValue = assembler.registers.getValueByIndex(args[1]);
+
+                assembler.registers.update(first, hexSum(firstRegisterValue, secondRegisterValue));
+
+                break;
+            case "register memory.register":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+
+                secondRegisterValue = assembler.registers.getValueByIndex(args[2]);
+                second = assembler.memory.point(secondRegisterValue);
+
+                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+
+                break;
+            case "register memory.number.*":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+                
+                second = assembler.memory.point(args[1] + args[2]);
+
+                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+
+                break;
+            case "register number.*":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+
+                second = args[1] + args[2];
+
+                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+
+                break;
+            default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
+        }
+
+        function hexSum(first, second) {
+            return (parseInt(first, 16) + parseInt(second, 16)).toString(16).toUpperCase().padStart(4, "0");
         }
     }
 };
