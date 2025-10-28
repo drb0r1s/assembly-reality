@@ -69,7 +69,7 @@ export class Memory {
     }
 
     point(address) {
-        const nextAddress = (parseInt(address, 16) + 1).toString().toUpperCase();
+        const nextAddress = (parseInt(address, 16) + 1).toString(16).toUpperCase();
         return this.get(address) + this.get(nextAddress);
     }
 
