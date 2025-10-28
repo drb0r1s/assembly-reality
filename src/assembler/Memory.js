@@ -31,18 +31,25 @@ export class Memory {
     }
 
     rewrite(address, value) {
-        // If value is greater than 255, it should use two memory cells for representing a value that is greater than 8-bits.
-        if(parseInt(value, 16) > 255) {
+        // 16-bit
+        if(value.length === 4) {
+            // It does not matter if 16-bit value is empty in the first two cells, .rewrite() should still override it.
             const firstCell = value.slice(0, 2);
 
-            const [row, column] = this.getLocation(address);
-            this.matrix[row][column] = firstCell;
+            const [firstRow, firstColumn] = this.getLocation(address);
+            this.matrix[firstRow][firstColumn] = firstCell;
+
+            const secondCell = value.slice(-2);
+
+            const [secondRow, secondColumn] = this.getLocation((parseInt(address, 16) + 1).toString(16).toUpperCase());
+            this.matrix[secondRow][secondColumn] = secondCell;
         }
 
-        const secondCell = value.slice(-2);
-
-        const [row, column] = this.getLocation((parseInt(address, 16) + 1).toString(16).toUpperCase());
-        this.matrix[row][column] = secondCell;
+        // 8-bit
+        else {
+            const [row, column] = this.getLocation(address);
+            this.matrix[row][column] = value;
+        }
 
         Manager.trigger("memoryUpdate", this.matrix);
     }
