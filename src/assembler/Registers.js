@@ -1,5 +1,3 @@
-import { Manager } from "../Manager";
-
 const registerIndex = {
     A: "00",
     B: "01",
@@ -92,7 +90,18 @@ export class Registers {
         }
 
         this[register] = value;
-        Manager.trigger("registerUpdate", this);
+    }
+
+    copy(registers) {
+        this.A = registers.A;
+        this.B = registers.B;
+        this.C = registers.C;
+        this.D = registers.D;
+
+        this.IP = registers.IP;
+        this.SP = registers.SP;
+        
+        this.SR = registers.SR;
     }
 
     reset() {

@@ -1,5 +1,4 @@
 import { AssemblerError } from "./AssemblerError";
-import { Manager } from "../Manager";
 
 export class Memory {
     constructor() {
@@ -26,8 +25,6 @@ export class Memory {
         }
 
         this.free = { i, j }; // Updating last memory-free coordinates globally.
-
-        Manager.trigger("memoryUpdate", this.matrix);
     }
 
     rewrite(address, value) {
@@ -50,8 +47,6 @@ export class Memory {
             const [row, column] = this.getLocation(address);
             this.matrix[row][column] = value;
         }
-
-        Manager.trigger("memoryUpdate", this.matrix);
     }
 
     get(address) {
@@ -71,6 +66,12 @@ export class Memory {
     point(address) {
         const nextAddress = (parseInt(address, 16) + 1).toString(16).toUpperCase();
         return this.get(address) + this.get(nextAddress);
+    }
+
+    copy(memory) {
+        this.matrix = memory.matrix;
+        this.free = memory.free;
+        this.execution = memory.execution;
     }
 
     reset() {

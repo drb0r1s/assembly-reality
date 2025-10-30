@@ -31,7 +31,7 @@ export class Assembler {
             }
         }
 
-        return this.memory.matrix;
+        return this.memory;
     }
 
     assembleInstruction(instruction) {
@@ -62,6 +62,8 @@ export class Assembler {
             // For infinite loop prevention, in case of bugs.
             if(this.memory.execution.i > this.memory.matrix.length) break;
         }
+
+        return this;
     }
 
     executeInstruction(cell) {
@@ -105,9 +107,17 @@ export class Assembler {
         return args;
     }
 
+    copy(assembler) {
+        this.registers.copy(assembler.registers);
+        this.memory.copy(assembler.memory);
+        this.halted = assembler.halted;
+    }
+
     reset() {
         this.registers.reset();
         this.memory.reset();
         this.halted = false;
+
+        return this;
     }
 };
