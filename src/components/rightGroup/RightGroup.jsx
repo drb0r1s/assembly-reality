@@ -5,7 +5,7 @@ import IORegisters from "./IORegisters";
 import Signature from "./Signature";
 import { useManagerValue } from "../../hooks/useManagerValue";
 
-const RightGroup = ({ assembler }) => {
+const RightGroup = () => {
     const rightGroupRef = useRef(null);
     const ioDevicesRef = useRef(null);
     const cpuRegistersRef = useRef(null);

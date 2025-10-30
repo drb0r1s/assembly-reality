@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import MemoryMap from "./MemoryMap";
+import { GlobalContext } from "../../context/GlobalContext";
 import { Manager } from "../../Manager";
 
-const Memory = ({ assembler }) => {
+const Memory = () => {
+    const { assembler } = useContext(GlobalContext);
+    
     const [memoryMatrix, setMemoryMatrix] = useState(assembler.memory.matrix);
     const [isSplitActive, setIsSplitActive] = useState(false);
     
