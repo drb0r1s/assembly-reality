@@ -51,7 +51,7 @@ export class Registers {
         return indexRegister[index];
     }
 
-    getValue(register) {
+    getValue(register, options) {
         if(register.includes("H") || register.includes("L")) {
             const isH = register.includes("H");
 
@@ -62,6 +62,9 @@ export class Registers {
 
             // Even though we expect 8-bit value, it is important to still return 16-bit value, with second cell empty.
             // This way we can "synchronize" this operation with others (e.g. memory.number.* type will call memory.point() which will result in 16-bit return value).
+            // However, that can be canceled using options.noLeadingZeros.
+
+            if(options?.noLeadingZeros) return cell;
             return `${cell}00`;
         }
 
@@ -72,9 +75,9 @@ export class Registers {
         return registerIndex[register];
     }
 
-    getValueByIndex(index) {
+    getValueByIndex(index, options) {
         const register = this.get(index);
-        return this.getValue(register);
+        return this.getValue(register, options);
     }
 
     update(register, value) {

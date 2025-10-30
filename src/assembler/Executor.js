@@ -262,11 +262,11 @@ export const Executor = {
                 break;
             case "half.register number.*":
                 first = assembler.registers.get(args[0]);
-                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0], { noLeadingZeros: true });
 
                 second = args[1];
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+                assembler.registers.update(first, hexSum(firstRegisterValue, second, { isHalf: true }));
 
                 break;
             default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
@@ -282,6 +282,7 @@ function argumentsCheck(executable, args) {
     });
 }
 
-function hexSum(first, second) {
-    return (parseInt(first, 16) + parseInt(second, 16)).toString(16).toUpperCase().padStart(4, "0");
+function hexSum(first, second, options) {
+    const length = options?.isHalf ? 2 : 4;
+    return (parseInt(first, 16) + parseInt(second, 16)).toString(16).toUpperCase().padStart(length, "0");
 }
