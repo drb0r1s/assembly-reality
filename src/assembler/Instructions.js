@@ -1,4 +1,4 @@
-import { Perform } from "./Perform";
+import { Encode } from "./Encode";
 
 /*
     Type examples:
@@ -13,7 +13,7 @@ export const Instructions = {
     HLT: () => "00",
     
     // MOV operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    MOV: instruction => Perform.twoOperands(instruction, {
+    MOV: instruction => Encode.twoOperands(instruction, {
         "register register": "01",
         "register memory.register": "02",
         "register memory.half.register": "02",
@@ -26,7 +26,7 @@ export const Instructions = {
     }),
 
     // MOVB operands: REG (half.register) || IND (memory.register. memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    MOVB: instruction => Perform.twoOperands(instruction, {
+    MOVB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "09",
         "half.register memory.register": "0A",
         "half.register memory.half.register": "0A",
@@ -41,7 +41,7 @@ export const Instructions = {
     }),
 
     // ADD operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    ADD: instruction => Perform.twoOperands(instruction, {
+    ADD: instruction => Encode.twoOperands(instruction, {
         "register register": "11",
         "register memory.register": "12",
         "register memory.number.*": "13",
@@ -49,7 +49,7 @@ export const Instructions = {
     }),
 
     // ADDB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    ADDB: instruction => Perform.twoOperands(instruction, {
+    ADDB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "15",
         "half.register memory.register": "16",
         "half.register memory.half.register": "16",
@@ -58,7 +58,7 @@ export const Instructions = {
     }),
 
     // SUB operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    SUB: instruction => Perform.twoOperands(instruction, {
+    SUB: instruction => Encode.twoOperands(instruction, {
         "register register": "19",
         "register memory.register": "1A",
         "register memory.number.*": "1B",
@@ -66,7 +66,7 @@ export const Instructions = {
     }),
 
     // SUBB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    SUBB: instruction => Perform.twoOperands(instruction, {
+    SUBB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "1D",
         "half.register memory.register": "1E",
         "half.register memory.half.register": "1E",
@@ -75,27 +75,27 @@ export const Instructions = {
     }),
 
     // INC operand: REG (register)
-    INC: instruction => Perform.oneOperand(instruction, {
+    INC: instruction => Encode.oneOperand(instruction, {
         "register": "21"
     }),
 
     // INCB operand: REG (half.register)
-    INCB: instruction => Perform.oneOperand(instruction, {
+    INCB: instruction => Encode.oneOperand(instruction, {
         "half.register": "22"
     }),
 
     // DEC operand: REG (register)
-    DEC: instruction => Perform.oneOperand(instruction, {
+    DEC: instruction => Encode.oneOperand(instruction, {
         "register": "23"
     }),
 
     // DECB operand: REG (half.register)
-    DECB: instruction => Perform.oneOperand(instruction, {
+    DECB: instruction => Encode.oneOperand(instruction, {
         "half.register": "24"
     }),
 
     // CMP operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    CMP: instruction => Perform.twoOperands(instruction, {
+    CMP: instruction => Encode.twoOperands(instruction, {
         "register register": "25",
         "register memory.register": "26",
         "register memory.number.*": "27",
@@ -103,7 +103,7 @@ export const Instructions = {
     }),
 
     // CMPB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    CMPB: instruction => Perform.twoOperands(instruction, {
+    CMPB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "29",
         "half.register memory.register": "2A",
         "half.register memory.half.register": "2A",
@@ -112,71 +112,71 @@ export const Instructions = {
     }),
 
     // JMP operand: IND (memoy.register) || IMD (number.*)
-    JMP: instruction => Perform.oneOperand(instruction, {
+    JMP: instruction => Encode.oneOperand(instruction, {
         "memory.register": "2D",
         "number.*": "2E"
     }),
 
     // JC operand: IND (memoy.register) || IMD (number.*)
-    JC: instruction => Perform.oneOperand(instruction, {
+    JC: instruction => Encode.oneOperand(instruction, {
         "memory.register": "2F",
         "number.*": "30"
     }),
 
     // JNC operand: IND (memoy.register) || IMD (number.*)
-    JNC: instruction => Perform.oneOperand(instruction, {
+    JNC: instruction => Encode.oneOperand(instruction, {
         "memory.register": "31",
         "number.*": "32"
     }),
 
     // JZ operand: IND (memoy.register) || IMD (number.*)
-    JZ: instruction => Perform.oneOperand(instruction, {
+    JZ: instruction => Encode.oneOperand(instruction, {
         "memory.register": "33",
         "number.*": "34"
     }),
 
     // JNZ operand: IND (memoy.register) || IMD (number.*)
-    JNZ: instruction => Perform.oneOperand(instruction, {
+    JNZ: instruction => Encode.oneOperand(instruction, {
         "memory.register": "35",
         "number.*": "36"
     }),
 
     // JA operand: IND (memoy.register) || IMD (number.*)
-    JA: instruction => Perform.oneOperand(instruction, {
+    JA: instruction => Encode.oneOperand(instruction, {
         "memory.register": "37",
         "number.*": "38"
     }),
 
     // JNA operand: IND (memoy.register) || IMD (number.*)
-    JNA: instruction => Perform.oneOperand(instruction, {
+    JNA: instruction => Encode.oneOperand(instruction, {
         "memory.register": "39",
         "number.*": "3A"
     }),
 
     // PUSH operand: REG (register) || IMD (number.*)
-    PUSH: instruction => Perform.oneOperand(instruction, {
+    PUSH: instruction => Encode.oneOperand(instruction, {
         "register": "3B",
         "number.*": "3C"
     }),
 
     // PUSHB operand: REG (half.register) || IMD (number.*)
-    PUSHB: instruction => Perform.oneOperand(instruction, {
+    PUSHB: instruction => Encode.oneOperand(instruction, {
         "half.register": "3F",
         "number.*": "40"
     }),
 
     // POP operand: REG (register)
-    POP: instruction => Perform.oneOperand(instruction, {
+    POP: instruction => Encode.oneOperand(instruction, {
         "register": "43"
     }),
 
     // POPB operand: REG (half.register)
-    POPB: instruction => Perform.oneOperand(instruction, {
+    POPB: instruction => Encode.oneOperand(instruction, {
         "half.register": "44"
     }),
 
     // CALL operand: IND (memory.register) || IMD (number.*)
-    CALL: instruction => Perform.oneOperand(instruction, {
+    CALL: instruction => Encode.oneOperand(instruction, {
         "memory.register": "45",
         "number.*": "46"
     }),
@@ -184,7 +184,7 @@ export const Instructions = {
     RET: () => "47",
 
     // MUL operand: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    MUL: instruction => Perform.oneOperand(instruction, {
+    MUL: instruction => Encode.oneOperand(instruction, {
         "register": "48",
         "memory.register": "49",
         "memory.number.*": "4A",
@@ -192,7 +192,7 @@ export const Instructions = {
     }),
 
     // MULB operand: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    MULB: instruction => Perform.oneOperand(instruction, {
+    MULB: instruction => Encode.oneOperand(instruction, {
         "half.register": "4C",
         "memory.register": "4D",
         "memory.half.register": "4D",
@@ -201,7 +201,7 @@ export const Instructions = {
     }),
 
     // DIV operand: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    DIV: instruction => Perform.oneOperand(instruction, {
+    DIV: instruction => Encode.oneOperand(instruction, {
         "register": "50",
         "memory.register": "51",
         "memory.number.*": "52",
@@ -209,7 +209,7 @@ export const Instructions = {
     }),
 
     // DIVB operand: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    DIVB: instruction => Perform.oneOperand(instruction, {
+    DIVB: instruction => Encode.oneOperand(instruction, {
         "half.register": "54",
         "memory.register": "55",
         "memory.half.register": "55",
@@ -218,7 +218,7 @@ export const Instructions = {
     }),
 
     // AND operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    AND: instruction => Perform.twoOperands(instruction, {
+    AND: instruction => Encode.twoOperands(instruction, {
         "register register": "58",
         "register memory.register": "59",
         "register memory.number.*": "5A",
@@ -226,7 +226,7 @@ export const Instructions = {
     }),
 
     // ANDB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    ANDB: instruction => Perform.twoOperands(instruction, {
+    ANDB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "5C",
         "half.register memory.register": "5D",
         "half.register memory.half.register": "5D",
@@ -235,7 +235,7 @@ export const Instructions = {
     }),
 
     // OR operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    OR: instruction => Perform.twoOperands(instruction, {
+    OR: instruction => Encode.twoOperands(instruction, {
         "register register": "60",
         "register memory.register": "61",
         "register memory.number.*": "62",
@@ -243,7 +243,7 @@ export const Instructions = {
     }),
 
     // ORB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    ORB: instruction => Perform.twoOperands(instruction, {
+    ORB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "64",
         "half.register memory.register": "65",
         "half.register memory.half.register": "65",
@@ -252,7 +252,7 @@ export const Instructions = {
     }),
 
     // XOR operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    XOR: instruction => Perform.twoOperands(instruction, {
+    XOR: instruction => Encode.twoOperands(instruction, {
         "register register": "68",
         "register memory.register": "69",
         "register memory.number.*": "6A",
@@ -260,7 +260,7 @@ export const Instructions = {
     }),
 
     // XORB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    XORB: instruction => Perform.twoOperands(instruction, {
+    XORB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "6C",
         "half.register memory.register": "6D",
         "half.register memory.half.register": "6D",
@@ -269,17 +269,17 @@ export const Instructions = {
     }),
 
     // NOT operand: REG (register)
-    NOT: instruction => Perform.oneOperand(instruction, {
+    NOT: instruction => Encode.oneOperand(instruction, {
         "register": "70"
     }),
 
     // NOTB operand: REG (half.register)
-    NOTB: instruction => Perform.oneOperand(instruction, {
+    NOTB: instruction => Encode.oneOperand(instruction, {
         "half.register": "71"
     }),
 
     // SHL operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    SHL: instruction => Perform.twoOperands(instruction, {
+    SHL: instruction => Encode.twoOperands(instruction, {
         "register register": "72",
         "register memory.register": "73",
         "register memory.number.*": "74",
@@ -287,7 +287,7 @@ export const Instructions = {
     }),
 
     // SHLB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    SHLB: instruction => Perform.twoOperands(instruction, {
+    SHLB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "76",
         "half.register memory.register": "77",
         "half.register memory.half.register": "77",
@@ -296,7 +296,7 @@ export const Instructions = {
     }),
 
     // SHR operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    SHR: instruction => Perform.twoOperands(instruction, {
+    SHR: instruction => Encode.twoOperands(instruction, {
         "register register": "7A",
         "register memory.register": "7B",
         "register memory.number.*": "7C",
@@ -304,7 +304,7 @@ export const Instructions = {
     }),
 
     // SHRB operands: REG (half.register) || IND (memory.register, memory.half.register) || DIR (memory.number.*) || IMD (number.*)
-    SHRB: instruction => Perform.twoOperands(instruction, {
+    SHRB: instruction => Encode.twoOperands(instruction, {
         "half.register half.register": "7E",
         "half.register memory.register": "7F",
         "half.register memory.half.register": "7F",
@@ -319,7 +319,7 @@ export const Instructions = {
     IRET: () => "84",
 
     // IN operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    IN: instruction => Perform.oneOperand(instruction, {
+    IN: instruction => Encode.oneOperand(instruction, {
         "register": "87",
         "memory.register": "88",
         "memory.number.*": "89",
@@ -327,7 +327,7 @@ export const Instructions = {
     }),
 
     // OUT operands: REG (register) || IND (memory.register) || DIR (memory.number.*) || IMD (number.*)
-    OUT: instruction => Perform.oneOperand(instruction, {
+    OUT: instruction => Encode.oneOperand(instruction, {
         "register": "8B",
         "memory.register": "8C",
         "memory.number.*": "8D",

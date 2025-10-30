@@ -1,7 +1,7 @@
 import { AssemblerError } from "./AssemblerError";
 import { Registers } from "./Registers";
 
-export const Perform = {
+export const Encode = {
     oneOperand: (instruction, combinations) => {
         if(instruction.operands.length !== 1) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 1 }, instruction.line);
 
