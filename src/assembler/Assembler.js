@@ -1,10 +1,10 @@
-import { Tokenizer } from "./Tokenizer";
-import { AST } from "./AST";
-import { Instructions } from "./Instructions";
+import { AssemblerError } from "./AssemblerError";
 import { Registers } from "./Registers";
 import { Memory } from "./Memory";
-import { Executor } from "./Executor";
-import { AssemblerError } from "./AssemblerError";
+import { Tokenizer } from "./frontend/Tokenizer";
+import { AST } from "./frontend/AST";
+import { Instructions } from "./frontend/Instructions";
+import { Executor } from "./backend/Executor";
 
 export class Assembler {
     constructor() {

@@ -1,4 +1,4 @@
-import { AssemblerError } from "./AssemblerError";
+import { AssemblerError } from "../AssemblerError";
 import { HexCalculator } from "./HexCalculator";
 
 export const Executor = {

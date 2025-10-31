@@ -1,5 +1,5 @@
-import { keywordsRegex } from "../data/richEditor/keywords";
-import { rootDefaultRegistersExpression, rootHalfRegistersExpression } from "../data/richEditor/registers";
+import { keywordsRegex } from "../../data/richEditor/keywords";
+import { rootDefaultRegistersExpression, rootHalfRegistersExpression } from "../../data/richEditor/registers";
 
 export const Tokenizer = {
     // Patterns are ordered from the highest to the lowest priority.

@@ -1,5 +1,5 @@
-import { AssemblerError } from "./AssemblerError";
-import { Registers } from "./Registers";
+import { AssemblerError } from "../AssemblerError";
+import { Registers } from "../Registers";
 
 export const Encode = {
     oneOperand: (instruction, combinations) => {
