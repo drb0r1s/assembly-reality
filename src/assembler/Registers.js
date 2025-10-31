@@ -48,6 +48,7 @@ export class Registers {
     }
 
     get(index) {
+        if(index.length === 4) index = index.slice(-2); // In case 16-bit value is passed, we're only interested in the last 8 bits.
         return indexRegister[index];
     }
 
