@@ -1,4 +1,5 @@
 import { AssemblerError } from "./AssemblerError";
+import { HexCalculator } from "./HexCalculator";
 
 export const Executor = {
     codes: {
@@ -33,6 +34,18 @@ export const Executor = {
         "16": { instruction: "ADDB", type: "half.register memory.register", length: 4 },
         "17": { instruction: "ADDB", type: "half.register memory.number.*", length: 4 },
         "18": { instruction: "ADDB", type: "half.register number.*", length: 3 },
+
+        // SUB
+        "19": { instruction: "SUB", type: "register register", length: 3 },
+        "1A": { instruction: "SUB", type: "register memory.register", length: 4 },
+        "1B": { instruction: "SUB", type: "register memory.number.*", length: 4 },
+        "1C": { instruction: "SUB", type: "register number.*", length: 4 },
+
+        // SUBB
+        "1D": { instruction: "SUBB", type: "half.register half.register", length: 3 },
+        "1E": { instruction: "SUBB", type: "half.register memory.register", length: 4 },
+        "1F": { instruction: "SUBB", type: "half.register memory.number.*", length: 4 },
+        "20": { instruction: "SUBB", type: "half.register number.*", length: 3 },
     },
 
     MOV: (assembler, executable, args) => {
@@ -188,7 +201,7 @@ export const Executor = {
                 firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
                 secondRegisterValue = assembler.registers.getValueByIndex(args[1]);
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, secondRegisterValue));
+                assembler.registers.update(first, HexCalculator.add(firstRegisterValue, secondRegisterValue));
 
                 break;
             case "register memory.register":
@@ -198,7 +211,7 @@ export const Executor = {
                 secondRegisterValue = assembler.registers.getValueByIndex(args[2]);
                 second = assembler.memory.point(secondRegisterValue);
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+                assembler.registers.update(first, HexCalculator.add(firstRegisterValue, second));
 
                 break;
             case "register memory.number.*":
@@ -207,7 +220,7 @@ export const Executor = {
                 
                 second = assembler.memory.point(args[1] + args[2]);
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+                assembler.registers.update(first, HexCalculator.add(firstRegisterValue, second));
 
                 break;
             case "register number.*":
@@ -216,7 +229,7 @@ export const Executor = {
 
                 second = args[1] + args[2];
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+                assembler.registers.update(first, HexCalculator.add(firstRegisterValue, second));
 
                 break;
             default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
@@ -238,7 +251,7 @@ export const Executor = {
                 firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
                 secondRegisterValue = assembler.registers.getValueByIndex(args[1]);
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, secondRegisterValue));
+                assembler.registers.update(first, HexCalculator.add(firstRegisterValue, secondRegisterValue));
 
                 break;
             case "half.register memory.register":
@@ -248,7 +261,7 @@ export const Executor = {
                 secondRegisterValue = assembler.registers.getValueByIndex(args[2]);
                 second = assembler.memory.point(secondRegisterValue);
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+                assembler.registers.update(first, HexCalculator.add(firstRegisterValue, second));
 
                 break;
             case "half.register memory.number.*":
@@ -257,7 +270,7 @@ export const Executor = {
                 
                 second = assembler.memory.point(args[1] + args[2]);
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, second));
+                assembler.registers.update(first, HexCalculator.add(firstRegisterValue, second));
 
                 break;
             case "half.register number.*":
@@ -266,12 +279,112 @@ export const Executor = {
 
                 second = args[1];
 
-                assembler.registers.update(first, hexSum(firstRegisterValue, second, { isHalf: true }));
+                assembler.registers.update(first, HexCalculator.add(firstRegisterValue, second, { isHalf: true }));
 
                 break;
             default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
         }
-    }
+    },
+
+    SUB: (assembler, executable, args) => {
+        argumentsCheck(executable, args);
+
+        let first = null;
+        let second = null;
+        let firstRegisterValue = null;
+        let secondRegisterValue = null;
+
+        switch(executable.type) {
+            case "register register":
+                first = assembler.registers.get(args[0]);
+
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+                secondRegisterValue = assembler.registers.getValueByIndex(args[1]);
+
+                assembler.registers.update(first, HexCalculator.sub(firstRegisterValue, secondRegisterValue));
+
+                break;
+            case "register memory.register":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+
+                secondRegisterValue = assembler.registers.getValueByIndex(args[2]);
+                second = assembler.memory.point(secondRegisterValue);
+
+                assembler.registers.update(first, HexCalculator.sub(firstRegisterValue, second));
+
+                break;
+            case "register memory.number.*":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+                
+                second = assembler.memory.point(args[1] + args[2]);
+
+                assembler.registers.update(first, HexCalculator.sub(firstRegisterValue, second));
+
+                break;
+            case "register number.*":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+
+                second = args[1] + args[2];
+
+                assembler.registers.update(first, HexCalculator.sub(firstRegisterValue, second));
+
+                break;
+            default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
+        }
+    },
+
+    SUBB: (assembler, executable, args) => {
+        argumentsCheck(executable, args);
+
+        let first = null;
+        let second = null;
+        let firstRegisterValue = null;
+        let secondRegisterValue = null;
+
+        switch(executable.type) {
+            case "half.register half.register":
+                first = assembler.registers.get(args[0]);
+
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+                secondRegisterValue = assembler.registers.getValueByIndex(args[1]);
+
+                assembler.registers.update(first, HexCalculator.sub(firstRegisterValue, secondRegisterValue));
+
+                break;
+            case "half.register memory.register":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+
+                secondRegisterValue = assembler.registers.getValueByIndex(args[2]);
+                second = assembler.memory.point(secondRegisterValue);
+
+                assembler.registers.update(first, HexCalculator.sub(firstRegisterValue, second));
+
+                break;
+            case "half.register memory.number.*":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0]);
+                
+                second = assembler.memory.point(args[1] + args[2]);
+
+                assembler.registers.update(first, HexCalculator.sub(firstRegisterValue, second));
+
+                break;
+            case "half.register number.*":
+                first = assembler.registers.get(args[0]);
+                firstRegisterValue = assembler.registers.getValueByIndex(args[0], { noLeadingZeros: true });
+
+                second = args[1];
+
+                assembler.registers.update(first, HexCalculator.sub(firstRegisterValue, second, { isHalf: true }));
+
+                break;
+            default: throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
+        }
+    },
 };
 
 function argumentsCheck(executable, args) {
@@ -280,9 +393,4 @@ function argumentsCheck(executable, args) {
         required: executable.length - 1,
         received: args.length
     });
-}
-
-function hexSum(first, second, options) {
-    const length = options?.isHalf ? 2 : 4;
-    return (parseInt(first, 16) + parseInt(second, 16)).toString(16).toUpperCase().padStart(length, "0");
 }
