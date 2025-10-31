@@ -16,5 +16,10 @@ export const HexCalculator = {
         }
 
         return (intFirst - intSecond).toString(16).toUpperCase().padStart(length, "0");
+    },
+
+    mul: (first, second, options) => {
+        const length = options?.isHalf ? 2 : 4;
+        
     }
 };

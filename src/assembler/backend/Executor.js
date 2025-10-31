@@ -46,6 +46,24 @@ export const Executor = {
         "1E": { instruction: "SUBB", type: "half.register memory.register", length: 4 },
         "1F": { instruction: "SUBB", type: "half.register memory.number.*", length: 4 },
         "20": { instruction: "SUBB", type: "half.register number.*", length: 3 },
+
+        // INC
+        "21": { instruction: "INC", type: "register", length: 2 },
+
+        // INCB
+        "22": { instruction: "INCB", type: "half.register", length: 2 },
+
+        // DEC
+        "23": { instruction: "DEC", type: "register", length: 2 },
+
+        // DECB
+        "24": { instruction: "DECB", type: "half.register", length: 2 },
+
+        // MUL
+        "48": { instruction: "MUL", type: "register", length: 3 },
+        "49": { instruction: "MUL", type: "memory.register", length: 3 },
+        "4A": { instruction: "MUL", type: "memory.number.*", length: 3 },
+        "4B": { instruction: "MUL", type: "number.*", length: 3 },
     },
 
     MOV: (assembler, executable, args) => {
@@ -181,4 +199,58 @@ export const Executor = {
             }
         });
     },
+
+    INC: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        Decoder.run(executable, {
+            "register": () => {
+                const sum = HexCalculator.add(first.registerValue, "0001");
+                assembler.registers.update(first.register, sum)
+            }
+        });
+    },
+
+    INCB: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        Decoder.run(executable, {
+            "half.register": () => {
+                const sum = HexCalculator.add(first.registerValue, "0001", { isHalf: true });
+                assembler.registers.update(first.register, sum)
+            }
+        });
+    },
+
+    DEC: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        Decoder.run(executable, {
+            "register": () => {
+                const diff = HexCalculator.sub(first.registerValue, "0001");
+                assembler.registers.update(first.register, diff)
+            }
+        });
+    },
+
+    DECB: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        Decoder.run(executable, {
+            "half.register": () => {
+                const diff = HexCalculator.sub(first.registerValue, "0001", { isHalf: true });
+                assembler.registers.update(first.register, diff)
+            }
+        });
+    },
+
+    MUL: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        Decoder.run(executable, {
+            "register": () => {
+                
+            }
+        });
+    }
 };
