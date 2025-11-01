@@ -44,5 +44,15 @@ export const HexCalculator = {
 
         const result = Math.floor(intFirst / intSecond) & data.max;
         return result.toString(16).toUpperCase().padStart(data.length, "0");
+    },
+
+    and: (first, second, options) => {
+        const data = {
+            length: options?.isHalf ? 2 : 4,
+            max: options?.isHalf ? 0xFF : 0xFFFF
+        };
+
+        const result = (parseInt(first, 16) & parseInt(second, 16)) & data.max;
+        return result.toString(16).toUpperCase().padStart(data.length, "0");
     }
 };

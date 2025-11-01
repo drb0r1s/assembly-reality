@@ -82,6 +82,12 @@ export const Executor = {
         "55": { instruction: "DIVB", type: "memory.register", length: 3 },
         "56": { instruction: "DIVB", type: "memory.number.*", length: 3 },
         "57": { instruction: "DIVB", type: "number.*", length: 2 },
+
+        // AND
+        "58": { instruction: "AND", type: "register register", length: 3 },
+        "59": { instruction: "AND", type: "register memory.register", length: 4 },
+        "5A": { instruction: "AND", type: "register memory.number.*", length: 4 },
+        "5B": { instruction: "AND", type: "register number.*", length: 4 },
     },
 
     MOV: (assembler, executable, args) => {
@@ -369,4 +375,30 @@ export const Executor = {
             }
         });
     },
+
+    AND: (assembler, executable, args) => {
+        const { first, second } = Decoder.decode(assembler, executable, args);
+
+        Decoder.run(executable, {
+            "register register": () => {
+                const and = HexCalculator.and(first.registerValue, second.registerValue);
+                assembler.registers.update(first.register, and);
+            },
+
+            "register memory.register": () => {
+                const and = HexCalculator.and(first.registerValue, second.memoryPoint);
+                assembler.registers.update(first.register, and);
+            },
+
+            "register memory.number.*": () => {
+                const and = HexCalculator.and(first.registerValue, second.memoryPoint);
+                assembler.registers.update(first.register, and);
+            },
+
+            "register number.*": () => {
+                const and = HexCalculator.and(first.registerValue, second.value);
+                assembler.registers.update(first.register, and);
+            }
+        });
+    }
 };
