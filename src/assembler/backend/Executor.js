@@ -1,5 +1,4 @@
-import { Decoder } from "./Decoder";
-import { HexCalculator } from "./HexCalculator";
+import { Executable } from "./Executable";
 
 export const Executor = {
     codes: {
@@ -88,317 +87,104 @@ export const Executor = {
         "59": { instruction: "AND", type: "register memory.register", length: 4 },
         "5A": { instruction: "AND", type: "register memory.number.*", length: 4 },
         "5B": { instruction: "AND", type: "register number.*", length: 4 },
+
+        // ANDB
+        "5C": { instruction: "ANDB", type: "half.register half.register", length: 3 },
+        "5D": { instruction: "ANDB", type: "half.register memory.register", length: 4 },
+        "5E": { instruction: "ANDB", type: "half.register memory.number.*", length: 4 },
+        "5F": { instruction: "ANDB", type: "half.register number.*", length: 3 },
+
+        // OR
+        "60": { instruction: "OR", type: "register register", length: 3 },
+        "61": { instruction: "OR", type: "register memory.register", length: 4 },
+        "62": { instruction: "OR", type: "register memory.number.*", length: 4 },
+        "63": { instruction: "OR", type: "register number.*", length: 4 },
+
+        // ORB
+        "64": { instruction: "ORB", type: "half.register half.register", length: 3 },
+        "65": { instruction: "ORB", type: "half.register memory.register", length: 4 },
+        "66": { instruction: "ORB", type: "half.register memory.number.*", length: 4 },
+        "67": { instruction: "ORB", type: "half.register number.*", length: 3 },
+
+        // XOR
+        "68": { instruction: "XOR", type: "register register", length: 3 },
+        "69": { instruction: "XOR", type: "register memory.register", length: 4 },
+        "6A": { instruction: "XOR", type: "register memory.number.*", length: 4 },
+        "6B": { instruction: "XOR", type: "register number.*", length: 4 },
+
+        // XORB
+        "6C": { instruction: "XORB", type: "half.register half.register", length: 3 },
+        "6D": { instruction: "XORB", type: "half.register memory.register", length: 4 },
+        "6E": { instruction: "XORB", type: "half.register memory.number.*", length: 4 },
+        "6F": { instruction: "XORB", type: "half.register number.*", length: 3 },
+
+        // NOT
+        "70": { instruction: "NOT", type: "register", length: 2 },
+
+        // NOTB
+        "71": { instruction: "NOTB", type: "half.register", length: 2 },
+
+        // SHL
+        "72": { instruction: "SHL", type: "register register", length: 3 },
+        "73": { instruction: "SHL", type: "register memory.register", length: 4 },
+        "74": { instruction: "SHL", type: "register memory.number.*", length: 4 },
+        "75": { instruction: "SHL", type: "register number.*", length: 4 },
+
+        // SHLB
+        "76": { instruction: "SHLB", type: "half.register half.register", length: 3 },
+        "77": { instruction: "SHLB", type: "half.register memory.register", length: 4 },
+        "78": { instruction: "SHLB", type: "half.register memory.number.*", length: 4 },
+        "79": { instruction: "SHLB", type: "half.register number.*", length: 3 },
+
+        // SHR
+        "7A": { instruction: "SHR", type: "register register", length: 3 },
+        "7B": { instruction: "SHR", type: "register memory.register", length: 4 },
+        "7C": { instruction: "SHR", type: "register memory.number.*", length: 4 },
+        "7D": { instruction: "SHR", type: "register number.*", length: 4 },
+
+        // SHRB
+        "7E": { instruction: "SHRB", type: "half.register half.register", length: 3 },
+        "7F": { instruction: "SHRB", type: "half.register memory.register", length: 4 },
+        "80": { instruction: "SHRB", type: "half.register memory.number.*", length: 4 },
+        "81": { instruction: "SHRB", type: "half.register number.*", length: 3 },
     },
 
-    MOV: (assembler, executable, args) => {
-        const { first, second } = Decoder.decode(assembler, executable, args);
+    MOV: (...params) => Executable.move(...params),
+    MOVB: (...params) => Executable.move(...params),
 
-        Decoder.run(executable, {
-            "register register": () => assembler.registers.update(first.register, second.registerValue),
-            "register memory.register": () => assembler.registers.update(first.register, second.memoryPoint),
-            "register memory.number.*": () => assembler.registers.update(first.register, second.memoryPoint),
-            "memory.register register": () => assembler.memory.rewrite(first.registerValue, second.registerValue),
-            "memory.number.* register": () => assembler.memory.rewrite(first.value, second.registerValue),
-            "register number.*": () => assembler.registers.update(first.register, second.value),
-            "memory.register number.*": () => assembler.memory.rewrite(first.registerValue, second.value),
-            "memory.number.* number.*": () => assembler.memory.rewrite(first.value, second.value)
-        });
-    },
+    ADD: (...params) => Executable.bitwise(...params),
+    ADDB: (...params) => Executable.bitwise(...params),
 
-    MOVB: (assembler, executable, args) => {
-        const { first, second } = Decoder.decode(assembler, executable, args);
+    SUB: (...params) => Executable.bitwise(...params),
+    SUBB: (...params) => Executable.bitwise(...params),
 
-        Decoder.run(executable, {
-            "half.register half.register": () => assembler.registers.update(first.register, second.registerValue),
-            "half.register memory.register": () => assembler.registers.update(first.register, second.memoryPoint),
-            "half.register memory.number.*": () => assembler.registers.update(first.register, second.memoryPoint),
-            "memory.register half.register": () => assembler.memory.rewrite(first.registerValue, second.registerValue),
-            "memory.number.* half.register": () => assembler.memory.rewrite(first.value, second.registerValue),
-            "half.register number.*": () => assembler.registers.update(first.register, second.value),
-            "memory.register number.*": () => assembler.memory.rewrite(first.registerValue, second.value),
-            "memory.number.* number.*": () => assembler.memory.rewrite(first.value, second.value)
-        });
-    },
+    INC: (...params) => Executable.bitwise(...params),
+    INCB: (...params) => Executable.bitwise(...params),
 
-    ADD: (assembler, executable, args) => {
-        const { first, second } = Decoder.decode(assembler, executable, args);
+    DEC: (...params) => Executable.bitwise(...params),
+    DECB: (...params) => Executable.bitwise(...params),
 
-        Decoder.run(executable, {
-            "register register": () => {
-                const sum = HexCalculator.add(first.registerValue, second.registerValue);
-                assembler.registers.update(first.register, sum);
-            },
+    MUL: (...params) => Executable.bitwise(...params),
+    MULB: (...params) => Executable.bitwise(...params),
 
-            "register memory.register": () => {
-                const sum = HexCalculator.add(first.registerValue, second.memoryPoint);
-                assembler.registers.update(first.register, sum);
-            },
+    DIV: (...params) => Executable.bitwise(...params),
+    DIVB: (...params) => Executable.bitwise(...params),
 
-            "register memory.number.*": () => {
-                const sum = HexCalculator.add(first.registerValue, second.memoryPoint);
-                assembler.registers.update(first.register, sum);
-            },
+    AND: (...params) => Executable.bitwise(...params),
+    ANDB: (...params) => Executable.bitwise(...params),
 
-            "register number.*": () => {
-                const sum = HexCalculator.add(first.registerValue, second.value);
-                assembler.registers.update(first.register, sum);
-            }
-        });
-    },
+    OR: (...params) => Executable.bitwise(...params),
+    ORB: (...params) => Executable.bitwise(...params),
 
-    ADDB: (assembler, executable, args) => {
-        const { first, second } = Decoder.decode(assembler, executable, args);
+    XOR: (...params) => Executable.bitwise(...params),
+    XORB: (...params) => Executable.bitwise(...params),
 
-        Decoder.run(executable, {
-            "half.register half.register": () => {
-                const sum = HexCalculator.add(first.registerValue, second.registerValue, { isHalf: true });
-                assembler.registers.update(first.register, sum);
-            },
+    NOT: (...params) => Executable.bitwise(...params),
+    NOTB: (...params) => Executable.bitwise(...params),
 
-            "half.register memory.register": () => {
-                const sum = HexCalculator.add(first.registerValue, second.memoryPoint, { isHalf: true })
-                assembler.registers.update(first.register, sum);
-            },
+    SHL: (...params) => Executable.bitwise(...params),
+    SHLB: (...params) => Executable.bitwise(...params),
 
-            "half.register memory.number.*": () => {
-                const sum = HexCalculator.add(first.registerValue, second.memoryPoint, { isHalf: true });
-                assembler.registers.update(first.register, sum);
-            },
-
-            "half.register number.*": () => {
-                const sum = HexCalculator.add(first.registerValue, second.value, { isHalf: true });
-                assembler.registers.update(first.register, sum);
-            }
-        });
-    },
-
-    SUB: (assembler, executable, args) => {
-        const { first, second } = Decoder.decode(assembler, executable, args);
-
-        Decoder.run(executable, {
-            "register register": () => {
-                const diff = HexCalculator.sub(first.registerValue, second.registerValue);
-                assembler.registers.update(first.register, diff);
-            },
-
-            "register memory.register": () => {
-                const diff = HexCalculator.sub(first.registerValue, second.memoryPoint);
-                assembler.registers.update(first.register, diff);
-            },
-
-            "register memory.number.*": () => {
-                const diff = HexCalculator.sub(first.registerValue, second.memoryPoint);
-                assembler.registers.update(first.register, diff);
-            },
-
-            "register number.*": () => {
-                const diff = HexCalculator.sub(first.registerValue, second.value);
-                assembler.registers.update(first.register, diff);
-            }
-        });
-    },
-
-    SUBB: (assembler, executable, args) => {
-        const { first, second } = Decoder.decode(assembler, executable, args);
-
-        Decoder.run(executable, {
-            "half.register half.register": () => {
-                const diff = HexCalculator.sub(first.registerValue, second.registerValue, { isHalf: true });
-                assembler.registers.update(first.register, diff);
-            },
-
-            "half.register memory.register": () => {
-                const diff = HexCalculator.sub(first.registerValue, second.memoryPoint, { isHalf: true })
-                assembler.registers.update(first.register, diff);
-            },
-
-            "half.register memory.number.*": () => {
-                const diff = HexCalculator.sub(first.registerValue, second.memoryPoint, { isHalf: true });
-                assembler.registers.update(first.register, diff);
-            },
-
-            "half.register number.*": () => {
-                const diff = HexCalculator.sub(first.registerValue, second.value, { isHalf: true });
-                assembler.registers.update(first.register, diff);
-            }
-        });
-    },
-
-    INC: (assembler, executable, args) => {
-        const { first } = Decoder.decode(assembler, executable, args);
-
-        Decoder.run(executable, {
-            "register": () => {
-                const sum = HexCalculator.add(first.registerValue, "0001");
-                assembler.registers.update(first.register, sum)
-            }
-        });
-    },
-
-    INCB: (assembler, executable, args) => {
-        const { first } = Decoder.decode(assembler, executable, args);
-
-        Decoder.run(executable, {
-            "half.register": () => {
-                const sum = HexCalculator.add(first.registerValue, "0001", { isHalf: true });
-                assembler.registers.update(first.register, sum)
-            }
-        });
-    },
-
-    DEC: (assembler, executable, args) => {
-        const { first } = Decoder.decode(assembler, executable, args);
-
-        Decoder.run(executable, {
-            "register": () => {
-                const diff = HexCalculator.sub(first.registerValue, "0001");
-                assembler.registers.update(first.register, diff)
-            }
-        });
-    },
-
-    DECB: (assembler, executable, args) => {
-        const { first } = Decoder.decode(assembler, executable, args);
-
-        Decoder.run(executable, {
-            "half.register": () => {
-                const diff = HexCalculator.sub(first.registerValue, "0001", { isHalf: true });
-                assembler.registers.update(first.register, diff)
-            }
-        });
-    },
-
-    MUL: (assembler, executable, args) => {
-        const { first } = Decoder.decode(assembler, executable, args);
-        const registerValue = assembler.registers.getValue("A");
-
-        Decoder.run(executable, {
-            "register": () => {
-                const mul = HexCalculator.mul(registerValue, first.registerValue);
-                assembler.registers.update("A", mul);
-            },
-
-            "memory.register": () => {
-                const mul = HexCalculator.mul(registerValue, first.memoryPoint);
-                assembler.registers.update("A", mul);
-            },
-
-            "memory.number.*": () => {
-                const mul = HexCalculator.mul(registerValue, first.memoryPoint);
-                assembler.registers.update("A", mul);
-            },
-
-            "number.*": () => {
-                const mul = HexCalculator.mul(registerValue, first.value);
-                assembler.registers.update("A", mul);
-            }
-        });
-    },
-
-    MULB: (assembler, executable, args) => {
-        const { first } = Decoder.decode(assembler, executable, args);
-        const registerValue = assembler.registers.getValue("AL");
-
-        Decoder.run(executable, {
-            "register": () => {
-                const mul = HexCalculator.mul(registerValue, first.registerValue, { isHalf: true });
-                assembler.registers.update("AL", mul);
-            },
-
-            "memory.register": () => {
-                const mul = HexCalculator.mul(registerValue, first.memoryPoint, { isHalf: true });
-                assembler.registers.update("AL", mul);
-            },
-
-            "memory.number.*": () => {
-                const mul = HexCalculator.mul(registerValue, first.memoryPoint, { isHalf: true });
-                assembler.registers.update("AL", mul);
-            },
-
-            "number.*": () => {
-                const mul = HexCalculator.mul(registerValue, first.value, { isHalf: true });
-                assembler.registers.update("AL", mul);
-            }
-        });
-    },
-
-    DIV: (assembler, executable, args) => {
-        const { first } = Decoder.decode(assembler, executable, args);
-        const registerValue = assembler.registers.getValue("A");
-
-        Decoder.run(executable, {
-            "register": () => {
-                const div = HexCalculator.div(registerValue, first.registerValue);
-                assembler.registers.update("A", div);
-            },
-
-            "memory.register": () => {
-                const div = HexCalculator.div(registerValue, first.memoryPoint);
-                assembler.registers.update("A", div);
-            },
-
-            "memory.number.*": () => {
-                const div = HexCalculator.div(registerValue, first.memoryPoint);
-                assembler.registers.update("A", div);
-            },
-
-            "number.*": () => {
-                const div = HexCalculator.div(registerValue, first.value);
-                assembler.registers.update("A", div);
-            }
-        });
-    },
-
-    DIVB: (assembler, executable, args) => {
-        const { first } = Decoder.decode(assembler, executable, args);
-        const registerValue = assembler.registers.getValue("AL");
-
-        Decoder.run(executable, {
-            "register": () => {
-                const div = HexCalculator.div(registerValue, first.registerValue, { isHalf: true });
-                assembler.registers.update("AL", div);
-            },
-
-            "memory.register": () => {
-                const div = HexCalculator.div(registerValue, first.memoryPoint, { isHalf: true });
-                assembler.registers.update("AL", div);
-            },
-
-            "memory.number.*": () => {
-                const div = HexCalculator.div(registerValue, first.memoryPoint, { isHalf: true });
-                assembler.registers.update("AL", div);
-            },
-
-            "number.*": () => {
-                const div = HexCalculator.div(registerValue, first.value, { isHalf: true });
-                assembler.registers.update("AL", div);
-            }
-        });
-    },
-
-    AND: (assembler, executable, args) => {
-        const { first, second } = Decoder.decode(assembler, executable, args);
-
-        Decoder.run(executable, {
-            "register register": () => {
-                const and = HexCalculator.and(first.registerValue, second.registerValue);
-                assembler.registers.update(first.register, and);
-            },
-
-            "register memory.register": () => {
-                const and = HexCalculator.and(first.registerValue, second.memoryPoint);
-                assembler.registers.update(first.register, and);
-            },
-
-            "register memory.number.*": () => {
-                const and = HexCalculator.and(first.registerValue, second.memoryPoint);
-                assembler.registers.update(first.register, and);
-            },
-
-            "register number.*": () => {
-                const and = HexCalculator.and(first.registerValue, second.value);
-                assembler.registers.update(first.register, and);
-            }
-        });
-    }
+    SHR: (...params) => Executable.bitwise(...params),
+    SHRB: (...params) => Executable.bitwise(...params),
 };

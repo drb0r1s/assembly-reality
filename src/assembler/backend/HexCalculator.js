@@ -1,7 +1,7 @@
 import { AssemblerError } from "../AssemblerError";
 
 export const HexCalculator = {
-    add: (first, second, options) => {
+    ADD: (first, second, options) => {
         const data = {
             length: options?.isHalf ? 2 : 4,
             max: options?.isHalf ? 0xFF : 0xFFFF
@@ -11,7 +11,7 @@ export const HexCalculator = {
         return result.toString(16).toUpperCase().padStart(data.length, "0");
     },
 
-    sub: (first, second, options) => {
+    SUB: (first, second, options) => {
         const data = {
             length: options?.isHalf ? 2 : 4,
             max: options?.isHalf ? 0xFF : 0xFFFF
@@ -21,7 +21,11 @@ export const HexCalculator = {
         return result.toString(16).toUpperCase().padStart(data.length, "0");
     },
 
-    mul: (first, second, options) => {
+    // Even though the following two functions don't need "second" as a parameter, for synchronization, it has to stay as a placeholder.
+    INC: (first, _, options) => HexCalculator.ADD(first, "0001", options),
+    DEC: (first, _, options) => HexCalculator.SUB(first, "0001", options),
+
+    MUL: (first, second, options) => {
         const data = {
             length: options?.isHalf ? 2 : 4,
             max: options?.isHalf ? 0xFF : 0xFFFF
@@ -31,7 +35,7 @@ export const HexCalculator = {
         return result.toString(16).toUpperCase().padStart(data.length, "0");
     },
 
-    div: (first, second, options) => {
+    DIV: (first, second, options) => {
         const data = {
             length: options?.isHalf ? 2 : 4,
             max: options?.isHalf ? 0xFF : 0xFFFF
@@ -40,13 +44,13 @@ export const HexCalculator = {
         const intFirst = parseInt(first, 16);
         const intSecond = parseInt(second, 16);
 
-        if(intSecond === 0) throw new AssemblerError("DivisionByZero");
+        if(intFirst === 0) throw new AssemblerError("DivisionByZero");
 
-        const result = Math.floor(intFirst / intSecond) & data.max;
+        const result = Math.floor(intSecond / intFirst) & data.max;
         return result.toString(16).toUpperCase().padStart(data.length, "0");
     },
 
-    and: (first, second, options) => {
+    AND: (first, second, options) => {
         const data = {
             length: options?.isHalf ? 2 : 4,
             max: options?.isHalf ? 0xFF : 0xFFFF
@@ -54,5 +58,55 @@ export const HexCalculator = {
 
         const result = (parseInt(first, 16) & parseInt(second, 16)) & data.max;
         return result.toString(16).toUpperCase().padStart(data.length, "0");
-    }
+    },
+
+    OR: (first, second, options) => {
+        const data = {
+            length: options?.isHalf ? 2 : 4,
+            max: options?.isHalf ? 0xFF : 0xFFFF
+        };
+
+        const result = (parseInt(first, 16) | parseInt(second, 16)) & data.max;
+        return result.toString(16).toUpperCase().padStart(data.length, "0");
+    },
+
+    XOR: (first, second, options) => {
+        const data = {
+            length: options?.isHalf ? 2 : 4,
+            max: options?.isHalf ? 0xFF : 0xFFFF
+        };
+
+        const result = (parseInt(first, 16) ^ parseInt(second, 16)) & data.max;
+        return result.toString(16).toUpperCase().padStart(data.length, "0");
+    },
+
+    NOT: (first, _, options) => {
+        const data = {
+            length: options?.isHalf ? 2 : 4,
+            max: options?.isHalf ? 0xFF : 0xFFFF
+        };
+
+        const result = (~parseInt(first, 16)) & data.max;
+        return result.toString(16).toUpperCase().padStart(data.length, "0");
+    },
+
+    SHL: (first, second, options) => {
+        const data = {
+            length: options?.isHalf ? 2 : 4,
+            max: options?.isHalf ? 0xFF : 0xFFFF
+        };
+
+        const result = (parseInt(first, 16) << parseInt(second, 16)) & data.max;
+        return result.toString(16).toUpperCase().padStart(data.length, "0");
+    },
+
+    SHR: (first, second, options) => {
+        const data = {
+            length: options?.isHalf ? 2 : 4,
+            max: options?.isHalf ? 0xFF : 0xFFFF
+        };
+
+        const result = (parseInt(first, 16) >>> parseInt(second, 16)) & data.max; // >>> is used for unsigned shift right
+        return result.toString(16).toUpperCase().padStart(data.length, "0");
+    },
 };
