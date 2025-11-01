@@ -4,6 +4,8 @@ import { images } from "../../data/images";
 const EditorError = ({ error, setError }) => {
     const editorErrorRef = useRef(null);
 
+    console.log(error)
+
     useEffect(() => {
         setTimeout(() => {
             editorErrorRef.current.style.opacity = "1";
@@ -21,7 +23,7 @@ const EditorError = ({ error, setError }) => {
     return(
         <div className="editor-error" ref={editorErrorRef}>
             <button onClick={disableEditorError}><img src={images.xIcon} alt="X" /></button>
-            <p>ERROR ({error.type}): {error.content}{error.line ? ` @ line ${error.line}` : ""}</p>
+            <p>{error.isRuntime ? "RUNTIME ": ""}ERROR ({error.type}): {error.content}{error.line ? ` @ line ${error.line}` : ""}</p>
         </div>
     );
 }
