@@ -4,10 +4,10 @@ import { LengthOf } from "./LengthOf";
 /*
     Type examples:
 
-    REG (Register): A,
-    IND (Indirect addressing): [A],
-    DIR (Direct addressing): [0x1000],
-    IMD (Immediate value): 10
+    REG (Register) -> register || half.register: A,
+    IND (Indirect addressing) -> memory.register: [A],
+    DIR (Direct addressing) -> memory.number.*: [0x1000],
+    IMD (Immediate value) -> number.*: 10
 */
 
 export const Instructions = {
