@@ -16,42 +16,32 @@ export class Assembler {
     }
     
     assemble(text) {
-        const tokens = Tokenizer.tokenize(text);
-        let ast = AST.build(tokens);
-
-        this.reset(); // We need to reset assembler before reassembling the code.
-
-        // Here we proceed to go through the AST twice:
-        // Pass 1: Simulate the memory shape, for assignment of addresses to labels.
-        // Pass 2: Actual assembling of instructions.
-
-        // Pass 1
-        for(let i = 0; i < ast.statements.length; i++) this.observeStatement(ast.statements[i]);
-
         try {
+            const tokens = Tokenizer.tokenize(text);
+            let ast = AST.build(tokens);
+
+            this.reset(); // We need to reset assembler before reassembling the code.
+
+            // Here we proceed to go through the AST twice:
+            // Pass 1: Simulate the memory shape, for assignment of addresses to labels.
+            // Pass 2: Actual assembling of instructions.
+
+            // Pass 1
+            for(let i = 0; i < ast.statements.length; i++) this.observeStatement(ast.statements[i]);
+            
             ast = this.labels.transform(ast);
+            this.memory.reset(); // We need to free the memory, free pointer need to be set to 0.
+
+            // Pass 2
+            for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
+
+            console.log(ast, this.labels)
         }
 
         catch(error) {
             if(error instanceof AssemblerError) return { error };
             else console.error(error);
         }
-
-        this.memory.reset(); // We need to free the memory, free pointer need to be set to 0.
-
-        // Pass 2
-        for(let i = 0; i < ast.statements.length; i++) {
-            try {
-                this.assembleStatement(ast.statements[i]);
-            }
-
-            catch(error) {
-                if(error instanceof AssemblerError) return { error };
-                else console.error(error);
-            }
-        }
-
-        console.log(ast, this.labels)
 
         return this.memory;
     }
@@ -151,6 +141,7 @@ export class Assembler {
     reset() {
         this.registers.reset();
         this.memory.reset();
+        this.labels.reset();
         this.halted = false;
 
         return this;

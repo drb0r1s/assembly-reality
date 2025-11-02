@@ -6,6 +6,8 @@ export class Labels {
     }
 
     collect(label, memory) {
+        if(this.collection[label.name]) throw new AssemblerError("DuplicatedLabel", { label: label.name }, label.line);
+
         const row = memory.free.i;
         const column = memory.free.j;
 
@@ -36,5 +38,9 @@ export class Labels {
         }
 
         return ast;
+    }
+
+    reset() {
+        this.collection = {};
     }
 };
