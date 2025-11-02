@@ -63,6 +63,26 @@ export class Memory {
         return [row, column];
     }
 
+    getAddress(row, column) {
+        const index = row * 16 + column;
+        return index.toString(16).toUpperCase().padStart(4, "0");
+    }
+
+    advance(amount) {
+        let { i, j } = this.free;
+
+        j += amount;
+
+        while (j > 15) {
+            j -= 16;
+            i++;
+        }
+
+        if(i >= this.matrix.length) throw new AssemblerError("OutOfMemory");
+
+        this.free = { i, j };
+    }
+
     point(address) {
         const nextAddress = (parseInt(address, 16) + 1).toString(16).toUpperCase();
         return this.get(address) + this.get(nextAddress);

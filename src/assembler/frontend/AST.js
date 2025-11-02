@@ -1,7 +1,15 @@
 class ProgramNode {
     constructor() {
         this.type = "Program";
-        this.instructions = [];
+        this.statements = []; // Statement is either a "label.definition" or a "instruction".
+    }
+}
+
+class LabelNode {
+    constructor(name, line) {
+        this.type = "Label";
+        this.name = name;
+        this.line = line;
     }
 }
 
@@ -44,8 +52,8 @@ export const AST = {
             // New line is reached, we should parse all the tokens from the previous line first.
             if(token.line !== line.number) {
                 if(line.tokens.length > 0) {
-                    const instructionNode = AST.parseInstruction(line.tokens);
-                    programNode.instructions.push(instructionNode);
+                    const statementNode = AST.parseStatement(line.tokens);
+                    if(statementNode) programNode.statements.push(statementNode);
                 }
 
                 // Reseting the line object.
@@ -58,23 +66,28 @@ export const AST = {
 
         // When the loop finishes, parse anything that was left from the last line.
         if(line.tokens.length > 0) {
-            const instructionNode = AST.parseInstruction(line.tokens);
-            programNode.instructions.push(instructionNode);
+            const statementNode = AST.parseStatement(line.tokens);
+            if(statementNode) programNode.statements.push(statementNode);
         }
 
         return programNode;
     },
 
     // tokens parameter contains all the tokens from the specific line
-    parseInstruction: tokens => {
-        const firstToken = tokens[0];
+    parseStatement: tokens => {
+        // AST should ignore comments.
+        const filteredTokens = tokens.filter(token => token.type !== "comment");
+
+        const firstToken = filteredTokens[0];
+        if(!firstToken) return null;
+
+        if(firstToken.type === "label.definition") return new LabelNode(firstToken.value, firstToken.line);
 
         if(firstToken.type === "keyword") {
             const instructionNode = new InstructionNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
             
-            for(let i = 1; i < tokens.length; i++) {
-                if(tokens[i].type === "comment") continue; // AST ignores the comments.
-                instructionNode.operands.push(AST.parseOperand(tokens[i]));
+            for(let i = 1; i < filteredTokens.length; i++) {
+                instructionNode.operands.push(AST.parseOperand(filteredTokens[i]));
             }
 
             return instructionNode;

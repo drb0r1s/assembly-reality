@@ -15,6 +15,7 @@ export class AssemblerError {
             case "UnknownExecutableType":
                 this.isRuntime = true;
                 return `"${attributes.type}" is not valid for executable ${attributes.instruction}!`;
+            case "UnknownLabel": return `"${attributes.label}" label is not defined.`;
             case "InvalidOperandsCombination": return `Combination of ${attributes.operands[0]} and ${attributes.operands[1]} operands is invalid for the ${attributes.instruction} instruction!`;
             case "InvalidOperand": return `Operand ${attributes.operand} is invalid for the ${attributes.instruction} instruction!`;
             case "InvalidNumberOfOperands": return `Instruction ${attributes.name} requires ${attributes.operands} operand${attributes.operands !== 1 ? "s" : ""}!`;

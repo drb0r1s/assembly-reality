@@ -61,6 +61,9 @@ function parseType(instruction, operand) {
         case "number.decimal":
             if(parseInt(operand.value) > data.maxValue) throw new AssemblerError(`DecimalLimit${data.bits}`, {}, instruction.line);
             return parseInt(operand.value).toString(16).toUpperCase().padStart(data.codeLength, "0");
+        case "label.reference":
+        case "memory.label.reference":
+            return operand.value;
         default: throw new AssemblerError("InvalidOperand", { operand: operand.value, instruction: instruction.name }, instruction.line);
     }
 }
@@ -92,11 +95,17 @@ function getInstructionCode(instruction, operands, combinations) {
 
     // number.hex => number.*
     function generalizeType(valueType) {
-        if(!valueType.startsWith("number") && !valueType.startsWith("memory.number")) return valueType; // Currently only used for number type.
+        const generalization = [
+            "number.decimal", "number.hex",
+            "memory.number.decimal", "memory.number.hex",
+            "label.reference", "memory.label.reference"
+        ];
+
+        if(generalization.indexOf(valueType) === -1) return valueType;
             
         const parts = valueType.split(".");
 
-        if(parts[0] === "memory") return `memory.${parts[1]}.*`;
-        return `${parts[0]}.*`;
+        if(parts[0] === "memory") return "memory.number.*";
+        return "number.*";
     }
 }

@@ -1,6 +1,7 @@
 import { AssemblerError } from "./AssemblerError";
 import { Registers } from "./Registers";
 import { Memory } from "./Memory";
+import { Labels } from "./Labels";
 import { Tokenizer } from "./frontend/Tokenizer";
 import { AST } from "./frontend/AST";
 import { Instructions } from "./frontend/Instructions";
@@ -10,19 +11,38 @@ export class Assembler {
     constructor() {
         this.registers = new Registers();
         this.memory = new Memory();
+        this.labels = new Labels();
         this.halted = false; // End the assembling of the code.
     }
     
     assemble(text) {
         const tokens = Tokenizer.tokenize(text);
-        const ast = AST.build(tokens);
-        console.log(ast)
+        let ast = AST.build(tokens);
 
-        this.reset(); // We need to reset the assembler before reassembling the code.
+        this.reset(); // We need to reset assembler before reassembling the code.
 
-        for(let i = 0; i < ast.instructions.length; i++) {
+        // Here we proceed to go through the AST twice:
+        // Pass 1: Simulate the memory shape, for assignment of addresses to labels.
+        // Pass 2: Actual assembling of instructions.
+
+        // Pass 1
+        for(let i = 0; i < ast.statements.length; i++) this.observeStatement(ast.statements[i]);
+
+        try {
+            ast = this.labels.transform(ast);
+        }
+
+        catch(error) {
+            if(error instanceof AssemblerError) return { error };
+            else console.error(error);
+        }
+
+        this.memory.reset(); // We need to free the memory, free pointer need to be set to 0.
+
+        // Pass 2
+        for(let i = 0; i < ast.statements.length; i++) {
             try {
-                this.assembleInstruction(ast.instructions[i]);
+                this.assembleStatement(ast.statements[i]);
             }
 
             catch(error) {
@@ -31,17 +51,32 @@ export class Assembler {
             }
         }
 
+        console.log(ast, this.labels)
+
         return this.memory;
     }
 
-    assembleInstruction(instruction) {
-        let assembledCode = "";
-        const instructionMethod = Instructions[instruction.name];
+    observeStatement(statement) {
+        if(statement.type === "Label") {
+            this.labels.collect(statement, this.memory);
+        }
 
-        if(instructionMethod) assembledCode = instructionMethod(instruction);
-        else throw new AssemblerError("UnknownInstruction", { name: instruction.name }, instruction.line);
+        if(statement.type === "Instruction") {
+            const lengthOfInstruction = Instructions[statement.name](statement, { getLength: true });
+            this.memory.advance(lengthOfInstruction);
+        }
+    }
 
-        if(assembledCode) this.memory.write(assembledCode);
+    assembleStatement(statement) {
+        if(statement.type === "Instruction") {
+            let assembledCode = "";
+            const instructionMethod = Instructions[statement.name];
+
+            if(instructionMethod) assembledCode = instructionMethod(statement);
+            else throw new AssemblerError("UnknownInstruction", { name: statement.name }, statement.line);
+
+            if(assembledCode) this.memory.write(assembledCode);
+        }
     }
 
     execute() {
