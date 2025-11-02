@@ -15,10 +15,3 @@ export const keywordsRegex = new RegExp(`^${rootKeywordsExpression}`);
 export const middleKeywordsRegex = new RegExp(`\\s${rootKeywordsExpression}`);
 
 export const jumpKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
-
-const rootJumpKeywordsExpression = `(${jumpKeywords.join("|")})(?=\\s)`;
-
-// This is a default keyword regex, requiring a keyword to be at the beginning of the line.
-export const jumpKeywordsRegex = new RegExp(`^${rootJumpKeywordsExpression}`);
-// This is a special (middle) keyword regex, in case there are tab spaces in front of the keyword.
-export const middleJumpKeywordsRegex = new RegExp(`\\s${rootJumpKeywordsExpression}`);

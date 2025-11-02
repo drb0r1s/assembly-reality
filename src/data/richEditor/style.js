@@ -9,8 +9,9 @@ export const colors = {
 
 export const rules = [
     { token: "keyword", foreground: "C586C0" },
-    { token: "label", foreground: "9CDCFE" },
-    { token: "memoryLabel", foreground: "7EBBE0" },
+    { token: "definitionLabel", foreground: "9CDCFE" },
+    { token: "referenceLabel", foreground: "7EBBE0" },
+    { token: "memoryReferenceLabel", foreground: "5B91B0" },
     { token: "register", foreground: "4EC9B0" },
     { token: "memoryRegister", foreground: "66D4BC" },
     { token: "halfRegister", foreground: "DCDCAA" },
