@@ -73,6 +73,20 @@ export const Executable = {
                 assembler.registers.update(first.register, operation);
             }
         });
+    },
+
+    jump: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        Decoder.run(executable, {
+            "memory.register": () => {
+                assembler.memory.adjustExecution(first.memoryPoint);
+            },
+
+            "number.*": () => {
+                assembler.memory.adjustExecution(first.value);
+            }
+        });
     }
 };
 

@@ -58,6 +58,10 @@ export const Executor = {
         // DECB
         "24": { instruction: "DECB", type: "half.register", length: 2 },
 
+        // JMP
+        "2D": { instruction: "JMP", type: "memory.register", length: 3 },
+        "2E": { instruction: "JMP", type: "number.*", length: 3 },
+
         // MUL
         "48": { instruction: "MUL", type: "register", length: 2 },
         "49": { instruction: "MUL", type: "memory.register", length: 3 },
@@ -163,6 +167,8 @@ export const Executor = {
 
     DEC: (...params) => Executable.bitwise(...params),
     DECB: (...params) => Executable.bitwise(...params),
+
+    JMP: (...params) => Executable.jump(...params),
 
     MUL: (...params) => Executable.bitwise(...params),
     MULB: (...params) => Executable.bitwise(...params),

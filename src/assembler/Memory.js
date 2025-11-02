@@ -88,6 +88,13 @@ export class Memory {
         return this.get(address) + this.get(nextAddress);
     }
 
+    adjustExecution(address) {
+        const [row, column] = this.getLocation(address);
+
+        this.execution.i = row;
+        this.execution.j = column;
+    }
+
     copy(memory) {
         this.matrix = memory.matrix;
         this.free = memory.free;

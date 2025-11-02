@@ -13,7 +13,7 @@ export const rules = [
     { token: "referenceLabel", foreground: "7EBBE0" },
     { token: "memoryReferenceLabel", foreground: "5B91B0" },
     { token: "register", foreground: "4EC9B0" },
-    { token: "memoryRegister", foreground: "66D4BC" },
+    { token: "memoryRegister", foreground: "3DA18C" },
     { token: "halfRegister", foreground: "DCDCAA" },
     { token: "memoryHalfRegister", foreground: "C5B26E" },
     { token: "number", foreground: "B5CEA8" },
