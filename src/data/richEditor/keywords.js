@@ -7,7 +7,7 @@ export const keywords = [
 ];
 
 // .sort() is needed here to fix the common issue of matching "keywordB" without considering "B".
-const rootKeywordsExpression = `(${[...keywords].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`;
+export const rootKeywordsExpression = `(${[...keywords].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`;
 
 // This is a default keyword regex, requiring a keyword to be at the beginning of the line.
 export const keywordsRegex = new RegExp(`^${rootKeywordsExpression}`);

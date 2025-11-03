@@ -1,4 +1,4 @@
-import { keywordsRegex } from "../../data/richEditor/keywords";
+import { rootKeywordsExpression } from "../../data/richEditor/keywords";
 import { rootDefaultRegistersExpression, rootHalfRegistersExpression } from "../../data/richEditor/registers";
 
 export const Tokenizer = {
@@ -12,7 +12,7 @@ export const Tokenizer = {
         "memory.half.register": new RegExp(`(?<=\\[)(${rootHalfRegistersExpression})(?=\\](\\s|,|$))`, "g"),
         "memory.register": new RegExp(`(?<=\\[)(${rootDefaultRegistersExpression})(?=\\](\\s|,|$))`, "g"),
         "memory.label.reference": /(?<=\s\[)([a-zA-Z0-9_]+)(?=\](\s|,|$))/g,
-        keyword: new RegExp(keywordsRegex.source, "g"),
+        keyword: new RegExp(`(?<=^|\\s)${rootKeywordsExpression}`, "g"),
         "half.register": new RegExp(`(?<=\\s)(${rootHalfRegistersExpression})(?=\\s|,|$)`, "g"),
         register: new RegExp(`(?<=\\s)(${rootDefaultRegistersExpression})(?=\\s|,|$)`, "g"),
         "number.hex": /(?<=\s0x)([0-9A-Fa-f]+)(?=\s|,|$)/g,
