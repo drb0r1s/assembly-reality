@@ -75,6 +75,39 @@ export const Executable = {
         });
     },
 
+    compare: (assembler, executable, args) => {
+        const { first, second } = Decoder.decode(assembler, executable, args);
+    
+        const [isHalf] = isInstructionHalf(executable.instruction);
+        const registerType = isHalf ? "half.register" : "register";
+
+        Decoder.run(executable, {
+            [`${registerType} ${registerType}`]: () => {
+                const flags = HexCalculator.CMP(first.registerValue, second.registerValue);
+                assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
+            },
+
+            [`${registerType} memory.register`]: () => {
+                const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
+                assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
+            },
+
+            [`${registerType} memory.number.*`]: () => {
+                const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
+                assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
+            },
+
+            [`${registerType} number.*`]: () => {
+                const flags = HexCalculator.CMP(first.registerValue, second.value);
+                assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
+            }
+        });
+
+        function performCompare() {
+
+        }
+    },
+
     jump: (assembler, executable, args) => {
         const { first } = Decoder.decode(assembler, executable, args);
 

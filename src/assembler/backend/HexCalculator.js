@@ -109,4 +109,22 @@ export const HexCalculator = {
         const result = (parseInt(first, 16) >>> parseInt(second, 16)) & data.max; // >>> is used for unsigned shift right
         return result.toString(16).toUpperCase().padStart(data.length, "0");
     },
+
+    // CMP relies on SR flags (Z and C).
+    // Z is set to 1 if first === second, otherwise C is set to 1.
+    CMP: (first, second) => {
+        const flags = { Z: 0, C: 0 };
+
+        const intFirst = parseInt(first, 16);
+        const intSecond = parseInt(second, 16);
+
+        if(intFirst === intSecond) flags.Z = 1;
+        
+        else {
+            if(intFirst < intSecond) flags.C = 1;
+            else flags.C = 0;
+        }
+
+        return flags;
+    }
 };

@@ -58,6 +58,18 @@ export const Executor = {
         // DECB
         "24": { instruction: "DECB", type: "half.register", length: 2 },
 
+        // CMP
+        "25": { instruction: "CMP", type: "register register", length: 3 },
+        "26": { instruction: "CMP", type: "register memory.register", length: 4 },
+        "27": { instruction: "CMP", type: "register memory.number.*", length: 4 },
+        "28": { instruction: "CMP", type: "register number.*", length: 4 },
+
+        // CMPB
+        "29": { instruction: "CMPB", type: "half.register half.register", length: 3 },
+        "2A": { instruction: "CMPB", type: "half.register memory.register", length: 4 },
+        "2B": { instruction: "CMPB", type: "half.register memory.number.*", length: 4 },
+        "2C": { instruction: "CMPB", type: "half.register number.*", length: 3 },
+
         // JMP
         "2D": { instruction: "JMP", type: "memory.register", length: 3 },
         "2E": { instruction: "JMP", type: "number.*", length: 3 },
@@ -167,6 +179,9 @@ export const Executor = {
 
     DEC: (...params) => Executable.bitwise(...params),
     DECB: (...params) => Executable.bitwise(...params),
+
+    CMP: (...params) => Executable.compare(...params),
+    CMPB: (...params) => Executable.compare(...params),
 
     JMP: (...params) => Executable.jump(...params),
 
