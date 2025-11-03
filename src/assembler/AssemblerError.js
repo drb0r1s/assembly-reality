@@ -9,6 +9,7 @@ export class AssemblerError {
     getContent(attributes) {
         switch(this.type) {
             case "UnknownInstruction": return `${attributes.name} is an unknown instruction!`;
+            case "UnknownInstant": return `${attributes.name} is an unknown instant instruction!`;
             case "UnknownInstructionCode":
                 this.isRuntime = true;
                 return `${attributes.code} doesn't represent any instruction!`;

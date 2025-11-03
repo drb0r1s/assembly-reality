@@ -23,6 +23,16 @@ class InstructionNode {
     }
 }
 
+class InstantNode {
+    constructor(name, line, isHalf, operands) {
+        this.type = "Instant";
+        this.name = name;
+        this.line = line;
+        this.isHalf = isHalf;
+        this.operands = operands;
+    }
+}
+
 class OperandNode {
     constructor(value, type) {
         this.type = "Operand";
@@ -39,6 +49,8 @@ class SeparatorNode {
 }
 
 export const AST = {
+    instantKeywords: ["DW", "DB"],
+
     build: tokens => {
         const programNode = new ProgramNode();
 
@@ -87,13 +99,16 @@ export const AST = {
         }
 
         if(firstToken.type === "keyword") {
-            const instructionNode = new InstructionNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
+            let node;
+
+            if(AST.instantKeywords.indexOf(firstToken.value) > -1) node = new InstantNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
+            else node = new InstructionNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
             
             for(let i = 1; i < filteredTokens.length; i++) {
-                instructionNode.operands.push(AST.parseOperand(filteredTokens[i]));
+                node.operands.push(AST.parseOperand(filteredTokens[i]));
             }
 
-            return [instructionNode];
+            return [node];
         }
     },
 

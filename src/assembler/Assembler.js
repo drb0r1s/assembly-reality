@@ -5,6 +5,7 @@ import { Labels } from "./Labels";
 import { Tokenizer } from "./frontend/Tokenizer";
 import { AST } from "./frontend/AST";
 import { Instructions } from "./frontend/Instructions";
+import { Instants } from "./frontend/Instants";
 import { Executor } from "./backend/Executor";
 
 export class Assembler {
@@ -55,6 +56,11 @@ export class Assembler {
             const lengthOfInstruction = Instructions[statement.name](statement, { getLength: true });
             this.memory.advance(lengthOfInstruction);
         }
+
+        if(statement.type === "Instant") {
+            const lengthOfInstant = statement.isHalf ? 1 : 2;
+            this.memory.advance(lengthOfInstant);
+        }
     }
 
     assembleStatement(statement) {
@@ -64,6 +70,16 @@ export class Assembler {
 
             if(instructionMethod) assembledCode = instructionMethod(statement);
             else throw new AssemblerError("UnknownInstruction", { name: statement.name }, statement.line);
+
+            if(assembledCode) this.memory.write(assembledCode);
+        }
+
+        if(statement.type === "Instant") {
+            let assembledCode = "";
+            const instantMethod = Instants[statement.name];
+
+            if(instantMethod) assembledCode = instantMethod(statement);
+            else throw new AssemblerError("UnknownInstant", { name: statement.name }, statement.line);
 
             if(assembledCode) this.memory.write(assembledCode);
         }

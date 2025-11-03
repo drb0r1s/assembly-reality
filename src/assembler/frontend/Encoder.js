@@ -48,16 +48,16 @@ function parseType(instruction, operand) {
         case "memory.register": return "00" + registers.getIndex(operand.value);
         case "memory.half.register": return registers.getIndex(operand.value);
         case "memory.number.hex":
-            if(parseInt(`0x${operand.value}`) > data.maxMemoryValue) throw new AssemblerError("HexMemoryLimit", {}, instruction.line);
+            if(parseInt(operand.value, 16) > data.maxMemoryValue) throw new AssemblerError("HexMemoryLimit", {}, instruction.line);
             return operand.value.toUpperCase().padStart(4, "0");
         case "memory.number.decimal":
             if(parseInt(operand.value) > data.maxMemoryValue) throw new AssemblerError("DecimalMemoryLimit", {}, instruction.line);
             return parseInt(operand.value).toString(16).toUpperCase().padStart(4, "0");
         case "number.hex":
-            if(parseInt(`0x${operand.value}`) > data.maxValue) throw new AssemblerError(`HexLimit${data.bits}`, {}, instruction.line);
+            if(parseInt(operand.value, 16) > data.maxValue) throw new AssemblerError(`HexLimit${data.bits}`, {}, instruction.line);
             // Here we firstly convert hexadecimal number back to decimal number, in order to escape the edge case (e.g. 0x0012), which can lead to 16-bit numbers in 8-bit instructions.
             // We use parseInt() here to get rid of starting zeros (if they exist).
-            return parseInt(`0x${operand.value}`).toString(16).toUpperCase().padStart(data.codeLength, "0");
+            return parseInt(operand.value, 16).toString(16).toUpperCase().padStart(data.codeLength, "0");
         case "number.decimal":
             if(parseInt(operand.value) > data.maxValue) throw new AssemblerError(`DecimalLimit${data.bits}`, {}, instruction.line);
             return parseInt(operand.value).toString(16).toUpperCase().padStart(data.codeLength, "0");
