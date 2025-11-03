@@ -1,6 +1,6 @@
 export const keywords = [
     "HLT", "MOV", "MOVB", "ADD", "ADDB", "SUB", "SUBB", "INC", "INCB", "DEC", "DECB",
-    "CMP", "CMPB", "JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB",
+    "CMP", "CMPB", "JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE",
     "PUSH", "PUSHB", "POP", "POPB", "CALL", "RET", "MUL", "MULB", "DIV", "DIVB", "AND", "ANDB",
     "OR", "ORB", "XOR", "XORB", "NOT", "NOTB", "SHL", "SHLB", "SHR", "SHRB", "CLI", "STI",
     "IRET", "IN", "OUT", "DB", "DW"
@@ -14,4 +14,4 @@ export const keywordsRegex = new RegExp(`^${rootKeywordsExpression}`);
 // This is a special (middle) keyword regex, in case keyword is located in the middle of the line. (e.g. DW)
 export const middleKeywordsRegex = new RegExp(`\\s${rootKeywordsExpression}`);
 
-export const jumpKeywords = ["JMP", "JE", "JNE", "JC", "JNC", "JZ", "JNZ", "JA", "JNA", "JB", "JNB", "CALL"];
+export const jumpKeywords = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL"];

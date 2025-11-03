@@ -102,14 +102,31 @@ export const Executable = {
                 assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
             }
         });
-
-        function performCompare() {
-
-        }
     },
 
     jump: (assembler, executable, args) => {
         const { first } = Decoder.decode(assembler, executable, args);
+
+        switch(executable.instruction) {
+            case "JC":
+                if(assembler.registers.SR.C === 0) return;
+                break;
+            case "JNC":
+                if(assembler.registers.SR.C === 1) return;
+                break;
+            case "JZ":
+                if(assembler.registers.SR.Z === 0) return;
+                break;
+            case "JNZ":
+                if(assembler.registers.SR.Z === 1) return;
+                break;
+            case "JA":
+                if(assembler.registers.SR.C !== 0 || assembler.registers.SR.Z !== 0) return;
+                break;
+            case "JNA":
+                if(assembler.registers.SR.C !== 1 && assembler.registers.SR.Z !== 1) return;
+                break;
+        }
 
         Decoder.run(executable, {
             "memory.register": () => {
@@ -124,7 +141,8 @@ export const Executable = {
 };
 
 function isInstructionHalf(instruction) {
-    if(instruction === "SUB") return [false, instruction]; // This is the edge case, the only instruction ending with "B" that should not be considered half.
+    const exceptions = ["SUB", "JB", "JNB"];
+    if(exceptions.indexOf(instruction) > -1) return [false, instruction];
 
     const last = instruction.slice(-1);
     if(last === "B") return [true, instruction.slice(0, -1)];

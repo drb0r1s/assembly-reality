@@ -74,6 +74,30 @@ export const Executor = {
         "2D": { instruction: "JMP", type: "memory.register", length: 3 },
         "2E": { instruction: "JMP", type: "number.*", length: 3 },
 
+        // JC
+        "2F": { instruction: "JC", type: "memory.register", length: 3 },
+        "30": { instruction: "JC", type: "number.*", length: 3 },
+
+        // JNC
+        "31": { instruction: "JNC", type: "memory.register", length: 3 },
+        "32": { instruction: "JNC", type: "number.*", length: 3 },
+
+        // JZ
+        "33": { instruction: "JZ", type: "memory.register", length: 3 },
+        "34": { instruction: "JZ", type: "number.*", length: 3 },
+
+        // JNZ
+        "35": { instruction: "JNZ", type: "memory.register", length: 3 },
+        "36": { instruction: "JNZ", type: "number.*", length: 3 },
+
+        // JA
+        "37": { instruction: "JA", type: "memory.register", length: 3 },
+        "38": { instruction: "JA", type: "number.*", length: 3 },
+
+        // JNA
+        "39": { instruction: "JNA", type: "memory.register", length: 3 },
+        "3A": { instruction: "JNA", type: "number.*", length: 3 },
+        
         // MUL
         "48": { instruction: "MUL", type: "register", length: 2 },
         "49": { instruction: "MUL", type: "memory.register", length: 3 },
@@ -184,6 +208,15 @@ export const Executor = {
     CMPB: (...params) => Executable.compare(...params),
 
     JMP: (...params) => Executable.jump(...params),
+
+    JC: (...params) => Executable.jump(...params),
+    JNC: (...params) => Executable.jump(...params),
+
+    JZ: (...params) => Executable.jump(...params),
+    JNZ: (...params) => Executable.jump(...params),
+
+    JA: (...params) => Executable.jump(...params),
+    JNA: (...params) => Executable.jump(...params),
 
     MUL: (...params) => Executable.bitwise(...params),
     MULB: (...params) => Executable.bitwise(...params),

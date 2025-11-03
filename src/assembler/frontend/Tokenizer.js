@@ -93,7 +93,8 @@ export const Tokenizer = {
     },
 
     isKeywordHalf: keyword => {
-        if(keyword === "SUB") return false; // This is the edge case, the only keyword ending with "B" that should not be considered half.
+        const exceptions = ["SUB", "JB", "JNB"];
+        if(exceptions.indexOf(keyword) > -1) return false;
 
         const last = keyword.slice(-1);
         if(last === "B") return true;

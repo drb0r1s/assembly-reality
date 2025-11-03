@@ -110,7 +110,27 @@ export const Instructions = {
         "number.*": "30"
     }),
 
+    JB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
+        "memory.register": "2F",
+        "number.*": "30"
+    }),
+
+    JNAE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
+        "memory.register": "2F",
+        "number.*": "30"
+    }),
+
     JNC: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
+        "memory.register": "31",
+        "number.*": "32"
+    }),
+
+    JAE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
+        "memory.register": "31",
+        "number.*": "32"
+    }),
+
+    JNB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
         "memory.register": "31",
         "number.*": "32"
     }),
@@ -120,7 +140,17 @@ export const Instructions = {
         "number.*": "34"
     }),
 
+    JE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
+        "memory.register": "33",
+        "number.*": "34"
+    }),
+
     JNZ: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
+        "memory.register": "35",
+        "number.*": "36"
+    }),
+
+    JNE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
         "memory.register": "35",
         "number.*": "36"
     }),
@@ -130,7 +160,17 @@ export const Instructions = {
         "number.*": "38"
     }),
 
+    JNBE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
+        "memory.register": "37",
+        "number.*": "38"
+    }),
+
     JNA: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
+        "memory.register": "39",
+        "number.*": "3A"
+    }),
+
+    JBE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
         "memory.register": "39",
         "number.*": "3A"
     }),

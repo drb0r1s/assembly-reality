@@ -9,6 +9,8 @@ export const Decoder = {
 
         let freeArgs = 0;
 
+        console.log(executable)
+
         for(let i = 0; i < types.length; i++) {
             const prop = i === 0 ? "first" : "second";
             decoded[prop] = { value: divideArgs(types[i]) };
@@ -89,7 +91,8 @@ function argumentsCheck(executable, args) {
 }
 
 function isInstructionHalf(instruction) {
-    if(instruction === "SUB") return false; // This is the edge case, the only instruction ending with "B" that should not be considered half.
+    const exceptions = ["SUB", "JB", "JNB"];
+    if(exceptions.indexOf(instruction) > -1) return false;
 
     const last = instruction.slice(-1);
     if(last === "B") return true;
