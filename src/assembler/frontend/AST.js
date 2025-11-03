@@ -53,7 +53,7 @@ export const AST = {
             if(token.line !== line.number) {
                 if(line.tokens.length > 0) {
                     const statementNode = AST.parseStatement(line.tokens);
-                    if(statementNode) programNode.statements.push(statementNode);
+                    if(statementNode) programNode.statements.push(...statementNode);
                 }
 
                 // Reseting the line object.
@@ -67,13 +67,14 @@ export const AST = {
         // When the loop finishes, parse anything that was left from the last line.
         if(line.tokens.length > 0) {
             const statementNode = AST.parseStatement(line.tokens);
-            if(statementNode) programNode.statements.push(statementNode);
+            if(statementNode) programNode.statements.push(...statementNode);
         }
 
         return programNode;
     },
 
     // tokens parameter contains all the tokens from the specific line
+    // The reason return value of this method is an array is because we want to support the following syntax: label: MOV A, B.
     parseStatement: tokens => {
         // AST should ignore comments.
         const filteredTokens = tokens.filter(token => token.type !== "comment");
@@ -81,7 +82,9 @@ export const AST = {
         const firstToken = filteredTokens[0];
         if(!firstToken) return null;
 
-        if(firstToken.type === "label.definition") return new LabelNode(firstToken.value, firstToken.line);
+        if(firstToken.type === "label.definition") {
+            return [new LabelNode(firstToken.value, firstToken.line), ...AST.parseStatement(filteredTokens.slice(2))]; // .slice(2) because of "label.definition" and "symbol".
+        }
 
         if(firstToken.type === "keyword") {
             const instructionNode = new InstructionNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
@@ -90,7 +93,7 @@ export const AST = {
                 instructionNode.operands.push(AST.parseOperand(filteredTokens[i]));
             }
 
-            return instructionNode;
+            return [instructionNode];
         }
     },
 
