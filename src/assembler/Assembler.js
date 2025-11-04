@@ -35,7 +35,7 @@ export class Assembler {
 
             // Pass 2
             for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
-
+        
             console.log(ast, this.labels)
         }
 
@@ -71,7 +71,7 @@ export class Assembler {
             if(instructionMethod) assembledCode = instructionMethod(statement);
             else throw new AssemblerError("UnknownInstruction", { name: statement.name }, statement.line);
 
-            if(assembledCode) this.memory.write(assembledCode);
+            if(assembledCode) this.memory.write(assembledCode, "code");
         }
 
         if(statement.type === "Instant") {
@@ -81,13 +81,21 @@ export class Assembler {
             if(instantMethod) assembledCode = instantMethod(statement);
             else throw new AssemblerError("UnknownInstant", { name: statement.name }, statement.line);
 
-            if(assembledCode) this.memory.write(assembledCode);
+            if(assembledCode) this.memory.write(assembledCode, "data");
         }
     }
 
     execute() {
         while(true) {
             if(this.memory.execution.i === this.memory.free.i && this.memory.execution.j === this.memory.free.j) break;
+
+            const [blockType, blockLength] = this.memory.getBlock();
+            this.memory.nextBlock();
+
+            if(blockType === "data") {
+                this.memory.advance(blockLength, { execution: true });
+                continue;
+            }
 
             const cell = this.memory.matrix[this.memory.execution.i][this.memory.execution.j];
             

@@ -5,9 +5,12 @@ export class Memory {
         this.matrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00")),
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
         this.execution = { i: 0, j: 0 } // Pointers to the last executed coordinates.
+        this.blocks = []; // Blocks of instructions (code) or instants (data). Structure of the block is [type, length].
+        this.blockPointer = 0; // Index of the last visited block.
     }
 
-    write(hex) {
+    // type: code || data
+    write(hex, type) {
         let { i, j } = this.free;
         const hexCells = hex.match(/.{1,2}/g); // Breaking hex string into groups of two digit numbers, to fit memory cells.
 
@@ -25,6 +28,7 @@ export class Memory {
         }
 
         this.free = { i, j }; // Updating last memory-free coordinates globally.
+        this.blocks.push([type, hexCells.length]);
     }
 
     rewrite(address, value) {
@@ -68,8 +72,17 @@ export class Memory {
         return index.toString(16).toUpperCase().padStart(4, "0");
     }
 
-    advance(amount) {
-        let { i, j } = this.free;
+    getBlock() {
+        return this.blocks[this.blockPointer];
+    }
+
+    nextBlock() {
+        this.blockPointer++;
+    }
+
+    advance(amount, options) {
+        const pointers = options?.execution ? this.execution : this.free;
+        let { i, j } = pointers;
 
         j += amount;
 
@@ -80,7 +93,8 @@ export class Memory {
 
         if(i >= this.matrix.length) throw new AssemblerError("OutOfMemory");
 
-        this.free = { i, j };
+        if(options?.execution) this.execution = { i, j };
+        else this.free = { i, j };
     }
 
     point(address) {
@@ -105,5 +119,7 @@ export class Memory {
         this.matrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"));
         this.free = { i: 0, j: 0 };
         this.execution = { i: 0, j: 0 };
+        this.blocks = [];
+        this.blockPointer = 0;
     }
 };

@@ -88,11 +88,13 @@ export const AST = {
     // tokens parameter contains all the tokens from the specific line
     // The reason return value of this method is an array is because we want to support the following syntax: label: MOV A, B.
     parseStatement: tokens => {
+        if(!tokens.length) return [];
+
         // AST should ignore comments.
         const filteredTokens = tokens.filter(token => token.type !== "comment");
 
         const firstToken = filteredTokens[0];
-        if(!firstToken) return null;
+        if(!firstToken) return [];
 
         if(firstToken.type === "label.definition") {
             return [new LabelNode(firstToken.value, firstToken.line), ...AST.parseStatement(filteredTokens.slice(2))]; // .slice(2) because of "label.definition" and "symbol".
