@@ -20,7 +20,9 @@ self.onmessage = async e => {
         case "run":
             // This method is asynchronous, because of the speed simulation.
             result = await assembler.execute(payload); // payload: speed
+            
             if(result?.error) self.postMessage({ action, error: result.error });
+            else self.postMessage({ action, data: result });
 
             break;
         case "reset":

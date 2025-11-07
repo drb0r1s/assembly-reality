@@ -7,19 +7,19 @@ const Memory = () => {
     const { assembler } = useContext(GlobalContext);
     
     const [memoryMatrix, setMemoryMatrix] = useState(assembler.memory.matrix);
-    const [memoryInstructions, setMemoryInstructions] = useState({ index: 0, list: [] });
+    const [memoryInstructions, setMemoryInstructions] = useState({ index: 0, pointer: 0, list: [] });
 
     const [isSplitActive, setIsSplitActive] = useState(false);
     
     useEffect(() => {
         const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", newMemory => {
             setMemoryMatrix([...newMemory.matrix]);
-            setMemoryInstructions({ index: newMemory.instructionIndex, list: newMemory.instructions });
+            setMemoryInstructions({ index: newMemory.instructionIndex, pointer: newMemory.IP, list: newMemory.instructions });
         });
 
         const unsubscribeReset = Manager.subscribe("memoryReset", () => {
             setMemoryMatrix(new Uint8Array(258 * 16));
-            setMemoryInstructions({ index: 0, list: [] });
+            setMemoryInstructions({ index: 0, pointer: 0, list: [] });
         });
     
         return () => {

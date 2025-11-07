@@ -6,7 +6,11 @@ const MemoryMap = ({ memoryMatrix, memoryInstructions, isSplitActive }) => {
     });
 
     function getInstructionClass(index) {
-        if(memoryInstructions.list[memoryInstructions.index] === index) return "memory-map-matrix-element-current-instruction";
+        if(
+            memoryInstructions.list[memoryInstructions.index] === index ||
+            memoryInstructions.pointer === index
+        ) return "memory-map-matrix-element-instruction-pointer";
+        
         if(memoryInstructions.list.indexOf(index) > -1) return "memory-map-matrix-element-instruction";
 
         return "";

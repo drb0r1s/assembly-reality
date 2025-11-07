@@ -37,6 +37,8 @@ export class Assembler {
             // Pass 2
             for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
         
+            this.registers.update("IP", this.memory.instructions[0]);
+
             console.log(ast, this.labels);
         }
 
@@ -93,6 +95,8 @@ export class Assembler {
         return new Promise((resolve, reject) => {
             this.setAssemblerInterval(speed, () => {
                 if(this.memory.instructionIndex === this.memory.instructions.length) {
+                    this.registers.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
+                    
                     clearInterval(this.intervalId);
                     resolve(this);
 
@@ -107,11 +111,12 @@ export class Assembler {
                 }
 
                 catch(error) {
-                    if(error instanceof AssemblerError) reject(error);
+                    if(error instanceof AssemblerError) resolve({ error });
                     else reject(error);
                 }
 
                 this.memory.nextInstruction();
+                this.registers.update("IP", this.memory.getCurrentInstruction());
             });
         });
     }
@@ -161,12 +166,20 @@ export class Assembler {
         if(isHighSpeed) {
             const numberOfInstructions = Math.floor(speed / 1000);
 
+            // The first iteration.
+            callback();
+
             this.intervalId = setInterval(() => {
-                for(let i = 0; i < numberOfInstructions; i++) callback();
+                for(let i = 1; i < numberOfInstructions; i++) callback();
             }, 1);
         }
 
-        else this.intervalId = setInterval(callback, delay);
+        else {
+            // The first iteration.
+            callback();
+            
+            this.intervalId = setInterval(callback, delay);
+        }
     }
 
     copy(assembler) {

@@ -43,8 +43,8 @@ export class Registers {
         this.C = 0x0000;
         this.D = 0x0000;
 
-        this.IP = 0;
-        this.SP = 0;
+        this.IP = 0x0000;
+        this.SP = 0x0000;
 
         this.SR = { M: 0, C: 0, Z: 0, F: 0, H: 0 };
     }
@@ -106,8 +106,8 @@ export class Registers {
         this.C = 0x0000;
         this.D = 0x0000;
 
-        this.IP = 0;
-        this.SP = 0;
+        this.IP = 0x0000;
+        this.SP = 0x0000;
 
         this.SR = { M: 0, C: 0, Z: 0, F: 0, H: 0 };
     }

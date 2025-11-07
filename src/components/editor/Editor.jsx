@@ -38,10 +38,11 @@ const Editor = () => {
                     Manager.trigger("memoryUpdate", data);
 
                     break;
+                case "run":
                 case "instructionExecuted":
                     assembler.copy(data);
 
-                    Manager.trigger("memoryUpdate", data.memory);
+                    Manager.trigger("memoryUpdate", {...data.memory, IP: data.registers.IP});
                     Manager.trigger("registerUpdate", data.registers);
 
                     break;
