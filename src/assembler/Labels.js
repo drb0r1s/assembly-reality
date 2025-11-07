@@ -13,7 +13,7 @@ export class Labels {
 
         this.collection = {
             ...this.collection,
-            [label.name]: memory.getAddress(row, column)
+            [label.name]: memory.getAddress(row, column).toString(16)
         };
     }
 
@@ -27,7 +27,7 @@ export class Labels {
             for(const operand of statement.operands) {
                 if(targetTypes.indexOf(operand.valueType) > -1) {
                     const address = this.collection[operand.value];
-                    if(!address) throw new AssemblerError("UnknownLabel", { label: operand.value }, statement.line);
+                    if(address === undefined) throw new AssemblerError("UnknownLabel", { label: operand.value }, statement.line);
 
                     operand.value = address;
                     
@@ -38,6 +38,10 @@ export class Labels {
         }
 
         return ast;
+    }
+
+    copy(labels) {
+        this.collection = labels.collection;
     }
 
     reset() {

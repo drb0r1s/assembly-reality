@@ -1,19 +1,22 @@
 import { AssemblerError } from "../AssemblerError";
+import { ByteNumber } from "../ByteNumber";
 
 export const Decoder = {
     decode: (assembler, executable, args) => {
         argumentsCheck(executable, args);
+
+        const isHalf = isInstructionHalf(executable.instruction);
         
         let decoded = { first: {}, second: {} };
         const types = executable.type.split(" ");
 
         let freeArgs = 0;
 
-        console.log(executable)
-
         for(let i = 0; i < types.length; i++) {
             const prop = i === 0 ? "first" : "second";
-            decoded[prop] = { value: divideArgs(types[i]) };
+
+            const value = divideArgs(types[i]);
+            decoded[prop] = { value: value.length === 1 ? value[0] : ByteNumber.join(value) };
 
             switch(types[i]) {
                 case "register":
@@ -32,14 +35,14 @@ export const Decoder = {
                         ...decoded[prop],
                         register: assembler.registers.get(decoded[prop].value),
                         registerValue,
-                        memoryPoint: assembler.memory.point(registerValue)
+                        memoryPoint: assembler.memory.point(registerValue, { isHalf })
                     };
 
                     break;
                 case "memory.number.*":
                     decoded[prop] = {
                         ...decoded[prop],
-                        memoryPoint: assembler.memory.point(decoded[prop].value)
+                        memoryPoint: assembler.memory.point(decoded[prop].value, { isHalf })
                     };
 
                     break;
@@ -54,23 +57,23 @@ export const Decoder = {
                 "half.register": 1,
                 "memory.register": 2,
                 "memory.number.*": 2,
-                "number.*": isInstructionHalf(executable.instruction) ? 1 : 2
+                "number.*": isHalf ? 1 : 2
             };
         
             // Since type can only be of length 1 or 2, we can simplify the args assignment, there is no need for for loop.
-            let code = "";
+            const cells = [];
 
             if(lengths[type] === 1) {
-                code += args[freeArgs];
+                cells.push(args[freeArgs]);
                 freeArgs++;
             }
 
             else {
-                code += args[freeArgs] + args[freeArgs + 1];
+                cells.push(args[freeArgs], args[freeArgs + 1]);
                 freeArgs += 2;
             }
 
-            return code;
+            return cells;
         }
     },
 

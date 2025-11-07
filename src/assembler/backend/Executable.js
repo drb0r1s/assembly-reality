@@ -12,11 +12,11 @@ export const Executable = {
             [`${registerType} ${registerType}`]: () => assembler.registers.update(first.register, second.registerValue),
             [`${registerType} memory.register`]: () => assembler.registers.update(first.register, second.memoryPoint),
             [`${registerType} memory.number.*`]: () => assembler.registers.update(first.register, second.memoryPoint),
-            [`memory.register ${registerType}`]: () => assembler.memory.rewrite(first.registerValue, second.registerValue),
-            [`memory.number.* ${registerType}`]: () => assembler.memory.rewrite(first.value, second.registerValue),
+            [`memory.register ${registerType}`]: () => assembler.memory.rewrite(first.registerValue, second.registerValue, { isHalf }),
+            [`memory.number.* ${registerType}`]: () => assembler.memory.rewrite(first.value, second.registerValue, { isHalf }),
             [`${registerType} number.*`]: () => assembler.registers.update(first.register, second.value),
-            "memory.register number.*": () => assembler.memory.rewrite(first.registerValue, second.value),
-            "memory.number.* number.*": () => assembler.memory.rewrite(first.value, second.value)
+            "memory.register number.*": () => assembler.memory.rewrite(first.registerValue, second.value, { isHalf }),
+            "memory.number.* number.*": () => assembler.memory.rewrite(first.value, second.value, { isHalf })
         });
     },
 
@@ -130,11 +130,11 @@ export const Executable = {
 
         Decoder.run(executable, {
             "memory.register": () => {
-                assembler.memory.adjustExecution(first.memoryPoint);
+                assembler.memory.adjustInstructionIndex(first.memoryPoint);
             },
 
             "number.*": () => {
-                assembler.memory.adjustExecution(first.value);
+                assembler.memory.adjustInstructionIndex(first.value);
             }
         });
     }

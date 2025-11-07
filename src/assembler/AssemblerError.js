@@ -12,7 +12,7 @@ export class AssemblerError {
             case "UnknownInstant": return `${attributes.name} is an unknown instant instruction!`;
             case "UnknownInstructionCode":
                 this.isRuntime = true;
-                return `${attributes.code} doesn't represent any instruction!`;
+                return `${attributes.code.toString(16).toUpperCase().padStart(2, "0")} doesn't represent any instruction!`;
             case "UnknownExecutableType":
                 this.isRuntime = true;
                 return `"${attributes.type}" is not valid for executable ${attributes.instruction}!`;

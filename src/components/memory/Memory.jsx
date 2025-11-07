@@ -11,7 +11,7 @@ const Memory = () => {
     
     useEffect(() => {
         const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", newMatrix => setMemoryMatrix([...newMatrix]));
-        const unsubscribeReset = Manager.subscribe("reset", () => setMemoryMatrix(Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"))));
+        const unsubscribeReset = Manager.subscribe("reset", () => setMemoryMatrix(new Uint8Array(258 * 16)));
     
         return () => {
             unsubscribeMemoryUpdate();

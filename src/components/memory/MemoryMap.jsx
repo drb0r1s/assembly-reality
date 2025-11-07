@@ -30,18 +30,11 @@ const MemoryMap = ({ memoryMatrix, isSplitActive }) => {
                 </div>
 
                 <div className="memory-map-matrix">
-                    {memoryMatrix.map((row, rowIndex) => {
-                        return <div
-                            key={`row-${rowIndex}`}
-                            className="memory-map-matrix-row"
-                        >
-                            {row.map((column, columnIndex) => {
-                                return <p
-                                    key={`column-${columnIndex}`}
-                                    className="memory-map-matrix-column"
-                                >{column}</p>;
-                            })}
-                        </div>;
+                    {[...memoryMatrix].map((element, index) => {
+                        return <p
+                            key={index}
+                            className="memory-map-matrix-element"
+                        >{element.toString(16).toUpperCase().padStart(2, "0")}</p>;
                     })}
                 </div>
             </div>

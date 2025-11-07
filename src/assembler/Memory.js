@@ -1,21 +1,27 @@
 import { AssemblerError } from "./AssemblerError";
+import { ByteNumber } from "./ByteNumber";
 
 export class Memory {
     constructor() {
-        this.matrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00")),
+        this.matrix = new Uint8Array(258 * 16),
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
-        this.execution = { i: 0, j: 0 } // Pointers to the last executed coordinates.
-        this.blocks = []; // Blocks of instructions (code) or instants (data). Structure of the block is [type, length].
-        this.blockPointer = 0; // Index of the last visited block.
+        this.instructions = []; // An array with instruction addresses in memory.
+        this.instructionIndex = 0; // Index of the current instruction.
     }
 
-    // type: code || data
-    write(hex, type) {
-        let { i, j } = this.free;
-        const hexCells = hex.match(/.{1,2}/g); // Breaking hex string into groups of two digit numbers, to fit memory cells.
+    getMatrixCell(row, column) {
+        return this.matrix[row * 16 + column];
+    }
 
-        for(let k = 0; k < hexCells.length; k++) {
-            this.matrix[i][j] = hexCells[k];
+    setMatrixCell(row, column, value) {
+        this.matrix[row * 16 + column] = value;
+    }
+
+    write(cells) {
+        let { i, j } = this.free;
+
+        for(let k = 0; k < cells.length; k++) {
+            this.setMatrixCell(i, j, cells[k]);
 
             if(j === 15) {
                 i++;
@@ -24,102 +30,100 @@ export class Memory {
 
             else j++;
 
-            if(i > this.matrix.length) throw new AssemblerError("OutOfMemory");
+            if(i >= this.matrix.length / 16) throw new AssemblerError("OutOfMemory");
         }
 
         this.free = { i, j }; // Updating last memory-free coordinates globally.
-        this.blocks.push([type, hexCells.length]);
     }
 
-    rewrite(address, value) {
-        // 16-bit
-        if(value.length === 4) {
-            // It does not matter if 16-bit value is empty in the first two cells, .rewrite() should still override it.
-            const firstCell = value.slice(0, 2);
-
-            const [firstRow, firstColumn] = this.getLocation(address);
-            this.matrix[firstRow][firstColumn] = firstCell;
-
-            const secondCell = value.slice(-2);
-
-            const [secondRow, secondColumn] = this.getLocation((parseInt(address, 16) + 1).toString(16).toUpperCase());
-            this.matrix[secondRow][secondColumn] = secondCell;
+    rewrite(address, value, options) {
+        // 8-bit
+        if(options?.isHalf) {
+            const [row, column] = this.getLocation(address);
+            this.setMatrixCell(row, column, value);
         }
 
-        // 8-bit
+        // 16-bit
         else {
-            const [row, column] = this.getLocation(address);
-            this.matrix[row][column] = value;
+            // It does not matter if 16-bit value is empty in the first two cells, .rewrite() should still override it.
+            const [firstCell, secondCell] = ByteNumber.divide(value);
+
+            const [firstRow, firstColumn] = this.getLocation(address);
+            this.setMatrixCell(firstRow, firstColumn, firstCell);
+
+            const [secondRow, secondColumn] = this.getLocation(address + 1);
+            this.setMatrixCell(secondRow, secondColumn, secondCell);
         }
     }
 
     get(address) {
         const [row, column] = this.getLocation(address);
-        return this.matrix[row][column];
+        return this.getMatrixCell(row, column);
     }
 
     getLocation(address) {
-        const index = parseInt(address, 16);
-
-        const row = Math.floor(index / 16);
-        const column = index % 16;
+        const row = Math.floor(address / 16);
+        const column = address % 16;
 
         return [row, column];
     }
 
     getAddress(row, column) {
-        const index = row * 16 + column;
-        return index.toString(16).toUpperCase().padStart(4, "0");
+        const location = row * 16 + column;
+        return location;
     }
 
-    getBlock() {
-        return this.blocks[this.blockPointer];
-    }
-
-    nextBlock() {
-        this.blockPointer++;
-    }
-
-    advance(amount, options) {
-        const pointers = options?.execution ? this.execution : this.free;
-        let { i, j } = pointers;
+    advance(amount) {
+        let { i, j } = this.free;
 
         j += amount;
 
-        while (j > 15) {
+        while(j > 15) {
             j -= 16;
             i++;
         }
 
-        if(i >= this.matrix.length) throw new AssemblerError("OutOfMemory");
+        if(i >= this.matrix.length / 16) throw new AssemblerError("OutOfMemory");
 
-        if(options?.execution) this.execution = { i, j };
-        else this.free = { i, j };
+        this.free = { i, j };
     }
 
-    point(address) {
-        const nextAddress = (parseInt(address, 16) + 1).toString(16).toUpperCase();
-        return this.get(address) + this.get(nextAddress);
+    point(address, options) {
+        if(options?.isHalf) return ByteNumber.join([0, this.get(address)]);
+        return ByteNumber.join([this.get(address), this.get(address + 1)]);
     }
 
-    adjustExecution(address) {
-        const [row, column] = this.getLocation(address);
+    addInstruction() {
+        this.instructions.push(this.getAddress(this.free.i, this.free.j));
+    }
 
-        this.execution.i = row;
-        this.execution.j = column;
+    nextInstruction() {
+        this.instructionIndex++;
+    }
+
+    getCurrentInstruction() {
+        return this.instructions[this.instructionIndex];
+    }
+
+    adjustInstructionIndex(address) {
+        const index = this.instructions.indexOf(address);
+
+        // IMPORTANT: We need to go one instruction back!
+        // .adjustInstructionIndex happens only in "move" executables, meaning the instruction index will be adjusted inside assembler.executeInstruction method.
+        // Because of that, right after executing jump, .nextInstruction method happens, moving instructionIndex to the next instruction, skipping the one we jumped on.
+        // So, -1 is used for instruction-skipping prevention.
+        this.instructionIndex = index - 1;
     }
 
     copy(memory) {
         this.matrix = memory.matrix;
         this.free = memory.free;
-        this.execution = memory.execution;
     }
 
     reset() {
-        this.matrix = Array.from({ length: 258 }, () => Array.from({ length: 16 }, () => "00"));
+        this.matrix = new Uint8Array(258 * 16);
         this.free = { i: 0, j: 0 };
-        this.execution = { i: 0, j: 0 };
-        this.blocks = [];
-        this.blockPointer = 0;
+        this.instructions = [];
+        this.instructionIndex = 0;
     }
 };

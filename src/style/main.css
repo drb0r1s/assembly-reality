@@ -389,21 +389,10 @@ header .header-title {
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
 }
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-row {
-  height: 20px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  justify-content: flex-start;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-row .memory-map-matrix-column {
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element {
   height: 20px;
   width: 24px;
   display: flex;
@@ -416,7 +405,7 @@ header .header-title {
   border-left: 1px solid #2F3336;
   padding: 5px;
 }
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-row .memory-map-matrix-column:last-child {
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element:last-child {
   border-right: 1px solid #2F3336;
 }
 

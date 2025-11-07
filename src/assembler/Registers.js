@@ -1,66 +1,64 @@
+import { ByteNumber } from "./ByteNumber";
+
 const registerIndex = {
-    A: "00",
-    B: "01",
-    C: "02",
-    D: "03",
-    SP: "04",
-    IP: "05",
-    SR: "06",
-    AH: "07",
-    AL: "08",
-    BH: "09",
-    BL: "0A",
-    CH: "0B",
-    CL: "0C",
-    DH: "0D",
-    DL: "0E"
+    A: 0,
+    B: 1,
+    C: 2,
+    D: 3,
+    SP: 4,
+    IP: 5,
+    SR: 6,
+    AH: 7,
+    AL: 8,
+    BH: 9,
+    BL: 10,
+    CH: 11,
+    CL: 12,
+    DH: 13,
+    DL: 14
 };
 
 const indexRegister = {
-    "00": "A",
-    "01": "B",
-    "02": "C",
-    "03": "D",
-    "04": "SP",
-    "05": "IP",
-    "06": "SR",
-    "07": "AH",
-    "08": "AL",
-    "09": "BH",
-    "0A": "BL",
-    "0B": "CH",
-    "0C": "CL",
-    "0D": "DH",
-    "0E": "DL"
+    0: "A",
+    1: "B",
+    2: "C",
+    3: "D",
+    4: "SP",
+    5: "IP",
+    6: "SR",
+    7: "AH",
+    8: "AL",
+    9: "BH",
+    10: "BL",
+    11: "CH",
+    12: "CL",
+    13: "DH",
+    14: "DL"
 };
 
 export class Registers {
     constructor() {
-        this.A = "0000";
-        this.B = "0000";
-        this.C = "0000";
-        this.D = "0000";
+        this.A = 0x0000;
+        this.B = 0x0000;
+        this.C = 0x0000;
+        this.D = 0x0000;
 
-        this.IP = "0000";
-        this.SP = "0000";
+        this.IP = 0;
+        this.SP = 0;
 
         this.SR = { M: 0, C: 0, Z: 0, F: 0, H: 0 };
     }
 
     get(index) {
-        if(index.length === 4) index = index.slice(-2); // In case 16-bit value is passed, we're only interested in the last 8 bits.
         return indexRegister[index];
     }
 
     getValue(register) {
-        if(register.includes("H") || register.includes("L")) {
-            const isH = register.includes("H");
+        if(register.endsWith("H") || register.endsWith("L")) {
+            const registerValue = this[register[0]];
+            const isH = register.endsWith("H");
 
-            register = register[0];
-            const registerValue = this.getValue(register);
-
-            const cell = isH ? registerValue.slice(0, 2) : registerValue.slice(-2);
-            return cell;
+            return isH ? (registerValue >>> 8) & 0xFF : registerValue & 0xFF;
         }
 
         return this[register];
@@ -76,18 +74,18 @@ export class Registers {
     }
 
     update(register, value) {
-        if(register.includes("H") || register.includes("L")) {
-            const isH = register.includes("H");
-            
-            register = register[0];
+        if(register.endsWith("H") || register.endsWith("L")) {
+            const [_, second] = ByteNumber.divide(value);
 
-            const updatedCell = value.slice(0, 2);
-            const oldCell = isH ? this.getValue(register).slice(-2) : this.getValue(register).slice(0, 2);
+            const registerValue = this[register[0]];
+            const isH = register.endsWith("H");
 
-            value = isH ? `${updatedCell}${oldCell}` : `${oldCell}${updatedCell}`;
+            if(isH) this[register[0]] = (second << 8) | (registerValue & 0xFF);
+            else this[register[0]] = (registerValue & 0xFF00) | (second & 0xFF);
         }
 
-        this[register] = value;
+        if(register === "SR") this[register] = value;
+        else this[register] = value & 0xFFFF; // We want to keep our register 16-bit.
     }
 
     copy(registers) {
@@ -103,14 +101,14 @@ export class Registers {
     }
 
     reset() {
-        this.A = "0000";
-        this.B = "0000";
-        this.C = "0000";
-        this.D = "0000";
+        this.A = 0x0000;
+        this.B = 0x0000;
+        this.C = 0x0000;
+        this.D = 0x0000;
 
-        this.IP = "0000";
-        this.SP = "0000";
+        this.IP = 0;
+        this.SP = 0;
 
-        this.SR = { M: "0", C: "0", Z: "0", F: "0", H: "0" };
+        this.SR = { M: 0, C: 0, Z: 0, F: 0, H: 0 };
     }
 };

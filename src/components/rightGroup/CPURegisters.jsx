@@ -4,22 +4,19 @@ import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { Manager } from "../../Manager";
 
 const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
-    const [registers, setRegisters] = useState({
-        A: "0000", B: "0000", C: "0000", D: "0000",
-        IP: "0000", SP: "0000",
-        SR: { M: "0", C: "0", Z: "0", F: "0", H: "0" }
-    });
+    const initialRegisters = {
+        A: 0, B: 0, C: 0, D: 0,
+        IP: 0, SP: 0,
+        SR: { M: 0, C: 0, Z: 0, F: 0, H: 0 }
+    };
+    
+    const [registers, setRegisters] = useState(initialRegisters);
     
     const headerRef = useRef(null);
 
     useEffect(() => {
         const unsubscribeRegisterUpdate = Manager.subscribe("registerUpdate", newRegisters => setRegisters({...newRegisters}));
-
-        const unsubscribeReset = Manager.subscribe("reset", () => setRegisters({
-            A: "0000", B: "0000", C: "0000", D: "0000",
-            IP: "0000", SP: "0000",
-            SR: { M: "0", C: "0", Z: "0", F: "0", H: "0" }
-        }));
+        const unsubscribeReset = Manager.subscribe("reset", () => setRegisters(initialRegisters));
 
         return () => {
             unsubscribeRegisterUpdate();
@@ -45,34 +42,34 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
                 <div className="cpu-registers-row">
                     <div className="cpu-registers-row-register">
                         <strong>A</strong>
-                        <p>{registers.A}</p>
+                        <p>{registers.A.toString(16).toUpperCase().padStart(4, "0")}</p>
                     </div>
 
                     <div className="cpu-registers-row-register">
                         <strong>B</strong>
-                        <p>{registers.B}</p>
+                        <p>{registers.B.toString(16).toUpperCase().padStart(4, "0")}</p>
                     </div>
 
                     <div className="cpu-registers-row-register">
                         <strong>C</strong>
-                        <p>{registers.C}</p>
+                        <p>{registers.C.toString(16).toUpperCase().padStart(4, "0")}</p>
                     </div>
 
                     <div className="cpu-registers-row-register">
                         <strong>D</strong>
-                        <p>{registers.D}</p>
+                        <p>{registers.D.toString(16).toUpperCase().padStart(4, "0")}</p>
                     </div>
                 </div>
 
                 <div className="cpu-registers-row">
                     <div className="cpu-registers-row-register cpu-ip-register">
                         <strong>IP</strong>
-                        <p>{registers.IP}</p>
+                        <p>{registers.IP.toString(16).toUpperCase().padStart(4, "0")}</p>
                     </div>
 
                     <div className="cpu-registers-row-register cpu-sp-register">
                         <strong>SP</strong>
-                        <p>{registers.SP}</p>
+                        <p>{registers.SP.toString(16).toUpperCase().padStart(4, "0")}</p>
                     </div>
 
                     <div className="cpu-registers-row-register">

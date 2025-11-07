@@ -36,7 +36,7 @@ export class Assembler {
             // Pass 2
             for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
         
-            console.log(ast, this.labels)
+            console.log(ast, this.labels);
         }
 
         catch(error) {
@@ -65,40 +65,36 @@ export class Assembler {
 
     assembleStatement(statement) {
         if(statement.type === "Instruction") {
-            let assembledCode = "";
+            let assembledCells = null;
             const instructionMethod = Instructions[statement.name];
 
-            if(instructionMethod) assembledCode = instructionMethod(statement);
+            if(instructionMethod) assembledCells = instructionMethod(statement);
             else throw new AssemblerError("UnknownInstruction", { name: statement.name }, statement.line);
 
-            if(assembledCode) this.memory.write(assembledCode, "code");
+            if(assembledCells) {
+                this.memory.addInstruction();
+                this.memory.write(assembledCells);
+            }
         }
 
         if(statement.type === "Instant") {
-            let assembledCode = "";
+            let assembledCells = null;
             const instantMethod = Instants[statement.name];
 
-            if(instantMethod) assembledCode = instantMethod(statement);
+            if(instantMethod) assembledCells = instantMethod(statement);
             else throw new AssemblerError("UnknownInstant", { name: statement.name }, statement.line);
 
-            if(assembledCode) this.memory.write(assembledCode, "data");
+            if(assembledCells) this.memory.write(assembledCells);
         }
     }
 
     execute() {
         while(true) {
-            if(this.memory.execution.i === this.memory.free.i && this.memory.execution.j === this.memory.free.j) break;
+            if(this.memory.instructionIndex === this.memory.instructions.length) break;
 
-            const [blockType, blockLength] = this.memory.getBlock();
-            this.memory.nextBlock();
+            const [row, column] = this.memory.getLocation(this.memory.getCurrentInstruction());
+            const cell = this.memory.getMatrixCell(row, column);
 
-            if(blockType === "data") {
-                this.memory.advance(blockLength, { execution: true });
-                continue;
-            }
-
-            const cell = this.memory.matrix[this.memory.execution.i][this.memory.execution.j];
-            
             try {
                 this.executeInstruction(cell);
             }
@@ -108,8 +104,7 @@ export class Assembler {
                 else console.error(error);
             }
 
-            // For infinite loop prevention, in case of bugs.
-            if(this.memory.execution.i > this.memory.matrix.length) break;
+            this.memory.nextInstruction();
         }
 
         return this;
@@ -119,37 +114,24 @@ export class Assembler {
         const executable = Executor.codes[cell];
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
-        const start = { i: this.memory.execution.i, j: this.memory.execution.j };
-
-        this.memory.execution.j += executable.length;
-
-        if(this.memory.execution.j > 15) {
-            this.memory.execution.i++;
-            this.memory.execution.j -= 16;
-        }
-
-        const args = this.collectArgs(start);
+        const args = this.collectArgs(executable.length);
         Executor[executable.instruction](this, executable, args);
     }
 
-    collectArgs(start) {
+    collectArgs(length) {
         const args = [];
-        const positions = {...start};
+        
+        let [row, column] = this.memory.getLocation(this.memory.getCurrentInstruction());
+        
+        for(let i = 0; i < length; i++) {
+            args.push(this.memory.getMatrixCell(row, column));
 
-        while(true) {
-            if(positions.i === this.memory.execution.i && positions.j === this.memory.execution.j) break;
+            column++;
 
-            args.push(this.memory.matrix[positions.i][positions.j]);
-
-            if(positions.j === 15) {
-                positions.i++;
-                positions.j = 0;
+            if(column > 15) {
+                column = 0;
+                row++;
             }
-
-            else positions.j++;
-
-            // For infinite loop prevention, in case of bugs.
-            if(positions.i > this.memory.matrix.length) break;
         }
 
         args.shift(); // We want to remove the first argument, because it is the instruction code, which is already known.
@@ -159,6 +141,7 @@ export class Assembler {
     copy(assembler) {
         this.registers.copy(assembler.registers);
         this.memory.copy(assembler.memory);
+        this.labels.copy(assembler.labels);
         this.halted = assembler.halted;
     }
 

@@ -4,8 +4,6 @@ import { images } from "../../data/images";
 const EditorError = ({ error, setError }) => {
     const editorErrorRef = useRef(null);
 
-    console.log(error)
-
     useEffect(() => {
         setTimeout(() => {
             editorErrorRef.current.style.opacity = "1";

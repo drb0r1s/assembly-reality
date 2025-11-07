@@ -11,325 +11,325 @@ import { LengthOf } from "./LengthOf";
 */
 
 export const Instructions = {
-    HLT: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : "00",
+    HLT: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x00,
 
     MOV: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "01",
-        "register memory.register": "02",
-        "register memory.half.register": "02",
-        "register memory.number.*": "03",
-        "memory.register register": "04",
-        "memory.number.* register": "05",
-        "register number.*": "06",
-        "memory.register number.*": "07",
-        "memory.number.* number.*": "08"
+        "register register": 0x01,
+        "register memory.register": 0x02,
+        "register memory.half.register": 0x02,
+        "register memory.number.*": 0x03,
+        "memory.register register": 0x04,
+        "memory.number.* register": 0x05,
+        "register number.*": 0x06,
+        "memory.register number.*": 0x07,
+        "memory.number.* number.*": 0x08
     }),
 
     MOVB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "09",
-        "half.register memory.register": "0A",
-        "half.register memory.half.register": "0A",
-        "half.register memory.number.*": "0B",
-        "memory.register half.register": "0C",
-        "memory.half.register half.register": "0C",
-        "memory.number.* half.register": "0D",
-        "half.register number.*": "0E",
-        "memory.register number.*": "0F",
-        "memory.half.register number.*": "0F",
-        "memory.number.* number.*": "10"
+        "half.register half.register": 0x09,
+        "half.register memory.register": 0x0A,
+        "half.register memory.half.register": 0x0A,
+        "half.register memory.number.*": 0x0B,
+        "memory.register half.register": 0x0C,
+        "memory.half.register half.register": 0x0C,
+        "memory.number.* half.register": 0x0D,
+        "half.register number.*": 0x0E,
+        "memory.register number.*": 0x0F,
+        "memory.half.register number.*": 0x0F,
+        "memory.number.* number.*": 0x10
     }),
 
     ADD: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "11",
-        "register memory.register": "12",
-        "register memory.number.*": "13",
-        "register number.*": "14"
+        "register register": 0x11,
+        "register memory.register": 0x12,
+        "register memory.number.*": 0x13,
+        "register number.*": 0x14
     }),
 
     ADDB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "15",
-        "half.register memory.register": "16",
-        "half.register memory.half.register": "16",
-        "half.register memory.number.*": "17",
-        "half.register number.*": "18"
+        "half.register half.register": 0x15,
+        "half.register memory.register": 0x16,
+        "half.register memory.half.register": 0x16,
+        "half.register memory.number.*": 0x17,
+        "half.register number.*": 0x18
     }),
 
     SUB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "19",
-        "register memory.register": "1A",
-        "register memory.number.*": "1B",
-        "register number.*": "1C"
+        "register register": 0x19,
+        "register memory.register": 0x1A,
+        "register memory.number.*": 0x1B,
+        "register number.*": 0x1C
     }),
 
     SUBB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "1D",
-        "half.register memory.register": "1E",
-        "half.register memory.half.register": "1E",
-        "half.register memory.number.*": "1F",
-        "half.register number.*": "20"
+        "half.register half.register": 0x1D,
+        "half.register memory.register": 0x1E,
+        "half.register memory.half.register": 0x1E,
+        "half.register memory.number.*": 0x1F,
+        "half.register number.*": 0x20
     }),
 
     INC: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "21"
+        "register": 0x21
     }),
 
     INCB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "half.register": "22"
+        "half.register": 0x22
     }),
 
     DEC: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "23"
+        "register": 0x23
     }),
 
     DECB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "half.register": "24"
+        "half.register": 0x24
     }),
 
     CMP: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "25",
-        "register memory.register": "26",
-        "register memory.number.*": "27",
-        "register number.*": "28"
+        "register register": 0x25,
+        "register memory.register": 0x26,
+        "register memory.number.*": 0x27,
+        "register number.*": 0x28
     }),
 
     CMPB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "29",
-        "half.register memory.register": "2A",
-        "half.register memory.half.register": "2A",
-        "half.register memory.number.*": "2B",
-        "half.register number.*": "2C"
+        "half.register half.register": 0x29,
+        "half.register memory.register": 0x2A,
+        "half.register memory.half.register": 0x2A,
+        "half.register memory.number.*": 0x2B,
+        "half.register number.*": 0x2C
     }),
 
     JMP: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "2D",
-        "number.*": "2E"
+        "memory.register": 0x2D,
+        "number.*": 0x2E
     }),
 
     JC: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "2F",
-        "number.*": "30"
+        "memory.register": 0x2F,
+        "number.*": 0x30
     }),
 
     JB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "2F",
-        "number.*": "30"
+        "memory.register": 0x2F,
+        "number.*": 0x30
     }),
 
     JNAE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "2F",
-        "number.*": "30"
+        "memory.register": 0x2F,
+        "number.*": 0x30
     }),
 
     JNC: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "31",
-        "number.*": "32"
+        "memory.register": 0x31,
+        "number.*": 0x32
     }),
 
     JAE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "31",
-        "number.*": "32"
+        "memory.register": 0x31,
+        "number.*": 0x32
     }),
 
     JNB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "31",
-        "number.*": "32"
+        "memory.register": 0x31,
+        "number.*": 0x32
     }),
 
     JZ: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "33",
-        "number.*": "34"
+        "memory.register": 0x33,
+        "number.*": 0x34
     }),
 
     JE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "33",
-        "number.*": "34"
+        "memory.register": 0x33,
+        "number.*": 0x34
     }),
 
     JNZ: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "35",
-        "number.*": "36"
+        "memory.register": 0x35,
+        "number.*": 0x36
     }),
 
     JNE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "35",
-        "number.*": "36"
+        "memory.register": 0x35,
+        "number.*": 0x36
     }),
 
     JA: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "37",
-        "number.*": "38"
+        "memory.register": 0x37,
+        "number.*": 0x38
     }),
 
     JNBE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "37",
-        "number.*": "38"
+        "memory.register": 0x37,
+        "number.*": 0x38
     }),
 
     JNA: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "39",
-        "number.*": "3A"
+        "memory.register": 0x39,
+        "number.*": 0x3A
     }),
 
     JBE: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "39",
-        "number.*": "3A"
+        "memory.register": 0x39,
+        "number.*": 0x3A
     }),
 
     PUSH: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "3B",
-        "number.*": "3C"
+        "register": 0x3B,
+        "number.*": 0x3C
     }),
 
     PUSHB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "half.register": "3F",
-        "number.*": "40"
+        "half.register": 0x3F,
+        "number.*": 0x40
     }),
 
     POP: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "43"
+        "register": 0x43
     }),
 
     POPB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "half.register": "44"
+        "half.register": 0x44
     }),
 
     CALL: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "memory.register": "45",
-        "number.*": "46"
+        "memory.register": 0x45,
+        "number.*": 0x46
     }),
 
-    RET: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : "47",
+    RET: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x47,
 
     MUL: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "48",
-        "memory.register": "49",
-        "memory.number.*": "4A",
-        "number.*": "4B"
+        "register": 0x48,
+        "memory.register": 0x49,
+        "memory.number.*": 0x4A,
+        "number.*": 0x4B
     }),
 
     MULB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "half.register": "4C",
-        "memory.register": "4D",
-        "memory.half.register": "4D",
-        "memory.number.*": "4E",
-        "number.*": "4F"
+        "half.register": 0x4C,
+        "memory.register": 0x4D,
+        "memory.half.register": 0x4D,
+        "memory.number.*": 0x4E,
+        "number.*": 0x4F
     }),
 
     DIV: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "50",
-        "memory.register": "51",
-        "memory.number.*": "52",
-        "number.*": "53"
+        "register": 0x50,
+        "memory.register": 0x51,
+        "memory.number.*": 0x52,
+        "number.*": 0x53
     }),
 
     DIVB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "half.register": "54",
-        "memory.register": "55",
-        "memory.half.register": "55",
-        "memory.number.*": "56",
-        "number.*": "57"
+        "half.register": 0x54,
+        "memory.register": 0x55,
+        "memory.half.register": 0x55,
+        "memory.number.*": 0x56,
+        "number.*": 0x57
     }),
 
     AND: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "58",
-        "register memory.register": "59",
-        "register memory.number.*": "5A",
-        "register number.*": "5B"
+        "register register": 0x58,
+        "register memory.register": 0x59,
+        "register memory.number.*": 0x5A,
+        "register number.*": 0x5B
     }),
 
     ANDB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "5C",
-        "half.register memory.register": "5D",
-        "half.register memory.half.register": "5D",
-        "half.register memory.number.*": "5E",
-        "half.register number.*": "5F"
+        "half.register half.register": 0x5C,
+        "half.register memory.register": 0x5D,
+        "half.register memory.half.register": 0x5D,
+        "half.register memory.number.*": 0x5E,
+        "half.register number.*": 0x5F
     }),
 
     OR: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "60",
-        "register memory.register": "61",
-        "register memory.number.*": "62",
-        "register number.*": "63"
+        "register register": 0x60,
+        "register memory.register": 0x61,
+        "register memory.number.*": 0x62,
+        "register number.*": 0x63
     }),
 
     ORB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "64",
-        "half.register memory.register": "65",
-        "half.register memory.half.register": "65",
-        "half.register memory.number.*": "66",
-        "half.register number.*": "67"
+        "half.register half.register": 0x64,
+        "half.register memory.register": 0x65,
+        "half.register memory.half.register": 0x65,
+        "half.register memory.number.*": 0x66,
+        "half.register number.*": 0x67
     }),
 
     XOR: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "68",
-        "register memory.register": "69",
-        "register memory.number.*": "6A",
-        "register number.*": "6B"
+        "register register": 0x68,
+        "register memory.register": 0x69,
+        "register memory.number.*": 0x6A,
+        "register number.*": 0x6B
     }),
 
     XORB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "6C",
-        "half.register memory.register": "6D",
-        "half.register memory.half.register": "6D",
-        "half.register memory.number.*": "6E",
-        "half.register number.*": "6F"
+        "half.register half.register": 0x6C,
+        "half.register memory.register": 0x6D,
+        "half.register memory.half.register": 0x6D,
+        "half.register memory.number.*": 0x6E,
+        "half.register number.*": 0x6F
     }),
 
     NOT: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "70"
+        "register": 0x70
     }),
 
     NOTB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "half.register": "71"
+        "half.register": 0x71
     }),
 
     SHL: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "72",
-        "register memory.register": "73",
-        "register memory.number.*": "74",
-        "register number.*": "75"
+        "register register": 0x72,
+        "register memory.register": 0x73,
+        "register memory.number.*": 0x74,
+        "register number.*": 0x75
     }),
 
     SHLB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "76",
-        "half.register memory.register": "77",
-        "half.register memory.half.register": "77",
-        "half.register memory.number.*": "78",
-        "half.register number.*": "79"
+        "half.register half.register": 0x76,
+        "half.register memory.register": 0x77,
+        "half.register memory.half.register": 0x77,
+        "half.register memory.number.*": 0x78,
+        "half.register number.*": 0x79
     }),
 
     SHR: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "register register": "7A",
-        "register memory.register": "7B",
-        "register memory.number.*": "7C",
-        "register number.*": "7D"
+        "register register": 0x7A,
+        "register memory.register": 0x7B,
+        "register memory.number.*": 0x7C,
+        "register number.*": 0x7D
     }),
 
     SHRB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
-        "half.register half.register": "7E",
-        "half.register memory.register": "7F",
-        "half.register memory.half.register": "7F",
-        "half.register memory.number.*": "80",
-        "half.register number.*": "81"
+        "half.register half.register": 0x7E,
+        "half.register memory.register": 0x7F,
+        "half.register memory.half.register": 0x7F,
+        "half.register memory.number.*": 0x80,
+        "half.register number.*": 0x81
     }),
 
-    CLI: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : "82",
+    CLI: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x82,
 
-    STI: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : "83",
+    STI: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x83,
 
-    IRET: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : "84",
+    IRET: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x84,
 
     IN: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "87",
-        "memory.register": "88",
-        "memory.number.*": "89",
-        "number.*": "8A"
+        "register": 0x87,
+        "memory.register": 0x88,
+        "memory.number.*": 0x89,
+        "number.*": 0x8A
     }),
 
     OUT: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
-        "register": "8B",
-        "memory.register": "8C",
-        "memory.number.*": "8D",
-        "number.*": "8E"
+        "register": 0x8B,
+        "memory.register": 0x8C,
+        "memory.number.*": 0x8D,
+        "number.*": 0x8E
     })
 };

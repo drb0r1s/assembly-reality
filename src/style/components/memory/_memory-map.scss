@@ -61,28 +61,21 @@
 
         .memory-map-matrix {
             width: 100%;
-            @include center(column);
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
 
-            .memory-map-matrix-row {
+            .memory-map-matrix-element {
                 height: 20px;
-                width: 100%;
+                width: 24px;
                 @include center;
-                justify-content: flex-start;
+                color: #D4D4D4;
+                font-size: 14px;
+                font-family: SourceCodePro-Regular;
+                border-left: 1px solid #2F3336;
+                padding: 5px;
 
-
-                .memory-map-matrix-column {
-                    height: 20px;
-                    width: 24px;
-                    @include center;
-                    color: #D4D4D4;
-                    font-size: 14px;
-                    font-family: SourceCodePro-Regular;
-                    border-left: 1px solid #2F3336;
-                    padding: 5px;
-
-                    &:last-child {
-                        border-right: 1px solid #2F3336;
-                    }
+                &:last-child {
+                    border-right: 1px solid #2F3336;
                 }
             }
         }
