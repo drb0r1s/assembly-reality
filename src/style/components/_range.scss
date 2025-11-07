@@ -1,0 +1,33 @@
+.range {
+    width: calc(100% - 25px);
+    @include center;
+    justify-content: flex-start;
+    position: relative;
+    padding: 10px 0;
+    cursor: grab;
+
+    .range-line {
+        height: 5px;
+        width: 100%;
+        background-color: #F4F4F4;
+        border-radius: 10px;
+    }
+
+    .range-filled-line {
+        height: 5px;
+        width: 0;
+        background-color: $ipLightColor;
+        border-radius: 10px;
+        position: absolute;
+    }
+
+    .range-circle {
+        height: 20px;
+        width: 20px;
+        background-color: $blue;
+        border: 3px solid #0F0F0F;
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+    }
+}

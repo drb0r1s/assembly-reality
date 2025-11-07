@@ -1,0 +1,38 @@
+.header-dropdown-speed {
+    width: 200px;
+    @include center(column);
+    gap: 10px;
+    padding: 7px 0;
+    cursor: default;
+
+    strong {
+        color: #F4F4F4;
+        font-size: 18px;
+        font-family: Roboto-SemiBold;
+        font-weight: normal;
+    }
+
+    .header-dropdown-speed-buttons {
+        width: 100%;
+        @include center;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        button {
+            width: 75px;
+            color: #F4F4F4;
+            font-size: 14px;
+            font-family: Roboto-Regular;
+            background-color: #0A0A0A;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 10px 0;
+            cursor: pointer;
+            transition: 300ms;
+
+            &:hover {
+                border: 1px solid #F4F4F4;
+            }
+        }
+    }
+}

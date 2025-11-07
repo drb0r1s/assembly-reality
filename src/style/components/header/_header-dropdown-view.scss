@@ -1,0 +1,32 @@
+.header-dropdown-view {
+    width: 150px;
+    @include center(column);
+    gap: 7px;
+
+    button {
+        width: 100%;
+        @include center;
+        justify-content: space-between;
+        background-color: transparent;
+        border: none;
+        border-radius: 5px;
+        padding: 5px;
+        cursor: pointer;
+        transition: 300ms;
+
+        &:hover {
+            background-color: $blue;
+        }
+
+        p {
+            color: #F4F4F4;
+            font-size: 14px;
+            font-family: Roboto-Regular;
+        }
+
+        img {
+            opacity: 0;
+            transition: 300ms;
+        }
+    }
+}
