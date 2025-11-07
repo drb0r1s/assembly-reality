@@ -14,6 +14,7 @@ export class Assembler {
         this.memory = new Memory();
         this.labels = new Labels();
         this.halted = false; // End the assembling of the code.
+        this.intervalId = null;
     }
     
     assemble(text) {
@@ -88,26 +89,31 @@ export class Assembler {
         }
     }
 
-    execute() {
-        while(true) {
-            if(this.memory.instructionIndex === this.memory.instructions.length) break;
+    execute(speed) {
+        return new Promise((resolve, reject) => {
+            this.setAssemblerInterval(speed, () => {
+                if(this.memory.instructionIndex === this.memory.instructions.length) {
+                    clearInterval(this.intervalId);
+                    resolve(this);
 
-            const [row, column] = this.memory.getLocation(this.memory.getCurrentInstruction());
-            const cell = this.memory.getMatrixCell(row, column);
+                    return;
+                }
 
-            try {
-                this.executeInstruction(cell);
-            }
+                const [row, column] = this.memory.getLocation(this.memory.getCurrentInstruction());
+                const cell = this.memory.getMatrixCell(row, column);
 
-            catch(error) {
-                if(error instanceof AssemblerError) return { error };
-                else console.error(error);
-            }
+                try {
+                    this.executeInstruction(cell);
+                }
 
-            this.memory.nextInstruction();
-        }
+                catch(error) {
+                    if(error instanceof AssemblerError) reject(error);
+                    else reject(error);
+                }
 
-        return this;
+                this.memory.nextInstruction();
+            });
+        });
     }
 
     executeInstruction(cell) {
@@ -116,6 +122,11 @@ export class Assembler {
 
         const args = this.collectArgs(executable.length);
         Executor[executable.instruction](this, executable, args);
+
+        self.postMessage({
+            action: "instructionExecuted",
+            data: this
+        });
     }
 
     collectArgs(length) {
@@ -136,6 +147,26 @@ export class Assembler {
 
         args.shift(); // We want to remove the first argument, because it is the instruction code, which is already known.
         return args;
+    }
+
+    setAssemblerInterval(speed, callback) {
+        const delay = 1000 / speed; // ms per instruction
+
+        // High speeds (> 1kHz) require < 1ms per instruction, which is not possible in browser.
+        // As a solution to that, we're going to execute multiple instructions at once, to simulate that < 1ms speed.
+        const isHighSpeed = speed > 1000;
+
+        if(this.intervalId) clearInterval(this.intervalId);
+
+        if(isHighSpeed) {
+            const numberOfInstructions = Math.floor(speed / 1000);
+
+            this.intervalId = setInterval(() => {
+                for(let i = 0; i < numberOfInstructions; i++) callback();
+            }, 1);
+        }
+
+        else this.intervalId = setInterval(callback, delay);
     }
 
     copy(assembler) {

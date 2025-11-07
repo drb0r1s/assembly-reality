@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import RichEditor from "../RichEditor";
 import EditorError from "./EditorError";
 import { GlobalContext } from "../../context/GlobalContext";
+import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 
 const Editor = () => {
@@ -9,6 +10,8 @@ const Editor = () => {
     
     const [code, setCode] = useState("");
     const [error, setError] = useState({ type: "", content: "" });
+
+    const speed = useManagerValue("speed");
 
     useEffect(() => {
         const unsubscribeAssemble = Manager.subscribe("assemble", () => {
@@ -18,7 +21,7 @@ const Editor = () => {
 
         const unsubscribeRun = Manager.subscribe("run", () => {
             if(!assemblerWorker) return;
-            assemblerWorker.postMessage({ action: "run" });
+            assemblerWorker.postMessage({ action: "run", payload: speed });
         });
 
         assemblerWorker.onmessage = e => {
@@ -35,18 +38,18 @@ const Editor = () => {
                     Manager.trigger("memoryUpdate", data);
 
                     break;
-                case "run":
+                case "instructionExecuted":
                     assembler.copy(data);
 
-                    Manager.trigger("memoryUpdate", assembler.memory.matrix);
-                    Manager.trigger("registerUpdate", assembler.registers);
+                    Manager.trigger("memoryUpdate", data.memory);
+                    Manager.trigger("registerUpdate", data.registers);
 
                     break;
                 case "reset":
                     assembler.copy(data);
-
-                    Manager.trigger("memoryUpdate");
-                    Manager.trigger("registerUpdate");
+                    
+                    Manager.trigger("memoryReset");
+                    Manager.trigger("registerReset");
 
                     break;
             }
@@ -56,7 +59,7 @@ const Editor = () => {
             unsubscribeAssemble();
             unsubscribeRun();
         };
-    }, [code]);
+    }, [code, speed]);
     
     return(
         <div className="editor">

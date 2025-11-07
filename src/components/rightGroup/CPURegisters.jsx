@@ -16,7 +16,7 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
 
     useEffect(() => {
         const unsubscribeRegisterUpdate = Manager.subscribe("registerUpdate", newRegisters => setRegisters({...newRegisters}));
-        const unsubscribeReset = Manager.subscribe("reset", () => setRegisters(initialRegisters));
+        const unsubscribeReset = Manager.subscribe("registerReset", () => setRegisters(initialRegisters));
 
         return () => {
             unsubscribeRegisterUpdate();

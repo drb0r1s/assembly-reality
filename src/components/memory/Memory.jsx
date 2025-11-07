@@ -17,7 +17,7 @@ const Memory = () => {
             setMemoryInstructions({ index: newMemory.instructionIndex, list: newMemory.instructions });
         });
 
-        const unsubscribeReset = Manager.subscribe("reset", () => {
+        const unsubscribeReset = Manager.subscribe("memoryReset", () => {
             setMemoryMatrix(new Uint8Array(258 * 16));
             setMemoryInstructions({ index: 0, list: [] });
         });
