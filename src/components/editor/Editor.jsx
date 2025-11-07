@@ -32,7 +32,7 @@ const Editor = () => {
             switch(action) {
                 case "assemble":
                     assembler.memory.copy(data);
-                    Manager.trigger("memoryUpdate", data.matrix);
+                    Manager.trigger("memoryUpdate", data);
 
                     break;
                 case "run":
@@ -45,8 +45,8 @@ const Editor = () => {
                 case "reset":
                     assembler.copy(data);
 
-                    Manager.trigger("memoryUpdate", assembler.memory.matrix);
-                    Manager.trigger("registerUpdate", assembler.registers);
+                    Manager.trigger("memoryUpdate");
+                    Manager.trigger("registerUpdate");
 
                     break;
             }

@@ -78,6 +78,15 @@
                     border-right: 1px solid #2F3336;
                 }
             }
+            
+            .memory-map-matrix-element-current-instruction {
+                background-color: $ipColor;
+            }
+
+            .memory-map-matrix-element-instruction {
+                color: black;
+                background-color: $ipLightColor;
+            }
         }
     }
 }

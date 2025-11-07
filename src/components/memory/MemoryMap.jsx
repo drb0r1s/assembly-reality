@@ -1,14 +1,16 @@
-const MemoryMap = ({ memoryMatrix, isSplitActive }) => {
+const MemoryMap = ({ memoryMatrix, memoryInstructions, isSplitActive }) => {
     const memoryMapColumns = ["empty", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
     
     const memoryMapRows = Array.from({ length: 0x102 }, (_, i) => {
-        let hexNumber = i.toString(16).toUpperCase();
-
-        if(hexNumber.length === 1) hexNumber = "00" + hexNumber;
-        if(hexNumber.length === 2) hexNumber = "0" + hexNumber;
-
-        return hexNumber;
+        return i.toString(16).toUpperCase().padStart(3, "0");
     });
+
+    function getInstructionClass(index) {
+        if(memoryInstructions.list[memoryInstructions.index] === index) return "memory-map-matrix-element-current-instruction";
+        if(memoryInstructions.list.indexOf(index) > -1) return "memory-map-matrix-element-instruction";
+
+        return "";
+    }
 
     return (
         <div
@@ -33,7 +35,7 @@ const MemoryMap = ({ memoryMatrix, isSplitActive }) => {
                     {[...memoryMatrix].map((element, index) => {
                         return <p
                             key={index}
-                            className="memory-map-matrix-element"
+                            className={`memory-map-matrix-element ${getInstructionClass(index)}`}
                         >{element.toString(16).toUpperCase().padStart(2, "0")}</p>;
                     })}
                 </div>

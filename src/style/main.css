@@ -408,6 +408,13 @@ header .header-title {
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element:last-child {
   border-right: 1px solid #2F3336;
 }
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-current-instruction {
+  background-color: #2F608B;
+}
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction {
+  color: black;
+  background-color: #79b4eb;
+}
 
 .right-group {
   height: calc(100dvh - 38px);

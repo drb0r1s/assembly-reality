@@ -7,11 +7,20 @@ const Memory = () => {
     const { assembler } = useContext(GlobalContext);
     
     const [memoryMatrix, setMemoryMatrix] = useState(assembler.memory.matrix);
+    const [memoryInstructions, setMemoryInstructions] = useState({ index: 0, list: [] });
+
     const [isSplitActive, setIsSplitActive] = useState(false);
     
     useEffect(() => {
-        const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", newMatrix => setMemoryMatrix([...newMatrix]));
-        const unsubscribeReset = Manager.subscribe("reset", () => setMemoryMatrix(new Uint8Array(258 * 16)));
+        const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", newMemory => {
+            setMemoryMatrix([...newMemory.matrix]);
+            setMemoryInstructions({ index: newMemory.instructionIndex, list: newMemory.instructions });
+        });
+
+        const unsubscribeReset = Manager.subscribe("reset", () => {
+            setMemoryMatrix(new Uint8Array(258 * 16));
+            setMemoryInstructions({ index: 0, list: [] });
+        });
     
         return () => {
             unsubscribeMemoryUpdate();
@@ -33,10 +42,12 @@ const Memory = () => {
             <div className="memory-map-holder">
                 <MemoryMap
                     memoryMatrix={memoryMatrix}
+                    memoryInstructions={memoryInstructions}
                     isSplitActive={isSplitActive}
                 />
                 {isSplitActive && <MemoryMap
                     memoryMatrix={memoryMatrix}
+                    memoryInstructions={memoryInstructions}
                     isSplitActive={isSplitActive}
                 />}
             </div>
