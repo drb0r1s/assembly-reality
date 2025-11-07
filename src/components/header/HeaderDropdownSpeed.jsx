@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Range from "../Range";
+import { useManagerValue } from "../../hooks/useManagerValue";
+import { Manager } from "../../Manager";
 
 const HeaderDropdownSpeed = () => {
-    const [speed, setSpeed] = useState(4);
+    const initialSpeed = useManagerValue("speed");
+    const [speed, setSpeed] = useState(initialSpeed);
 
     const buttons = [4, 1000, 5000, 10000, 20000, 50000];
+
+    useEffect(() => {
+        if(speed === initialSpeed) return;
+        Manager.set("speed", speed);
+    }, [speed]);
     
     return(
         <div className="header-dropdown-speed">
