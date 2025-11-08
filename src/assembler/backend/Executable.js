@@ -184,6 +184,40 @@ export const Executable = {
                 assembler.registers.update(first.register, popped);
             }
         });
+    },
+
+    call: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        Decoder.run(executable, {
+            "memory.register": () => {
+                const currentAddress = assembler.registers.IP + 4;
+
+                assembler.memory.adjustInstructionIndex(first.memoryPoint);
+
+                // PUSH return address to the stack.
+                assembler.memory.rewrite(assembler.registers.SP, currentAddress, { isStack: true });
+                assembler.registers.update("SP", assembler.registers.SP - 2);
+            },
+
+            "number.*": () => {
+                const currentAddress = assembler.registers.IP + 4;
+
+                assembler.memory.adjustInstructionIndex(first.value);
+
+                // PUSH return address to the stack.
+                assembler.memory.rewrite(assembler.registers.SP, currentAddress, { isStack: true });
+                assembler.registers.update("SP", assembler.registers.SP - 2);
+            }
+        });
+    },
+
+    ret: (assembler, executable, args) => {
+        // POP the return address from the stack.
+        assembler.registers.update("SP", assembler.registers.SP + 2);
+        
+        const popped = assembler.memory.point(assembler.registers.SP, { isStack: true });
+        assembler.memory.adjustInstructionIndex(popped);
     }
 };
 

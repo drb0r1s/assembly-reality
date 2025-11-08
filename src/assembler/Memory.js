@@ -118,7 +118,7 @@ export class Memory {
         const index = this.instructions.indexOf(address);
 
         // IMPORTANT: We need to go one instruction back!
-        // .adjustInstructionIndex happens only in "move" executables, meaning the instruction index will be adjusted inside assembler.executeInstruction method.
+        // .adjustInstructionIndex happens only in "jump" executables, meaning the instruction index will be adjusted inside assembler.executeInstruction method.
         // Because of that, right after executing jump, .nextInstruction method happens, moving instructionIndex to the next instruction, skipping the one we jumped on.
         // So, -1 is used for instruction-skipping prevention.
         this.instructionIndex = index - 1;

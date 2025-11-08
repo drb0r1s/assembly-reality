@@ -111,6 +111,13 @@ export const Executor = {
 
         // POPB
         0x44: { instruction: "POPB", type: "half.register", length: 2 },
+
+        // CALL
+        0x45: { instruction: "CALL", type: "memory.register", length: 3 },
+        0x46: { instruction: "CALL", type: "number.*", length: 3 },
+
+        // RET
+        0x47: { instruction: "RET", type: "", length: 1 },
         
         // MUL
         0x48: { instruction: "MUL", type: "register", length: 2 },
@@ -237,6 +244,10 @@ export const Executor = {
 
     POP: (...params) => Executable.pop(...params),
     POPB: (...params) => Executable.pop(...params),
+
+    CALL: (...params) => Executable.call(...params),
+
+    RET: (...params) => Executable.ret(...params),
 
     MUL: (...params) => Executable.bitwise(...params),
     MULB: (...params) => Executable.bitwise(...params),

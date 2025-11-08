@@ -11,7 +11,7 @@ import { LengthOf } from "./LengthOf";
 */
 
 export const Instructions = {
-    HLT: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x00,
+    HLT: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : [0x00],
 
     MOV: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "register register": 0x01,
@@ -198,7 +198,7 @@ export const Instructions = {
         "number.*": 0x46
     }),
 
-    RET: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x47,
+    RET: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : [0x47],
 
     MUL: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
         "register": 0x48,
@@ -313,11 +313,11 @@ export const Instructions = {
         "half.register number.*": 0x81
     }),
 
-    CLI: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x82,
+    CLI: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : [0x82],
 
-    STI: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x83,
+    STI: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : [0x83],
 
-    IRET: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : 0x84,
+    IRET: (instruction, options) => options?.getLength ? LengthOf.noOperands(instruction) : [0x84],
 
     IN: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
         "register": 0x87,
