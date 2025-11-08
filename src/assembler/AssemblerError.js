@@ -31,6 +31,9 @@ export class AssemblerError {
             case "HexLimit16": return "16-bit operand must have a value between 0x0000 and 0xFFFF!";
             case "HexLimit8": return "8-bit operand must have a value between 0x00 and 0xFF!";
             case "HexMemoryLimit": return "Hex memory pointer operand must have a value between 0x0000 and 0x101F!";
+            case "StackUnderflow":
+                this.isRuntime = true;
+                return "The stack is empty!";
             case "OutOfMemory": return "Memory limit exceeded!";
             case "DivisionByZero":
                 this.isRuntime = true;

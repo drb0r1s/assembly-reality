@@ -1,3 +1,4 @@
+import { AssemblerError } from "../AssemblerError";
 import { Decoder } from "./Decoder";
 import { HexCalculator } from "./HexCalculator";
 
@@ -174,6 +175,9 @@ export const Executable = {
         Decoder.run(executable, {
             [registerType]: () => {
                 const numberOfCells = isHalf ? 1 : 2;
+
+                if(assembler.registers.SP + numberOfCells > assembler.memory.stackStart) throw new AssemblerError("StackUnderflow");
+
                 assembler.registers.update("SP", assembler.registers.SP + numberOfCells);
 
                 const popped = assembler.memory.point(assembler.registers.SP, { isHalf, isStack: true });
