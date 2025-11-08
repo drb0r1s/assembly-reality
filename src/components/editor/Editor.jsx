@@ -35,7 +35,9 @@ const Editor = () => {
             switch(action) {
                 case "assemble":
                     assembler.memory.copy(data);
-                    Manager.trigger("memoryUpdate", { memory: data });
+
+                    Manager.trigger("memoryUpdate", { memory: data.memory, registers: { IP: data.registers.IP, SP: data.registers.SP } });
+                    Manager.trigger("registerUpdate", data.registers);
 
                     break;
                 case "run":

@@ -47,7 +47,7 @@ export class Assembler {
             else console.error(error);
         }
 
-        return this.memory;
+        return this;
     }
 
     observeStatement(statement) {
