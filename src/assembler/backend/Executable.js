@@ -182,8 +182,6 @@ export const Executable = {
 
                 const popped = assembler.memory.point(assembler.registers.SP, { isHalf, isStack: true });
                 assembler.registers.update(first.register, popped);
-
-                assembler.memory.rewrite(assembler.registers.SP, 0, { isHalf, isStack: true });
             }
         });
     }
