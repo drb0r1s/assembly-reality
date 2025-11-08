@@ -6,25 +6,32 @@ import { Manager } from "../../Manager";
 const Memory = () => {
     const { assembler } = useContext(GlobalContext);
     
-    const [memoryMatrix, setMemoryMatrix] = useState(assembler.memory.matrix);
-    const [memoryInstructions, setMemoryInstructions] = useState({ index: 0, list: [] });
+    const initialMemory = {
+        matrix: new Uint8Array(258 * 16),
+        instructions: [],
+        instructionIndex: 0,
+        stackStart: 0
+    };
+    
+    const [memory, setMemory] = useState(initialMemory);
     const [registerPointers, setRegisterPointers] = useState({ IP: assembler.registers.IP, SP: assembler.registers.SP });
 
     const [isSplitActive, setIsSplitActive] = useState(false);
     
     useEffect(() => {
         const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", data => {
-            if(data?.memory) {
-                setMemoryMatrix([...data.memory.matrix]);
-                setMemoryInstructions({ index: data.memory.instructionIndex, list: data.memory.instructions });
-            }
+            if(data?.memory) setMemory({
+                matrix: [...data.memory.matrix],
+                instructions: data.memory.instructions,
+                instructionIndex: data.memory.instructionIndex,
+                stackStart: data.memory.stackStart
+            });
 
             if(data?.registers) setRegisterPointers({ IP: data.registers.IP, SP: data.registers.SP });
         });
 
         const unsubscribeReset = Manager.subscribe("memoryReset", () => {
-            setMemoryMatrix(new Uint8Array(258 * 16));
-            setMemoryInstructions({ index: 0, list: [] });
+            setMemory(initialMemory);
             setRegisterPointers({ IP: 0, SP: 0 });
         });
     
@@ -47,14 +54,13 @@ const Memory = () => {
 
             <div className="memory-map-holder">
                 <MemoryMap
-                    memoryMatrix={memoryMatrix}
-                    memoryInstructions={memoryInstructions}
+                    memory={memory}
                     registerPointers={registerPointers}
                     isSplitActive={isSplitActive}
                 />
                 {isSplitActive && <MemoryMap
-                    memoryMatrix={memoryMatrix}
-                    memoryInstructions={memoryInstructions}
+                    memory={memory}
+                    registerPointers={registerPointers}
                     isSplitActive={isSplitActive}
                 />}
             </div>

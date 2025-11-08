@@ -457,6 +457,10 @@ header .header-title {
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-stack-pointer {
   background-color: #BB3071;
 }
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-stack {
+  color: black;
+  background-color: #F59CC5;
+}
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction-pointer {
   background-color: #2F608B;
 }

@@ -7,6 +7,9 @@ export const Executable = {
 
         const [isHalf] = isInstructionHalf(executable.instruction);
         const registerType = isHalf ? "half.register" : "register";
+
+        // In case of updating the stack pointer register, we need to adjust the memory.stackStart address.
+        if(first?.register === "SP") updateStackStart(assembler, executable, second);
         
         Decoder.run(executable, {
             [`${registerType} ${registerType}`]: () => assembler.registers.update(first.register, second.registerValue),
@@ -32,7 +35,7 @@ export const Executable = {
 
         Decoder.run(executable, {
             // ONE OPERAND
-            [`${registerType}`]: () => {
+            [registerType]: () => {
                 const operation = HexCalculator[instruction](first.registerValue, usedRegister.registerValue, { isHalf });
                 assembler.registers.update(usedRegister.register, operation);
             },
@@ -137,6 +140,48 @@ export const Executable = {
                 assembler.memory.adjustInstructionIndex(first.value);
             }
         });
+    },
+
+    push: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        const [isHalf] = isInstructionHalf(executable.instruction);
+        const registerType = isHalf ? "half.register" : "register";
+
+        Decoder.run(executable, {
+            [registerType]: () => {
+                assembler.memory.rewrite(assembler.registers.SP, first.registerValue, { isHalf, isStack: true });
+
+                const numberOfCells = isHalf ? 1 : 2;
+                assembler.registers.update("SP", assembler.registers.SP - numberOfCells);
+            },
+
+            "number.*": () => {
+                assembler.memory.rewrite(assembler.registers.SP, first.value, { isHalf, isStack: true });
+
+                const numberOfCells = isHalf ? 1 : 2;
+                assembler.registers.update("SP", assembler.registers.SP - numberOfCells);
+            }
+        });
+    },
+
+    pop: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
+
+        const [isHalf] = isInstructionHalf(executable.instruction);
+        const registerType = isHalf ? "half.register" : "register";
+
+        Decoder.run(executable, {
+            [registerType]: () => {
+                const numberOfCells = isHalf ? 1 : 2;
+                assembler.registers.update("SP", assembler.registers.SP + numberOfCells);
+
+                const popped = assembler.memory.point(assembler.registers.SP, { isHalf, isStack: true });
+                assembler.registers.update(first.register, popped);
+
+                assembler.memory.rewrite(assembler.registers.SP, 0, { isHalf, isStack: true });
+            }
+        });
     }
 };
 
@@ -165,4 +210,24 @@ function getUsedRegister(assembler, instruction, isHalf, register) {
     usedRegister.registerValue = assembler.registers.getValue(usedRegister.register);
 
     return usedRegister;
+}
+
+function updateStackStart(assembler, executable, second) {
+    const secondType = executable.type.split(" ")[1];
+    let value;
+
+    switch(secondType) {
+        case "register":
+            value = second.registerValue;
+            break;
+        case "memory.register":
+        case "memory.number.*":
+            value = second.memoryPoint;
+            break;
+        case "number.*":
+            value = second.value;
+            break;
+    }
+
+    if(value > assembler.registers.SP) assembler.memory.stackStart = value;
 }

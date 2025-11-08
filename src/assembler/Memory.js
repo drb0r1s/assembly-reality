@@ -5,8 +5,9 @@ export class Memory {
     constructor() {
         this.matrix = new Uint8Array(258 * 16),
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
-        this.instructions = []; // An array with instruction addresses in memory.
+        this.instructions = []; // An array of instruction addresses in memory.
         this.instructionIndex = 0; // Index of the current instruction.
+        this.stackStart = 0; // The address of the start of the stack.
     }
 
     getMatrixCell(row, column) {
@@ -48,10 +49,14 @@ export class Memory {
             // It does not matter if 16-bit value is empty in the first two cells, .rewrite() should still override it.
             const [firstCell, secondCell] = ByteNumber.divide(value);
 
-            const [firstRow, firstColumn] = this.getLocation(address);
+            // This constant is used to shape the full 16-bit address.
+            // Stack is writing addresses in memory from right to the left, while normal writing is from left to the right.
+            const adjustments = options?.isStack ? [-1, 0] : [0, 1];
+
+            const [firstRow, firstColumn] = this.getLocation(address + adjustments[0]);
             this.setMatrixCell(firstRow, firstColumn, firstCell);
 
-            const [secondRow, secondColumn] = this.getLocation(address + 1);
+            const [secondRow, secondColumn] = this.getLocation(address + adjustments[1]);
             this.setMatrixCell(secondRow, secondColumn, secondCell);
         }
     }
@@ -90,7 +95,11 @@ export class Memory {
 
     point(address, options) {
         if(options?.isHalf) return ByteNumber.join([0, this.get(address)]);
-        return ByteNumber.join([this.get(address), this.get(address + 1)]);
+        
+        // This constant is used to adjust the direction of pointing in memory.
+        // In stack, we are pointing from right to left, instead of pointing from left to right.
+        const adjustments = options?.isStack ? [-1, 0] : [0, 1];
+        return ByteNumber.join([this.get(address + adjustments[0]), this.get(address + adjustments[1])]);
     }
 
     addInstruction() {
@@ -125,5 +134,6 @@ export class Memory {
         this.free = { i: 0, j: 0 };
         this.instructions = [];
         this.instructionIndex = 0;
+        this.stackStart = 0;
     }
 };

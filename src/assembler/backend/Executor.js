@@ -97,6 +97,20 @@ export const Executor = {
         // JNA
         0x39: { instruction: "JNA", type: "memory.register", length: 3 },
         0x3A: { instruction: "JNA", type: "number.*", length: 3 },
+
+        // PUSH
+        0x3B: { instruction: "PUSH", type: "register", length: 2 },
+        0x3C: { instruction: "PUSH", type: "number.*", length: 3 },
+
+        // PUSHB
+        0x3F: { instruction: "PUSHB", type: "half.register", length: 2 },
+        0x40: { instruction: "PUSHB", type: "number.*", length: 2 },
+
+        // POP
+        0x43: { instruction: "POP", type: "register", length: 2 },
+
+        // POPB
+        0x44: { instruction: "POPB", type: "half.register", length: 2 },
         
         // MUL
         0x48: { instruction: "MUL", type: "register", length: 2 },
@@ -218,6 +232,12 @@ export const Executor = {
     JA: (...params) => Executable.jump(...params),
     JNA: (...params) => Executable.jump(...params),
 
+    PUSH: (...params) => Executable.push(...params),
+    PUSHB: (...params) => Executable.push(...params),
+
+    POP: (...params) => Executable.pop(...params),
+    POPB: (...params) => Executable.pop(...params),
+
     MUL: (...params) => Executable.bitwise(...params),
     MULB: (...params) => Executable.bitwise(...params),
 
@@ -240,5 +260,5 @@ export const Executor = {
     SHLB: (...params) => Executable.bitwise(...params),
 
     SHR: (...params) => Executable.bitwise(...params),
-    SHRB: (...params) => Executable.bitwise(...params),
+    SHRB: (...params) => Executable.bitwise(...params)
 };

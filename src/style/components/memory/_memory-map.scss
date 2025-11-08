@@ -82,6 +82,11 @@
             .memory-map-matrix-element-stack-pointer {
                 background-color: $spColor;
             }
+
+            .memory-map-matrix-element-stack {
+                color: black;
+                background-color: $spLightColor;
+            }
             
             .memory-map-matrix-element-instruction-pointer {
                 background-color: $ipColor;
