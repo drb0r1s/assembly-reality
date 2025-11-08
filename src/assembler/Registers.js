@@ -84,7 +84,7 @@ export class Registers {
             else this[register[0]] = (registerValue & 0xFF00) | (second & 0xFF);
         }
 
-        if(register === "SR") this[register] = value;
+        else if(register === "SR") this[register] = value;
         else this[register] = value & 0xFFFF; // We want to keep our register 16-bit.
     }
 
