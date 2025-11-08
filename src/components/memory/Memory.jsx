@@ -24,7 +24,8 @@ const Memory = () => {
 
         const unsubscribeReset = Manager.subscribe("memoryReset", () => {
             setMemoryMatrix(new Uint8Array(258 * 16));
-            setMemoryInstructions({ index: 0, pointer: 0, list: [] });
+            setMemoryInstructions({ index: 0, list: [] });
+            setRegisterPointers({ IP: 0, SP: 0 });
         });
     
         return () => {
