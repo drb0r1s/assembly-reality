@@ -1,17 +1,22 @@
-const MemoryMap = ({ memoryMatrix, memoryInstructions, isSplitActive }) => {
+const MemoryMap = ({ memoryMatrix, memoryInstructions, registerPointers, isSplitActive }) => {
     const memoryMapColumns = ["empty", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
     
     const memoryMapRows = Array.from({ length: 0x102 }, (_, i) => {
         return i.toString(16).toUpperCase().padStart(3, "0");
     });
 
-    function getInstructionClass(index) {
-        if(
-            memoryInstructions.list[memoryInstructions.index] === index ||
-            memoryInstructions.pointer === index
-        ) return "memory-map-matrix-element-instruction-pointer";
-        
+    function getCellClass(index) {
+        // Stack classes should take priority over the instruction classes.
+
+        // STACK CLASSES
+        if(registerPointers.SP === index) return "memory-map-matrix-element-stack-pointer";
+
+        // INSTRUCTION CLASSES
+        if(registerPointers.IP === index) return "memory-map-matrix-element-instruction-pointer";
         if(memoryInstructions.list.indexOf(index) > -1) return "memory-map-matrix-element-instruction";
+
+        // DISPLAY CLASSES
+        if(index > 0xFFF) return "memory-map-matrix-element-display";
 
         return "";
     }
@@ -39,7 +44,7 @@ const MemoryMap = ({ memoryMatrix, memoryInstructions, isSplitActive }) => {
                     {[...memoryMatrix].map((element, index) => {
                         return <p
                             key={index}
-                            className={`memory-map-matrix-element ${getInstructionClass(index)}`}
+                            className={`memory-map-matrix-element ${getCellClass(index)}`}
                         >{element.toString(16).toUpperCase().padStart(2, "0")}</p>;
                     })}
                 </div>

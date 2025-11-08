@@ -454,12 +454,18 @@ header .header-title {
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element:last-child {
   border-right: 1px solid #2F3336;
 }
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-stack-pointer {
+  background-color: #BB3071;
+}
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction-pointer {
   background-color: #2F608B;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction {
   color: black;
   background-color: #79b4eb;
+}
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-display {
+  background-color: #0F0F0F;
 }
 
 .right-group {

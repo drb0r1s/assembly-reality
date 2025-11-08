@@ -7,14 +7,19 @@ const Memory = () => {
     const { assembler } = useContext(GlobalContext);
     
     const [memoryMatrix, setMemoryMatrix] = useState(assembler.memory.matrix);
-    const [memoryInstructions, setMemoryInstructions] = useState({ index: 0, pointer: 0, list: [] });
+    const [memoryInstructions, setMemoryInstructions] = useState({ index: 0, list: [] });
+    const [registerPointers, setRegisterPointers] = useState({ IP: assembler.registers.IP, SP: assembler.registers.SP });
 
     const [isSplitActive, setIsSplitActive] = useState(false);
     
     useEffect(() => {
-        const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", newMemory => {
-            setMemoryMatrix([...newMemory.matrix]);
-            setMemoryInstructions({ index: newMemory.instructionIndex, pointer: newMemory.IP, list: newMemory.instructions });
+        const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", data => {
+            if(data?.memory) {
+                setMemoryMatrix([...data.memory.matrix]);
+                setMemoryInstructions({ index: data.memory.instructionIndex, list: data.memory.instructions });
+            }
+
+            if(data?.registers) setRegisterPointers({ IP: data.registers.IP, SP: data.registers.SP });
         });
 
         const unsubscribeReset = Manager.subscribe("memoryReset", () => {
@@ -43,6 +48,7 @@ const Memory = () => {
                 <MemoryMap
                     memoryMatrix={memoryMatrix}
                     memoryInstructions={memoryInstructions}
+                    registerPointers={registerPointers}
                     isSplitActive={isSplitActive}
                 />
                 {isSplitActive && <MemoryMap

@@ -1,7 +1,8 @@
 // DEFAULT REGISTERS
 const defaultRegisters = ["A", "B", "C", "D"];
+const systemRegisters = ["SP"];
 
-export const rootDefaultRegistersExpression = defaultRegisters.join("|");
+export const rootDefaultRegistersExpression = [...defaultRegisters, ...systemRegisters].join("|");
 
 export const defaultRegistersRegex = new RegExp(`\\s(${rootDefaultRegistersExpression})(?=\\s|,|$)`);
 export const memoryDefaultRegistersRegex = new RegExp(`\\s\\[(${rootDefaultRegistersExpression})\\](?=\\s|,|$)`);
