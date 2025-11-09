@@ -121,9 +121,11 @@ export class Assembler {
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
         const args = this.collectArgs(executable.length);
+        const oldAddress = this.registers.IP;
+
         Executor[executable.instruction](this, executable, args);
 
-        this.nextInstruction(executable);
+        this.nextInstruction(executable, oldAddress);
 
         self.postMessage({
             action: "instructionExecuted",
@@ -133,15 +135,18 @@ export class Assembler {
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
     // However, if executed instruction was a halt, jump, function call, or function return, we shouldn't move the instruction pointer.
-    nextInstruction(executable) {
-        const blockIP = ["HLT", "JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET"];
+    nextInstruction(executable, oldAddress) {
+        const blockIP = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET"];
 
-        if(blockIP.indexOf(executable.instruction) === -1) {
-            const instructionIndex = this.memory.instructions.indexOf(this.registers.IP);
+        if(
+            executable.instruction === "HLT" ||
+            (blockIP.indexOf(executable.instruction) > -1 && this.registers.IP !== oldAddress)
+        ) return;
 
-            if(instructionIndex === this.memory.instructions.length - 1) this.registers.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
-            else this.registers.update("IP", this.memory.instructions[instructionIndex + 1]);
-        }
+        const instructionIndex = this.memory.instructions.indexOf(this.registers.IP);
+
+        if(instructionIndex === this.memory.instructions.length - 1) this.registers.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
+        else this.registers.update("IP", this.memory.instructions[instructionIndex + 1]);
     }
 
     collectArgs(length) {
@@ -196,14 +201,14 @@ export class Assembler {
         this.registers.copy(assembler.registers);
         this.memory.copy(assembler.memory);
         this.labels.copy(assembler.labels);
-        this.halted = assembler.halted;
+        this.isHalted = assembler.isHalted;
     }
 
     reset() {
         this.registers.reset();
         this.memory.reset();
         this.labels.reset();
-        this.halted = false;
+        this.isHalted = false;
 
         return this;
     }
