@@ -93,7 +93,7 @@ export class Assembler {
 
     execute(speed) {
         return new Promise((resolve, reject) => {
-            this.setAssemblerInterval(speed, () => {
+            this.setAssemblerInterval(() => {
                 if(this.memory.instructionIndex === this.memory.instructions.length) {
                     this.registers.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
                     
@@ -117,7 +117,7 @@ export class Assembler {
 
                 this.memory.nextInstruction();
                 this.registers.update("IP", this.memory.getCurrentInstruction());
-            });
+            }, speed);
         });
     }
 
@@ -154,7 +154,7 @@ export class Assembler {
         return args;
     }
 
-    setAssemblerInterval(speed, callback) {
+    setAssemblerInterval(callback, speed) {
         const delay = 1000 / speed; // ms per instruction
 
         // High speeds (> 1kHz) require < 1ms per instruction, which is not possible in browser.
