@@ -94,16 +94,14 @@ export class Assembler {
     execute(speed) {
         return new Promise((resolve, reject) => {
             this.setAssemblerInterval(() => {
-                if(this.memory.instructionIndex === this.memory.instructions.length) {
-                    this.registers.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
-                    
+                if(this.memory.instructions.indexOf(this.registers.IP) === -1) {
                     clearInterval(this.intervalId);
                     resolve(this);
 
                     return;
                 }
 
-                const [row, column] = this.memory.getLocation(this.memory.getCurrentInstruction());
+                const [row, column] = this.memory.getLocation(this.registers.IP);
                 const cell = this.memory.getMatrixCell(row, column);
 
                 try {
@@ -114,9 +112,6 @@ export class Assembler {
                     if(error instanceof AssemblerError) resolve({ error });
                     else reject(error);
                 }
-
-                this.memory.nextInstruction();
-                this.registers.update("IP", this.memory.getCurrentInstruction());
             }, speed);
         });
     }
@@ -128,16 +123,31 @@ export class Assembler {
         const args = this.collectArgs(executable.length);
         Executor[executable.instruction](this, executable, args);
 
+        this.nextInstruction(executable);
+
         self.postMessage({
             action: "instructionExecuted",
             data: this
         });
     }
 
+    // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
+    // However, if executed instruction was jump, function call, or function return, we shouldn't move the instruction pointer.
+    nextInstruction(executable) {
+        const jumpInstructions = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET"];
+
+        if(jumpInstructions.indexOf(executable.instruction) === -1) {
+            const instructionIndex = this.memory.instructions.indexOf(this.registers.IP);
+
+            if(instructionIndex === this.memory.instructions.length - 1) this.registers.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
+            else this.registers.update("IP", this.memory.instructions[instructionIndex + 1]);
+        }
+    }
+
     collectArgs(length) {
         const args = [];
         
-        let [row, column] = this.memory.getLocation(this.memory.getCurrentInstruction());
+        let [row, column] = this.memory.getLocation(this.registers.IP);
         
         for(let i = 0; i < length; i++) {
             args.push(this.memory.getMatrixCell(row, column));

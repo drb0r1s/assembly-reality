@@ -9,7 +9,6 @@ const Memory = () => {
     const initialMemory = {
         matrix: new Uint8Array(258 * 16),
         instructions: [],
-        instructionIndex: 0,
         stackStart: 0
     };
     
@@ -23,7 +22,6 @@ const Memory = () => {
             if(data?.memory) setMemory({
                 matrix: [...data.memory.matrix],
                 instructions: data.memory.instructions,
-                instructionIndex: data.memory.instructionIndex,
                 stackStart: data.memory.stackStart
             });
 

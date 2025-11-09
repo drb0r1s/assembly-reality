@@ -134,11 +134,11 @@ export const Executable = {
 
         Decoder.run(executable, {
             "memory.register": () => {
-                assembler.memory.adjustInstructionIndex(first.memoryPoint);
+                assembler.registers.update("IP", first.memoryPoint);
             },
 
             "number.*": () => {
-                assembler.memory.adjustInstructionIndex(first.value);
+                assembler.registers.update("IP", first.value);
             }
         });
     },
@@ -191,9 +191,11 @@ export const Executable = {
 
         Decoder.run(executable, {
             "memory.register": () => {
-                const currentAddress = assembler.registers.IP + 4;
+                // IMPORTANT: Here we set the current (return) address as the next address that should be executed, after the RET instruction.
+                // If we didn't specify that we want to return to the next address, we would ran into an infinite loop, as function would keep calling itself.
+                const currentAddress = assembler.registers.IP + 3;
 
-                assembler.memory.adjustInstructionIndex(first.memoryPoint);
+                assembler.registers.update("IP", first.memoryPoint);
 
                 // PUSH return address to the stack.
                 assembler.memory.rewrite(assembler.registers.SP, currentAddress, { isStack: true });
@@ -201,9 +203,11 @@ export const Executable = {
             },
 
             "number.*": () => {
-                const currentAddress = assembler.registers.IP + 4;
+                // IMPORTANT: Here we set the current (return) address as the next address that should be executed, after the RET instruction.
+                // If we didn't specify that we want to return to the next address, we would ran into an infinite loop, as function would keep calling itself.
+                const currentAddress = assembler.registers.IP + 3;
 
-                assembler.memory.adjustInstructionIndex(first.value);
+                assembler.registers.update("IP", first.value);
 
                 // PUSH return address to the stack.
                 assembler.memory.rewrite(assembler.registers.SP, currentAddress, { isStack: true });
@@ -217,7 +221,7 @@ export const Executable = {
         assembler.registers.update("SP", assembler.registers.SP + 2);
         
         const popped = assembler.memory.point(assembler.registers.SP, { isStack: true });
-        assembler.memory.adjustInstructionIndex(popped);
+        assembler.registers.update("IP", popped);
     }
 };
 

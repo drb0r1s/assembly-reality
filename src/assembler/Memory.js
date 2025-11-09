@@ -6,7 +6,6 @@ export class Memory {
         this.matrix = new Uint8Array(258 * 16),
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
         this.instructions = []; // An array of instruction addresses in memory.
-        this.instructionIndex = 0; // Index of the current instruction.
         this.stackStart = 0; // The address of the start of the stack.
     }
 
@@ -106,24 +105,6 @@ export class Memory {
         this.instructions.push(this.getAddress(this.free.i, this.free.j));
     }
 
-    nextInstruction() {
-        this.instructionIndex++;
-    }
-
-    getCurrentInstruction() {
-        return this.instructions[this.instructionIndex];
-    }
-
-    adjustInstructionIndex(address) {
-        const index = this.instructions.indexOf(address);
-
-        // IMPORTANT: We need to go one instruction back!
-        // .adjustInstructionIndex happens only in "jump" executables, meaning the instruction index will be adjusted inside assembler.executeInstruction method.
-        // Because of that, right after executing jump, .nextInstruction method happens, moving instructionIndex to the next instruction, skipping the one we jumped on.
-        // So, -1 is used for instruction-skipping prevention.
-        this.instructionIndex = index - 1;
-    }
-
     copy(memory) {
         this.matrix = memory.matrix;
         this.free = memory.free;
@@ -133,7 +114,6 @@ export class Memory {
         this.matrix = new Uint8Array(258 * 16);
         this.free = { i: 0, j: 0 };
         this.instructions = [];
-        this.instructionIndex = 0;
         this.stackStart = 0;
     }
 };
