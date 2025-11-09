@@ -136,11 +136,11 @@ export class Assembler {
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
     // However, if executed instruction was a halt, jump, function call, or function return, we shouldn't move the instruction pointer.
     nextInstruction(executable, oldAddress) {
-        const blockIP = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET"];
+        const jumpInstructions = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET"];
 
         if(
             executable.instruction === "HLT" ||
-            (blockIP.indexOf(executable.instruction) > -1 && this.registers.IP !== oldAddress)
+            (jumpInstructions.indexOf(executable.instruction) > -1 && this.registers.IP !== oldAddress)
         ) return;
 
         const instructionIndex = this.memory.instructions.indexOf(this.registers.IP);

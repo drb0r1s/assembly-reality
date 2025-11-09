@@ -19,6 +19,7 @@
         background-color: $ipLightColor;
         border-radius: 10px;
         position: absolute;
+        transition: 0;
     }
 
     .range-circle {
@@ -29,5 +30,11 @@
         border-radius: 50%;
         position: absolute;
         left: 0;
+        transform: translateX(0);
+        transition: background-color 300ms ease;
+
+        &:hover {
+            background-color: #2e4469;
+        }
     }
 }

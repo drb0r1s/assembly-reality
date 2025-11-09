@@ -2,7 +2,11 @@ import { useState, useEffect, useRef } from "react";
 
 const Range = ({ value, min, max, onDrag }) => {
     const [range, setRange] = useState({ position: 0, percent: 0 });
+    
     const rangeLineRef = useRef(null);
+    const rangeFilledLineRef = useRef(null);
+    const rangeCircleRef = useRef(null);
+    const removeTransitionRef = useRef(false);
 
     const circleWidth = 20;
 
@@ -18,8 +22,21 @@ const Range = ({ value, min, max, onDrag }) => {
         setRange({ position: newPosition, percent: newPercent });
     }, [value]);
 
+    useEffect(() => {
+        if(!removeTransitionRef.current) return;
+
+        setTimeout(() => {
+            rangeFilledLineRef.current.style.transition = "";
+            rangeCircleRef.current.style.transition = "";
+
+            removeTransitionRef.current = false;
+        }, 300);
+    }, [range]);
+
     function handleDrag(e) {
-        calculateValue(e);
+        e.stopPropagation();
+        
+        calculateValue(e, true);
         document.body.style.userSelect = "none";
         
         window.addEventListener("mousemove", handleDrag);
@@ -28,38 +45,48 @@ const Range = ({ value, min, max, onDrag }) => {
             window.removeEventListener("mousemove", handleDrag);
             document.body.style.userSelect = "";
         }, { once: true });
+    }
 
-        function calculateValue() {
-            const rect = rangeLineRef.current.getBoundingClientRect();
-            const usableWidth = rect.width - circleWidth;
+    function calculateValue(e, isDrag = false) {
+        const rect = rangeLineRef.current.getBoundingClientRect();
+        const usableWidth = rect.width - circleWidth;
             
-            let x = e.clientX - rect.left;
-            x = Math.max(0, Math.min(x, usableWidth));
+        let x = e.clientX - rect.left;
+        x = Math.max(0, Math.min(x, usableWidth));
 
-            const newPercent = (x / usableWidth) * 100;
+        const newPercent = (x / usableWidth) * 100;
 
-            setRange({ position: x, percent: newPercent });
+        if(!isDrag) {
+            rangeFilledLineRef.current.style.transition = "300ms";
+            rangeCircleRef.current.style.transition = "300ms";
 
-            const frequency = min * Math.pow(max / min, newPercent / 100);
-            onDrag(frequency);
+            removeTransitionRef.current = true;
         }
+
+        setRange({ position: x, percent: newPercent });
+
+        const frequency = min * Math.pow(max / min, newPercent / 100);
+        onDrag(frequency);
     }
     
     return(
         <div
             className="range"
-            onMouseDown={handleDrag}
+            onMouseDown={calculateValue}
         >
             <div className="range-line" ref={rangeLineRef}></div>
             
             <div
                 className="range-filled-line"
                 style={{ width: `${range.percent}%` }}
+                ref={rangeFilledLineRef}
             ></div>
             
             <div
                 className="range-circle"
                 style={{ left: `${range.position}px` }}
+                ref={rangeCircleRef}
+                onMouseDown={handleDrag}
             ></div>
         </div>
     );

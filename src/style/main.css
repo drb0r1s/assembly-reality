@@ -816,6 +816,7 @@ header .header-title {
   background-color: #79b4eb;
   border-radius: 10px;
   position: absolute;
+  transition: 0;
 }
 .range .range-circle {
   height: 20px;
@@ -825,4 +826,9 @@ header .header-title {
   border-radius: 50%;
   position: absolute;
   left: 0;
+  transform: translateX(0);
+  transition: background-color 300ms ease;
+}
+.range .range-circle:hover {
+  background-color: #2e4469;
 }/*# sourceMappingURL=main.css.map */
