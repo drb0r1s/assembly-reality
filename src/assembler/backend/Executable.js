@@ -3,6 +3,10 @@ import { Decoder } from "./Decoder";
 import { HexCalculator } from "./HexCalculator";
 
 export const Executable = {
+    halt: assembler => {
+        assembler.isHalted = true;
+    },
+
     move: (assembler, executable, args) => {
         const { first, second } = Decoder.decode(assembler, executable, args);
 
@@ -216,7 +220,7 @@ export const Executable = {
         });
     },
 
-    ret: (assembler, executable, args) => {
+    ret: assembler => {
         // POP the return address from the stack.
         assembler.registers.update("SP", assembler.registers.SP + 2);
         

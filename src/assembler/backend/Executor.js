@@ -2,6 +2,9 @@ import { Executable } from "./Executable";
 
 export const Executor = {
     codes: {
+        // HLT
+        0x00: { instruction: "HLT", type: "", length: 1 },
+
         // MOV
         0x01: { instruction: "MOV", type: "register register", length: 3 },
         0x02: { instruction: "MOV", type: "register memory.register", length: 4 },
@@ -209,6 +212,8 @@ export const Executor = {
         0x80: { instruction: "SHRB", type: "half.register memory.number.*", length: 4 },
         0x81: { instruction: "SHRB", type: "half.register number.*", length: 3 },
     },
+
+    HLT: (...params) => Executable.halt(...params),
 
     MOV: (...params) => Executable.move(...params),
     MOVB: (...params) => Executable.move(...params),

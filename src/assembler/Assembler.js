@@ -13,7 +13,7 @@ export class Assembler {
         this.registers = new Registers();
         this.memory = new Memory();
         this.labels = new Labels();
-        this.halted = false; // End the assembling of the code.
+        this.isHalted = false; // End the executing of the code.
         this.intervalId = null;
     }
     
@@ -105,7 +105,7 @@ export class Assembler {
                 const cell = this.memory.getMatrixCell(row, column);
 
                 try {
-                    this.executeInstruction(cell);
+                    if(!this.isHalted) this.executeInstruction(cell);
                 }
 
                 catch(error) {
@@ -132,11 +132,11 @@ export class Assembler {
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
-    // However, if executed instruction was jump, function call, or function return, we shouldn't move the instruction pointer.
+    // However, if executed instruction was a halt, jump, function call, or function return, we shouldn't move the instruction pointer.
     nextInstruction(executable) {
-        const jumpInstructions = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET"];
+        const blockIP = ["HLT", "JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET"];
 
-        if(jumpInstructions.indexOf(executable.instruction) === -1) {
+        if(blockIP.indexOf(executable.instruction) === -1) {
             const instructionIndex = this.memory.instructions.indexOf(this.registers.IP);
 
             if(instructionIndex === this.memory.instructions.length - 1) this.registers.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
