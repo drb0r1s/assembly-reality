@@ -3,7 +3,7 @@ export const keywords = [
     "CMP", "CMPB", "JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE",
     "PUSH", "PUSHB", "POP", "POPB", "CALL", "RET", "MUL", "MULB", "DIV", "DIVB", "AND", "ANDB",
     "OR", "ORB", "XOR", "XORB", "NOT", "NOTB", "SHL", "SHLB", "SHR", "SHRB", "CLI", "STI",
-    "IRET", "IN", "OUT", "DB", "DW"
+    "IRET", "IN", "OUT", "DB", "DW", "ORG"
 ];
 
 // .sort() is needed here to fix the common issue of matching "keywordB" without considering "B".

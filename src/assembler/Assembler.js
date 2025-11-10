@@ -61,8 +61,13 @@ export class Assembler {
         }
 
         if(statement.type === "Instant") {
-            const lengthOfInstant = statement.isHalf ? 1 : 2;
-            this.memory.advance(lengthOfInstant);
+            // ORG is the special type of instant, we need to rely on the actual implementation of the instant here to get the correct shape.
+            if(statement.name === "ORG") Instants.ORG(this, statement);
+
+            else {
+                const lengthOfInstant = statement.isHalf ? 1 : 2;
+                this.memory.advance(lengthOfInstant);
+            }
         }
     }
 
@@ -81,13 +86,10 @@ export class Assembler {
         }
 
         if(statement.type === "Instant") {
-            let assembledCells = null;
             const instantMethod = Instants[statement.name];
 
-            if(instantMethod) assembledCells = instantMethod(statement);
+            if(instantMethod) instantMethod(this, statement);
             else throw new AssemblerError("UnknownInstant", { name: statement.name }, statement.line);
-
-            if(assembledCells) this.memory.write(assembledCells);
         }
     }
 

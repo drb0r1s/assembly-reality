@@ -92,6 +92,13 @@ export class Memory {
         this.free = { i, j };
     }
 
+    adjustFree(address) {
+        const [row, column] = this.getLocation(address);
+
+        this.free.i = row;
+        this.free.j = column;
+    }
+
     point(address, options) {
         if(options?.isHalf) return ByteNumber.join([0, this.get(address)]);
         

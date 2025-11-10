@@ -49,7 +49,7 @@ class SeparatorNode {
 }
 
 export const AST = {
-    instantKeywords: ["DW", "DB"],
+    instantKeywords: ["DW", "DB", "ORG"],
 
     build: tokens => {
         const programNode = new ProgramNode();
