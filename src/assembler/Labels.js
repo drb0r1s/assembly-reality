@@ -22,7 +22,7 @@ export class Labels {
         const targetTypes = ["label.reference", "memory.label.reference"];
         
         for(const statement of ast.statements) {
-            if(statement.type !== "Instruction") continue;
+            if(["Instruction", "Instant"].indexOf(statement.type) === -1) continue;
 
             for(const operand of statement.operands) {
                 if(targetTypes.indexOf(operand.valueType) > -1) {
