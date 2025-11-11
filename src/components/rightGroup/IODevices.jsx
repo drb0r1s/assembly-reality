@@ -3,17 +3,17 @@ import MiniHeader from "../MiniHeader";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
 import { useManagerValue } from "../../hooks/useManagerValue";
+import { Manager } from "../../Manager";
 import { images } from "../../data/images";
 
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
+    const [display, setDisplay] = useState(new Uint16Array(32));
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
     const [lowerSection, setLowerSection] = useState({ ref: null }); // This state has to contain the elements inside the object, under the ref property, because of the way React is updating ref objects.
     
     const headerRef = useRef(null);
 
     const view = useManagerValue("view");
-
-    const miniDisplayMatrix = Array.from({ length: 2 }, () => Array.from({ length: 16 }, () => ""));
     
     const ioDevicesHeight = useResizeObserver({ elementRef: ioDevicesRef });
     const lowerSectionHeight = useResizeObserver({ elementRef: lowerSection.ref }); // Here we need to take in the consideration a possibility that CPU Registers section can be disabled.
@@ -24,6 +24,16 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         holderRef: rightGroupRef,
         collisionRefs: { next: view.cpuRegisters ? cpuRegistersRef : ioRegistersRef, doubleNext: view.cpuRegisters ? ioRegistersRef : { current: null } }
     });
+
+    useEffect(() => {
+        const unsubscribeDisplayUpdate = Manager.subscribe("displayUpdate", newDislay => setDisplay([...newDislay]));
+        const unsubscribeReset = Manager.subscribe("displayReset", () => setDisplay(new Uint16Array(32)));
+        
+        return () => {
+            unsubscribeDisplayUpdate();
+            unsubscribeReset();
+        };
+    }, []);
 
     useEffect(() => {
         const ref = cpuRegistersRef?.current ? cpuRegistersRef : ioRegistersRef;
@@ -67,18 +77,11 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
                 </div>
 
                 <div className="io-devices-mini-display">
-                    {miniDisplayMatrix.map((row, rowIndex) => {
-                        return <div
-                            key={`row-${rowIndex}`}
-                            className="io-devices-mini-display-row"
-                        >
-                            {row.map((column, columnIndex) => {
-                                return <p
-                                    key={`column-${columnIndex}`}
-                                    className="io-devices-mini-display-column"
-                                >{column}</p>;
-                            })}
-                        </div>;
+                    {[...display].map((element, index) => {
+                        return <p
+                            key={index}
+                            className="io-devices-mini-display-element"
+                        >{element !== 0 ? String.fromCharCode(element) : ""}</p>;
                     })}
                 </div>
 

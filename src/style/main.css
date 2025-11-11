@@ -561,28 +561,22 @@ header .header-title {
 }
 .right-group .right-group-content .io-devices .io-devices-content .io-devices-mini-display {
   width: 256px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
 }
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-mini-display .io-devices-mini-display-row {
+.right-group .right-group-content .io-devices .io-devices-content .io-devices-mini-display .io-devices-mini-display-element {
   height: 20px;
-  width: 100%;
+  width: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  justify-content: space-between;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-mini-display .io-devices-mini-display-row:first-child {
-  border-bottom: 4px solid black;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-mini-display .io-devices-mini-display-row .io-devices-mini-display-column {
-  height: 20px;
-  width: 16px;
+  color: #D4D4D4;
+  font-size: 16px;
+  font-family: SourceCodePro-Regular;
   background-color: #2F3336;
-  border-left: 2px solid black;
+  border-top: 3px solid black;
+  border-left: 3px solid black;
 }
 .right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard {
   width: 256px;

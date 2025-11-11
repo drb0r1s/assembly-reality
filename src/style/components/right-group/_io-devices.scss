@@ -16,7 +16,7 @@
         padding: 10px 0;
         overflow-x: hidden;
         overflow-y: auto;
-        
+
         .io-devices-canvas-holder {
             @include center;
             position: relative;
@@ -40,24 +40,19 @@
 
         .io-devices-mini-display {
             width: 256px;
-            @include center(column);
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
 
-            .io-devices-mini-display-row {
+            .io-devices-mini-display-element {
                 height: 20px;
-                width: 100%;
+                width: 16px;
                 @include center;
-                justify-content: space-between;
-
-                &:first-child {
-                    border-bottom: 4px solid black;
-                }
-
-                .io-devices-mini-display-column {
-                    height: 20px;
-                    width: 16px;
-                    background-color: #2F3336;
-                    border-left: 2px solid black;
-                }
+                color: #D4D4D4;
+                font-size: 16px;
+                font-family: SourceCodePro-Regular;
+                background-color: #2F3336;
+                border-top: 3px solid black;
+                border-left: 3px solid black;
             }
         }
 

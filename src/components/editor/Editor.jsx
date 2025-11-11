@@ -46,6 +46,7 @@ const Editor = () => {
 
                     Manager.trigger("memoryUpdate", { memory: data.memory, registers: { IP: data.registers.IP, SP: data.registers.SP } });
                     Manager.trigger("registerUpdate", data.registers);
+                    Manager.trigger("displayUpdate", data.memory.matrix.slice(-32));
 
                     break;
                 case "reset":
@@ -53,6 +54,7 @@ const Editor = () => {
                     
                     Manager.trigger("memoryReset");
                     Manager.trigger("registerReset");
+                    Manager.trigger("displayReset");
 
                     break;
             }
