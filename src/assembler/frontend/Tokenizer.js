@@ -5,8 +5,8 @@ export const Tokenizer = {
     // Patterns are ordered from the highest to the lowest priority.
     patterns: {
         comment: /\/\/.*$|;.*$/g,
-        "string.double": /\"([^"\\]|\\.)*\"/g,
-        "string.single": /\'([^'\\]|\\.)*\'/g,
+        "string.double": /(?<=\")([^"\\]|\\.)*(?=\")/g,
+        "string.single": /(?<=\')([^'\\]|\\.)*(?=\')/g,
         "memory.number.hex": /(?<=\s\[0x)([0-9A-Fa-f]+)(?=\](\s|,|$))/g,
         "memory.number.decimal": /(?<=\s\[)([0-9]+)(?=\](\s|,|$))/g,
         "memory.half.register": new RegExp(`(?<=\\[)(${rootHalfRegistersExpression})(?=\\](\\s|,|$))`, "g"),
