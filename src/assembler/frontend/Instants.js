@@ -15,12 +15,22 @@ export const Instants = {
             result = ByteNumber.divide(intValue);
         }
 
-        if(operand.valueType === "number.hex") {
+        else if(operand.valueType === "number.hex") {
             const intValue = parseInt(operand.value, 16);
             if(intValue > maxValue) throw new AssemblerError("HexLimit16", {}, instant.line);
             
             result = ByteNumber.divide(intValue);
         }
+
+        else if(operand.valueType === "string.double" || operand.valueType === "string.single") {
+            const characters = operand.value.split("");
+
+            result = [];
+            // Since we know that string characters are always less than 0xFF, we can simply add one additional 8-bit value of 0, to fill out 2 8-bit cells, which is required for this instant.
+            characters.map(character => { result.push(0, character.charCodeAt(0)) });
+        }
+
+        else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
         assembler.memory.write(result);
     },
@@ -38,12 +48,19 @@ export const Instants = {
             result = [intValue];
         }
 
-        if(operand.valueType === "number.hex") {
+        else if(operand.valueType === "number.hex") {
             const intValue = parseInt(operand.value, 16);
             if(intValue > maxValue) throw new AssemblerError("HexLimit8", {}, instant.line);
             
             result = [intValue];
         }
+
+        else if(operand.valueType === "string.double" || operand.valueType === "string.single") {
+            const characters = operand.value.split("");
+            result = characters.map(character => character.charCodeAt(0));
+        }
+
+        else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
         assembler.memory.write(result);
     },
@@ -61,12 +78,14 @@ export const Instants = {
             result = intValue;
         }
 
-        if(operand.valueType === "number.hex") {
+        else if(operand.valueType === "number.hex") {
             const intValue = parseInt(operand.value, 16);
             if(intValue > maxValue) throw new AssemblerError("HexMemoryLimit", {}, instant.line);
         
             result = intValue;
         }
+
+        else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
         assembler.memory.adjustFree(result);
     }
