@@ -65,7 +65,14 @@ export class Assembler {
             if(statement.name === "ORG") Instants.ORG(this, statement);
 
             else {
-                const lengthOfInstant = statement.isHalf ? 1 : 2;
+                const operand = statement.operands[0];
+                let lengthOfInstant = 0;
+
+                // In case we need to write strings in memory, we need to get the length of the string.
+                // However, if we want to use 16-bit value for each character (DW), then the shape of the instant in memory is going to be twice the length of the string.
+                if(["string.double", "string.single"].indexOf(operand.valueType) > -1) lengthOfInstant = statement.name === "DW" ? 2 * operand.value.length : operand.value.length;
+                else lengthOfInstant = statement.isHalf ? 1 : 2;
+
                 this.memory.advance(lengthOfInstant);
             }
         }
