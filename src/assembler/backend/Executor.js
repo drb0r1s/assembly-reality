@@ -211,6 +211,18 @@ export const Executor = {
         0x7F: { instruction: "SHRB", type: "half.register memory.register", length: 4 },
         0x80: { instruction: "SHRB", type: "half.register memory.number.*", length: 4 },
         0x81: { instruction: "SHRB", type: "half.register number.*", length: 3 },
+
+        // IN
+        0x87: { instruction: "IN", type: "register", length: 2 },
+        0x88: { instruction: "IN", type: "memory.register", length: 3 },
+        0x89: { instruction: "IN", type: "memory.number.*", length: 3 },
+        0x8A: { instruction: "IN", type: "number.*", length: 3 },
+
+        // OUT
+        0x8B: { instruction: "OUT", type: "register", length: 2 },
+        0x8C: { instruction: "OUT", type: "memory.register", length: 3 },
+        0x8D: { instruction: "OUT", type: "memory.number.*", length: 3 },
+        0x8E: { instruction: "OUT", type: "number.*", length: 3 },
     },
 
     HLT: (...params) => Executable.halt(...params),
@@ -276,5 +288,9 @@ export const Executor = {
     SHLB: (...params) => Executable.bitwise(...params),
 
     SHR: (...params) => Executable.bitwise(...params),
-    SHRB: (...params) => Executable.bitwise(...params)
+    SHRB: (...params) => Executable.bitwise(...params),
+
+    IN: (...params) => Executable.in(...params),
+
+    OUT: (...params) => Executable.out(...params),
 };

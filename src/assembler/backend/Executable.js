@@ -226,6 +226,14 @@ export const Executable = {
         
         const popped = assembler.memory.point(assembler.registers.SP, { isStack: true });
         assembler.registers.update("IP", popped);
+    },
+
+    in: (assembler, executable, args) => {
+
+    },
+
+    out: (assembler, executable, args) => {
+
     }
 };
 
