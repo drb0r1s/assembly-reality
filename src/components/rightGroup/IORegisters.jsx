@@ -37,10 +37,12 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
 
     useEffect(() => {
         const unsubscribeIORegisterUpdate = Manager.subscribe("ioRegisterUpdate", newIORegisters => setIORegisters({...newIORegisters}));
+        const unsubscribeIOKeyboardUpdate = Manager.subscribe("ioKeyboardUpdate", newIORegisters => setIORegisters(prevIORegisters => { return {...prevIORegisters, ...newIORegisters} }));
         const unsubscribeReset = Manager.subscribe("ioRegisterReset", () => setIORegisters(initialIORegisters));
 
         return () => {
             unsubscribeIORegisterUpdate();
+            unsubscribeIOKeyboardUpdate();
             unsubscribeReset();
         };
     }, []);

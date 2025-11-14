@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import MiniHeader from "../MiniHeader";
+import { GlobalContext } from "../../context/GlobalContext";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
 import { useManagerValue } from "../../hooks/useManagerValue";
@@ -7,6 +8,8 @@ import { Manager } from "../../Manager";
 import { images } from "../../data/images";
 
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
+    const { assembler } = useContext(GlobalContext);
+    
     const [display, setDisplay] = useState(new Uint16Array(32));
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
     const [lowerSection, setLowerSection] = useState({ ref: null }); // This state has to contain the elements inside the object, under the ref property, because of the way React is updating ref objects.
@@ -42,10 +45,27 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     
     useEffect(() => {
         const handleKeydown = e => {
+            if(e.repeat) return;
+
+            const character = e.key.charCodeAt(0);
+
+            assembler.ioRegisters.keydown(character);
+
+            Manager.trigger("ioKeyboardUpdate", {
+                KBDSTATUS: assembler.ioRegisters.KBDSTATUS,
+                KBDDATA: character
+            });
+
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
         }
 
         const handleKeyup = () => {
+            assembler.ioRegisters.keyup();
+
+            Manager.trigger("ioKeyboardUpdate", {
+                KBDSTATUS: assembler.ioRegisters.KBDSTATUS
+            });
+
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
         }
 
