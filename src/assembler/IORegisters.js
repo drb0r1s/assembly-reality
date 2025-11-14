@@ -49,6 +49,15 @@ export class IORegisters {
         return addressRegister[index];
     }
 
+    getValue(register) {
+        return this[register];
+    }
+
+    getValueByIndex(index) {
+        const register = this.get(index);
+        return this.getValue(register);
+    }
+
     update(register, value) {
         if(readOnly[register]) throw new AssemblerError("ReadOnlyRegisterUpdate", { register });
         this[register] = value & 0xFFFF; // We want to keep our register 16-bit.

@@ -229,7 +229,29 @@ export const Executable = {
     },
 
     in: (assembler, executable, args) => {
+        const { first } = Decoder.decode(assembler, executable, args);
 
+        Decoder.run(executable, {
+            "register": () => {
+                const ioRegisterValue = assembler.ioRegisters.getValueByIndex(first.registerValue);
+                assembler.cpuRegisters.update("A", ioRegisterValue);
+            },
+
+            "memory.register": () => {
+                const ioRegisterValue = assembler.ioRegisters.getValueByIndex(first.memoryPoint);
+                assembler.cpuRegisters.update("A", ioRegisterValue);
+            },
+
+            "memory.number.*": () => {
+                const ioRegisterValue = assembler.ioRegisters.getValueByIndex(first.memoryPoint);
+                assembler.cpuRegisters.update("A", ioRegisterValue);
+            },
+
+            "number.*": () => {
+                const ioRegisterValue = assembler.ioRegisters.getValueByIndex(first.value);
+                assembler.cpuRegisters.update("A", ioRegisterValue);
+            }
+        });
     },
 
     out: (assembler, executable, args) => {
