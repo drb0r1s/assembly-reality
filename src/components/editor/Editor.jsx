@@ -36,16 +36,16 @@ const Editor = () => {
                 case "assemble":
                     assembler.memory.copy(data);
 
-                    Manager.trigger("memoryUpdate", { memory: data.memory, registers: { IP: data.registers.IP, SP: data.registers.SP } });
-                    Manager.trigger("registerUpdate", data.registers);
+                    Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: { IP: data.cpuRegisters.IP, SP: data.cpuRegisters.SP } });
+                    Manager.trigger("registerUpdate", data.cpuRegisters);
 
                     break;
                 case "run":
                 case "instructionExecuted":
                     assembler.copy(data);
 
-                    Manager.trigger("memoryUpdate", { memory: data.memory, registers: { IP: data.registers.IP, SP: data.registers.SP } });
-                    Manager.trigger("registerUpdate", data.registers);
+                    Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: { IP: data.cpuRegisters.IP, SP: data.cpuRegisters.SP } });
+                    Manager.trigger("registerUpdate", data.cpuRegisters);
                     Manager.trigger("displayUpdate", data.memory.matrix.slice(-32));
 
                     break;

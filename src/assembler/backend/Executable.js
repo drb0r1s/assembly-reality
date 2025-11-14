@@ -17,12 +17,12 @@ export const Executable = {
         if(first?.register === "SP") updateStackStart(assembler, executable, second);
         
         Decoder.run(executable, {
-            [`${registerType} ${registerType}`]: () => assembler.registers.update(first.register, second.registerValue),
-            [`${registerType} memory.register`]: () => assembler.registers.update(first.register, second.memoryPoint),
-            [`${registerType} memory.number.*`]: () => assembler.registers.update(first.register, second.memoryPoint),
+            [`${registerType} ${registerType}`]: () => assembler.cpuRegisters.update(first.register, second.registerValue),
+            [`${registerType} memory.register`]: () => assembler.cpuRegisters.update(first.register, second.memoryPoint),
+            [`${registerType} memory.number.*`]: () => assembler.cpuRegisters.update(first.register, second.memoryPoint),
             [`memory.register ${registerType}`]: () => assembler.memory.rewrite(first.registerValue, second.registerValue, { isHalf }),
             [`memory.number.* ${registerType}`]: () => assembler.memory.rewrite(first.value, second.registerValue, { isHalf }),
-            [`${registerType} number.*`]: () => assembler.registers.update(first.register, second.value),
+            [`${registerType} number.*`]: () => assembler.cpuRegisters.update(first.register, second.value),
             "memory.register number.*": () => assembler.memory.rewrite(first.registerValue, second.value, { isHalf }),
             "memory.number.* number.*": () => assembler.memory.rewrite(first.value, second.value, { isHalf })
         });
@@ -42,43 +42,43 @@ export const Executable = {
             // ONE OPERAND
             [registerType]: () => {
                 const operation = HexCalculator[instruction](first.registerValue, usedRegister.registerValue, { isHalf });
-                assembler.registers.update(usedRegister.register, operation);
+                assembler.cpuRegisters.update(usedRegister.register, operation);
             },
 
             "memory.register": () => {
                 const operation = HexCalculator[instruction](first.memoryPoint, usedRegister.registerValue, { isHalf });
-                assembler.registers.update(usedRegister.register, operation);
+                assembler.cpuRegisters.update(usedRegister.register, operation);
             },
 
             "memory.number.*": () => {
                 const operation = HexCalculator[instruction](first.memoryPoint, usedRegister.registerValue, { isHalf });
-                assembler.registers.update(usedRegister.register, operation);
+                assembler.cpuRegisters.update(usedRegister.register, operation);
             },
 
             "number.*": () => {
                 const operation = HexCalculator[instruction](first.value, usedRegister.registerValue, { isHalf });
-                assembler.registers.update(usedRegister.register, operation);
+                assembler.cpuRegisters.update(usedRegister.register, operation);
             },
             
             // TWO OPERANDS
             [`${registerType} ${registerType}`]: () => {
                 const operation = HexCalculator[instruction](first.registerValue, second.registerValue, { isHalf });
-                assembler.registers.update(first.register, operation);
+                assembler.cpuRegisters.update(first.register, operation);
             },
         
             [`${registerType} memory.register`]: () => {
                 const operation = HexCalculator[instruction](first.registerValue, second.memoryPoint, { isHalf });
-                assembler.registers.update(first.register, operation);
+                assembler.cpuRegisters.update(first.register, operation);
             },
         
             [`${registerType} memory.number.*`]: () => {
                 const operation = HexCalculator[instruction](first.registerValue, second.memoryPoint, { isHalf });
-                assembler.registers.update(first.register, operation);
+                assembler.cpuRegisters.update(first.register, operation);
             },
         
             [`${registerType} number.*`]: () => {
                 const operation = HexCalculator[instruction](first.registerValue, second.value, { isHalf });
-                assembler.registers.update(first.register, operation);
+                assembler.cpuRegisters.update(first.register, operation);
             }
         });
     },
@@ -92,22 +92,22 @@ export const Executable = {
         Decoder.run(executable, {
             [`${registerType} ${registerType}`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.registerValue);
-                assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
+                assembler.cpuRegisters.update("SR", {...assembler.cpuRegisters.SR, ...flags});
             },
 
             [`${registerType} memory.register`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
-                assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
+                assembler.cpuRegisters.update("SR", {...assembler.cpuRegisters.SR, ...flags});
             },
 
             [`${registerType} memory.number.*`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
-                assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
+                assembler.cpuRegisters.update("SR", {...assembler.cpuRegisters.SR, ...flags});
             },
 
             [`${registerType} number.*`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.value);
-                assembler.registers.update("SR", {...assembler.registers.SR, ...flags});
+                assembler.cpuRegisters.update("SR", {...assembler.cpuRegisters.SR, ...flags});
             }
         });
     },
@@ -117,32 +117,32 @@ export const Executable = {
 
         switch(executable.instruction) {
             case "JC":
-                if(assembler.registers.SR.C === 0) return;
+                if(assembler.cpuRegisters.SR.C === 0) return;
                 break;
             case "JNC":
-                if(assembler.registers.SR.C === 1) return;
+                if(assembler.cpuRegisters.SR.C === 1) return;
                 break;
             case "JZ":
-                if(assembler.registers.SR.Z === 0) return;
+                if(assembler.cpuRegisters.SR.Z === 0) return;
                 break;
             case "JNZ":
-                if(assembler.registers.SR.Z === 1) return;
+                if(assembler.cpuRegisters.SR.Z === 1) return;
                 break;
             case "JA":
-                if(assembler.registers.SR.C !== 0 || assembler.registers.SR.Z !== 0) return;
+                if(assembler.cpuRegisters.SR.C !== 0 || assembler.cpuRegisters.SR.Z !== 0) return;
                 break;
             case "JNA":
-                if(assembler.registers.SR.C !== 1 && assembler.registers.SR.Z !== 1) return;
+                if(assembler.cpuRegisters.SR.C !== 1 && assembler.cpuRegisters.SR.Z !== 1) return;
                 break;
         }
 
         Decoder.run(executable, {
             "memory.register": () => {
-                assembler.registers.update("IP", first.memoryPoint);
+                assembler.cpuRegisters.update("IP", first.memoryPoint);
             },
 
             "number.*": () => {
-                assembler.registers.update("IP", first.value);
+                assembler.cpuRegisters.update("IP", first.value);
             }
         });
     },
@@ -155,17 +155,17 @@ export const Executable = {
 
         Decoder.run(executable, {
             [registerType]: () => {
-                assembler.memory.rewrite(assembler.registers.SP, first.registerValue, { isHalf, isStack: true });
+                assembler.memory.rewrite(assembler.cpuRegisters.SP, first.registerValue, { isHalf, isStack: true });
 
                 const numberOfCells = isHalf ? 1 : 2;
-                assembler.registers.update("SP", assembler.registers.SP - numberOfCells);
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP - numberOfCells);
             },
 
             "number.*": () => {
-                assembler.memory.rewrite(assembler.registers.SP, first.value, { isHalf, isStack: true });
+                assembler.memory.rewrite(assembler.cpuRegisters.SP, first.value, { isHalf, isStack: true });
 
                 const numberOfCells = isHalf ? 1 : 2;
-                assembler.registers.update("SP", assembler.registers.SP - numberOfCells);
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP - numberOfCells);
             }
         });
     },
@@ -180,12 +180,12 @@ export const Executable = {
             [registerType]: () => {
                 const numberOfCells = isHalf ? 1 : 2;
 
-                if(assembler.registers.SP + numberOfCells > assembler.memory.stackStart) throw new AssemblerError("StackUnderflow");
+                if(assembler.cpuRegisters.SP + numberOfCells > assembler.memory.stackStart) throw new AssemblerError("StackUnderflow");
 
-                assembler.registers.update("SP", assembler.registers.SP + numberOfCells);
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP + numberOfCells);
 
-                const popped = assembler.memory.point(assembler.registers.SP, { isHalf, isStack: true });
-                assembler.registers.update(first.register, popped);
+                const popped = assembler.memory.point(assembler.cpuRegisters.SP, { isHalf, isStack: true });
+                assembler.cpuRegisters.update(first.register, popped);
             }
         });
     },
@@ -197,35 +197,35 @@ export const Executable = {
             "memory.register": () => {
                 // IMPORTANT: Here we set the current (return) address as the next address that should be executed, after the RET instruction.
                 // If we didn't specify that we want to return to the next address, we would ran into an infinite loop, as function would keep calling itself.
-                const currentAddress = assembler.registers.IP + 3;
+                const currentAddress = assembler.cpuRegisters.IP + 3;
 
-                assembler.registers.update("IP", first.memoryPoint);
+                assembler.cpuRegisters.update("IP", first.memoryPoint);
 
                 // PUSH return address to the stack.
-                assembler.memory.rewrite(assembler.registers.SP, currentAddress, { isStack: true });
-                assembler.registers.update("SP", assembler.registers.SP - 2);
+                assembler.memory.rewrite(assembler.cpuRegisters.SP, currentAddress, { isStack: true });
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP - 2);
             },
 
             "number.*": () => {
                 // IMPORTANT: Here we set the current (return) address as the next address that should be executed, after the RET instruction.
                 // If we didn't specify that we want to return to the next address, we would ran into an infinite loop, as function would keep calling itself.
-                const currentAddress = assembler.registers.IP + 3;
+                const currentAddress = assembler.cpuRegisters.IP + 3;
 
-                assembler.registers.update("IP", first.value);
+                assembler.cpuRegisters.update("IP", first.value);
 
                 // PUSH return address to the stack.
-                assembler.memory.rewrite(assembler.registers.SP, currentAddress, { isStack: true });
-                assembler.registers.update("SP", assembler.registers.SP - 2);
+                assembler.memory.rewrite(assembler.cpuRegisters.SP, currentAddress, { isStack: true });
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP - 2);
             }
         });
     },
 
     ret: assembler => {
         // POP the return address from the stack.
-        assembler.registers.update("SP", assembler.registers.SP + 2);
+        assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP + 2);
         
-        const popped = assembler.memory.point(assembler.registers.SP, { isStack: true });
-        assembler.registers.update("IP", popped);
+        const popped = assembler.memory.point(assembler.cpuRegisters.SP, { isStack: true });
+        assembler.cpuRegisters.update("IP", popped);
     },
 
     in: (assembler, executable, args) => {
@@ -259,7 +259,7 @@ function getUsedRegister(assembler, instruction, isHalf, register) {
 
     else usedRegister.register = register;
 
-    usedRegister.registerValue = assembler.registers.getValue(usedRegister.register);
+    usedRegister.registerValue = assembler.cpuRegisters.getValue(usedRegister.register);
 
     return usedRegister;
 }
@@ -281,5 +281,5 @@ function updateStackStart(assembler, executable, second) {
             break;
     }
 
-    if(value > assembler.registers.SP) assembler.memory.stackStart = value;
+    if(value > assembler.cpuRegisters.SP) assembler.memory.stackStart = value;
 }

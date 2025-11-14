@@ -1,5 +1,5 @@
 import { AssemblerError } from "../AssemblerError";
-import { Registers } from "../Registers";
+import { CPURegisters } from "../CPURegisters";
 import { ByteNumber } from "../ByteNumber";
 
 export const Encoder = {
@@ -40,13 +40,13 @@ function parseType(instruction, operand) {
         bits: instruction.isHalf ? 8 : 16
     };
 
-    const registers = new Registers();
+    const cpuRegisters = new CPURegisters();
     
     switch(operand.valueType) {
-        case "register": return [registers.getIndex(operand.value)];
-        case "half.register": return [registers.getIndex(operand.value)];
-        case "memory.register": return [0, registers.getIndex(operand.value)];
-        case "memory.half.register": return [registers.getIndex(operand.value)];
+        case "register": return [cpuRegisters.getIndex(operand.value)];
+        case "half.register": return [cpuRegisters.getIndex(operand.value)];
+        case "memory.register": return [0, cpuRegisters.getIndex(operand.value)];
+        case "memory.half.register": return [cpuRegisters.getIndex(operand.value)];
         case "memory.number.hex":
             const intMemoryHexValue = parseInt(operand.value, 16);
             if(intMemoryHexValue > data.maxMemoryValue) throw new AssemblerError("HexMemoryLimit", {}, instruction.line);

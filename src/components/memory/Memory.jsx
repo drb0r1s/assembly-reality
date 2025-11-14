@@ -13,7 +13,7 @@ const Memory = () => {
     };
     
     const [memory, setMemory] = useState(initialMemory);
-    const [registerPointers, setRegisterPointers] = useState({ IP: assembler.registers.IP, SP: assembler.registers.SP });
+    const [registerPointers, setRegisterPointers] = useState({ IP: assembler.cpuRegisters.IP, SP: assembler.cpuRegisters.SP });
 
     const [isSplitActive, setIsSplitActive] = useState(false);
     
@@ -25,7 +25,7 @@ const Memory = () => {
                 stackStart: data.memory.stackStart
             });
 
-            if(data?.registers) setRegisterPointers({ IP: data.registers.IP, SP: data.registers.SP });
+            if(data?.cpuRegisters) setRegisterPointers({ IP: data.cpuRegisters.IP, SP: data.cpuRegisters.SP });
         });
 
         const unsubscribeReset = Manager.subscribe("memoryReset", () => {

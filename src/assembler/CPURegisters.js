@@ -36,7 +36,7 @@ const indexRegister = {
     14: "DL"
 };
 
-export class Registers {
+export class CPURegisters {
     constructor() {
         this.A = 0x0000;
         this.B = 0x0000;
@@ -88,16 +88,16 @@ export class Registers {
         else this[register] = value & 0xFFFF; // We want to keep our register 16-bit.
     }
 
-    copy(registers) {
-        this.A = registers.A;
-        this.B = registers.B;
-        this.C = registers.C;
-        this.D = registers.D;
+    copy(cpuRegisters) {
+        this.A = cpuRegisters.A;
+        this.B = cpuRegisters.B;
+        this.C = cpuRegisters.C;
+        this.D = cpuRegisters.D;
 
-        this.IP = registers.IP;
-        this.SP = registers.SP;
+        this.IP = cpuRegisters.IP;
+        this.SP = cpuRegisters.SP;
         
-        this.SR = registers.SR;
+        this.SR = cpuRegisters.SR;
     }
 
     reset() {

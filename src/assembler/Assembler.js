@@ -1,5 +1,5 @@
 import { AssemblerError } from "./AssemblerError";
-import { Registers } from "./Registers";
+import { CPURegisters } from "./CPURegisters";
 import { Memory } from "./Memory";
 import { Labels } from "./Labels";
 import { Tokenizer } from "./frontend/Tokenizer";
@@ -10,7 +10,7 @@ import { Executor } from "./backend/Executor";
 
 export class Assembler {
     constructor() {
-        this.registers = new Registers();
+        this.cpuRegisters = new CPURegisters();
         this.memory = new Memory();
         this.labels = new Labels();
         this.isHalted = false; // End the executing of the code.
@@ -37,7 +37,7 @@ export class Assembler {
             // Pass 2
             for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
         
-            this.registers.update("IP", this.memory.instructions[0]);
+            this.cpuRegisters.update("IP", this.memory.instructions[0]);
 
             console.log(ast, this.labels);
         }
@@ -103,14 +103,14 @@ export class Assembler {
     execute(speed) {
         return new Promise((resolve, reject) => {
             this.setAssemblerInterval(() => {
-                if(this.memory.instructions.indexOf(this.registers.IP) === -1) {
+                if(this.memory.instructions.indexOf(this.cpuRegisters.IP) === -1) {
                     clearInterval(this.intervalId);
                     resolve(this);
 
                     return;
                 }
 
-                const [row, column] = this.memory.getLocation(this.registers.IP);
+                const [row, column] = this.memory.getLocation(this.cpuRegisters.IP);
                 const cell = this.memory.getMatrixCell(row, column);
 
                 try {
@@ -130,7 +130,7 @@ export class Assembler {
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
         const args = this.collectArgs(executable.length);
-        const oldAddress = this.registers.IP;
+        const oldAddress = this.cpuRegisters.IP;
 
         Executor[executable.instruction](this, executable, args);
 
@@ -149,19 +149,19 @@ export class Assembler {
 
         if(
             executable.instruction === "HLT" ||
-            (jumpInstructions.indexOf(executable.instruction) > -1 && this.registers.IP !== oldAddress)
+            (jumpInstructions.indexOf(executable.instruction) > -1 && this.cpuRegisters.IP !== oldAddress)
         ) return;
 
-        const instructionIndex = this.memory.instructions.indexOf(this.registers.IP);
+        const instructionIndex = this.memory.instructions.indexOf(this.cpuRegisters.IP);
 
-        if(instructionIndex === this.memory.instructions.length - 1) this.registers.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
-        else this.registers.update("IP", this.memory.instructions[instructionIndex + 1]);
+        if(instructionIndex === this.memory.instructions.length - 1) this.cpuRegisters.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
+        else this.cpuRegisters.update("IP", this.memory.instructions[instructionIndex + 1]);
     }
 
     collectArgs(length) {
         const args = [];
         
-        let [row, column] = this.memory.getLocation(this.registers.IP);
+        let [row, column] = this.memory.getLocation(this.cpuRegisters.IP);
         
         for(let i = 0; i < length; i++) {
             args.push(this.memory.getMatrixCell(row, column));
@@ -207,14 +207,14 @@ export class Assembler {
     }
 
     copy(assembler) {
-        this.registers.copy(assembler.registers);
+        this.cpuRegisters.copy(assembler.cpuRegisters);
         this.memory.copy(assembler.memory);
         this.labels.copy(assembler.labels);
         this.isHalted = assembler.isHalted;
     }
 
     reset() {
-        this.registers.reset();
+        this.cpuRegisters.reset();
         this.memory.reset();
         this.labels.reset();
         this.isHalted = false;

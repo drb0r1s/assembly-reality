@@ -23,17 +23,17 @@ export const Decoder = {
                 case "half.register":
                     decoded[prop] = {
                         ...decoded[prop],
-                        register: assembler.registers.get(decoded[prop].value),
-                        registerValue: assembler.registers.getValueByIndex(decoded[prop].value)
+                        register: assembler.cpuRegisters.get(decoded[prop].value),
+                        registerValue: assembler.cpuRegisters.getValueByIndex(decoded[prop].value)
                     };
 
                     break;
                 case "memory.register":
-                    const registerValue = assembler.registers.getValueByIndex(decoded[prop].value);
+                    const registerValue = assembler.cpuRegisters.getValueByIndex(decoded[prop].value);
 
                     decoded[prop] = {
                         ...decoded[prop],
-                        register: assembler.registers.get(decoded[prop].value),
+                        register: assembler.cpuRegisters.get(decoded[prop].value),
                         registerValue,
                         memoryPoint: assembler.memory.point(registerValue, { isHalf })
                     };
