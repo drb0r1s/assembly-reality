@@ -1,5 +1,6 @@
 import { AssemblerError } from "./AssemblerError";
 import { CPURegisters } from "./CPURegisters";
+import { IORegisters } from "./IORegisters";
 import { Memory } from "./Memory";
 import { Labels } from "./Labels";
 import { Tokenizer } from "./frontend/Tokenizer";
@@ -11,6 +12,7 @@ import { Executor } from "./backend/Executor";
 export class Assembler {
     constructor() {
         this.cpuRegisters = new CPURegisters();
+        this.ioRegisters = new IORegisters();
         this.memory = new Memory();
         this.labels = new Labels();
         this.isHalted = false; // End the executing of the code.
@@ -208,6 +210,7 @@ export class Assembler {
 
     copy(assembler) {
         this.cpuRegisters.copy(assembler.cpuRegisters);
+        this.ioRegisters.copy(assembler.ioRegisters);
         this.memory.copy(assembler.memory);
         this.labels.copy(assembler.labels);
         this.isHalted = assembler.isHalted;
@@ -215,6 +218,7 @@ export class Assembler {
 
     reset() {
         this.cpuRegisters.reset();
+        this.ioRegisters.reset();
         this.memory.reset();
         this.labels.reset();
         this.isHalted = false;

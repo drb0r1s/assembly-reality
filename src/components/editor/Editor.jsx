@@ -37,7 +37,7 @@ const Editor = () => {
                     assembler.memory.copy(data);
 
                     Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: { IP: data.cpuRegisters.IP, SP: data.cpuRegisters.SP } });
-                    Manager.trigger("registerUpdate", data.cpuRegisters);
+                    Manager.trigger("cpuRegisterUpdate", data.cpuRegisters);
 
                     break;
                 case "run":
@@ -45,16 +45,18 @@ const Editor = () => {
                     assembler.copy(data);
 
                     Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: { IP: data.cpuRegisters.IP, SP: data.cpuRegisters.SP } });
-                    Manager.trigger("registerUpdate", data.cpuRegisters);
+                    Manager.trigger("cpuRegisterUpdate", data.cpuRegisters);
                     Manager.trigger("displayUpdate", data.memory.matrix.slice(-32));
+                    Manager.trigger("ioRegisterUpdate", data.ioRegisters);
 
                     break;
                 case "reset":
                     assembler.copy(data);
                     
                     Manager.trigger("memoryReset");
-                    Manager.trigger("registerReset");
+                    Manager.trigger("cpuRegisterReset");
                     Manager.trigger("displayReset");
+                    Manager.trigger("ioRegisterReset");
 
                     break;
             }

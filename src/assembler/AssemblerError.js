@@ -35,6 +35,9 @@ export class AssemblerError {
             case "StackUnderflow":
                 this.isRuntime = true;
                 return "The stack is empty!";
+            case "ReadOnlyRegisterUpdate":
+                this.isRuntime = true;
+                return `${attributes.register} is a read-only register, it cannot be updated!`;
             case "OutOfMemory": return "Memory limit exceeded!";
             case "DivisionByZero":
                 this.isRuntime = true;
