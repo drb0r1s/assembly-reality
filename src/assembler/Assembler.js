@@ -115,6 +115,8 @@ export class Assembler {
 
     execute(speed) {
         return new Promise((resolve, reject) => {
+            let instructionCounter = 0;
+
             this.setAssemblerInterval(() => {
                 if(this.memory.instructions.indexOf(this.cpuRegisters.IP) === -1) {
                     clearInterval(this.intervalId);
@@ -127,7 +129,7 @@ export class Assembler {
                 const cell = this.memory.getMatrixCell(row, column);
 
                 try {
-                    if(!this.isHalted) this.executeInstruction(cell);
+                    if(!this.isHalted) this.executeInstruction(cell, speed, instructionCounter);
                 }
 
                 catch(error) {
@@ -138,7 +140,7 @@ export class Assembler {
         });
     }
 
-    executeInstruction(cell) {
+    executeInstruction(cell, speed, instructionCounter) {
         const executable = Executor.codes[cell];
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
@@ -149,7 +151,10 @@ export class Assembler {
 
         this.nextInstruction(executable, oldAddress);
 
-        self.postMessage({
+        const isHighSpeed = speed > 1000;
+        const updatePerInstructions = speed / 1000 > 1 ? speed / 1000 : 1;
+
+        if(instructionCounter % updatePerInstructions === 0 || !isHighSpeed) self.postMessage({
             action: "instructionExecuted",
             data: {
                 cpuRegisters: this.cpuRegisters,
@@ -199,7 +204,7 @@ export class Assembler {
         return args;
     }
 
-    setAssemblerInterval(callback, speed) {
+    setAssemblerInterval(callback, speed, instructionCounter = 0) {
         const delay = 1000 / speed; // ms per instruction
 
         // High speeds (> 1kHz) require < 1ms per instruction, which is not possible in browser.
@@ -225,6 +230,9 @@ export class Assembler {
             
             this.intervalId = setInterval(callback, delay);
         }
+
+        instructionCounter++;
+        return instructionCounter;
     }
 
     // For now, it seems that the only reasonable property to copy (for the Assembler on the main thread) is ioRegisters.
