@@ -10,7 +10,7 @@ import { images } from "../../data/images";
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const { assembler } = useContext(GlobalContext);
     
-    const [memoryVersion, setMemoryVersion] = useState(0);
+    const [_, setMemoryVersion] = useState(0);
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
     const [lowerSection, setLowerSection] = useState({ ref: null }); // This state has to contain the elements inside the object, under the ref property, because of the way React is updating ref objects.
     
