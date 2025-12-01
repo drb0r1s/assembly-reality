@@ -1,11 +1,17 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { GlobalContext } from "./GlobalContext";
 import { useWorker } from "../hooks/useWorker";
 import { Assembler } from "../assembler/Assembler";
 
 const ContextWrapper = ({ children }) => {
-    const assembler = useRef(new Assembler()).current;
+    const memoryBuffer = new SharedArrayBuffer(258 * 16);
+
+    const assembler = useRef(new Assembler(memoryBuffer)).current;
     const assemblerWorker = useWorker();
+
+    useEffect(() => {
+        if(assemblerWorker) assemblerWorker.postMessage({ action: "memoryInitialization", payload: memoryBuffer });
+    }, [assemblerWorker]);
 
     return(
         <GlobalContext.Provider value={{ assembler, assemblerWorker }}>

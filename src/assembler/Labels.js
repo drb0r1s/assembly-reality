@@ -40,10 +40,6 @@ export class Labels {
         return ast;
     }
 
-    copy(labels) {
-        this.collection = labels.collection;
-    }
-
     reset() {
         this.collection = {};
     }

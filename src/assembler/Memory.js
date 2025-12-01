@@ -2,8 +2,8 @@ import { AssemblerError } from "./AssemblerError";
 import { ByteNumber } from "./ByteNumber";
 
 export class Memory {
-    constructor() {
-        this.matrix = new Uint8Array(258 * 16),
+    constructor(memoryBuffer) {
+        this.matrix = new Uint8Array(memoryBuffer),
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
         this.instructions = []; // An array of instruction addresses in memory.
         this.stackStart = 0; // The address of the start of the stack.
@@ -112,13 +112,8 @@ export class Memory {
         this.instructions.push(this.getAddress(this.free.i, this.free.j));
     }
 
-    copy(memory) {
-        this.matrix = memory.matrix;
-        this.free = memory.free;
-    }
-
     reset() {
-        this.matrix = new Uint8Array(258 * 16);
+        this.matrix.fill(0);
         this.free = { i: 0, j: 0 };
         this.instructions = [];
         this.stackStart = 0;

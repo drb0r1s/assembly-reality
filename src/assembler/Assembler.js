@@ -10,10 +10,11 @@ import { Instants } from "./frontend/Instants";
 import { Executor } from "./backend/Executor";
 
 export class Assembler {
-    constructor() {
+    constructor(memoryBuffer) {
         this.cpuRegisters = new CPURegisters();
         this.ioRegisters = new IORegisters();
-        this.memory = new Memory();
+        this.memory = new Memory(memoryBuffer);
+        this.memoryBuffer = memoryBuffer;
         this.labels = new Labels();
         this.isHalted = false; // End the executing of the code.
         this.intervalId = null;
@@ -49,7 +50,17 @@ export class Assembler {
             else console.error(error);
         }
 
-        return this;
+        return {
+            memory: {
+                instructions: this.memory.instructions,
+                stackStart: this.memory.stackStart
+            },
+
+            cpuRegisters: {
+                IP: this.cpuRegisters.IP,
+                SP: this.cpuRegisters.SP
+            }
+        };
     }
 
     observeStatement(statement) {
@@ -140,7 +151,15 @@ export class Assembler {
 
         self.postMessage({
             action: "instructionExecuted",
-            data: this
+            data: {
+                cpuRegisters: this.cpuRegisters,
+                ioRegisters: this.ioRegisters,
+
+                memory: {
+                    instructions: this.memory.instructions,
+                    stackStart: this.memory.stackStart
+                }
+            }
         });
     }
 
@@ -208,12 +227,9 @@ export class Assembler {
         }
     }
 
+    // For now, it seems that the only reasonable property to copy (for the Assembler on the main thread) is ioRegisters.
     copy(assembler) {
-        this.cpuRegisters.copy(assembler.cpuRegisters);
         this.ioRegisters.copy(assembler.ioRegisters);
-        this.memory.copy(assembler.memory);
-        this.labels.copy(assembler.labels);
-        this.isHalted = assembler.isHalted;
     }
 
     reset() {
@@ -222,7 +238,5 @@ export class Assembler {
         this.memory.reset();
         this.labels.reset();
         this.isHalted = false;
-
-        return this;
     }
 };

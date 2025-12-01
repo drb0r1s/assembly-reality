@@ -5,22 +5,20 @@ import { Manager } from "../../Manager";
 
 const Memory = () => {
     const { assembler } = useContext(GlobalContext);
-    
+
     const initialMemory = {
-        matrix: new Uint8Array(258 * 16),
         instructions: [],
         stackStart: 0
     };
     
     const [memory, setMemory] = useState(initialMemory);
-    const [registerPointers, setRegisterPointers] = useState({ IP: assembler.cpuRegisters.IP, SP: assembler.cpuRegisters.SP });
+    const [registerPointers, setRegisterPointers] = useState({ IP: 0, SP: 0 });
 
     const [isSplitActive, setIsSplitActive] = useState(false);
     
     useEffect(() => {
         const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", data => {
             if(data?.memory) setMemory({
-                matrix: [...data.memory.matrix],
                 instructions: data.memory.instructions,
                 stackStart: data.memory.stackStart
             });

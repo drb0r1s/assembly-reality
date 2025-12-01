@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { GlobalContext } from "../../context/GlobalContext";
+
 const MemoryMap = ({ memory, registerPointers, isSplitActive }) => {
+    const { assembler } = useContext(GlobalContext);
+    
     const memoryMapColumns = ["empty", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
     
     const memoryMapRows = Array.from({ length: 0x102 }, (_, i) => {
@@ -42,7 +47,7 @@ const MemoryMap = ({ memory, registerPointers, isSplitActive }) => {
                 </div>
 
                 <div className="memory-map-matrix">
-                    {[...memory.matrix].map((element, index) => {
+                    {Array.from(assembler.memory.matrix).map((element, index) => {
                         return <p
                             key={index}
                             className={`memory-map-matrix-element ${getCellClass(index)}`}

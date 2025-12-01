@@ -6,7 +6,7 @@ import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 
 const Editor = () => {
-    const { assembler, assemblerWorker } = useContext(GlobalContext);
+    const { assemblerWorker } = useContext(GlobalContext);
     
     const [code, setCode] = useState("");
     const [error, setError] = useState({ type: "", content: "" });
@@ -34,28 +34,20 @@ const Editor = () => {
 
             switch(action) {
                 case "assemble":
-                    assembler.memory.copy(data);
-
-                    Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: { IP: data.cpuRegisters.IP, SP: data.cpuRegisters.SP } });
+                    Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: data.cpuRegisters });
                     Manager.trigger("cpuRegisterUpdate", data.cpuRegisters);
 
                     break;
                 case "run":
                 case "instructionExecuted":
-                    assembler.copy(data);
-
-                    Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: { IP: data.cpuRegisters.IP, SP: data.cpuRegisters.SP } });
+                    Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: data.cpuRegisters });
                     Manager.trigger("cpuRegisterUpdate", data.cpuRegisters);
-                    Manager.trigger("displayUpdate", data.memory.matrix.slice(-32));
                     Manager.trigger("ioRegisterUpdate", data.ioRegisters);
 
                     break;
-                case "reset":
-                    assembler.copy(data);
-                    
+                case "reset":                    
                     Manager.trigger("memoryReset");
                     Manager.trigger("cpuRegisterReset");
-                    Manager.trigger("displayReset");
                     Manager.trigger("ioRegisterReset");
 
                     break;

@@ -1,6 +1,6 @@
 import { Assembler } from "../assembler/Assembler";
 
-const assembler = new Assembler();
+let assembler = null;
 
 self.onmessage = async e => {
     const { action, payload } = e.data;
@@ -8,6 +8,11 @@ self.onmessage = async e => {
     let result = null;
 
     switch(action) {
+        case "memoryInitialization":
+            // Since we use SharedArrayBuffer class in order to use the same memory reference on both threads, it is important to pass that buffer into the assembler, before performing anything else.
+            assembler = new Assembler(payload);
+            
+            break;
         case "assemble":
             result = assembler.assemble(payload); // payload: code
             
@@ -20,14 +25,14 @@ self.onmessage = async e => {
         case "run":
             // This method is asynchronous, because of the speed simulation.
             result = await assembler.execute(payload); // payload: speed
-            
+
             if(result?.error) self.postMessage({ action, error: result.error });
             else self.postMessage({ action, data: result });
 
             break;
         case "reset":
-            result = assembler.reset();
-            self.postMessage({ action, data: result });
+            assembler.reset();
+            self.postMessage({ action, data: null });
 
             break;
     }

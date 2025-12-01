@@ -10,7 +10,7 @@ import { images } from "../../data/images";
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const { assembler } = useContext(GlobalContext);
     
-    const [display, setDisplay] = useState(new Uint16Array(32));
+    const [memoryVersion, setMemoryVersion] = useState(0);
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
     const [lowerSection, setLowerSection] = useState({ ref: null }); // This state has to contain the elements inside the object, under the ref property, because of the way React is updating ref objects.
     
@@ -29,11 +29,11 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     });
 
     useEffect(() => {
-        const unsubscribeDisplayUpdate = Manager.subscribe("displayUpdate", newDislay => setDisplay([...newDislay]));
-        const unsubscribeReset = Manager.subscribe("displayReset", () => setDisplay(new Uint16Array(32)));
+        const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", () => setMemoryVersion(prevVersion => prevVersion + 1));
+        const unsubscribeReset = Manager.subscribe("memoryReset", () => setMemoryVersion(prevVersion => prevVersion + 1));
         
         return () => {
-            unsubscribeDisplayUpdate();
+            unsubscribeMemoryUpdate();
             unsubscribeReset();
         };
     }, []);
@@ -97,7 +97,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
                 </div>
 
                 <div className="io-devices-mini-display">
-                    {[...display].map((element, index) => {
+                    {Array.from(assembler.memory.matrix.slice(-32)).map((element, index) => {
                         return <p
                             key={index}
                             className="io-devices-mini-display-element"
