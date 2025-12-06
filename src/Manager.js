@@ -1,7 +1,8 @@
 export const Manager = (() => {
     const values = new Map([
         ["view", { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true }],
-        ["speed", 4]
+        ["speed", 4],
+        ["isHighSpeed", false]
     ]);
     
     const listeners = new Map();

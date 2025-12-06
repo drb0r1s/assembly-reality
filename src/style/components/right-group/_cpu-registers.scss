@@ -12,6 +12,7 @@
         width: 100%;
         @include center(column);
         gap: 7px;
+        position: relative;
 
         .cpu-registers-row {
             width: 100%;

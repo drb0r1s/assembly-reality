@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import MiniHeader from "../MiniHeader";
+import HighSpeedBlock from "../HighSpeedBlock";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
+import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 
 const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
@@ -13,6 +15,7 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
     const [cpuRegisters, setCPURegisters] = useState(initialCPURegisters);
     
     const headerRef = useRef(null);
+    const isHighSpeed = useManagerValue("isHighSpeed");
 
     useEffect(() => {
         const unsubscribeCPURegisterUpdate = Manager.subscribe("cpuRegisterUpdate", newCPURegisters => setCPURegisters({...initialCPURegisters, ...newCPURegisters}));
@@ -39,6 +42,8 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
             />
 
             <div className="cpu-registers-content">
+                <HighSpeedBlock />
+                
                 <div className="cpu-registers-row">
                     <div className="cpu-registers-row-register">
                         <strong>A</strong>

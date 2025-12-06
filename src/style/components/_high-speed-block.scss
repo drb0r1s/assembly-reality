@@ -1,0 +1,30 @@
+.high-speed-block {
+    height: 100%;
+    width: 100%;
+    @include center;
+    background-color: rgba($color: black, $alpha: .8);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    transition: 300ms;
+
+    .high-speed-block-container {
+        width: 80%;
+        @include center;
+        gap: 12px;
+
+        img {
+            height: 32px;
+            width: 32px;
+            object-fit: contain;
+        }
+
+        p {
+            color: #F4F4F4;
+            font-size: 16px;
+            font-family: Roboto-Regular;
+        }
+    }
+}

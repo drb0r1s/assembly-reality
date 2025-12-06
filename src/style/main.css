@@ -361,6 +361,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  position: relative;
 }
 .memory .memory-map-holder .memory-map {
   height: 100%;
@@ -650,6 +651,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   gap: 7px;
+  position: relative;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row {
   width: 100%;
@@ -825,4 +827,39 @@ header .header-title {
 }
 .range .range-circle:hover {
   background-color: #2e4469;
+}
+
+.high-speed-block {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  transition: 300ms;
+}
+.high-speed-block .high-speed-block-container {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 12px;
+}
+.high-speed-block .high-speed-block-container img {
+  height: 32px;
+  width: 32px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.high-speed-block .high-speed-block-container p {
+  color: #F4F4F4;
+  font-size: 16px;
+  font-family: Roboto-Regular;
 }/*# sourceMappingURL=main.css.map */

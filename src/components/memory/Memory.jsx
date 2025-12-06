@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from "react";
+import HighSpeedBlock from "../HighSpeedBlock";
 import MemoryMap from "./MemoryMap";
 import { GlobalContext } from "../../context/GlobalContext";
+import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 
 const Memory = () => {
@@ -15,6 +17,8 @@ const Memory = () => {
     const [registerPointers, setRegisterPointers] = useState({ IP: 0, SP: 0 });
 
     const [isSplitActive, setIsSplitActive] = useState(false);
+
+    const isHighSpeed = useManagerValue("isHighSpeed");
     
     useEffect(() => {
         const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", data => {
@@ -49,11 +53,14 @@ const Memory = () => {
             </div>
 
             <div className="memory-map-holder">
+                <HighSpeedBlock />
+                
                 <MemoryMap
                     memory={memory}
                     registerPointers={registerPointers}
                     isSplitActive={isSplitActive}
                 />
+
                 {isSplitActive && <MemoryMap
                     memory={memory}
                     registerPointers={registerPointers}

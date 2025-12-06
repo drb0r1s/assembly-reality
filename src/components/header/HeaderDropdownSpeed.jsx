@@ -5,13 +5,19 @@ import { Manager } from "../../Manager";
 
 const HeaderDropdownSpeed = () => {
     const initialSpeed = useManagerValue("speed");
+    const isHighSpeed = useManagerValue("isHighSpeed");
+
     const [speed, setSpeed] = useState(initialSpeed);
 
     const buttons = [4, 1000, 5000, 10000, 20000, 50000];
 
     useEffect(() => {
         if(speed === initialSpeed) return;
+
         Manager.set("speed", speed);
+        
+        if(speed >= 10000 && !isHighSpeed) Manager.set("isHighSpeed", true);
+        if(speed < 10000 && isHighSpeed) Manager.set("isHighSpeed", false);
     }, [speed]);
     
     return(

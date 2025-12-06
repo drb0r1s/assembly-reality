@@ -50,6 +50,7 @@
         height: calc(100dvh - 38px - 27px); // 38px (header height) + 27px (memory-header height)
         width: 100%;
         @include center(column);
+        position: relative;
         
         @import "./memory-map";
     }
