@@ -118,9 +118,13 @@ export class Assembler {
             let instructionCounter = 0;
 
             this.setAssemblerInterval(() => {
-                if(this.memory.instructions.indexOf(this.cpuRegisters.IP) === -1) {
+                // The end of instruction execution is reached only if one of two cases:
+                if(
+                    (this.memory.instructions.indexOf(this.cpuRegisters.IP) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
+                    this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
+                ) {
                     clearInterval(this.intervalId);
-                    resolve(this);
+                    resolve(this.getAssemblerState(speed));
 
                     return;
                 }
@@ -136,6 +140,8 @@ export class Assembler {
                     if(error instanceof AssemblerError) resolve({ error });
                     else reject(error);
                 }
+
+                instructionCounter++;
             }, speed);
         });
     }
@@ -152,20 +158,9 @@ export class Assembler {
         this.nextInstruction(executable, oldAddress);
 
         const isHighSpeed = speed > 1000;
-        const updatePerInstructions = speed / 1000 > 1 ? speed / 1000 : 1;
+        const updatePerInstructions = speed / 1000 > 1 ? speed / 1000 * 100 : 1;
 
-        if(instructionCounter % updatePerInstructions === 0 || !isHighSpeed) self.postMessage({
-            action: "instructionExecuted",
-            data: {
-                cpuRegisters: this.cpuRegisters,
-                ioRegisters: this.ioRegisters,
-
-                memory: {
-                    instructions: this.memory.instructions,
-                    stackStart: this.memory.stackStart
-                }
-            }
-        });
+        if(instructionCounter % updatePerInstructions === 0 || !isHighSpeed) self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState(speed) });
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
@@ -204,7 +199,7 @@ export class Assembler {
         return args;
     }
 
-    setAssemblerInterval(callback, speed, instructionCounter = 0) {
+    setAssemblerInterval(callback, speed) {
         const delay = 1000 / speed; // ms per instruction
 
         // High speeds (> 1kHz) require < 1ms per instruction, which is not possible in browser.
@@ -216,11 +211,9 @@ export class Assembler {
         if(isHighSpeed) {
             const numberOfInstructions = Math.floor(speed / 1000);
 
-            // The first iteration.
-            callback();
-
+            // Here we do not want to call one callback immediately, like we do for low speeds.
             this.intervalId = setInterval(() => {
-                for(let i = 1; i < numberOfInstructions; i++) callback();
+                for(let i = 0; i < numberOfInstructions; i++) callback();
             }, 1);
         }
 
@@ -230,9 +223,23 @@ export class Assembler {
             
             this.intervalId = setInterval(callback, delay);
         }
+    }
 
-        instructionCounter++;
-        return instructionCounter;
+    getAssemblerState(speed) {
+        let data = { ioRegisters: this.ioRegisters };
+
+        // If speed is too high (over 10kHz), we won't update cpuRegisters and memory.
+        if(speed < 10000) data = {
+            ...data,
+            cpuRegisters: this.cpuRegisters,
+
+            memory: {
+                instructions: this.memory.instructions,
+                stackStart: this.memory.stackStart
+            }
+        };
+
+        return data;
     }
 
     // For now, it seems that the only reasonable property to copy (for the Assembler on the main thread) is ioRegisters.
