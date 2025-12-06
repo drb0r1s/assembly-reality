@@ -1,3 +1,4 @@
+import React from "react";
 import Editor from "@monaco-editor/react";
 import { useRichEditor } from "../hooks/useRichEditor";
 
@@ -10,7 +11,7 @@ const RichEditor = ({ code, onChange }) => {
                 height="100%"
                 defaultLanguage="assembly"
                 theme="assembly-dark"
-                value={code}
+                defaultValue={code}
                 onChange={onChange}
                 onMount={handleEditorDidMount}
                 options={{
@@ -22,4 +23,4 @@ const RichEditor = ({ code, onChange }) => {
     );
 }
 
-export default RichEditor;
+export default React.memo(RichEditor);
