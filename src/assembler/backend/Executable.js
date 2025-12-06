@@ -236,33 +236,33 @@ export const Executable = {
                 const ioRegisterValue = assembler.ioRegisters.getValueByIndex(first.registerValue);
                 assembler.cpuRegisters.update("A", ioRegisterValue);
 
-                ioInteractions(ioRegisterValue);
+                ioInteractions(first.registerValue);
             },
 
             "memory.register": () => {
                 const ioRegisterValue = assembler.ioRegisters.getValueByIndex(first.memoryPoint);
                 assembler.cpuRegisters.update("A", ioRegisterValue);
 
-                ioInteractions(ioRegisterValue);
+                ioInteractions(first.memoryPoint);
             },
 
             "memory.number.*": () => {
                 const ioRegisterValue = assembler.ioRegisters.getValueByIndex(first.memoryPoint);
                 assembler.cpuRegisters.update("A", ioRegisterValue);
 
-                ioInteractions(ioRegisterValue);
+                ioInteractions(first.memoryPoint);
             },
 
             "number.*": () => {
                 const ioRegisterValue = assembler.ioRegisters.getValueByIndex(first.value);
                 assembler.cpuRegisters.update("A", ioRegisterValue);
 
-                ioInteractions(ioRegisterValue);
+                ioInteractions(first.value);
             }
         });
 
-        function ioInteractions(value) {
-            if(value === 5) assembler.ioRegisters.update("KBDSTATUS", 0);
+        function ioInteractions(register) {
+            if(register === 6) assembler.ioRegisters.update("KBDSTATUS", 0, { force: true });
         }
     },
 

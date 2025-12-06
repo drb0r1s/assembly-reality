@@ -42,13 +42,13 @@ const Editor = () => {
                 case "instructionExecuted":
                     Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: data.cpuRegisters });
                     Manager.trigger("cpuRegisterUpdate", data.cpuRegisters);
-                    Manager.trigger("ioRegisterUpdate", data.ioRegisters);
+                    Manager.trigger("ioRegisterPing");
 
                     break;
                 case "reset":                    
                     Manager.trigger("memoryReset");
                     Manager.trigger("cpuRegisterReset");
-                    Manager.trigger("ioRegisterReset");
+                    Manager.trigger("ioRegisterPing");
 
                     break;
             }

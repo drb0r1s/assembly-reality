@@ -50,21 +50,14 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
             const character = e.key.charCodeAt(0);
 
             assembler.ioRegisters.keydown(character);
-
-            Manager.trigger("ioKeyboardUpdate", {
-                KBDSTATUS: assembler.ioRegisters.KBDSTATUS,
-                KBDDATA: character
-            });
+            Manager.trigger("ioRegisterPing");
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
         }
 
         const handleKeyup = () => {
             assembler.ioRegisters.keyup();
-
-            Manager.trigger("ioKeyboardUpdate", {
-                KBDSTATUS: assembler.ioRegisters.KBDSTATUS
-            });
+            Manager.trigger("ioRegisterPing");
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
         }

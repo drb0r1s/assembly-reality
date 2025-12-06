@@ -8,9 +8,9 @@ self.onmessage = async e => {
     let result = null;
 
     switch(action) {
-        case "memoryInitialization":
+        case "init":
             // Since we use SharedArrayBuffer class in order to use the same memory reference on both threads, it is important to pass that buffer into the assembler, before performing anything else.
-            assembler = new Assembler(payload);
+            assembler = new Assembler(payload.memoryBuffer, payload.ioRegistersBuffer);
             
             break;
         case "assemble":

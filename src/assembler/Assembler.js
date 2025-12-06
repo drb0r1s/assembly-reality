@@ -10,9 +10,9 @@ import { Instants } from "./frontend/Instants";
 import { Executor } from "./backend/Executor";
 
 export class Assembler {
-    constructor(memoryBuffer) {
+    constructor(memoryBuffer, ioRegistersBuffer) {
         this.cpuRegisters = new CPURegisters();
-        this.ioRegisters = new IORegisters();
+        this.ioRegisters = new IORegisters(ioRegistersBuffer);
         this.memory = new Memory(memoryBuffer);
         this.memoryBuffer = memoryBuffer;
         this.labels = new Labels();
@@ -228,11 +228,8 @@ export class Assembler {
     }
 
     getAssemblerState(speed) {
-        let data = { ioRegisters: this.ioRegisters };
-
         // If speed is too high (over 10kHz), we won't update cpuRegisters and memory.
-        if(speed < 10000) data = {
-            ...data,
+        if(speed < 10000) return {
             cpuRegisters: this.cpuRegisters,
 
             memory: {
@@ -241,12 +238,7 @@ export class Assembler {
             }
         };
 
-        return data;
-    }
-
-    // For now, it seems that the only reasonable property to copy (for the Assembler on the main thread) is ioRegisters.
-    copy(assembler) {
-        this.ioRegisters.copy(assembler.ioRegisters);
+        return {};
     }
 
     reset() {

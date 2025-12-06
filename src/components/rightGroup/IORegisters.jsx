@@ -1,29 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import MiniHeader from "../MiniHeader";
+import { GlobalContext } from "../../context/GlobalContext";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 
 const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
-    const initialIORegisters = {
-        IRQMASK: 0,
-        IRQSTATUS: 0,
-        IRQEOI: 0,
-
-        TMRPRELOAD: 0,
-        TMRCOUNTER: 0,
-
-        KBDSTATUS: 0,
-        KBDDATA: 0,
-
-        VIDMODE: 0,
-        VIDADDR: 0,
-        VIDDATA: 0,
-
-        RNDGEN: 0
-    };
-
-    const [ioRegisters, setIORegisters] = useState(initialIORegisters);
+    const { assembler } = useContext(GlobalContext);
+    
+    const [ioRegisters, setIORegisters] = useState(assembler.ioRegisters.construct());
     
     const headerRef = useRef(null);
     const view = useManagerValue("view");
@@ -36,15 +21,8 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
     });
 
     useEffect(() => {
-        const unsubscribeIORegisterUpdate = Manager.subscribe("ioRegisterUpdate", newIORegisters => setIORegisters({...newIORegisters}));
-        const unsubscribeIOKeyboardUpdate = Manager.subscribe("ioKeyboardUpdate", newIORegisters => setIORegisters(prevIORegisters => { return {...prevIORegisters, ...newIORegisters} }));
-        const unsubscribeReset = Manager.subscribe("ioRegisterReset", () => setIORegisters(initialIORegisters));
-
-        return () => {
-            unsubscribeIORegisterUpdate();
-            unsubscribeIOKeyboardUpdate();
-            unsubscribeReset();
-        };
+        const unsubscribeIORegisterPing = Manager.subscribe("ioRegisterPing", () => setIORegisters(assembler.ioRegisters.construct()));
+        return unsubscribeIORegisterPing;
     }, []);
     
     return(

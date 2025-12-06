@@ -27,46 +27,51 @@ const readOnly = {
 };
 
 export class IORegisters {
-    constructor() {
-        this.IRQMASK = 0x0000;
-        this.IRQSTATUS = 0x0000;
-        this.IRQEOI = 0x0000;
-        
-        this.TMRPRELOAD = 0x0000;
-        this.TMRCOUNTER = 0x0000;
+    constructor(ioRegistersBuffer) {
+        this.buffer = ioRegistersBuffer;
 
-        this.KBDSTATUS = 0x0000;
-        this.KBDDATA = 0x0000;
+        this.registers = new Uint16Array(ioRegistersBuffer);
+        this.registerIndexes = {};
 
-        this.VIDMODE = 0x0000;
-        this.VIDADDR = 0x0000;
-        this.VIDDATA = 0x0000;
+        addressRegister.forEach((register, index) => { this.registerIndexes[register] = index });
+    }
 
-        this.RNDGEN = 0x0000;
+    construct() {
+        let constructed = {};
+
+        for(let i = 0; i < addressRegister.length; i++) {
+            const register = addressRegister[i];
+            constructed[register] = this.getValueByIndex(i);
+        }
+
+        return constructed;
     }
 
     get(index) {
         return addressRegister[index];
     }
 
+    getIndex(register) {
+        return this.registerIndexes[register];
+    }
+
     getValue(register) {
-        return this[register];
+        return this.getValueByIndex(this.getIndex(register));
     }
 
     getValueByIndex(index) {
-        const register = this.get(index);
-        return this.getValue(register);
+        return Atomics.load(this.registers, index);
     }
 
     // options.force is used to give a permission to the method to edit read-only registers.
     update(register, value, options) {
         if(readOnly[register] && !options?.force) throw new AssemblerError("ReadOnlyRegisterUpdate", { register });
-        this[register] = value & 0xFFFF; // We want to keep our register 16-bit.
+        Atomics.store(this.registers, this.getIndex(register), value & 0xFFFF); // We want to keep our register 16-bit.
     }
 
     // KEYDOWN event affects the KBDSTATUS registers by adding 1.
     keydown(character) {
-        const newKbdStatus = (this.KBDSTATUS & ~0b010) | 0b001; // We want to clear possible KEYUP event that was left in the register, so we XOR it.
+        const newKbdStatus = (this.getValue("KBDSTATUS") & ~0b010) | 0b001; // We want to clear possible KEYUP event that was left in the register, so we XOR it.
         
         this.update("KBDSTATUS", newKbdStatus, { force: true });
         this.update("KBDDATA", character, { force: true });
@@ -74,45 +79,15 @@ export class IORegisters {
 
     // KEYUP event affects the KBDSTATUS registers by adding 2.
     keyup() {
-        let newKbdStatus = (this.KBDSTATUS & ~0b001) | 0b010; // We want to clear the KEYDOWN event that was left in the register, so we XOR it.
-        if(this.KBDDATA > 0) newKbdStatus |= 0b100;
+        let newKbdStatus = (this.getValue("KBDSTATUS") & ~0b001) | 0b010; // We want to clear the KEYDOWN event that was left in the register, so we XOR it.
+        if(this.getValue("KBDDATA") > 0) newKbdStatus |= 0b100;
         
         this.update("KBDSTATUS", newKbdStatus, { force: true });
     }
 
-    copy(ioRegisters) {
-        this.IRQMASK = ioRegisters.IRQMASK;
-        this.IRQSTATUS = ioRegisters.IRQSTATUS;
-        this.IRQEOI = ioRegisters.IRQEOI;
-        
-        this.TMRPRELOAD = ioRegisters.TMRPRELOAD;
-        this.TMRCOUNTER = ioRegisters.TMRCOUNTER;
-
-        this.KBDSTATUS = ioRegisters.KBDSTATUS;
-        this.KBDDATA = ioRegisters.KBDDATA;
-
-        this.VIDMODE = ioRegisters.VIDMODE;
-        this.VIDADDR = ioRegisters.VIDADDR;
-        this.VIDDATA = ioRegisters.VIDDATA;
-
-        this.RNDGEN = ioRegisters.RNDGEN;
-    }
-
     reset() {
-        this.IRQMASK = 0x0000;
-        this.IRQSTATUS = 0x0000;
-        this.IRQEOI = 0x0000;
-        
-        this.TMRPRELOAD = 0x0000;
-        this.TMRCOUNTER = 0x0000;
-
-        this.KBDSTATUS = 0x0000;
-        this.KBDDATA = 0x0000;
-
-        this.VIDMODE = 0x0000;
-        this.VIDADDR = 0x0000;
-        this.VIDDATA = 0x0000;
-
-        this.RNDGEN = 0x0000;
+        for(let i = 0; i < this.registers.length; i++) {
+            Atomics.store(this.registers, i, 0);
+        }
     }
 };
