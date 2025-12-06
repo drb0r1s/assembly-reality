@@ -157,10 +157,12 @@ export class Assembler {
 
         this.nextInstruction(executable, oldAddress);
 
-        const isHighSpeed = speed > 1000;
-        const updatePerInstructions = speed / 1000 > 1 ? speed / 1000 * 100 : 1;
+        const updatesPerSecond = 10;
+        
+        let updatePerInstructions = Math.floor(speed / updatesPerSecond);
+        if (updatePerInstructions < 1) updatePerInstructions = 1;
 
-        if(instructionCounter % updatePerInstructions === 0 || !isHighSpeed) self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState(speed) });
+        if(instructionCounter % updatePerInstructions === 0) self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState(speed) });
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.

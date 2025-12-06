@@ -21,7 +21,7 @@ const Editor = () => {
 
         const unsubscribeRun = Manager.subscribe("run", () => {
             if(!assemblerWorker) return;
-            assemblerWorker.postMessage({ action: "run", payload: speed });
+            assemblerWorker.postMessage({ action: "run", payload: parseInt(speed) });
         });
 
         assemblerWorker.onmessage = e => {
