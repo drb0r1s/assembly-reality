@@ -21,7 +21,7 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
     });
 
     useEffect(() => {
-        const unsubscribeIORegisterPing = Manager.subscribe("ioRegisterPing", () => setIORegisters(assembler.ioRegisters.construct()));
+        const unsubscribeIORegisterPing = Manager.subscribe("ioRegistersPing", () => setIORegisters(assembler.ioRegisters.construct()));
         return unsubscribeIORegisterPing;
     }, []);
     

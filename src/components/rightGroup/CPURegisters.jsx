@@ -13,7 +13,7 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
     const headerRef = useRef(null);
 
     useEffect(() => {
-        const unsubscribeCPURegisterPing = Manager.subscribe("cpuRegisterPing", () => setCPURegisters(assembler.cpuRegisters.construct()));
+        const unsubscribeCPURegisterPing = Manager.subscribe("cpuRegistersPing", () => setCPURegisters(assembler.cpuRegisters.construct()));
         return unsubscribeCPURegisterPing;
     }, []);
 

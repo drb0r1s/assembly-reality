@@ -50,14 +50,14 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
             const character = e.key.charCodeAt(0);
 
             assembler.ioRegisters.keydown(character);
-            Manager.trigger("ioRegisterPing");
+            Manager.trigger("ioRegistersPing");
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
         }
 
         const handleKeyup = () => {
             assembler.ioRegisters.keyup();
-            Manager.trigger("ioRegisterPing");
+            Manager.trigger("ioRegistersPing");
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
         }
