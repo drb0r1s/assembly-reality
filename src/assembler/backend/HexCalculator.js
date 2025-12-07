@@ -57,10 +57,10 @@ export const HexCalculator = {
         return (first >>> second) & max; // >>> is used for unsigned shift right
     },
 
-    // CMP relies on SR flags (Z and C).
+    // CMP relies on SR flags (C and Z).
     // Z is set to 1 if first === second, otherwise C is set to 1.
     CMP: (first, second) => {
-        const flags = { Z: 0, C: 0 };
+        const flags = { M: 0, C: 0, Z: 0, F: 0, H: 0 };
 
         if(first === second) flags.Z = 1;
         
@@ -69,6 +69,12 @@ export const HexCalculator = {
             else flags.C = 0;
         }
 
-        return flags;
+        return(
+            (flags.M << 4) |
+            (flags.C << 3) |
+            (flags.Z << 2) |
+            (flags.F << 1) |
+            (flags.H << 0)
+        );
     }
 };

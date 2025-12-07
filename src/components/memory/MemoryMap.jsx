@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 
-const MemoryMap = ({ memory, registerPointers, isSplitActive }) => {
+const MemoryMap = ({ memory, cpuRegisters, isSplitActive }) => {
     const { assembler } = useContext(GlobalContext);
     
     const memoryMapColumns = ["empty", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
@@ -14,11 +14,11 @@ const MemoryMap = ({ memory, registerPointers, isSplitActive }) => {
         // Stack classes should take priority over the instruction classes.
 
         // STACK CLASSES
-        if(registerPointers.SP === index) return "memory-map-matrix-element-stack-pointer";
-        if(registerPointers.SP < index && index <= memory.stackStart) return "memory-map-matrix-element-stack";
+        if(cpuRegisters.SP === index) return "memory-map-matrix-element-stack-pointer";
+        if(cpuRegisters.SP < index && index <= memory.stackStart) return "memory-map-matrix-element-stack";
 
         // INSTRUCTION CLASSES
-        if(registerPointers.IP === index) return "memory-map-matrix-element-instruction-pointer";
+        if(cpuRegisters.IP === index) return "memory-map-matrix-element-instruction-pointer";
         if(memory.instructions.indexOf(index) > -1) return "memory-map-matrix-element-instruction";
 
         // DISPLAY CLASSES

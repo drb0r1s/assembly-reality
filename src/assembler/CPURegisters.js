@@ -1,71 +1,65 @@
 import { ByteNumber } from "./ByteNumber";
 
-const registerIndex = {
-    A: 0,
-    B: 1,
-    C: 2,
-    D: 3,
-    SP: 4,
-    IP: 5,
-    SR: 6,
-    AH: 7,
-    AL: 8,
-    BH: 9,
-    BL: 10,
-    CH: 11,
-    CL: 12,
-    DH: 13,
-    DL: 14
-};
-
-const indexRegister = {
-    0: "A",
-    1: "B",
-    2: "C",
-    3: "D",
-    4: "SP",
-    5: "IP",
-    6: "SR",
-    7: "AH",
-    8: "AL",
-    9: "BH",
-    10: "BL",
-    11: "CH",
-    12: "CL",
-    13: "DH",
-    14: "DL"
-};
+const allRegisters = [
+    "A", "B", "C", "D",
+    "SP", "IP", "SR",
+    "AH", "AL", "BH", "BL", "CH", "CL", "DH", "DL"
+];
 
 export class CPURegisters {
-    constructor() {
-        this.A = 0x0000;
-        this.B = 0x0000;
-        this.C = 0x0000;
-        this.D = 0x0000;
+    constructor(cpuRegistersBuffer) {
+        this.registers = new Uint16Array(cpuRegistersBuffer);
+        this.registerIndexes = {};
 
-        this.IP = 0x0000;
-        this.SP = 0x0000;
+        allRegisters.forEach((register, index) => { this.registerIndexes[register] = index });
+    }
 
-        this.SR = { M: 0, C: 0, Z: 0, F: 0, H: 0 };
+    construct() {
+        let constructed = {};
+
+        // Here we want to visit only the first 7 elements of allRegisters, these are the real registers, all others are just half registers.
+        for(let i = 0; i < 7; i++) {
+            const register = allRegisters[i];
+
+            if(register === "SR") constructed[register] = this.constructSR();
+            else constructed[register] = this.getValueByIndex(i);
+        }
+
+        return constructed;
+    }
+
+    constructSR() {
+        const SR = this.getValue("SR");
+
+        return {
+            M: (SR >> 4) & 1,
+            C: (SR >> 3) & 1,
+            Z: (SR >> 2) & 1,
+            F: (SR >> 1) & 1,
+            H: (SR >> 0) & 1,
+        };
     }
 
     get(index) {
-        return indexRegister[index];
-    }
-
-    getValue(register) {
-        if(register.endsWith("H") || register.endsWith("L")) {
-            const registerValue = this[register[0]];
-            const isH = register.endsWith("H");
-
-            return isH ? (registerValue >>> 8) & 0xFF : registerValue & 0xFF;
-        }
-
-        return this[register];
+        return allRegisters[index];
     }
 
     getIndex(register) {
-        return registerIndex[register];
+        return this.registerIndexes[register];
+    }
+
+    getValue(register) {
+        // 8-bit
+        if(register.endsWith("H") || register.endsWith("L")) {
+            const fullRegister = register[0];
+            const fullRegisterValue = Atomics.load(this.registers, this.getIndex(fullRegister));
+
+            if(register.endsWith("H")) return (fullRegisterValue >>> 8) & 0xFF;
+            return fullRegisterValue & 0xFF;
+        }
+
+        // 16-bit
+        return Atomics.load(this.registers, this.getIndex(register));
     }
 
     getValueByIndex(index) {
@@ -74,29 +68,31 @@ export class CPURegisters {
     }
 
     update(register, value) {
+        // 8-bit
         if(register.endsWith("H") || register.endsWith("L")) {
+            const fullRegister = register[0];
+            const fullRegisterValue = Atomics.load(this.registers, this.getIndex(fullRegister));
+        
             const [_, second] = ByteNumber.divide(value);
 
-            const registerValue = this[register[0]];
-            const isH = register.endsWith("H");
+            if(register.endsWith("H")) {
+                const newValue = (second << 8) | (fullRegisterValue & 0xFF);
+                Atomics.store(this.registers, this.getIndex(fullRegister), newValue);
+            }
 
-            if(isH) this[register[0]] = (second << 8) | (registerValue & 0xFF);
-            else this[register[0]] = (registerValue & 0xFF00) | (second & 0xFF);
+            else {
+                const newValue = (fullRegisterValue & 0xFF00) | (second & 0xFF);
+                Atomics.store(this.registers, this.getIndex(fullRegister), newValue);
+            }
         }
 
-        else if(register === "SR") this[register] = value;
-        else this[register] = value & 0xFFFF; // We want to keep our register 16-bit.
+        // 16-bit
+        else Atomics.store(this.registers, this.getIndex(register), value & 0xFFFF); // We want to keep our register 16-bit.
     }
 
     reset() {
-        this.A = 0x0000;
-        this.B = 0x0000;
-        this.C = 0x0000;
-        this.D = 0x0000;
-
-        this.IP = 0x0000;
-        this.SP = 0x0000;
-
-        this.SR = { M: 0, C: 0, Z: 0, F: 0, H: 0 };
+        for(let i = 0; i < this.registers.length; i++) {
+            Atomics.store(this.registers, i, 0);
+        }
     }
 };

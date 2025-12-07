@@ -92,47 +92,48 @@ export const Executable = {
         Decoder.run(executable, {
             [`${registerType} ${registerType}`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.registerValue);
-                assembler.cpuRegisters.update("SR", {...assembler.cpuRegisters.SR, ...flags});
+                assembler.cpuRegisters.update("SR", flags & 0xFFFF);
             },
 
             [`${registerType} memory.register`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
-                assembler.cpuRegisters.update("SR", {...assembler.cpuRegisters.SR, ...flags});
+                assembler.cpuRegisters.update("SR", flags & 0xFFFF);
             },
 
             [`${registerType} memory.number.*`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
-                assembler.cpuRegisters.update("SR", {...assembler.cpuRegisters.SR, ...flags});
+                assembler.cpuRegisters.update("SR", flags & 0xFFFF);
             },
 
             [`${registerType} number.*`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.value);
-                assembler.cpuRegisters.update("SR", {...assembler.cpuRegisters.SR, ...flags});
+                assembler.cpuRegisters.update("SR", flags & 0xFFFF);
             }
         });
     },
 
     jump: (assembler, executable, args) => {
         const { first } = Decoder.decode(assembler, executable, args);
+        const SR = assembler.cpuRegisters.constructSR();
 
         switch(executable.instruction) {
             case "JC":
-                if(assembler.cpuRegisters.SR.C === 0) return;
+                if(SR.C === 0) return;
                 break;
             case "JNC":
-                if(assembler.cpuRegisters.SR.C === 1) return;
+                if(SR.C === 1) return;
                 break;
             case "JZ":
-                if(assembler.cpuRegisters.SR.Z === 0) return;
+                if(SR.Z === 0) return;
                 break;
             case "JNZ":
-                if(assembler.cpuRegisters.SR.Z === 1) return;
+                if(SR.Z === 1) return;
                 break;
             case "JA":
-                if(assembler.cpuRegisters.SR.C !== 0 || assembler.cpuRegisters.SR.Z !== 0) return;
+                if(SR.C !== 0 || SR.Z !== 0) return;
                 break;
             case "JNA":
-                if(assembler.cpuRegisters.SR.C !== 1 && assembler.cpuRegisters.SR.Z !== 1) return;
+                if(SR.C !== 1 && SR.Z !== 1) return;
                 break;
         }
 
@@ -155,17 +156,17 @@ export const Executable = {
 
         Decoder.run(executable, {
             [registerType]: () => {
-                assembler.memory.rewrite(assembler.cpuRegisters.SP, first.registerValue, { isHalf, isStack: true });
+                assembler.memory.rewrite(assembler.cpuRegisters.getValue("SP"), first.registerValue, { isHalf, isStack: true });
 
                 const numberOfCells = isHalf ? 1 : 2;
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP - numberOfCells);
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - numberOfCells);
             },
 
             "number.*": () => {
-                assembler.memory.rewrite(assembler.cpuRegisters.SP, first.value, { isHalf, isStack: true });
+                assembler.memory.rewrite(assembler.cpuRegisters.getValue("SP"), first.value, { isHalf, isStack: true });
 
                 const numberOfCells = isHalf ? 1 : 2;
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP - numberOfCells);
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - numberOfCells);
             }
         });
     },
@@ -180,11 +181,11 @@ export const Executable = {
             [registerType]: () => {
                 const numberOfCells = isHalf ? 1 : 2;
 
-                if(assembler.cpuRegisters.SP + numberOfCells > assembler.memory.stackStart) throw new AssemblerError("StackUnderflow");
+                if(assembler.cpuRegisters.getValue("SP") + numberOfCells > assembler.memory.stackStart) throw new AssemblerError("StackUnderflow");
 
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP + numberOfCells);
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") + numberOfCells);
 
-                const popped = assembler.memory.point(assembler.cpuRegisters.SP, { isHalf, isStack: true });
+                const popped = assembler.memory.point(assembler.cpuRegisters.getValue("SP"), { isHalf, isStack: true });
                 assembler.cpuRegisters.update(first.register, popped);
             }
         });
@@ -197,34 +198,34 @@ export const Executable = {
             "memory.register": () => {
                 // IMPORTANT: Here we set the current (return) address as the next address that should be executed, after the RET instruction.
                 // If we didn't specify that we want to return to the next address, we would ran into an infinite loop, as function would keep calling itself.
-                const currentAddress = assembler.cpuRegisters.IP + 3;
+                const currentAddress = assembler.cpuRegisters.getValue("IP") + 3;
 
                 assembler.cpuRegisters.update("IP", first.memoryPoint);
 
                 // PUSH return address to the stack.
-                assembler.memory.rewrite(assembler.cpuRegisters.SP, currentAddress, { isStack: true });
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP - 2);
+                assembler.memory.rewrite(assembler.cpuRegisters.getValue("SP"), currentAddress, { isStack: true });
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - 2);
             },
 
             "number.*": () => {
                 // IMPORTANT: Here we set the current (return) address as the next address that should be executed, after the RET instruction.
                 // If we didn't specify that we want to return to the next address, we would ran into an infinite loop, as function would keep calling itself.
-                const currentAddress = assembler.cpuRegisters.IP + 3;
+                const currentAddress = assembler.cpuRegisters.getValue("IP") + 3;
 
                 assembler.cpuRegisters.update("IP", first.value);
 
                 // PUSH return address to the stack.
-                assembler.memory.rewrite(assembler.cpuRegisters.SP, currentAddress, { isStack: true });
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP - 2);
+                assembler.memory.rewrite(assembler.cpuRegisters.getValue("SP"), currentAddress, { isStack: true });
+                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - 2);
             }
         });
     },
 
     ret: assembler => {
         // POP the return address from the stack.
-        assembler.cpuRegisters.update("SP", assembler.cpuRegisters.SP + 2);
+        assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") + 2);
         
-        const popped = assembler.memory.point(assembler.cpuRegisters.SP, { isStack: true });
+        const popped = assembler.memory.point(assembler.cpuRegisters.getValue("SP"), { isStack: true });
         assembler.cpuRegisters.update("IP", popped);
     },
 
@@ -272,22 +273,22 @@ export const Executable = {
         Decoder.run(executable, {
             "register": () => {
                 const ioRegister = assembler.ioRegisters.get(first.registerValue);
-                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.A);
+                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
             },
 
             "memory.register": () => {
                 const ioRegister = assembler.ioRegisters.get(first.memoryPoint);
-                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.A);
+                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
             },
 
             "memory.number.*": () => {
                 const ioRegister = assembler.ioRegisters.get(first.memoryPoint);
-                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.A);
+                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
             },
 
             "number.*": () => {
                 const ioRegister = assembler.ioRegisters.get(first.value);
-                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.A);
+                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
             }
         });
     }
@@ -337,5 +338,5 @@ function updateStackStart(assembler, executable, second) {
             break;
     }
 
-    if(value > assembler.cpuRegisters.SP) assembler.memory.stackStart = value;
+    if(value > assembler.cpuRegisters.getValue("SP")) assembler.memory.stackStart = value;
 }

@@ -4,14 +4,15 @@ import { useWorker } from "../hooks/useWorker";
 import { Assembler } from "../assembler/Assembler";
 
 const ContextWrapper = ({ children }) => {
-    const memoryBuffer = new SharedArrayBuffer(258 * 16);
+    const cpuRegistersBuffer = new SharedArrayBuffer(7 * 2);
     const ioRegistersBuffer = new SharedArrayBuffer(11 * 2);
+    const memoryBuffer = new SharedArrayBuffer(258 * 16);
 
-    const assembler = useRef(new Assembler(memoryBuffer, ioRegistersBuffer)).current;
+    const assembler = useRef(new Assembler(cpuRegistersBuffer, ioRegistersBuffer, memoryBuffer)).current;
     const assemblerWorker = useWorker();
 
     useEffect(() => {
-        if(assemblerWorker) assemblerWorker.postMessage({ action: "init", payload: { memoryBuffer, ioRegistersBuffer } });
+        if(assemblerWorker) assemblerWorker.postMessage({ action: "init", payload: { cpuRegistersBuffer, ioRegistersBuffer, memoryBuffer } });
     }, [assemblerWorker]);
 
     return(

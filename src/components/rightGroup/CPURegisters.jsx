@@ -1,30 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import MiniHeader from "../MiniHeader";
 import HighSpeedBlock from "../HighSpeedBlock";
+import { GlobalContext } from "../../context/GlobalContext";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
-import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 
 const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
-    const initialCPURegisters = {
-        A: 0, B: 0, C: 0, D: 0,
-        IP: 0, SP: 0,
-        SR: { M: 0, C: 0, Z: 0, F: 0, H: 0 }
-    };
+    const { assembler } = useContext(GlobalContext);
     
-    const [cpuRegisters, setCPURegisters] = useState(initialCPURegisters);
+    const [cpuRegisters, setCPURegisters] = useState(assembler.cpuRegisters.construct());
     
     const headerRef = useRef(null);
-    const isHighSpeed = useManagerValue("isHighSpeed");
 
     useEffect(() => {
-        const unsubscribeCPURegisterUpdate = Manager.subscribe("cpuRegisterUpdate", newCPURegisters => setCPURegisters({...initialCPURegisters, ...newCPURegisters}));
-        const unsubscribeReset = Manager.subscribe("cpuRegisterReset", () => setCPURegisters(initialCPURegisters));
-
-        return () => {
-            unsubscribeCPURegisterUpdate();
-            unsubscribeReset();
-        };
+        const unsubscribeCPURegisterPing = Manager.subscribe("cpuRegisterPing", () => setCPURegisters(assembler.cpuRegisters.construct()));
+        return unsubscribeCPURegisterPing;
     }, []);
 
     useLinkedResizing({

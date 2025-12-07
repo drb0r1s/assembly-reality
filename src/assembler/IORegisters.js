@@ -1,6 +1,6 @@
 import { AssemblerError } from "./AssemblerError";
 
-const addressRegister = [
+const allRegisters = [
     "IRQMASK", "IRQSTATUS", "IRQEOI",
     "TMRPRELOAD", "TMRCOUNTER",
     "KBDSTATUS", "KBDDATA",
@@ -28,19 +28,17 @@ const readOnly = {
 
 export class IORegisters {
     constructor(ioRegistersBuffer) {
-        this.buffer = ioRegistersBuffer;
-
         this.registers = new Uint16Array(ioRegistersBuffer);
         this.registerIndexes = {};
 
-        addressRegister.forEach((register, index) => { this.registerIndexes[register] = index });
+        allRegisters.forEach((register, index) => { this.registerIndexes[register] = index });
     }
 
     construct() {
         let constructed = {};
 
-        for(let i = 0; i < addressRegister.length; i++) {
-            const register = addressRegister[i];
+        for(let i = 0; i < allRegisters.length; i++) {
+            const register = allRegisters[i];
             constructed[register] = this.getValueByIndex(i);
         }
 
@@ -48,7 +46,7 @@ export class IORegisters {
     }
 
     get(index) {
-        return addressRegister[index];
+        return allRegisters[index];
     }
 
     getIndex(register) {

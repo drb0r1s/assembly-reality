@@ -34,20 +34,20 @@ const Editor = () => {
 
             switch(action) {
                 case "assemble":
-                    Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: data.cpuRegisters });
-                    Manager.trigger("cpuRegisterUpdate", data.cpuRegisters);
+                    Manager.trigger("memoryUpdate", { memory: data.memory });
+                    Manager.trigger("cpuRegisterPing");
 
                     break;
                 case "run":
                 case "instructionExecuted":
-                    Manager.trigger("memoryUpdate", { memory: data.memory, cpuRegisters: data.cpuRegisters });
-                    Manager.trigger("cpuRegisterUpdate", data.cpuRegisters);
+                    Manager.trigger("memoryUpdate", { memory: data.memory });
+                    Manager.trigger("cpuRegisterPing");
                     Manager.trigger("ioRegisterPing");
 
                     break;
                 case "reset":                    
                     Manager.trigger("memoryReset");
-                    Manager.trigger("cpuRegisterReset");
+                    Manager.trigger("cpuRegisterPing");
                     Manager.trigger("ioRegisterPing");
 
                     break;

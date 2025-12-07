@@ -10,11 +10,10 @@ import { Instants } from "./frontend/Instants";
 import { Executor } from "./backend/Executor";
 
 export class Assembler {
-    constructor(memoryBuffer, ioRegistersBuffer) {
-        this.cpuRegisters = new CPURegisters();
+    constructor(cpuRegistersBuffer, ioRegistersBuffer, memoryBuffer) {
+        this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
         this.ioRegisters = new IORegisters(ioRegistersBuffer);
         this.memory = new Memory(memoryBuffer);
-        this.memoryBuffer = memoryBuffer;
         this.labels = new Labels();
         this.isHalted = false; // End the executing of the code.
         this.intervalId = null;
@@ -54,11 +53,6 @@ export class Assembler {
             memory: {
                 instructions: this.memory.instructions,
                 stackStart: this.memory.stackStart
-            },
-
-            cpuRegisters: {
-                IP: this.cpuRegisters.IP,
-                SP: this.cpuRegisters.SP
             }
         };
     }
@@ -120,7 +114,7 @@ export class Assembler {
             this.setAssemblerInterval(() => {
                 // The end of instruction execution is reached only if one of two cases:
                 if(
-                    (this.memory.instructions.indexOf(this.cpuRegisters.IP) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
+                    (this.memory.instructions.indexOf(this.cpuRegisters.getValue("IP")) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
                     this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 ) {
                     clearInterval(this.intervalId);
@@ -129,7 +123,7 @@ export class Assembler {
                     return;
                 }
 
-                const [row, column] = this.memory.getLocation(this.cpuRegisters.IP);
+                const [row, column] = this.memory.getLocation(this.cpuRegisters.getValue("IP"));
                 const cell = this.memory.getMatrixCell(row, column);
 
                 try {
@@ -151,7 +145,7 @@ export class Assembler {
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
         const args = this.collectArgs(executable.length);
-        const oldAddress = this.cpuRegisters.IP;
+        const oldAddress = this.cpuRegisters.getValue("IP");
 
         Executor[executable.instruction](this, executable, args);
 
@@ -172,10 +166,10 @@ export class Assembler {
 
         if(
             executable.instruction === "HLT" ||
-            (jumpInstructions.indexOf(executable.instruction) > -1 && this.cpuRegisters.IP !== oldAddress)
+            (jumpInstructions.indexOf(executable.instruction) > -1 && this.cpuRegisters.getValue("IP") !== oldAddress)
         ) return;
 
-        const instructionIndex = this.memory.instructions.indexOf(this.cpuRegisters.IP);
+        const instructionIndex = this.memory.instructions.indexOf(this.cpuRegisters.getValue("IP"));
 
         if(instructionIndex === this.memory.instructions.length - 1) this.cpuRegisters.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
         else this.cpuRegisters.update("IP", this.memory.instructions[instructionIndex + 1]);
@@ -184,7 +178,7 @@ export class Assembler {
     collectArgs(length) {
         const args = [];
         
-        let [row, column] = this.memory.getLocation(this.cpuRegisters.IP);
+        let [row, column] = this.memory.getLocation(this.cpuRegisters.getValue("IP"));
         
         for(let i = 0; i < length; i++) {
             args.push(this.memory.getMatrixCell(row, column));
@@ -230,8 +224,6 @@ export class Assembler {
     getAssemblerState(speed) {
         // If speed is too high (over 10kHz), we won't update cpuRegisters and memory.
         if(speed < 10000) return {
-            cpuRegisters: this.cpuRegisters,
-
             memory: {
                 instructions: this.memory.instructions,
                 stackStart: this.memory.stackStart

@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import HighSpeedBlock from "../HighSpeedBlock";
 import MemoryMap from "./MemoryMap";
 import { GlobalContext } from "../../context/GlobalContext";
-import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 
 const Memory = () => {
@@ -14,11 +13,9 @@ const Memory = () => {
     };
     
     const [memory, setMemory] = useState(initialMemory);
-    const [registerPointers, setRegisterPointers] = useState({ IP: 0, SP: 0 });
+    const [cpuRegisters, setCPURegisters] = useState(assembler.cpuRegisters.construct());
 
     const [isSplitActive, setIsSplitActive] = useState(false);
-
-    const isHighSpeed = useManagerValue("isHighSpeed");
     
     useEffect(() => {
         const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", data => {
@@ -27,12 +24,12 @@ const Memory = () => {
                 stackStart: data.memory.stackStart
             });
 
-            if(data?.cpuRegisters) setRegisterPointers({ IP: data.cpuRegisters.IP, SP: data.cpuRegisters.SP });
+            setCPURegisters(assembler.cpuRegisters.construct());
         });
 
         const unsubscribeReset = Manager.subscribe("memoryReset", () => {
             setMemory(initialMemory);
-            setRegisterPointers({ IP: 0, SP: 0 });
+            setCPURegisters(assembler.cpuRegisters.construct());
         });
     
         return () => {
@@ -57,13 +54,13 @@ const Memory = () => {
                 
                 <MemoryMap
                     memory={memory}
-                    registerPointers={registerPointers}
+                    cpuRegisters={cpuRegisters}
                     isSplitActive={isSplitActive}
                 />
 
                 {isSplitActive && <MemoryMap
                     memory={memory}
-                    registerPointers={registerPointers}
+                    cpuRegisters={cpuRegisters}
                     isSplitActive={isSplitActive}
                 />}
             </div>
