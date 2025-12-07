@@ -55,8 +55,10 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
         }
 
-        const handleKeyup = () => {
-            assembler.ioRegisters.keyup();
+        const handleKeyup = e => {
+            const character = e.key.charCodeAt(0);
+
+            assembler.ioRegisters.keyup(character);
             Manager.trigger("ioRegistersPing");
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
