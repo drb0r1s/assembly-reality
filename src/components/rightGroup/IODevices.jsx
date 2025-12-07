@@ -29,12 +29,12 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     });
 
     useEffect(() => {
-        const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", () => setMemoryVersion(prevVersion => prevVersion + 1));
-        const unsubscribeReset = Manager.subscribe("memoryReset", () => setMemoryVersion(prevVersion => prevVersion + 1));
+        const unsubscribeMiniDisplayPing = Manager.subscribe("miniDisplayPing", () => setMemoryVersion(prevVersion => prevVersion + 1));
+        const unsubscribeMemoryReset = Manager.subscribe("memoryReset", () => setMemoryVersion(prevVersion => prevVersion + 1));
         
         return () => {
-            unsubscribeMemoryUpdate();
-            unsubscribeReset();
+            unsubscribeMiniDisplayPing();
+            unsubscribeMemoryReset();
         };
     }, []);
 

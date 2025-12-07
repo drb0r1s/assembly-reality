@@ -51,6 +51,10 @@ const Editor = () => {
                     Manager.trigger("ioRegistersPing");
 
                     break;
+                case "miniDisplayUpdate":
+                    Manager.trigger("miniDisplayPing");
+                    
+                    break;
             }
         };
 

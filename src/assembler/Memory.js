@@ -58,6 +58,8 @@ export class Memory {
             const [secondRow, secondColumn] = this.getLocation(address + adjustments[1]);
             this.setMatrixCell(secondRow, secondColumn, secondCell);
         }
+
+        if(address >= 4096) self.postMessage({ action: "miniDisplayUpdate" });
     }
 
     get(address) {
