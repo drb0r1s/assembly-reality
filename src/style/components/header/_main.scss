@@ -47,6 +47,18 @@ header {
 
         .header-dropdown-buttons .header-dropdown-button {
             position: relative;
+
+            span {
+                @include center;
+                width: 83px;
+                color: #F4F4F4;
+                font-size: 14px;
+                font-family: SourceCodePro-Regular;
+                background-color: #274677;
+                border-radius: 5px;
+                margin-left: 8px;
+                padding: 3px;
+            }
         }
 
         .header-regular-buttons {

@@ -243,6 +243,20 @@ header .header-left-group .header-buttons .header-dropdown-button p {
 header .header-left-group .header-dropdown-buttons .header-dropdown-button {
   position: relative;
 }
+header .header-left-group .header-dropdown-buttons .header-dropdown-button span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  width: 83px;
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: SourceCodePro-Regular;
+  background-color: #274677;
+  border-radius: 5px;
+  margin-left: 8px;
+  padding: 3px;
+}
 header .header-left-group .header-regular-buttons {
   gap: 7px;
 }

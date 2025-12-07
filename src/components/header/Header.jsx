@@ -1,10 +1,13 @@
 import HeaderDropdown from "./HeaderDropdown";
 import { useDropdown } from "../../hooks/useDropdown";
 import { headerButtons } from "../../data/headerButtons";
+import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 
 const Header = () => {
     const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ view: false, speed: false });
+
+    const speed = useManagerValue("speed");
 
     function handleButton(button) {
         switch(button) {
@@ -40,6 +43,7 @@ const Header = () => {
                             />}
 
                             <p>{button.title}</p>
+                            {button.title === "Speed" && <span>{speed < 1000 ? `${speed.toFixed(1)} Hz` : `${(speed / 1000).toFixed(2)} kHz`}</span>}
                             <img src={button.icon} alt={button.title.toUpperCase()} />
                         </div>;
                     })}
