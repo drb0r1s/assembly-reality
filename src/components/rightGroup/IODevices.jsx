@@ -102,7 +102,10 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
 
                 <button
                     className={`io-devices-keyboard ${keyboard.isActive ? "io-devices-keyboard-active" : ""}`}
-                    onClick={() => setKeyboard(prevKeyboard => { return {...prevKeyboard, isActive: !prevKeyboard.isActive} })}
+                    onClick={e => {
+                        if(e.detail === 0) return; // This is used to prevent triggering the click event with a spacebar.
+                        setKeyboard(prevKeyboard => { return {...prevKeyboard, isActive: !prevKeyboard.isActive} });
+                    }}
                 >
                     <div className="io-devices-keyboard-left-group">
                         <div className="io-devices-keyboard-image-holder">
