@@ -8,7 +8,7 @@ import { Manager } from "../../Manager";
 import { images } from "../../data/images";
 
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
-    const { assembler } = useContext(GlobalContext);
+    const { assembler, assemblerWorker } = useContext(GlobalContext);
     
     const [_, setMemoryVersion] = useState(0);
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
@@ -48,18 +48,20 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
             if(e.repeat) return;
 
             const character = e.key.charCodeAt(0);
-
             assembler.ioRegisters.keydown(character);
+
             Manager.trigger("ioRegistersPing");
+            assemblerWorker.postMessage({ action: "ioRegistersKeyboard" }); // Trigger the interrupt.
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
         }
 
         const handleKeyup = e => {
             const character = e.key.charCodeAt(0);
-
             assembler.ioRegisters.keyup(character);
+
             Manager.trigger("ioRegistersPing");
+            assemblerWorker.postMessage({ action: "ioRegistersKeyboard" }); // Trigger the interrupt.
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
         }

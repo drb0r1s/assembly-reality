@@ -17,6 +17,7 @@ export class Assembler {
         this.labels = new Labels();
         this.isHalted = false; // End the executing of the code.
         this.intervalId = null;
+        this.speed = 4; // Default speed (4Hz).
     }
     
     assemble(text) {
@@ -108,6 +109,8 @@ export class Assembler {
     }
 
     execute(speed) {
+        this.speed = speed;
+
         return new Promise((resolve, reject) => {
             let instructionCounter = 0;
 
@@ -160,9 +163,9 @@ export class Assembler {
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
-    // However, if executed instruction was a halt, jump, function call, or function return, we shouldn't move the instruction pointer.
+    // However, if executed instruction was a halt, jump, function call, function return, or interrupt return, we shouldn't move the instruction pointer.
     nextInstruction(executable, oldAddress) {
-        const jumpInstructions = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET"];
+        const jumpInstructions = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET", "IRET"];
 
         if(
             executable.instruction === "HLT" ||
@@ -239,5 +242,7 @@ export class Assembler {
         this.memory.reset();
         this.labels.reset();
         this.isHalted = false;
+        this.intervalId = null;
+        this.speed = 4;
     }
 };

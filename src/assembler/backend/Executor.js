@@ -212,6 +212,15 @@ export const Executor = {
         0x80: { instruction: "SHRB", type: "half.register memory.number.*", length: 4 },
         0x81: { instruction: "SHRB", type: "half.register number.*", length: 3 },
 
+        // CLI
+        0x82: { instruction: "CLI", type: "", length: 1 },
+
+        // STI
+        0x83: { instruction: "STI", type: "", length: 1 },
+
+        // IRET
+        0x84: { instruction: "IRET", type: "", length: 1 },
+
         // IN
         0x87: { instruction: "IN", type: "register", length: 2 },
         0x88: { instruction: "IN", type: "memory.register", length: 3 },
@@ -289,6 +298,12 @@ export const Executor = {
 
     SHR: (...params) => Executable.bitwise(...params),
     SHRB: (...params) => Executable.bitwise(...params),
+
+    CLI: (...params) => Executable.interrupt(...params),
+
+    STI: (...params) => Executable.interrupt(...params),
+
+    IRET: (...params) => Executable.interrupt(...params),
 
     IN: (...params) => Executable.in(...params),
 

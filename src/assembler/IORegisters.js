@@ -1,4 +1,5 @@
 import { AssemblerError } from "./AssemblerError";
+import { Interrupts } from "./Interrupts";
 
 const allRegisters = [
     "IRQMASK", "IRQSTATUS", "IRQEOI",
@@ -64,7 +65,9 @@ export class IORegisters {
     // options.force is used to give a permission to the method to edit read-only registers.
     update(register, value, options) {
         if(readOnly[register] && !options?.force) throw new AssemblerError("ReadOnlyRegisterUpdate", { register });
-        Atomics.store(this.registers, this.getIndex(register), value & 0xFFFF); // We want to keep our register 16-bit.
+        Atomics.store(this.registers, this.getIndex(register), value);
+
+        self.postMessage({ action: "ioRegistersUpdate" });
     }
 
     // KEYDOWN event affects the KBDSTATUS register by adding 1.

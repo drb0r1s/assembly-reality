@@ -87,7 +87,7 @@ export class CPURegisters {
         }
 
         // 16-bit
-        else Atomics.store(this.registers, this.getIndex(register), value & 0xFFFF); // We want to keep our register 16-bit.
+        else Atomics.store(this.registers, this.getIndex(register), value);
     }
 
     reset() {

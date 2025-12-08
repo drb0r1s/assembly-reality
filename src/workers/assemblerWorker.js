@@ -1,4 +1,5 @@
 import { Assembler } from "../assembler/Assembler";
+import { Interrupts } from "../assembler/Interrupts";
 
 let assembler = null;
 
@@ -34,6 +35,9 @@ self.onmessage = async e => {
             assembler.reset();
             self.postMessage({ action, data: null });
 
+            break;
+        case "ioRegistersKeyboard":
+            Interrupts.trigger(assembler, "keyboard");
             break;
     }
 };

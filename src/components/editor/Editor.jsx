@@ -42,7 +42,6 @@ const Editor = () => {
                 case "instructionExecuted":
                     Manager.trigger("memoryUpdate", { memory: data.memory });
                     Manager.trigger("cpuRegistersPing");
-                    Manager.trigger("ioRegistersPing");
 
                     break;
                 case "reset":                    
@@ -53,7 +52,9 @@ const Editor = () => {
                     break;
                 case "miniDisplayUpdate":
                     Manager.trigger("miniDisplayPing");
-                    
+                    break;
+                case "ioRegistersUpdate":
+                    Manager.trigger("ioRegistersPing");
                     break;
             }
         };

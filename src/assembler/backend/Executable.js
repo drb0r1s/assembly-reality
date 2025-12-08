@@ -1,10 +1,12 @@
-import { AssemblerError } from "../AssemblerError";
 import { Decoder } from "./Decoder";
 import { HexCalculator } from "./HexCalculator";
+import { Stack } from "../Stack";
 
 export const Executable = {
     halt: assembler => {
         assembler.isHalted = true;
+        // 0b00001 only because H flag is the last one in the SR sequence.
+        assembler.cpuRegisters.update("SR", assembler.cpuRegisters.getValue("SR") | 0b00001);
     },
 
     move: (assembler, executable, args) => {
@@ -92,22 +94,22 @@ export const Executable = {
         Decoder.run(executable, {
             [`${registerType} ${registerType}`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.registerValue);
-                assembler.cpuRegisters.update("SR", flags & 0xFFFF);
+                assembler.cpuRegisters.update("SR", flags);
             },
 
             [`${registerType} memory.register`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
-                assembler.cpuRegisters.update("SR", flags & 0xFFFF);
+                assembler.cpuRegisters.update("SR", flags);
             },
 
             [`${registerType} memory.number.*`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
-                assembler.cpuRegisters.update("SR", flags & 0xFFFF);
+                assembler.cpuRegisters.update("SR", flags);
             },
 
             [`${registerType} number.*`]: () => {
                 const flags = HexCalculator.CMP(first.registerValue, second.value);
-                assembler.cpuRegisters.update("SR", flags & 0xFFFF);
+                assembler.cpuRegisters.update("SR", flags);
             }
         });
     },
@@ -155,19 +157,8 @@ export const Executable = {
         const registerType = isHalf ? "half.register" : "register";
 
         Decoder.run(executable, {
-            [registerType]: () => {
-                assembler.memory.rewrite(assembler.cpuRegisters.getValue("SP"), first.registerValue, { isHalf, isStack: true });
-
-                const numberOfCells = isHalf ? 1 : 2;
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - numberOfCells);
-            },
-
-            "number.*": () => {
-                assembler.memory.rewrite(assembler.cpuRegisters.getValue("SP"), first.value, { isHalf, isStack: true });
-
-                const numberOfCells = isHalf ? 1 : 2;
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - numberOfCells);
-            }
+            [registerType]: () => Stack.push(assembler, first.registerValue, { isHalf }),
+            "number.*": () => Stack.push(assembler, first.value, { isHalf })
         });
     },
 
@@ -178,16 +169,7 @@ export const Executable = {
         const registerType = isHalf ? "half.register" : "register";
 
         Decoder.run(executable, {
-            [registerType]: () => {
-                const numberOfCells = isHalf ? 1 : 2;
-
-                if(assembler.cpuRegisters.getValue("SP") + numberOfCells > assembler.memory.stackStart) throw new AssemblerError("StackUnderflow");
-
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") + numberOfCells);
-
-                const popped = assembler.memory.point(assembler.cpuRegisters.getValue("SP"), { isHalf, isStack: true });
-                assembler.cpuRegisters.update(first.register, popped);
-            }
+            [registerType]: () => Stack.pop(assembler, first.register, { isHalf })
         });
     },
 
@@ -202,9 +184,7 @@ export const Executable = {
 
                 assembler.cpuRegisters.update("IP", first.memoryPoint);
 
-                // PUSH return address to the stack.
-                assembler.memory.rewrite(assembler.cpuRegisters.getValue("SP"), currentAddress, { isStack: true });
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - 2);
+                Stack.push(assembler, currentAddress); // PUSH return address to the stack.
             },
 
             "number.*": () => {
@@ -214,9 +194,7 @@ export const Executable = {
 
                 assembler.cpuRegisters.update("IP", first.value);
 
-                // PUSH return address to the stack.
-                assembler.memory.rewrite(assembler.cpuRegisters.getValue("SP"), currentAddress, { isStack: true });
-                assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - 2);
+                Stack.push(assembler, currentAddress); // PUSH return address to the stack.
             }
         });
     },
@@ -263,6 +241,7 @@ export const Executable = {
         });
 
         function ioInteractions(register) {
+            // KBDDATA
             if(register === 6) assembler.ioRegisters.update("KBDSTATUS", 0, { force: true });
         }
     },
@@ -274,23 +253,51 @@ export const Executable = {
             "register": () => {
                 const ioRegister = assembler.ioRegisters.get(first.registerValue);
                 assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
+
+                ioInteractions(first.registerValue);
             },
 
             "memory.register": () => {
                 const ioRegister = assembler.ioRegisters.get(first.memoryPoint);
                 assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
+
+                ioInteractions(first.memoryPoint);
             },
 
             "memory.number.*": () => {
                 const ioRegister = assembler.ioRegisters.get(first.memoryPoint);
                 assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
+
+                ioInteractions(first.memoryPoint);
             },
 
             "number.*": () => {
                 const ioRegister = assembler.ioRegisters.get(first.value);
                 assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
+
+                ioInteractions(first.value);
             }
         });
+
+        function ioInteractions(register) {
+            // IRQEOI
+            if(register === 2) assembler.ioRegisters.update("IRQSTATUS", assembler.ioRegisters.getValue("IRQSTATUS") & ~assembler.ioRegisters.getValue("IRQEOI"), { force: true });
+        }
+    },
+
+    interrupt: (assembler, executable) => {
+        if(executable.instruction === "CLI") assembler.cpuRegisters.update("SR", assembler.cpuRegisters.getValue("SR") & 0b01111);
+        if(executable.instruction === "STI") assembler.cpuRegisters.update("SR", assembler.cpuRegisters.getValue("SR") | 0b10000);
+    
+        if(executable.instruction === "IRET") {
+            // 1. The return address (IP) and the status register are restored from the stack in this order.
+            const IP = Stack.pop(assembler);
+            const SR = Stack.pop(assembler);
+
+            // 2. Jump to the return address.
+            assembler.cpuRegisters.update("IP", IP);
+            assembler.cpuRegisters.update("SR", SR); // Here we restore the old (pre-interrupt) SR.
+        }
     }
 };
 
