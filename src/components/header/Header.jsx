@@ -3,11 +3,13 @@ import { useDropdown } from "../../hooks/useDropdown";
 import { headerButtons } from "../../data/headerButtons";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
+import { images } from "../../data/images";
 
 const Header = () => {
     const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ view: false, speed: false });
 
     const speed = useManagerValue("speed");
+    const isRunning = useManagerValue("isRunning");
 
     function handleButton(button) {
         switch(button) {
@@ -16,6 +18,9 @@ const Header = () => {
                 break;
             case "Run":
                 Manager.trigger("run");
+                break;
+            case "Pause":
+                Manager.trigger("pause");
                 break;
             case "Step": break;
             case "Reset":
@@ -53,6 +58,15 @@ const Header = () => {
 
                 <div className="header-buttons header-regular-buttons">
                     {headerButtons.regular.map((button, index) => {
+                        if(button.title === "Run") return <div
+                            key={index}
+                            className="header-regular-button"
+                            onClick={() => handleButton(isRunning ? "Pause" : "Run")}
+                        >
+                            <img src={isRunning ? images.pauseIcon : images.runIcon} alt={isRunning ? "PAUSE" : "RUN"} />
+                            <p>{isRunning ? "Pause" : "Run"}</p>
+                        </div>;
+                        
                         return <button
                             key={index}
                             className="header-regular-button"

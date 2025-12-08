@@ -31,6 +31,13 @@ self.onmessage = async e => {
             else self.postMessage({ action, data: result });
 
             break;
+        case "pause":
+            result = assembler.pause();
+
+            if(result?.error) self.postMessage({ action, error: result.error });
+            else self.postMessage({ action, data: result });
+
+            break;
         case "reset":
             assembler.reset();
             self.postMessage({ action, data: null });

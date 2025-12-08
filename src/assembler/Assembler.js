@@ -121,7 +121,7 @@ export class Assembler {
                     this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 ) {
                     clearInterval(this.intervalId);
-                    resolve(this.getAssemblerState(speed));
+                    resolve(this.getAssemblerState());
 
                     return;
                 }
@@ -159,7 +159,7 @@ export class Assembler {
         let updatePerInstructions = Math.floor(speed / updatesPerSecond);
         if (updatePerInstructions < 1) updatePerInstructions = 1;
 
-        if(instructionCounter % updatePerInstructions === 0) self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState(speed) });
+        if(instructionCounter % updatePerInstructions === 0) self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
@@ -176,6 +176,13 @@ export class Assembler {
 
         if(instructionIndex === this.memory.instructions.length - 1) this.cpuRegisters.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
         else this.cpuRegisters.update("IP", this.memory.instructions[instructionIndex + 1]);
+    }
+
+    pause() {
+        if(!this.intervalId) return;
+
+        clearInterval(this.intervalId);
+        return this.getAssemblerState();
     }
 
     collectArgs(length) {
@@ -224,9 +231,9 @@ export class Assembler {
         }
     }
 
-    getAssemblerState(speed) {
+    getAssemblerState() {
         // If speed is too high (over 10kHz), we won't update cpuRegisters and memory.
-        if(speed < 10000) return {
+        if(this.speed < 10000) return {
             memory: {
                 instructions: this.memory.instructions,
                 stackStart: this.memory.stackStart

@@ -21,7 +21,16 @@ const Editor = () => {
 
         const unsubscribeRun = Manager.subscribe("run", () => {
             if(!assemblerWorker) return;
+
+            Manager.set("isRunning", true);
             assemblerWorker.postMessage({ action: "run", payload: parseInt(speed) });
+        });
+
+        const unsubscribePause = Manager.subscribe("pause", () => {
+            if(!assemblerWorker) return;
+
+            Manager.set("isRunning", false);
+            assemblerWorker.postMessage({ action: "pause" });
         });
 
         assemblerWorker.onmessage = e => {
@@ -38,7 +47,14 @@ const Editor = () => {
                     Manager.trigger("cpuRegistersPing");
 
                     break;
+                // We receive the message with the action "run" only when the execution has ended.
                 case "run":
+                    Manager.set("isRunning", false);
+
+                    Manager.trigger("memoryUpdate", { memory: data.memory });
+                    Manager.trigger("cpuRegistersPing");
+
+                    break;
                 case "instructionExecuted":
                     Manager.trigger("memoryUpdate", { memory: data.memory });
                     Manager.trigger("cpuRegistersPing");
@@ -62,6 +78,7 @@ const Editor = () => {
         return () => {
             unsubscribeAssemble();
             unsubscribeRun();
+            unsubscribePause();
         };
     }, [code, speed]);
     
