@@ -18,6 +18,7 @@ export const rules = [
     { token: "memoryHalfRegister", foreground: "C5B26E" },
     { token: "number", foreground: "B5CEA8" },
     { token: "memoryNumber", foreground: "9BB98E" },
-    { token: "string", foreground: "CE9178" },
+    { token: "stringDouble", foreground: "CE9178" },
+    { token: "stringSingle", foreground: "ECC6B9" },
     { token: "comment", foreground: "6A9955", fontStyle: "italic" }
 ];

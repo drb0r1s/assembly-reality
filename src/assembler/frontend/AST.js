@@ -115,7 +115,7 @@ export const AST = {
     },
 
     parseOperand: token => {
-        if(token.value === ",") return new SeparatorNode(token.value);
+        if(token.value === ",") return new SeparatorNode(token.value);    
         return new OperandNode(token.value, token.type);
     }
 };

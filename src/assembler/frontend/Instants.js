@@ -22,7 +22,7 @@ export const Instants = {
             result = ByteNumber.divide(intValue);
         }
 
-        else if(operand.valueType === "string.double" || operand.valueType === "string.single") {
+        else if(operand.valueType === "string.double") {
             const characters = operand.value.split("");
 
             result = [];
@@ -55,7 +55,7 @@ export const Instants = {
             result = [intValue];
         }
 
-        else if(operand.valueType === "string.double" || operand.valueType === "string.single") {
+        else if(operand.valueType === "string.double") {
             const characters = operand.value.split("");
             result = characters.map(character => character.charCodeAt(0));
         }

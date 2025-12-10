@@ -30,8 +30,8 @@ export const tokenizer = {
         [/\s\[([a-zA-Z0-9_]+)\](?=\s|,|$)/, "memoryReferenceLabel"], // Memory reference label
         
         // Strings
-        [/\"([^"\\]|\\.)*\"/, "string"], // Double-quoted strings
-        [/\'([^'\\]|\\.)*\'/, "string"], // Single-quoted strings
+        [/\"([^"\\]|\\.)*\"/, "stringDouble"], // Double-quoted strings
+        [/\'([^'\\]|\\.)*\'/, "stringSingle"], // Single-quoted strings
         
         // Comments
         [/\/\*/, { token: "comment", next: "@comment" }], // Multi-line comment

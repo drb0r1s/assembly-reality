@@ -1,3 +1,4 @@
+import { AssemblerError } from "../AssemblerError";
 import { rootKeywordsExpression } from "../../data/richEditor/keywords";
 import { rootDefaultRegistersExpression, rootHalfRegistersExpression } from "../../data/richEditor/registers";
 
@@ -79,6 +80,14 @@ export const Tokenizer = {
                     };
 
                     if(token.type === "keyword") token.isHalf = Tokenizer.isKeywordHalf(token.value);
+
+                    // All tokens of type "string.single" are going to be transformed to "number.decimal".
+                    if(token.type === "string.single") {
+                        if(token.value.length > 1) throw new AssemblerError("StringAsACharacter", null, token.line);
+
+                        token.type = "number.decimal";
+                        token.value = token.value.charCodeAt(0);
+                    }
                     
                     lineTokens.push(token);
                 }
