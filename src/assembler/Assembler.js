@@ -116,13 +116,14 @@ export class Assembler {
         return new Promise((resolve, reject) => {
             let instructionCounter = 0;
 
-            this.setAssemblerInterval(() => {
+            this.setAssemblerInterval(() => {                
                 // The end of instruction execution is reached only if one of two cases:
                 if(
                     (this.memory.instructions.indexOf(this.cpuRegisters.getValue("IP")) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
                     this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 ) {
-                    if(this.isTimerActive) return Interrupts.checkTimer(this);
+                    const mFlag = (this.cpuRegisters.getValue("SR") >> 4) & 1;
+                    if(this.isTimerActive && mFlag) return Interrupts.checkTimer(this);
                     
                     clearInterval(this.intervalId);
                     resolve(this.getAssemblerState());
@@ -232,7 +233,6 @@ export class Assembler {
         else {
             // The first iteration.
             callback();
-            
             this.intervalId = setInterval(callback, delay);
         }
     }
@@ -257,6 +257,8 @@ export class Assembler {
         this.ioRegisters.reset();
         this.memory.reset();
         this.labels.reset();
+        
+        clearInterval(this.intervalId);
         this.intervalId = null;
     }
 };

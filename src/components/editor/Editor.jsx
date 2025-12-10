@@ -60,7 +60,9 @@ const Editor = () => {
                     Manager.trigger("cpuRegistersPing");
 
                     break;
-                case "reset":                    
+                case "reset":
+                    Manager.set("isRunning", false);    
+                
                     Manager.trigger("memoryReset");
                     Manager.trigger("cpuRegistersPing");
                     Manager.trigger("ioRegistersPing");

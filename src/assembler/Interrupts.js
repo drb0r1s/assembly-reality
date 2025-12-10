@@ -69,6 +69,6 @@ export const Interrupts = {
             assembler.ioRegisters.update("TMRCOUNTER", assembler.ioRegisters.getValue("TMRPRELOAD"), { force: true });
         }
 
-        else assembler.ioRegisters.update("TMRCOUNTER", tmrCounter - 10, { force: true });
+        else assembler.ioRegisters.update("TMRCOUNTER", tmrCounter - 1, { force: true });
     }
 };
