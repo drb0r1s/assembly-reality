@@ -289,7 +289,7 @@ header .header-title {
   position: relative;
 }
 .editor .editor-pages {
-  height: 35px;
+  height: 40px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -300,25 +300,28 @@ header .header-title {
   flex-shrink: 0;
   background-color: black;
   border-bottom: 1px solid #2F3336;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 .editor .editor-pages .editor-page {
-  height: calc(100% - 10px);
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   justify-content: space-between;
   gap: 12px;
+  flex-shrink: 0;
   background-color: #0F0F0F;
   border: 1px solid transparent;
   border-radius: 5px;
+  opacity: 0.7;
   padding: 0 8px;
   cursor: pointer;
   transition: 300ms;
 }
 .editor .editor-pages .editor-page:hover {
   background-color: #2B2A2A;
-  border: 1px solid #F4F4F4;
 }
 .editor .editor-pages .editor-page:hover button {
   opacity: 1;
@@ -350,6 +353,7 @@ header .header-title {
   border: none;
   opacity: 0;
   transition: 300ms;
+  cursor: pointer;
 }
 .editor .editor-pages .editor-page button img {
   height: 16px;
@@ -359,18 +363,17 @@ header .header-title {
 }
 .editor .editor-pages .editor-active-page {
   background-color: #2B2A2A;
+  opacity: 1;
   cursor: default;
 }
-.editor .editor-pages .editor-active-page:hover {
-  border: 1px solid transparent;
-}
 .editor .editor-pages .editor-add-button {
-  height: 25px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
+  flex-shrink: 0;
   background-color: #0F0F0F;
   border: none;
   border-radius: 50%;

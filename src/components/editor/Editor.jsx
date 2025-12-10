@@ -15,6 +15,22 @@ const Editor = () => {
 
     const speed = useManagerValue("speed");
 
+    // THIS AUTOSAVE SYSTEM IS TEMPORARILY NOT IN USE
+    // AUTOSAVE GET
+    /*useEffect(() => {
+        const savedCode = JSON.parse(localStorage.getItem("ASSEMBLY_REALITY_CODE"));
+
+        setPages(savedCode.pages);
+        setCodes(savedCode.codes);
+    }, []);
+
+    // AUTOSAVE SET
+    useEffect(() => {
+        return () => {
+            localStorage.setItem("ASSEMBLY_REALITY_CODE", JSON.stringify({ pages, codes }));
+        }
+    }, [pages, codes]);*/
+
     useEffect(() => {
         const unsubscribeAssemble = Manager.subscribe("assemble", () => {
             if(!assemblerWorker) return;

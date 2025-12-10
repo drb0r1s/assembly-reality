@@ -6,7 +6,7 @@ const RichEditor = ({ code, onChange }) => {
     const handleEditorDidMount = useRichEditor();
     
     return(
-        <div className="rich-editor" style={{ height: "calc(100% - 35px)", width: "100%" }}>
+        <div className="rich-editor" style={{ height: "calc(100% - 40px)", width: "100%" }}>
             <Editor
                 height="100%"
                 defaultLanguage="assembly"
