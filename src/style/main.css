@@ -281,8 +281,110 @@ header .header-title {
   height: 100%;
   width: 100%;
   min-width: calc(100vw - 860px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   border-top: 1px solid #2F3336;
   position: relative;
+}
+.editor .editor-pages {
+  height: 35px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  background-color: black;
+  border-bottom: 1px solid #2F3336;
+}
+.editor .editor-pages .editor-page {
+  height: calc(100% - 10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 12px;
+  background-color: #0F0F0F;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 0 8px;
+  cursor: pointer;
+  transition: 300ms;
+}
+.editor .editor-pages .editor-page:hover {
+  background-color: #2B2A2A;
+  border: 1px solid #F4F4F4;
+}
+.editor .editor-pages .editor-page:hover button {
+  opacity: 1;
+}
+.editor .editor-pages .editor-page .editor-page-left-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 6px;
+}
+.editor .editor-pages .editor-page .editor-page-left-group img {
+  height: 18px;
+  width: 18px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.editor .editor-pages .editor-page .editor-page-left-group p {
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: Roboto-Regular;
+}
+.editor .editor-pages .editor-page button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: transparent;
+  border: none;
+  opacity: 0;
+  transition: 300ms;
+}
+.editor .editor-pages .editor-page button img {
+  height: 16px;
+  width: 16px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.editor .editor-pages .editor-active-page {
+  background-color: #2B2A2A;
+  cursor: default;
+}
+.editor .editor-pages .editor-active-page:hover {
+  border: 1px solid transparent;
+}
+.editor .editor-pages .editor-add-button {
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: #0F0F0F;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 300ms;
+}
+.editor .editor-pages .editor-add-button:hover {
+  background-color: #2B2A2A;
+}
+.editor .editor-pages .editor-add-button img {
+  height: 20px;
+  width: 20px;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .editor .editor-error {
   width: 100%;

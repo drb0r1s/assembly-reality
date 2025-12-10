@@ -10,9 +10,11 @@ import keyboardBlueIcon from "../images/keyboard-blue-icon.svg";
 import checkIcon from "../images/check-icon.svg";
 import xIcon from "../images/x-icon.svg";
 import visibilityIcon from "../images/visibility-icon.svg";
+import pageIcon from "../images/page-icon.svg";
+import addIcon from "../images/add-icon.svg";
 
 export const images = {
     // GENERAL
     arrowDownIcon, assembleIcon, runIcon, pauseIcon, stepIcon, resetIcon, keyboardIcon, keyboardBlueIcon, checkIcon,
-    xIcon, visibilityIcon
+    xIcon, visibilityIcon, pageIcon, addIcon
 };
