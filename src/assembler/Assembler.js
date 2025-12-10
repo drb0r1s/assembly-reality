@@ -8,16 +8,18 @@ import { AST } from "./frontend/AST";
 import { Instructions } from "./frontend/Instructions";
 import { Instants } from "./frontend/Instants";
 import { Executor } from "./backend/Executor";
+import { Interrupts } from "./Interrupts";
 
 export class Assembler {
     constructor(cpuRegistersBuffer, ioRegistersBuffer, memoryBuffer) {
+        this.speed = 4; // Default speed (4Hz).
+        this.isHalted = false; // End the executing of the code.
+        this.isTimerActive = false;
         this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
         this.ioRegisters = new IORegisters(ioRegistersBuffer);
         this.memory = new Memory(memoryBuffer);
         this.labels = new Labels();
-        this.isHalted = false; // End the executing of the code.
         this.intervalId = null;
-        this.speed = 4; // Default speed (4Hz).
     }
     
     assemble(text) {
@@ -78,7 +80,7 @@ export class Assembler {
 
                 // In case we need to write strings in memory, we need to get the length of the string.
                 // However, if we want to use 16-bit value for each character (DW), then the shape of the instant in memory is going to be twice the length of the string.
-                if(["string.double", "string.single"].indexOf(operand.valueType) > -1) lengthOfInstant = statement.name === "DW" ? 2 * operand.value.length : operand.value.length;
+                if(operand.valueType === "string.double") lengthOfInstant = statement.name === "DW" ? 2 * operand.value.length : operand.value.length;
                 else lengthOfInstant = statement.isHalf ? 1 : 2;
 
                 this.memory.advance(lengthOfInstant);
@@ -120,6 +122,8 @@ export class Assembler {
                     (this.memory.instructions.indexOf(this.cpuRegisters.getValue("IP")) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
                     this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 ) {
+                    if(this.isTimerActive) return Interrupts.checkTimer(this);
+                    
                     clearInterval(this.intervalId);
                     resolve(this.getAssemblerState());
 
@@ -139,6 +143,8 @@ export class Assembler {
                 }
 
                 instructionCounter++;
+
+                Interrupts.checkTimer(this);
             }, speed);
         });
     }
@@ -244,12 +250,13 @@ export class Assembler {
     }
 
     reset() {
+        this.speed = 4;
+        this.isHalted = false;
+        this.isTimerActive = false;
         this.cpuRegisters.reset();
         this.ioRegisters.reset();
         this.memory.reset();
         this.labels.reset();
-        this.isHalted = false;
         this.intervalId = null;
-        this.speed = 4;
     }
 };

@@ -42,6 +42,7 @@ export class AssemblerError {
             case "DivisionByZero":
                 this.isRuntime = true;
                 return "DIV instruction cannot be performed with operand 0!";
+            case "StringAsACharacter": return "Single characters must be defined using 'single quotes', \"double quotes\" are reserved for strings.";
         }
     }
 };

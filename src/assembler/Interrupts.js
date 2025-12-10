@@ -12,6 +12,9 @@ export const Interrupts = {
             case "keyboard":
                 assembler.ioRegisters.update("IRQSTATUS", assembler.ioRegisters.getValue("IRQSTATUS") | 0b001, { force: true });
                 break;
+            case "timer":
+                assembler.ioRegisters.update("IRQSTATUS", assembler.ioRegisters.getValue("IRQSTATUS") | 0b010, { force: true });
+                break;
         }
 
         Interrupts.process(assembler);
@@ -19,6 +22,7 @@ export const Interrupts = {
         function checkIRQMASK() {
             switch(type) {
                 case "keyboard": return irqMask & 1; // 1st LSB
+                case "timer": return (irqMask >> 1) & 1;
             }
         }
     },
@@ -53,5 +57,18 @@ export const Interrupts = {
             if(result?.error) self.postMessage({ action, error: result.error });
             else self.postMessage({ action: "run", data: result });
         }
+    },
+
+    checkTimer: assembler => {
+        if(!assembler.isTimerActive) return;
+
+        const tmrCounter = assembler.ioRegisters.getValue("TMRCOUNTER");
+        
+        if(tmrCounter === 0) {
+            Interrupts.trigger(assembler, "timer");
+            assembler.ioRegisters.update("TMRCOUNTER", assembler.ioRegisters.getValue("TMRPRELOAD"), { force: true });
+        }
+
+        else assembler.ioRegisters.update("TMRCOUNTER", tmrCounter - 10, { force: true });
     }
 };

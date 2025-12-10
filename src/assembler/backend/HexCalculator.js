@@ -59,22 +59,22 @@ export const HexCalculator = {
 
     // CMP relies on SR flags (C and Z).
     // Z is set to 1 if first === second, otherwise C is set to 1.
-    CMP: (first, second) => {
-        const flags = { M: 0, C: 0, Z: 0, F: 0, H: 0 };
+    CMP: (assembler, first, second) => {
+        const SR = assembler.cpuRegisters.constructSR();
 
-        if(first === second) flags.Z = 1;
+        if(first === second) SR.Z = 1;
         
         else {
-            if(first < second) flags.C = 1;
-            else flags.C = 0;
+            if(first < second) SR.C = 1;
+            else SR.C = 0;
         }
 
         return(
-            (flags.M << 4) |
-            (flags.C << 3) |
-            (flags.Z << 2) |
-            (flags.F << 1) |
-            (flags.H << 0)
+            (SR.M << 4) |
+            (SR.C << 3) |
+            (SR.Z << 2) |
+            (SR.F << 1) |
+            (SR.H << 0)
         );
     }
 };

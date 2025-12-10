@@ -93,22 +93,22 @@ export const Executable = {
 
         Decoder.run(executable, {
             [`${registerType} ${registerType}`]: () => {
-                const flags = HexCalculator.CMP(first.registerValue, second.registerValue);
+                const flags = HexCalculator.CMP(assembler, first.registerValue, second.registerValue);
                 assembler.cpuRegisters.update("SR", flags);
             },
 
             [`${registerType} memory.register`]: () => {
-                const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
+                const flags = HexCalculator.CMP(assembler, first.registerValue, second.memoryPoint);
                 assembler.cpuRegisters.update("SR", flags);
             },
 
             [`${registerType} memory.number.*`]: () => {
-                const flags = HexCalculator.CMP(first.registerValue, second.memoryPoint);
+                const flags = HexCalculator.CMP(assembler, first.registerValue, second.memoryPoint);
                 assembler.cpuRegisters.update("SR", flags);
             },
 
             [`${registerType} number.*`]: () => {
-                const flags = HexCalculator.CMP(first.registerValue, second.value);
+                const flags = HexCalculator.CMP(assembler, first.registerValue, second.value);
                 assembler.cpuRegisters.update("SR", flags);
             }
         });
@@ -280,8 +280,17 @@ export const Executable = {
         });
 
         function ioInteractions(register) {
-            // IRQEOI
-            if(register === 2) assembler.ioRegisters.update("IRQSTATUS", assembler.ioRegisters.getValue("IRQSTATUS") & ~assembler.ioRegisters.getValue("IRQEOI"), { force: true });
+            switch(register) {
+                // IRQEOI
+                case 2:
+                    assembler.ioRegisters.update("IRQSTATUS", assembler.ioRegisters.getValue("IRQSTATUS") & ~assembler.ioRegisters.getValue("IRQEOI"), { force: true });
+                    break;
+                // TMRPRELOAD
+                case 3:
+                    assembler.isTimerActive = true;
+                    assembler.ioRegisters.update("TMRCOUNTER", assembler.ioRegisters.getValue("TMRPRELOAD"), { force: true });
+                    break;
+            }
         }
     },
 
