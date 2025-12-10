@@ -33,6 +33,11 @@ const Editor = () => {
             assemblerWorker.postMessage({ action: "pause" });
         });
 
+        const unsubscribeStep = Manager.subscribe("step", () => {
+            if(!assemblerWorker) return;
+            assemblerWorker.postMessage({ action: "step" });
+        });
+
         assemblerWorker.onmessage = e => {
             const { action, data, error } = e.data;
 
@@ -81,6 +86,7 @@ const Editor = () => {
             unsubscribeAssemble();
             unsubscribeRun();
             unsubscribePause();
+            unsubscribeStep();
         };
     }, [code, speed]);
     

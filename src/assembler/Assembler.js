@@ -135,7 +135,7 @@ export class Assembler {
                 const cell = this.memory.getMatrixCell(row, column);
 
                 try {
-                    if(!this.isHalted) this.executeInstruction(cell, speed, instructionCounter);
+                    if(!this.isHalted) this.executeInstruction(cell, instructionCounter);
                 }
 
                 catch(error) {
@@ -146,11 +146,27 @@ export class Assembler {
                 instructionCounter++;
 
                 Interrupts.checkTimer(this);
-            }, speed);
+            });
         });
     }
 
-    executeInstruction(cell, speed, instructionCounter) {
+    executeOne() {
+        const [row, column] = this.memory.getLocation(this.cpuRegisters.getValue("IP"));
+        const cell = this.memory.getMatrixCell(row, column);
+
+        try {
+            if(!this.isHalted) this.executeInstruction(cell);
+        }
+
+        catch(error) {
+            if(error instanceof AssemblerError) return { error };
+            else console.error(error);
+        }
+
+        return this.getAssemblerState();
+    }
+
+    executeInstruction(cell, instructionCounter = null) {
         const executable = Executor.codes[cell];
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
@@ -163,10 +179,16 @@ export class Assembler {
 
         const updatesPerSecond = 10;
         
-        let updatePerInstructions = Math.floor(speed / updatesPerSecond);
-        if (updatePerInstructions < 1) updatePerInstructions = 1;
+        // If instructionCounter is defined, that means that we're in a "running" mode.
+        if(instructionCounter) {
+            let updatePerInstructions = Math.floor(this.speed / updatesPerSecond);
+            if (updatePerInstructions < 1) updatePerInstructions = 1;
 
-        if(instructionCounter % updatePerInstructions === 0) self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
+            if(instructionCounter % updatePerInstructions === 0) self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
+        }
+
+        // Otherwise, we're just executing one instruction ("step" mode).
+        else self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
@@ -212,17 +234,17 @@ export class Assembler {
         return args;
     }
 
-    setAssemblerInterval(callback, speed) {
-        const delay = 1000 / speed; // ms per instruction
+    setAssemblerInterval(callback) {
+        const delay = 1000 / this.speed; // ms per instruction
 
         // High speeds (> 1kHz) require < 1ms per instruction, which is not possible in browser.
         // As a solution to that, we're going to execute multiple instructions at once, to simulate that < 1ms speed.
-        const isHighSpeed = speed > 1000;
+        const isHighSpeed = this.speed > 1000;
 
         if(this.intervalId) clearInterval(this.intervalId);
 
         if(isHighSpeed) {
-            const numberOfInstructions = Math.floor(speed / 1000);
+            const numberOfInstructions = Math.floor(this.speed / 1000);
 
             // Here we do not want to call one callback immediately, like we do for low speeds.
             this.intervalId = setInterval(() => {

@@ -22,7 +22,9 @@ const Header = () => {
             case "Pause":
                 Manager.trigger("pause");
                 break;
-            case "Step": break;
+            case "Step":
+                Manager.trigger("step");
+                break;
             case "Reset":
                 Manager.trigger("reset");
                 break;
