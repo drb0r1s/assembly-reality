@@ -244,11 +244,36 @@ export class Assembler {
         if(this.intervalId) clearInterval(this.intervalId);
 
         if(isHighSpeed) {
-            const numberOfInstructions = Math.floor(this.speed / 1000);
+            let prevNow = performance.now();
+            let leftover = 0;
 
             // Here we do not want to call one callback immediately, like we do for low speeds.
             this.intervalId = setInterval(() => {
-                for(let i = 0; i < numberOfInstructions; i++) callback();
+                const now = performance.now();
+
+                const passedTime = now - prevNow;
+                prevNow = now;
+
+                // This constant uses the formula to calculate instructions per clock cycle, with respect to leftovers.
+                const numberOfInstructions = (passedTime * this.speed) / 1000 + leftover;
+                let instructionsToExecute = Math.floor(numberOfInstructions);
+
+                leftover = numberOfInstructions - instructionsToExecute;
+
+                if(instructionsToExecute <= 0) return;
+
+                // In general, relation between speed and clock cycles is calculated to be approx. speed / 100 = clock cycle.
+                // Because of that, we will rely on this constant to speed up the execution if instructionsToExecute is too high.
+                const speedToClockCycleRatio = this.speed / 100;
+
+                while(instructionsToExecute > 0) {
+                    // There is a possibility that calculated real instructions per clock cycle (instructionsToExecute) are not fast enough for our simulation.
+                    // Because of that, as mentioned above, we use speedToClockCycleRatio.
+                    const executedInstructions = Math.min(speedToClockCycleRatio, instructionsToExecute);
+                    for(let i = 0; i < executedInstructions; i++) callback();
+
+                    instructionsToExecute -= executedInstructions;
+                }
             }, 1);
         }
 
