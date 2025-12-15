@@ -67,7 +67,9 @@ export class IORegisters {
         if(readOnly[register] && !options?.force) throw new AssemblerError("ReadOnlyRegisterUpdate", { register });
         Atomics.store(this.registers, this.getIndex(register), value);
 
-        self.postMessage({ action: "ioRegistersUpdate" });
+        // IO Register TMRCOUNTER updates too fast, there is not a real point in showing that real-time.
+        // For that register, it is fine to rely on the standard updating system.
+        if(register !== "TMRCOUNTER") self.postMessage({ action: "ioRegistersUpdate" });
     }
 
     // KEYDOWN event affects the KBDSTATUS register by adding 1.
