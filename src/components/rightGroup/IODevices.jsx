@@ -105,7 +105,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
                 </div>
 
                 <div className="io-devices-mini-display">
-                    {Array.from(assembler.memory.matrix.slice(-32)).map((element, index) => {
+                    {assembler.memory.matrix.arrayify({ miniDisplay: true }).map((element, index) => {
                         return <p
                             key={index}
                             className="io-devices-mini-display-element"

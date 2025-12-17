@@ -47,7 +47,7 @@ const MemoryMap = ({ memory, cpuRegisters, isSplitActive }) => {
                 </div>
 
                 <div className="memory-map-matrix">
-                    {Array.from(assembler.memory.matrix).map((element, index) => {
+                    {assembler.memory.matrix.arrayify().map((element, index) => {
                         return <p
                             key={index}
                             className={`memory-map-matrix-element ${getCellClass(index)}`}
