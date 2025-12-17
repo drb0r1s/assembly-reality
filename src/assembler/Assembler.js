@@ -3,6 +3,7 @@ import { CPURegisters } from "./CPURegisters";
 import { IORegisters } from "./IORegisters";
 import { Memory } from "./Memory";
 import { Labels } from "./Labels";
+import { Graphics } from "./Graphics";
 import { Tokenizer } from "./frontend/Tokenizer";
 import { AST } from "./frontend/AST";
 import { Instructions } from "./frontend/Instructions";
@@ -19,6 +20,7 @@ export class Assembler {
         this.ioRegisters = new IORegisters(ioRegistersBuffer);
         this.memory = new Memory(memoryBuffer);
         this.labels = new Labels();
+        this.graphics = new Graphics(memoryBuffer);
         this.intervalId = null;
     }
     
@@ -131,8 +133,8 @@ export class Assembler {
                     return;
                 }
 
-                const [row, column] = this.memory.getLocation(this.cpuRegisters.getValue("IP"));
-                const cell = this.memory.getMatrixCell(row, column);
+                const [row, column] = this.memory.matrix.getLocation(this.cpuRegisters.getValue("IP"));
+                const cell = this.memory.matrix.getCell(row, column);
 
                 try {
                     if(!this.isHalted) this.executeInstruction(cell, instructionCounter);
@@ -151,8 +153,8 @@ export class Assembler {
     }
 
     executeOne() {
-        const [row, column] = this.memory.getLocation(this.cpuRegisters.getValue("IP"));
-        const cell = this.memory.getMatrixCell(row, column);
+        const [row, column] = this.memory.matrix.getLocation(this.cpuRegisters.getValue("IP"));
+        const cell = this.memory.matrix.getCell(row, column);
 
         try {
             if(!this.isHalted) this.executeInstruction(cell);
@@ -203,7 +205,7 @@ export class Assembler {
 
         const instructionIndex = this.memory.instructions.indexOf(this.cpuRegisters.getValue("IP"));
 
-        if(instructionIndex === this.memory.instructions.length - 1) this.cpuRegisters.update("IP", this.memory.getAddress(this.memory.free.i, this.memory.free.j));
+        if(instructionIndex === this.memory.instructions.length - 1) this.cpuRegisters.update("IP", this.memory.matrix.getAddress(this.memory.free.i, this.memory.free.j));
         else this.cpuRegisters.update("IP", this.memory.instructions[instructionIndex + 1]);
     }
 
@@ -217,10 +219,10 @@ export class Assembler {
     collectArgs(length) {
         const args = [];
         
-        let [row, column] = this.memory.getLocation(this.cpuRegisters.getValue("IP"));
+        let [row, column] = this.memory.matrix.getLocation(this.cpuRegisters.getValue("IP"));
         
         for(let i = 0; i < length; i++) {
-            args.push(this.memory.getMatrixCell(row, column));
+            args.push(this.memory.matrix.getCell(row, column));
 
             column++;
 
@@ -303,6 +305,7 @@ export class Assembler {
         this.cpuRegisters.reset();
         this.ioRegisters.reset();
         this.memory.reset();
+        this.graphics.reset();
         this.labels.reset();
         
         clearInterval(this.intervalId);

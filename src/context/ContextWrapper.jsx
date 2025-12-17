@@ -6,7 +6,7 @@ import { Assembler } from "../assembler/Assembler";
 const ContextWrapper = ({ children }) => {
     const cpuRegistersBuffer = new SharedArrayBuffer(7 * 2);
     const ioRegistersBuffer = new SharedArrayBuffer(11 * 2);
-    const memoryBuffer = new SharedArrayBuffer(258 * 16);
+    const memoryBuffer = new SharedArrayBuffer(0x10000); // 65536B
 
     const assembler = useRef(new Assembler(cpuRegistersBuffer, ioRegistersBuffer, memoryBuffer)).current;
     const assemblerWorker = useWorker();

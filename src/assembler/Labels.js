@@ -13,7 +13,7 @@ export class Labels {
 
         this.collection = {
             ...this.collection,
-            [label.name]: memory.getAddress(row, column).toString(16)
+            [label.name]: memory.matrix.getAddress(row, column).toString(16)
         };
     }
 
