@@ -15,6 +15,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     const [lowerSection, setLowerSection] = useState({ ref: null }); // This state has to contain the elements inside the object, under the ref property, because of the way React is updating ref objects.
     
     const headerRef = useRef(null);
+    const canvasStrongRef = useRef(null);
 
     const view = useManagerValue("view");
     
@@ -30,11 +31,21 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
 
     useEffect(() => {
         const unsubscribeMiniDisplayPing = Manager.subscribe("miniDisplayPing", () => setMemoryVersion(prevVersion => prevVersion + 1));
-        const unsubscribeMemoryReset = Manager.subscribe("memoryReset", () => setMemoryVersion(prevVersion => prevVersion + 1));
+        
+        const unsubscribeMemoryReset = Manager.subscribe("memoryReset", () => {
+            setMemoryVersion(prevVersion => prevVersion + 1);
+            canvasStrongRef.current.style.opacity = ""; // This memoryReset event is useful to return the title over the canvas.
+        });
+
+        const unsubscribeGraphicsEnabled = Manager.subscribe("graphicsEnabled", () => { canvasStrongRef.current.style.opacity = "0" });
+        const unsubscribeGraphicsDisabled = Manager.subscribe("graphicsDisabled", () => { canvasStrongRef.current.style.opacity = "" });
         
         return () => {
             unsubscribeMiniDisplayPing();
             unsubscribeMemoryReset();
+
+            unsubscribeGraphicsEnabled();
+            unsubscribeGraphicsDisabled();
         };
     }, []);
 
@@ -90,7 +101,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
             >
                 <div className="io-devices-canvas-holder">
                     <canvas></canvas>
-                    <strong>Assembly Simulator</strong>
+                    <strong ref={canvasStrongRef}>Assembly Simulator</strong>
                 </div>
 
                 <div className="io-devices-mini-display">

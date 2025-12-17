@@ -290,6 +290,16 @@ export const Executable = {
                     assembler.isTimerActive = true;
                     assembler.ioRegisters.update("TMRCOUNTER", assembler.ioRegisters.getValue("TMRPRELOAD"), { force: true });
                     break;
+                // VIDMODE
+                case 7:
+                    // We're taking the value of register A, because it is used to set the exact value to the VIDMODE register.
+                    // But why do we do this? In order to be able to send proper message to the UI thread and tell that "Assembly Reality" title should be enabled/disabled from the canvas.
+                    const registerAValue = assembler.cpuRegisters.getValue("A");
+
+                    if(registerAValue > 0) self.postMessage({ action: "graphicsEnabled" });
+                    else self.postMessage({ action: "graphicsDisabled" });
+                    
+                    break;
             }
         }
     },

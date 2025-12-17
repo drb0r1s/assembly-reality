@@ -97,6 +97,12 @@ const Editor = () => {
                 case "ioRegistersUpdate":
                     Manager.trigger("ioRegistersPing");
                     break;
+                case "graphicsEnabled":
+                    Manager.trigger("graphicsEnabled");
+                    break;
+                case "graphicsDisabled":
+                    Manager.trigger("graphicsDisabled");
+                    break;
             }
         };
 
