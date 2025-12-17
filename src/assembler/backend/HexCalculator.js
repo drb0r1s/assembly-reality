@@ -63,6 +63,7 @@ export const HexCalculator = {
         const SR = assembler.cpuRegisters.constructSR();
 
         if(first === second) SR.Z = 1;
+        else if(SR.Z) SR.Z = 0;
         
         else {
             if(first < second) SR.C = 1;
