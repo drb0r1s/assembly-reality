@@ -22,11 +22,11 @@ export const Executable = {
             [`${registerType} ${registerType}`]: () => assembler.cpuRegisters.update(first.register, second.registerValue),
             [`${registerType} memory.register`]: () => assembler.cpuRegisters.update(first.register, second.memoryPoint),
             [`${registerType} memory.number.*`]: () => assembler.cpuRegisters.update(first.register, second.memoryPoint),
-            [`memory.register ${registerType}`]: () => assembler.memory.matrix.update(first.registerValue, second.registerValue, { isHalf }),
-            [`memory.number.* ${registerType}`]: () => assembler.memory.matrix.update(first.value, second.registerValue, { isHalf }),
+            [`memory.register ${registerType}`]: () => assembler.ram.matrix.update(first.registerValue, second.registerValue, { isHalf }),
+            [`memory.number.* ${registerType}`]: () => assembler.ram.matrix.update(first.value, second.registerValue, { isHalf }),
             [`${registerType} number.*`]: () => assembler.cpuRegisters.update(first.register, second.value),
-            "memory.register number.*": () => assembler.memory.matrix.update(first.registerValue, second.value, { isHalf }),
-            "memory.number.* number.*": () => assembler.memory.matrix.update(first.value, second.value, { isHalf })
+            "memory.register number.*": () => assembler.ram.matrix.update(first.registerValue, second.value, { isHalf }),
+            "memory.number.* number.*": () => assembler.ram.matrix.update(first.value, second.value, { isHalf })
         });
     },
 
@@ -203,7 +203,7 @@ export const Executable = {
         // POP the return address from the stack.
         assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") + 2);
         
-        const popped = assembler.memory.matrix.point(assembler.cpuRegisters.getValue("SP"), { isStack: true });
+        const popped = assembler.ram.matrix.point(assembler.cpuRegisters.getValue("SP"), { isStack: true });
         assembler.cpuRegisters.update("IP", popped);
     },
 
@@ -241,39 +241,52 @@ export const Executable = {
         });
 
         function ioInteractions(register) {
-            // KBDDATA
-            if(register === 6) assembler.ioRegisters.update("KBDSTATUS", 0, { force: true });
+            switch(register) {
+                // KBDDATA
+                case 6:
+                    assembler.ioRegisters.update("KBDSTATUS", 0, { force: true });
+                    break;
+                // RNDGEN
+                case 10:
+                    const randomNumber = Math.floor(Math.random() * 0x10000); // Getting a random number from [0x0000, 0xFFFF].
+
+                    assembler.cpuRegisters.update("A", randomNumber);
+                    assembler.ioRegisters.update("RNDGEN", randomNumber, { force: true });
+                    break;
+            }
         }
     },
 
     out: (assembler, executable, args) => {
         const { first } = Decoder.decode(assembler, executable, args);
 
+        const registerAValue = assembler.cpuRegisters.getValue("A");
+
         Decoder.run(executable, {
             "register": () => {
                 const ioRegister = assembler.ioRegisters.get(first.registerValue);
-                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
+                assembler.ioRegisters.update(ioRegister, registerAValue);
 
                 ioInteractions(first.registerValue);
             },
 
             "memory.register": () => {
                 const ioRegister = assembler.ioRegisters.get(first.memoryPoint);
-                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
+                assembler.ioRegisters.update(ioRegister, registerAValue);
 
                 ioInteractions(first.memoryPoint);
             },
 
             "memory.number.*": () => {
                 const ioRegister = assembler.ioRegisters.get(first.memoryPoint);
-                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
+                assembler.ioRegisters.update(ioRegister, registerAValue);
 
                 ioInteractions(first.memoryPoint);
             },
 
             "number.*": () => {
                 const ioRegister = assembler.ioRegisters.get(first.value);
-                assembler.ioRegisters.update(ioRegister, assembler.cpuRegisters.getValue("A"));
+                assembler.ioRegisters.update(ioRegister, registerAValue);
 
                 ioInteractions(first.value);
             }
@@ -380,5 +393,5 @@ function updateStackStart(assembler, executable, second) {
             break;
     }
 
-    if(value > assembler.cpuRegisters.getValue("SP")) assembler.memory.stackStart = value;
+    if(value > assembler.cpuRegisters.getValue("SP")) assembler.ram.stackStart = value;
 }

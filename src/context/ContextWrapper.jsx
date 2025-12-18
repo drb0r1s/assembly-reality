@@ -6,13 +6,14 @@ import { Assembler } from "../assembler/Assembler";
 const ContextWrapper = ({ children }) => {
     const cpuRegistersBuffer = new SharedArrayBuffer(7 * 2);
     const ioRegistersBuffer = new SharedArrayBuffer(11 * 2);
-    const memoryBuffer = new SharedArrayBuffer(0x10000); // 65536B
+    const ramBuffer = new SharedArrayBuffer(258 * 16);
+    const graphicsBuffer = new SharedArrayBuffer(0x10000); // 65536B
 
-    const assembler = useRef(new Assembler(cpuRegistersBuffer, ioRegistersBuffer, memoryBuffer)).current;
+    const assembler = useRef(new Assembler(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer)).current;
     const assemblerWorker = useWorker();
 
     useEffect(() => {
-        if(assemblerWorker) assemblerWorker.postMessage({ action: "init", payload: { cpuRegistersBuffer, ioRegistersBuffer, memoryBuffer } });
+        if(assemblerWorker) assemblerWorker.postMessage({ action: "init", payload: { cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer } });
     }, [assemblerWorker]);
 
     return(

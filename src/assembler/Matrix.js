@@ -1,8 +1,8 @@
 import { ByteNumber } from "./ByteNumber";
 
 export class Matrix {
-    constructor(buffer, start = null, size = null) {
-        this.values = start !== null ? new Uint8Array(buffer, start, size) : new Uint8Array(buffer);
+    constructor(buffer) {
+        this.values = new Uint8Array(buffer);
     }
 
     getCell(row, column) {

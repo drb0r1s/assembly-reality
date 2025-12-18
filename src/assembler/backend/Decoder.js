@@ -35,14 +35,14 @@ export const Decoder = {
                         ...decoded[prop],
                         register: assembler.cpuRegisters.get(decoded[prop].value),
                         registerValue,
-                        memoryPoint: assembler.memory.matrix.point(registerValue, { isHalf })
+                        memoryPoint: assembler.ram.matrix.point(registerValue, { isHalf })
                     };
 
                     break;
                 case "memory.number.*":
                     decoded[prop] = {
                         ...decoded[prop],
-                        memoryPoint: assembler.memory.matrix.point(decoded[prop].value, { isHalf })
+                        memoryPoint: assembler.ram.matrix.point(decoded[prop].value, { isHalf })
                     };
 
                     break;

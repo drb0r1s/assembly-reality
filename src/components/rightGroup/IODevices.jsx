@@ -34,10 +34,10 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     useEffect(() => {
         const unsubscribeMiniDisplayPing = Manager.subscribe("miniDisplayPing", () => setMemoryVersion(prevVersion => prevVersion + 1));
         
-        const unsubscribeMemoryReset = Manager.subscribe("memoryReset", () => {
+        const unsubscribeMemoryReset = Manager.subscribe("ramReset", () => {
             setMemoryVersion(prevVersion => prevVersion + 1);
             
-            // This memoryReset event is useful to reset the canvas and to return the title over the canvas.
+            // This ramReset event is useful to reset the canvas and to return the title over the canvas.
             resetCanvas();
             canvasStrongRef.current.style.opacity = "";
         });
@@ -143,7 +143,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
                 </div>
 
                 <div className="io-devices-mini-display">
-                    {assembler.memory.matrix.arrayify({ miniDisplay: true }).map((element, index) => {
+                    {assembler.ram.matrix.arrayify({ miniDisplay: true }).map((element, index) => {
                         return <p
                             key={index}
                             className="io-devices-mini-display-element"

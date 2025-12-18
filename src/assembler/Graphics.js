@@ -1,8 +1,8 @@
 import { Matrix } from "./Matrix";
 
 export class Graphics {
-    constructor(memoryBuffer) {
-        this.matrix = new Matrix(memoryBuffer);
+    constructor(graphicsBuffer) {
+        this.matrix = new Matrix(graphicsBuffer);
         this.rgbTable = new Array(256);
 
         for(let i = 0; i < 256; i++) {

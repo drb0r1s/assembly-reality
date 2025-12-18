@@ -1,11 +1,9 @@
 import { AssemblerError } from "./AssemblerError";
 import { Matrix } from "./Matrix";
 
-const memoryAddresses = { start: 0x0000, end: 0x101F };
-
-export class Memory {
-    constructor(memoryBuffer) {
-        this.matrix = new Matrix(memoryBuffer, memoryAddresses.start, memoryAddresses.end - memoryAddresses.start + 1),
+export class RAM {
+    constructor(ramBuffer) {
+        this.matrix = new Matrix(ramBuffer),
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
         this.instructions = []; // An array of instruction addresses in memory.
         this.stackStart = 0; // The address of the start of the stack.

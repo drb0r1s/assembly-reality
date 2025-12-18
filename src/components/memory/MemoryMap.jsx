@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 
-const MemoryMap = ({ memory, cpuRegisters, isSplitActive }) => {
+const MemoryMap = ({ ram, cpuRegisters, isSplitActive }) => {
     const { assembler } = useContext(GlobalContext);
     
     const memoryMapColumns = ["empty", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
@@ -15,11 +15,11 @@ const MemoryMap = ({ memory, cpuRegisters, isSplitActive }) => {
 
         // STACK CLASSES
         if(cpuRegisters.SP === index) return "memory-map-matrix-element-stack-pointer";
-        if(cpuRegisters.SP < index && index <= memory.stackStart) return "memory-map-matrix-element-stack";
+        if(cpuRegisters.SP < index && index <= ram.stackStart) return "memory-map-matrix-element-stack";
 
         // INSTRUCTION CLASSES
         if(cpuRegisters.IP === index) return "memory-map-matrix-element-instruction-pointer";
-        if(memory.instructions.indexOf(index) > -1) return "memory-map-matrix-element-instruction";
+        if(ram.instructions.indexOf(index) > -1) return "memory-map-matrix-element-instruction";
 
         // DISPLAY CLASSES
         if(index > 0xFFF) return "memory-map-matrix-element-display";
@@ -47,7 +47,7 @@ const MemoryMap = ({ memory, cpuRegisters, isSplitActive }) => {
                 </div>
 
                 <div className="memory-map-matrix">
-                    {assembler.memory.matrix.arrayify().map((element, index) => {
+                    {assembler.ram.matrix.arrayify().map((element, index) => {
                         return <p
                             key={index}
                             className={`memory-map-matrix-element ${getCellClass(index)}`}

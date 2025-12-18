@@ -7,33 +7,33 @@ import { Manager } from "../../Manager";
 const Memory = () => {
     const { assembler } = useContext(GlobalContext);
 
-    const initialMemory = {
+    const initialRAM = {
         instructions: [],
         stackStart: 0
     };
     
-    const [memory, setMemory] = useState(initialMemory);
+    const [ram, setRAM] = useState(initialRAM);
     const [cpuRegisters, setCPURegisters] = useState(assembler.cpuRegisters.construct());
 
     const [isSplitActive, setIsSplitActive] = useState(false);
     
     useEffect(() => {
-        const unsubscribeMemoryUpdate = Manager.subscribe("memoryUpdate", data => {
-            if(data?.memory) setMemory({
-                instructions: data.memory.instructions,
-                stackStart: data.memory.stackStart
+        const unsubscribeRAMUpdate = Manager.subscribe("ramUpdate", data => {
+            if(data?.ram) setRAM({
+                instructions: data.ram.instructions,
+                stackStart: data.ram.stackStart
             });
 
             setCPURegisters(assembler.cpuRegisters.construct());
         });
 
-        const unsubscribeReset = Manager.subscribe("memoryReset", () => {
-            setMemory(initialMemory);
+        const unsubscribeReset = Manager.subscribe("ramReset", () => {
+            setRAM(initialRAM);
             setCPURegisters(assembler.cpuRegisters.construct());
         });
     
         return () => {
-            unsubscribeMemoryUpdate();
+            unsubscribeRAMUpdate();
             unsubscribeReset();
         };
     }, []);
@@ -53,13 +53,13 @@ const Memory = () => {
                 <HighSpeedBlock />
                 
                 <MemoryMap
-                    memory={memory}
+                    ram={ram}
                     cpuRegisters={cpuRegisters}
                     isSplitActive={isSplitActive}
                 />
 
                 {isSplitActive && <MemoryMap
-                    memory={memory}
+                    ram={ram}
                     cpuRegisters={cpuRegisters}
                     isSplitActive={isSplitActive}
                 />}

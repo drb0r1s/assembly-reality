@@ -1,7 +1,7 @@
 import { AssemblerError } from "./AssemblerError";
 import { CPURegisters } from "./CPURegisters";
 import { IORegisters } from "./IORegisters";
-import { Memory } from "./Memory";
+import { RAM } from "./RAM";
 import { Labels } from "./Labels";
 import { Graphics } from "./Graphics";
 import { Tokenizer } from "./frontend/Tokenizer";
@@ -12,15 +12,15 @@ import { Executor } from "./backend/Executor";
 import { Interrupts } from "./Interrupts";
 
 export class Assembler {
-    constructor(cpuRegistersBuffer, ioRegistersBuffer, memoryBuffer) {
+    constructor(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer) {
         this.speed = 4; // Default speed (4Hz).
         this.isHalted = false; // End the executing of the code.
         this.isTimerActive = false;
         this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
         this.ioRegisters = new IORegisters(ioRegistersBuffer);
-        this.memory = new Memory(memoryBuffer);
+        this.ram = new RAM(ramBuffer);
         this.labels = new Labels();
-        this.graphics = new Graphics(memoryBuffer);
+        this.graphics = new Graphics(graphicsBuffer);
         this.intervalId = null;
     }
     
@@ -39,12 +39,12 @@ export class Assembler {
             for(let i = 0; i < ast.statements.length; i++) this.observeStatement(ast.statements[i]);
             
             ast = this.labels.transform(ast);
-            this.memory.reset(); // We need to free the memory, free pointer need to be set to 0.
+            this.ram.reset(); // We need to free the memory, free pointer need to be set to 0.
 
             // Pass 2
             for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
         
-            this.cpuRegisters.update("IP", this.memory.instructions[0]);
+            this.cpuRegisters.update("IP", this.ram.instructions[0]);
 
             console.log(ast, this.labels);
         }
@@ -55,21 +55,21 @@ export class Assembler {
         }
 
         return {
-            memory: {
-                instructions: this.memory.instructions,
-                stackStart: this.memory.stackStart
+            ram: {
+                instructions: this.ram.instructions,
+                stackStart: this.ram.stackStart
             }
         };
     }
 
     observeStatement(statement) {
         if(statement.type === "Label") {
-            this.labels.collect(statement, this.memory);
+            this.labels.collect(statement, this.ram);
         }
 
         if(statement.type === "Instruction") {
             const lengthOfInstruction = Instructions[statement.name](statement, { getLength: true });
-            this.memory.advance(lengthOfInstruction);
+            this.ram.advance(lengthOfInstruction);
         }
 
         if(statement.type === "Instant") {
@@ -85,7 +85,7 @@ export class Assembler {
                 if(operand.valueType === "string.double") lengthOfInstant = statement.name === "DW" ? 2 * operand.value.length : operand.value.length;
                 else lengthOfInstant = statement.isHalf ? 1 : 2;
 
-                this.memory.advance(lengthOfInstant);
+                this.ram.advance(lengthOfInstant);
             }
         }
     }
@@ -99,8 +99,8 @@ export class Assembler {
             else throw new AssemblerError("UnknownInstruction", { name: statement.name }, statement.line);
 
             if(assembledCells) {
-                this.memory.addInstruction();
-                this.memory.write(assembledCells);
+                this.ram.addInstruction();
+                this.ram.write(assembledCells);
             }
         }
 
@@ -121,7 +121,7 @@ export class Assembler {
             this.setAssemblerInterval(() => {                
                 // The end of instruction execution is reached only if one of two cases:
                 if(
-                    (this.memory.instructions.indexOf(this.cpuRegisters.getValue("IP")) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
+                    (this.ram.instructions.indexOf(this.cpuRegisters.getValue("IP")) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
                     this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 ) {
                     const mFlag = (this.cpuRegisters.getValue("SR") >> 4) & 1;
@@ -133,8 +133,8 @@ export class Assembler {
                     return;
                 }
 
-                const [row, column] = this.memory.matrix.getLocation(this.cpuRegisters.getValue("IP"));
-                const cell = this.memory.matrix.getCell(row, column);
+                const [row, column] = this.ram.matrix.getLocation(this.cpuRegisters.getValue("IP"));
+                const cell = this.ram.matrix.getCell(row, column);
 
                 try {
                     if(!this.isHalted) this.executeInstruction(cell, instructionCounter);
@@ -153,8 +153,8 @@ export class Assembler {
     }
 
     executeOne() {
-        const [row, column] = this.memory.matrix.getLocation(this.cpuRegisters.getValue("IP"));
-        const cell = this.memory.matrix.getCell(row, column);
+        const [row, column] = this.ram.matrix.getLocation(this.cpuRegisters.getValue("IP"));
+        const cell = this.ram.matrix.getCell(row, column);
 
         try {
             if(!this.isHalted) this.executeInstruction(cell);
@@ -203,10 +203,10 @@ export class Assembler {
             (jumpInstructions.indexOf(executable.instruction) > -1 && this.cpuRegisters.getValue("IP") !== oldAddress)
         ) return;
 
-        const instructionIndex = this.memory.instructions.indexOf(this.cpuRegisters.getValue("IP"));
+        const instructionIndex = this.ram.instructions.indexOf(this.cpuRegisters.getValue("IP"));
 
-        if(instructionIndex === this.memory.instructions.length - 1) this.cpuRegisters.update("IP", this.memory.matrix.getAddress(this.memory.free.i, this.memory.free.j));
-        else this.cpuRegisters.update("IP", this.memory.instructions[instructionIndex + 1]);
+        if(instructionIndex === this.ram.instructions.length - 1) this.cpuRegisters.update("IP", this.ram.matrix.getAddress(this.ram.free.i, this.ram.free.j));
+        else this.cpuRegisters.update("IP", this.ram.instructions[instructionIndex + 1]);
     }
 
     pause() {
@@ -219,10 +219,10 @@ export class Assembler {
     collectArgs(length) {
         const args = [];
         
-        let [row, column] = this.memory.matrix.getLocation(this.cpuRegisters.getValue("IP"));
+        let [row, column] = this.ram.matrix.getLocation(this.cpuRegisters.getValue("IP"));
         
         for(let i = 0; i < length; i++) {
-            args.push(this.memory.matrix.getCell(row, column));
+            args.push(this.ram.matrix.getCell(row, column));
 
             column++;
 
@@ -289,9 +289,9 @@ export class Assembler {
     getAssemblerState() {
         // If speed is too high (over 10kHz), we won't update cpuRegisters and memory.
         if(this.speed < 10000) return {
-            memory: {
-                instructions: this.memory.instructions,
-                stackStart: this.memory.stackStart
+            ram: {
+                instructions: this.ram.instructions,
+                stackStart: this.ram.stackStart
             }
         };
 
@@ -304,7 +304,7 @@ export class Assembler {
         this.isTimerActive = false;
         this.cpuRegisters.reset();
         this.ioRegisters.reset();
-        this.memory.reset();
+        this.ram.reset();
         this.graphics.reset();
         this.labels.reset();
         

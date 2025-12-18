@@ -66,7 +66,7 @@ const Editor = () => {
 
             switch(action) {
                 case "assemble":
-                    Manager.trigger("memoryUpdate", data);
+                    Manager.trigger("ramUpdate", data);
                     Manager.trigger("cpuRegistersPing");
 
                     break;
@@ -74,19 +74,19 @@ const Editor = () => {
                 case "run":
                     Manager.set("isRunning", false);
 
-                    Manager.trigger("memoryUpdate", data);
+                    Manager.trigger("ramUpdate", data);
                     Manager.trigger("cpuRegistersPing");
 
                     break;
                 case "instructionExecuted":
-                    Manager.trigger("memoryUpdate", data);
+                    Manager.trigger("ramUpdate", data);
                     Manager.trigger("cpuRegistersPing");
 
                     break;
                 case "reset":
                     Manager.set("isRunning", false);    
                 
-                    Manager.trigger("memoryReset");
+                    Manager.trigger("ramReset");
                     Manager.trigger("cpuRegistersPing");
                     Manager.trigger("ioRegistersPing");
 

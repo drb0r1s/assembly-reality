@@ -32,7 +32,7 @@ export const Instants = {
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
-        assembler.memory.write(result);
+        assembler.ram.write(result);
     },
 
     DB: (assembler, instant) => {
@@ -62,7 +62,7 @@ export const Instants = {
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
-        assembler.memory.write(result);
+        assembler.ram.write(result);
     },
 
     ORG: (assembler, instant) => {
@@ -87,6 +87,6 @@ export const Instants = {
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
-        assembler.memory.adjustFree(result);
+        assembler.ram.adjustFree(result);
     }
 };
