@@ -15,6 +15,8 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     const [lowerSection, setLowerSection] = useState({ ref: null }); // This state has to contain the elements inside the object, under the ref property, because of the way React is updating ref objects.
     
     const headerRef = useRef(null);
+
+    const canvasRef = useRef(null);
     const canvasStrongRef = useRef(null);
 
     const view = useManagerValue("view");
@@ -34,11 +36,27 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         
         const unsubscribeMemoryReset = Manager.subscribe("memoryReset", () => {
             setMemoryVersion(prevVersion => prevVersion + 1);
-            canvasStrongRef.current.style.opacity = ""; // This memoryReset event is useful to return the title over the canvas.
+            
+            // This memoryReset event is useful to reset the canvas and to return the title over the canvas.
+            resetCanvas();
+            canvasStrongRef.current.style.opacity = "";
         });
 
         const unsubscribeGraphicsEnabled = Manager.subscribe("graphicsEnabled", () => { canvasStrongRef.current.style.opacity = "0" });
         const unsubscribeGraphicsDisabled = Manager.subscribe("graphicsDisabled", () => { canvasStrongRef.current.style.opacity = "" });
+
+        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", data => {
+            const [x, y, color] = data;
+            const { r, g, b } = color;
+
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext("2d");
+            
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fillRect(x, y, 1, 1);
+        });
+
+        initializeCanvas();
         
         return () => {
             unsubscribeMiniDisplayPing();
@@ -46,6 +64,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
 
             unsubscribeGraphicsEnabled();
             unsubscribeGraphicsDisabled();
+            unsubscribeGraphicsRedraw();
         };
     }, []);
 
@@ -88,6 +107,25 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         }
     }, [keyboard.isActive]);
 
+    function initializeCanvas() {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+
+        canvas.height = 256;
+        canvas.width = 256;
+
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, 256, 256);
+    }
+
+    function resetCanvas() {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
     return(
         <div className="io-devices" ref={ioDevicesRef}>
             <MiniHeader
@@ -100,7 +138,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
                 style={{ height: `${ioDevicesHeight - lowerSectionHeight - 27}px` }} // 27px (header height)
             >
                 <div className="io-devices-canvas-holder">
-                    <canvas></canvas>
+                    <canvas ref={canvasRef}></canvas>
                     <strong ref={canvasStrongRef}>Assembly Simulator</strong>
                 </div>
 

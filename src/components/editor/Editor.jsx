@@ -66,7 +66,7 @@ const Editor = () => {
 
             switch(action) {
                 case "assemble":
-                    Manager.trigger("memoryUpdate", { memory: data.memory });
+                    Manager.trigger("memoryUpdate", data);
                     Manager.trigger("cpuRegistersPing");
 
                     break;
@@ -74,12 +74,12 @@ const Editor = () => {
                 case "run":
                     Manager.set("isRunning", false);
 
-                    Manager.trigger("memoryUpdate", { memory: data.memory });
+                    Manager.trigger("memoryUpdate", data);
                     Manager.trigger("cpuRegistersPing");
 
                     break;
                 case "instructionExecuted":
-                    Manager.trigger("memoryUpdate", { memory: data.memory });
+                    Manager.trigger("memoryUpdate", data);
                     Manager.trigger("cpuRegistersPing");
 
                     break;
@@ -102,6 +102,9 @@ const Editor = () => {
                     break;
                 case "graphicsDisabled":
                     Manager.trigger("graphicsDisabled");
+                    break;
+                case "graphicsRedraw":
+                    Manager.trigger("graphicsRedraw", data);
                     break;
             }
         };

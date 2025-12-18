@@ -280,8 +280,7 @@ export const Executable = {
         });
 
         function ioInteractions(register) {
-            // It is useful to have value of register A available, because that exact value was set to the target register, so we can now easily access the content of the register.
-            const registerAValue = assembler.cpuRegisters.getValue("A");
+            const registerValue = assembler.ioRegisters.getValueByIndex(register);
             
             switch(register) {
                 // IRQEOI
@@ -296,19 +295,25 @@ export const Executable = {
                 // VIDMODE
                 case 7:
                     // Why do we do this? In order to be able to send proper message to the UI thread and tell that "Assembly Reality" title should be enabled/disabled from the canvas.
-                    if(registerAValue > 0) self.postMessage({ action: "graphicsEnabled" });
+                    if(registerValue > 0) self.postMessage({ action: "graphicsEnabled" });
                     else self.postMessage({ action: "graphicsDisabled" });
                     
                     break;
                 // VIDADDR
                 case 8:
-                    const vidData = assembler.memory.matrix.point(registerAValue);
-                    assembler.ioRegisters.update("VIDDATA", vidData);
+                    const vidDataForAddress = assembler.graphics.matrix.point(registerValue);
+                    assembler.ioRegisters.update("VIDDATA", vidDataForAddress);
 
                     break;
                 // VIDDATA
                 case 9:
-                    
+                    const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
+                    assembler.graphics.matrix.update(vidAddr, registerValue);
+
+                    const [x, y] = assembler.graphics.addressToPosition(vidAddr);
+
+                    // data: x, y, color
+                    self.postMessage({ action: "graphicsRedraw", data: [x, y, assembler.graphics.getRGB(registerValue)]});
 
                     break;
             }
