@@ -22,11 +22,11 @@ export const Executable = {
             [`${registerType} ${registerType}`]: () => assembler.cpuRegisters.update(first.register, second.registerValue),
             [`${registerType} memory.register`]: () => assembler.cpuRegisters.update(first.register, second.memoryPoint),
             [`${registerType} memory.number.*`]: () => assembler.cpuRegisters.update(first.register, second.memoryPoint),
-            [`memory.register ${registerType}`]: () => assembler.memory.rewrite(first.registerValue, second.registerValue, { isHalf }),
-            [`memory.number.* ${registerType}`]: () => assembler.memory.rewrite(first.value, second.registerValue, { isHalf }),
+            [`memory.register ${registerType}`]: () => assembler.memory.matrix.update(first.registerValue, second.registerValue, { isHalf }),
+            [`memory.number.* ${registerType}`]: () => assembler.memory.matrix.update(first.value, second.registerValue, { isHalf }),
             [`${registerType} number.*`]: () => assembler.cpuRegisters.update(first.register, second.value),
-            "memory.register number.*": () => assembler.memory.rewrite(first.registerValue, second.value, { isHalf }),
-            "memory.number.* number.*": () => assembler.memory.rewrite(first.value, second.value, { isHalf })
+            "memory.register number.*": () => assembler.memory.matrix.update(first.registerValue, second.value, { isHalf }),
+            "memory.number.* number.*": () => assembler.memory.matrix.update(first.value, second.value, { isHalf })
         });
     },
 
@@ -203,7 +203,7 @@ export const Executable = {
         // POP the return address from the stack.
         assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") + 2);
         
-        const popped = assembler.memory.point(assembler.cpuRegisters.getValue("SP"), { isStack: true });
+        const popped = assembler.memory.matrix.point(assembler.cpuRegisters.getValue("SP"), { isStack: true });
         assembler.cpuRegisters.update("IP", popped);
     },
 
@@ -302,7 +302,7 @@ export const Executable = {
                     break;
                 // VIDADDR
                 case 8:
-                    const vidData = assembler.memory.point(registerAValue);
+                    const vidData = assembler.memory.matrix.point(registerAValue);
                     assembler.ioRegisters.update("VIDDATA", vidData);
 
                     break;
