@@ -128,7 +128,9 @@ export class Assembler {
                     if(this.isTimerActive && mFlag) return Interrupts.checkTimer(this);
                     
                     clearInterval(this.intervalId);
-                    resolve(this.getAssemblerState());
+                    resolve({ executed: true });
+
+                    this.updateUI();
 
                     return;
                 }
@@ -179,18 +181,18 @@ export class Assembler {
 
         this.nextInstruction(executable, oldAddress);
 
-        const updatesPerSecond = 10;
-        
+        const updatesPerSecond = 2;
+
         // If instructionCounter is defined, that means that we're in a "running" mode.
         if(instructionCounter) {
             let updatePerInstructions = Math.floor(this.speed / updatesPerSecond);
             if (updatePerInstructions < 1) updatePerInstructions = 1;
 
-            if(instructionCounter % updatePerInstructions === 0) self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
+            if(instructionCounter % updatePerInstructions === 0) this.updateUI();
         }
 
         // Otherwise, we're just executing one instruction ("step" mode).
-        else self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
+        else this.updateUI();
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
@@ -287,7 +289,7 @@ export class Assembler {
     }
 
     getAssemblerState() {
-        // If speed is too high (over 10kHz), we won't update cpuRegisters and memory.
+        // If speed is too high (over 10kHz), we won't update cpuRegisters and RAM.
         if(this.speed < 10000) return {
             ram: {
                 instructions: this.ram.instructions,
@@ -296,6 +298,16 @@ export class Assembler {
         };
 
         return {};
+    }
+
+    updateUI() {
+        self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
+        
+        // For speeds lower than 10kHz, we use this partial updates to update the canvas.
+        if(this.speed < 10000) {
+            const vidMode = this.ioRegisters.getValue("VIDMODE");
+            if(vidMode !== 0) self.postMessage({ action: "graphicsRedraw" });
+        }
     }
 
     reset() {

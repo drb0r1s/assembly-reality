@@ -2,7 +2,7 @@ import { Matrix } from "./Matrix";
 
 export class Graphics {
     constructor(graphicsBuffer) {
-        this.matrix = new Matrix(graphicsBuffer);
+        this.matrix = new Matrix(graphicsBuffer, 256);
         this.rgbTable = new Array(256);
 
         for(let i = 0; i < 256; i++) {

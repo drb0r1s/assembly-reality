@@ -17,7 +17,12 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     const headerRef = useRef(null);
 
     const canvasRef = useRef(null);
+    const ctxRef = useRef(null);
     const canvasStrongRef = useRef(null);
+
+    const imageDataRef = useRef(null);
+    const frameBufferRef = useRef(null);
+    const paletteRef = useRef(null);
 
     const view = useManagerValue("view");
     
@@ -44,16 +49,14 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
 
         const unsubscribeGraphicsEnabled = Manager.subscribe("graphicsEnabled", () => { canvasStrongRef.current.style.opacity = "0" });
         const unsubscribeGraphicsDisabled = Manager.subscribe("graphicsDisabled", () => { canvasStrongRef.current.style.opacity = "" });
+        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", redrawCanvas);7
 
-        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", data => {
+        const unsubscribeGraphicsRedrawInstant = Manager.subscribe("graphicsRedrawInstant", data => {
             const [x, y, color] = data;
             const { r, g, b } = color;
-
-            const canvas = canvasRef.current;
-            const ctx = canvas.getContext("2d");
             
-            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            ctx.fillRect(x, y, 1, 1);
+            ctxRef.current.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctxRef.current.fillRect(x, y, 1, 1);
         });
 
         initializeCanvas();
@@ -65,6 +68,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
             unsubscribeGraphicsEnabled();
             unsubscribeGraphicsDisabled();
             unsubscribeGraphicsRedraw();
+            unsubscribeGraphicsRedrawInstant();
         };
     }, []);
 
@@ -114,16 +118,47 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         canvas.height = 256;
         canvas.width = 256;
 
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, 256, 256);
+        ctx.imageSmoothingEnabled = true;
+
+        const imageData = ctx.createImageData(256, 256);
+        const frameBuffer = new Uint32Array(imageData.data.buffer);
+
+        const palette = new Uint32Array(256);
+
+        for(let i = 0; i < 256; i++) {
+            const r = (i >> 5) & 7;
+            const g = (i >> 2) & 7;
+            const b = i & 3;
+
+            const R = (r * 255 / 7) | 0;
+            const G = (g * 255 / 7) | 0;
+            const B = (b * 255 / 3) | 0;
+
+            palette[i] = (255 << 24) | (B << 16) | (G << 8) | R;
+        }
+
+        ctxRef.current = ctx;
+        imageDataRef.current = imageData;
+        frameBufferRef.current = frameBuffer;
+        paletteRef.current = palette;
+    }
+
+    function redrawCanvas() {
+        const graphicsMatrix = assembler.graphics.matrix.getMatrix();
+
+        const ctx = ctxRef.current;
+        const imageData = imageDataRef.current;
+        const frameBuffer = frameBufferRef.current;
+        const palette = paletteRef.current;
+
+        for(let i = 0; i < graphicsMatrix.length; i++) frameBuffer[i] = palette[graphicsMatrix[i]];
+
+        ctx.putImageData(imageData, 0, 0);
     }
 
     function resetCanvas() {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        assembler.graphics.matrix.reset();
+        redrawCanvas();
     }
 
     return(

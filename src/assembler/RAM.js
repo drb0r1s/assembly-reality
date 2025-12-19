@@ -3,7 +3,7 @@ import { Matrix } from "./Matrix";
 
 export class RAM {
     constructor(ramBuffer) {
-        this.matrix = new Matrix(ramBuffer),
+        this.matrix = new Matrix(ramBuffer, 16),
         this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
         this.instructions = []; // An array of instruction addresses in memory.
         this.stackStart = 0; // The address of the start of the stack.
@@ -22,7 +22,7 @@ export class RAM {
 
             else j++;
 
-            if(i >= this.matrix.values.length / 16) throw new AssemblerError("OutOfMemory");
+            if(i >= this.matrix.getMatrix().length / 16) throw new AssemblerError("OutOfMemory");
         }
 
         this.free = { i, j }; // Updating last memory-free coordinates globally.
@@ -38,7 +38,7 @@ export class RAM {
             i++;
         }
 
-        if(i >= this.matrix.values.length / 16) throw new AssemblerError("OutOfMemory");
+        if(i >= this.matrix.getMatrix().length / 16) throw new AssemblerError("OutOfMemory");
 
         this.free = { i, j };
     }

@@ -71,14 +71,13 @@ const Editor = () => {
 
                     break;
                 // We receive the message with the action "run" only when the execution has ended.
+                // NOTE: In the past, "run" action used to .trigger "ramUpdate" and "cpuRegistersPing", with new update (calling assembler.updateUI() at the end of the execution) it's no longer useful.
                 case "run":
                     Manager.set("isRunning", false);
-
-                    Manager.trigger("ramUpdate", data);
-                    Manager.trigger("cpuRegistersPing");
-
                     break;
                 case "instructionExecuted":
+                    if(speed >= 10000) return;
+
                     Manager.trigger("ramUpdate", data);
                     Manager.trigger("cpuRegistersPing");
 
@@ -104,7 +103,10 @@ const Editor = () => {
                     Manager.trigger("graphicsDisabled");
                     break;
                 case "graphicsRedraw":
-                    Manager.trigger("graphicsRedraw", data);
+                    Manager.trigger("graphicsRedraw");
+                    break;
+                case "graphicsRedrawInstant":
+                    Manager.trigger("graphicsRedrawInstant", data);
                     break;
             }
         };

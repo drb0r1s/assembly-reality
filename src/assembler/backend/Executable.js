@@ -321,12 +321,13 @@ export const Executable = {
                 // VIDDATA
                 case 9:
                     const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
-                    assembler.graphics.matrix.update(vidAddr, registerValue);
+                    assembler.graphics.matrix.update(vidAddr, registerValue, { isHalf: true });
 
-                    const [x, y] = assembler.graphics.addressToPosition(vidAddr);
-
-                    // data: x, y, color
-                    self.postMessage({ action: "graphicsRedraw", data: [x, y, assembler.graphics.getRGB(registerValue)]});
+                    // For speeds greather than or equal to 10kHz, we update the canvas instantly.
+                    if(assembler.speed >= 10000) {
+                        const [x, y] = assembler.graphics.addressToPosition(vidAddr);
+                        self.postMessage({ action: "graphicsRedrawInstant", data: [x, y, assembler.graphics.getRGB(registerValue)]});
+                    }
 
                     break;
             }

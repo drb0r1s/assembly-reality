@@ -1,16 +1,21 @@
 import { ByteNumber } from "./ByteNumber";
 
 export class Matrix {
-    constructor(buffer) {
+    constructor(buffer, rowSize) {
         this.values = new Uint8Array(buffer);
+        this.rowSize = rowSize; // 16 for RAM, 256 for Graphics.
+    }
+
+    getMatrix() {
+        return this.values;
     }
 
     getCell(row, column) {
-        return this.values[row * 16 + column];
+        return this.values[row * this.rowSize + column];
     }
 
     setCell(row, column, value) {
-        this.values[row * 16 + column] = value;
+        this.values[row * this.rowSize + column] = value;
     }
 
     get(address) {
@@ -19,14 +24,14 @@ export class Matrix {
     }
 
     getLocation(address) {
-        const row = Math.floor(address / 16);
-        const column = address % 16;
+        const row = Math.floor(address / this.rowSize);
+        const column = address % this.rowSize;
 
         return [row, column];
     }
 
     getAddress(row, column) {
-        const location = row * 16 + column;
+        const location = row * this.rowSize + column;
         return location;
     }
 
@@ -54,7 +59,8 @@ export class Matrix {
         }
     
         // Addresses reserved for mini display.
-        if(address >= 4096 && address <= 4128) self.postMessage({ action: "miniDisplayUpdate" });
+        // We're checking if rowSize is 16 in order to confirm this was called by RAM and not by Graphics!
+        if(this.rowSize === 16 && address >= 4096 && address <= 4128) self.postMessage({ action: "miniDisplayUpdate" });
     }
 
     point(address, options) {
