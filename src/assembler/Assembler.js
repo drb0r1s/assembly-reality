@@ -306,7 +306,15 @@ export class Assembler {
         // For speeds lower than 10kHz, we use this partial updates to update the canvas.
         if(this.speed < 10000) {
             const vidMode = this.ioRegisters.getValue("VIDMODE");
-            if(vidMode !== 0) self.postMessage({ action: "graphicsRedraw" });
+            if(vidMode === 0) return; // If graphics are disabled, there is no need to check them.
+
+            const storageType = vidMode > 1 ? "bitmap" : "text";
+            
+            const storage = this.graphics.storageGet(storageType);
+            if(storage.length === 0) return;
+
+            self.postMessage({ action: "graphicsRedraw", data: storage });
+            this.graphics.storageClear(storageType);
         }
     }
 

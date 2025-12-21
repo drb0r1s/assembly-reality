@@ -66,7 +66,6 @@ export class IORegisters {
     update(register, value, options) {
         if(readOnly[register] && !options?.force) throw new AssemblerError("ReadOnlyRegisterUpdate", { register });
         
-        if(register === "VIDDATA") value &= 0xFF; // VIDDATA should ignore the upper 8bits for now.
         Atomics.store(this.registers, this.getIndex(register), value);
 
         // IO Register TMRCOUNTER updates too fast, there is not a real point in showing that real-time.

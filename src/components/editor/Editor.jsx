@@ -68,6 +68,7 @@ const Editor = () => {
                 case "assemble":
                     Manager.trigger("ramUpdate", data);
                     Manager.trigger("cpuRegistersPing");
+                    Manager.trigger("graphicsReset"); // If something was left on the canvas, it is a good idea to reset it, just in case.
 
                     break;
                 // We receive the message with the action "run" only when the execution has ended.
@@ -88,6 +89,7 @@ const Editor = () => {
                     Manager.trigger("ramReset");
                     Manager.trigger("cpuRegistersPing");
                     Manager.trigger("ioRegistersPing");
+                    Manager.trigger("graphicsReset");
 
                     break;
                 case "miniDisplayUpdate":
@@ -103,10 +105,7 @@ const Editor = () => {
                     Manager.trigger("graphicsDisabled");
                     break;
                 case "graphicsRedraw":
-                    Manager.trigger("graphicsRedraw");
-                    break;
-                case "graphicsRedrawInstant":
-                    Manager.trigger("graphicsRedrawInstant", data);
+                    Manager.trigger("graphicsRedraw", data);
                     break;
             }
         };

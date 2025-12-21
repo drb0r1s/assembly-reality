@@ -259,7 +259,6 @@ export const Executable = {
 
     out: (assembler, executable, args) => {
         const { first } = Decoder.decode(assembler, executable, args);
-
         const registerAValue = assembler.cpuRegisters.getValue("A");
 
         Decoder.run(executable, {
@@ -320,15 +319,10 @@ export const Executable = {
                     break;
                 // VIDDATA
                 case 9:
-                    const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
-                    assembler.graphics.matrix.update(vidAddr, registerValue, { isHalf: true });
+                    const vidMode = assembler.ioRegisters.getValue("VIDMODE");
+                    if(vidMode > 1) assembler.ioRegisters.update("VIDDATA", registerValue & 0xFF); // In case we're in bitmap mode, we need to ignore upper 8 bits.
 
-                    // For speeds greather than or equal to 10kHz, we update the canvas instantly.
-                    if(assembler.speed >= 10000) {
-                        const [x, y] = assembler.graphics.addressToPosition(vidAddr);
-                        self.postMessage({ action: "graphicsRedrawInstant", data: [x, y, assembler.graphics.getRGB(registerValue)]});
-                    }
-
+                    assembler.graphics.draw(assembler, registerValue);
                     break;
             }
         }

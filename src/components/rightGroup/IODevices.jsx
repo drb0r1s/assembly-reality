@@ -6,6 +6,7 @@ import { useResizeObserver } from "../../hooks/useResizeObserver";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 import { images } from "../../data/images";
+import { TextModeData } from "../../assembler/TextModeData";
 
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const { assembler, assemblerWorker } = useContext(GlobalContext);
@@ -38,26 +39,12 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
 
     useEffect(() => {
         const unsubscribeMiniDisplayPing = Manager.subscribe("miniDisplayPing", () => setMemoryVersion(prevVersion => prevVersion + 1));
-        
-        const unsubscribeMemoryReset = Manager.subscribe("ramReset", () => {
-            setMemoryVersion(prevVersion => prevVersion + 1);
-            
-            // This ramReset event is useful to reset the canvas and to return the title over the canvas.
-            resetCanvas();
-            canvasStrongRef.current.style.opacity = "";
-        });
+        const unsubscribeMemoryReset = Manager.subscribe("ramReset", () => setMemoryVersion(prevVersion => prevVersion + 1));
 
         const unsubscribeGraphicsEnabled = Manager.subscribe("graphicsEnabled", () => { canvasStrongRef.current.style.opacity = "0" });
         const unsubscribeGraphicsDisabled = Manager.subscribe("graphicsDisabled", () => { canvasStrongRef.current.style.opacity = "" });
-        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", redrawCanvas);7
-
-        const unsubscribeGraphicsRedrawInstant = Manager.subscribe("graphicsRedrawInstant", data => {
-            const [x, y, color] = data;
-            const { r, g, b } = color;
-            
-            ctxRef.current.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            ctxRef.current.fillRect(x, y, 1, 1);
-        });
+        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", redrawCanvas);
+        const unsubscribeGraphicsReset = Manager.subscribe("graphicsReset", resetCanvas);
 
         initializeCanvas();
         
@@ -68,7 +55,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
             unsubscribeGraphicsEnabled();
             unsubscribeGraphicsDisabled();
             unsubscribeGraphicsRedraw();
-            unsubscribeGraphicsRedrawInstant();
+            unsubscribeGraphicsReset();
         };
     }, []);
 
@@ -143,22 +130,60 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         paletteRef.current = palette;
     }
 
-    function redrawCanvas() {
-        const graphicsMatrix = assembler.graphics.matrix.getMatrix();
+    function redrawCanvas(data) {
+        const vidMode = assembler.ioRegisters.getValue("VIDMODE");
+
+        // Bitmap
+        if(vidMode > 1) for(let i = 0; i < data.length; i++) drawPixel(data[i]);
+
+        // Text
+        else for(let i = 0; i < data.length; i++) drawCharacter(data[i]);
+    }
+
+    function drawPixel(data) {
+        const [x, y, color] = data;
+        const { r, g, b } = color;
+
+        ctxRef.current.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        ctxRef.current.fillRect(x, y, 1, 1);
+    }
+
+    function drawCharacter(data) {
+        const [x, y, ascii, color] = data;
 
         const ctx = ctxRef.current;
         const imageData = imageDataRef.current;
-        const frameBuffer = frameBufferRef.current;
-        const palette = paletteRef.current;
 
-        for(let i = 0; i < graphicsMatrix.length; i++) frameBuffer[i] = palette[graphicsMatrix[i]];
+        const character = { height: 16, width: 8, bits: ascii * 32 }; // 32 bits are reserved for each ASCII character.
+        const screenWidth = 256;
+
+        for(let i = 0; i < character.height; i++) {
+            const firstHalf = TextModeData.TEXT[character.bits + i * 2];
+            const secondHalf = TextModeData.TEXT[character.bits + i * 2 + 1];
+                
+            const lineBits = (firstHalf << 8) | secondHalf;
+
+            for(let j = 0; j < character.width * 2; j++) {
+                const lineBit = (lineBits >> (15 - j)) & 1;
+                const usedColor = lineBit ? color : { r: 0, g: 0, b: 0 };
+
+                const px = ((y * character.height + i) * screenWidth + (x * character.width + j)) * 4;
+
+                imageData.data[px] = usedColor.r;
+                imageData.data[px + 1] = usedColor.g;
+                imageData.data[px + 2] = usedColor.b;
+                imageData.data[px + 3] = 255;
+            }
+        }
 
         ctx.putImageData(imageData, 0, 0);
     }
 
     function resetCanvas() {
-        assembler.graphics.matrix.reset();
-        redrawCanvas();
+        canvasStrongRef.current.style.opacity = "";
+
+        frameBufferRef.current.fill(0xFF000000);
+        ctxRef.current.putImageData(imageDataRef.current, 0, 0);
     }
 
     return(
