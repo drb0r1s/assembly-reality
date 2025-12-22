@@ -139,15 +139,15 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         // Text
         else {
             // Background color cannot be changed in bitmap mode.
-            if(data[0] === "background") {
-                const colorIndex = assembler.graphics.matrix.point(0xA301, { isHalf: true });
-                const color = assembler.graphics.getRGB(colorIndex);
+            if(data[0] === "background") drawBackground();
 
-                ctxRef.current.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
-                ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            else {
+                const backgroundColor = assembler.graphics.getReserved("background");
+                const [scrollX, scrollY] = assembler.graphics.getReserved("scroll");
+                
+                for(let i = 0; i < data.length; i++) drawCharacter(data[i], backgroundColor, scrollX, scrollY);
+                ctxRef.current.putImageData(imageDataRef.current, 0, 0);
             }
-
-            else for(let i = 0; i < data.length; i++) drawCharacter(data[i]);
         }
     }
 
@@ -159,26 +159,53 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         ctxRef.current.fillRect(x, y, 1, 1);
     }
 
-    function drawCharacter(data) {
+    function drawCharacter(data, backgroundColor, scrollX, scrollY) {
         const [x, y, ascii, color] = data;
 
-        const ctx = ctxRef.current;
         const imageData = imageDataRef.current;
 
-        const character = { height: 16, width: 8, bits: ascii * 32 }; // 32 bits are reserved for each ASCII character.
-        const screenWidth = 256;
+        const character = {
+            height: 16,
+            width: 8,
+            bits: ascii * 32, // 32 bits are reserved for each ASCII character.
+            top: y,
+            left: x,
+            bottom: y * 16,
+            right: x * 8
+        };
+        
+        const screenSize = 256;
+
+        const screen = {
+            x: character.right - scrollX,
+            y: character.bottom - scrollY
+        };
+
+        // We need to check if character is totally off the screen.
+        if(
+            screen.x <= -character.width * 2 ||
+            screen.x >= screenSize ||
+            screen.y <= -character.height ||
+            screen.y >= screenSize
+        ) return;
 
         for(let i = 0; i < character.height; i++) {
+            const y = screen.y + i;
+            if(y < 0 || y >= screenSize) continue; // This line of pixels is off the screen on y.
+            
             const firstHalf = TextModeData.TEXT[character.bits + i * 2];
             const secondHalf = TextModeData.TEXT[character.bits + i * 2 + 1];
                 
             const lineBits = (firstHalf << 8) | secondHalf;
 
             for(let j = 0; j < character.width * 2; j++) {
+                const x = screen.x + j;
+                if(x < 0 || x >= screenSize) continue; // This pixel is off the screen on x.
+                
                 const lineBit = (lineBits >> (15 - j)) & 1;
-                const usedColor = lineBit ? color : { r: 0, g: 0, b: 0 };
+                const usedColor = lineBit ? color : backgroundColor;
 
-                const px = ((y * character.height + i) * screenWidth + (x * character.width + j)) * 4;
+                const px = (y * screenSize + x) * 4;
 
                 imageData.data[px] = usedColor.r;
                 imageData.data[px + 1] = usedColor.g;
@@ -186,8 +213,22 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
                 imageData.data[px + 3] = 255;
             }
         }
+    }
 
-        ctx.putImageData(imageData, 0, 0);
+    function drawBackground() {
+        const backgroundColor = assembler.graphics.getReserved("background");
+        const { r, g, b } = backgroundColor;
+
+        const imageData = imageDataRef.current;
+
+        for(let i = 0; i < imageData.data.length; i += 4) {
+            imageData.data[i] = r;
+            imageData.data[i + 1] = g;
+            imageData.data[i + 2] = b;
+            imageData.data[i + 3] = 255;
+        }
+
+        ctxRef.current.putImageData(imageData, 0, 0);
     }
 
     function resetCanvas() {

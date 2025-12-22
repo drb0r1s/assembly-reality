@@ -22,6 +22,19 @@ export class Graphics {
         this.storedBits = []; // An array of bits waiting to be updated in bitmap mode for speeds < 10kHz.
         this.storedCharacters = []; // An array of characters waiting to be updated in text mode for speeds < 10kHz.
     }
+
+    getReserved(key) {
+        switch(key) {
+            case "background":
+                const backgroundColorIndex = this.matrix.point(0xA301, { isHalf: true });
+                return this.getRGB(backgroundColorIndex);
+            case "scroll":
+                return [
+                    this.matrix.point(0xA302),
+                    this.matrix.point(0xA304)
+                ];
+        }
+    }
     
     getRGB(value) {
         return this.rgbTable[value];
@@ -48,6 +61,8 @@ export class Graphics {
     }
 
     draw(assembler, value) {
+        const vidMode = assembler.ioRegisters.getValue("VIDMODE");
+
         const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
         const [x, y] = this.addressToPosition(vidAddr);
 
