@@ -322,7 +322,7 @@ export const Executable = {
                     const vidMode = assembler.ioRegisters.getValue("VIDMODE");
                     if(vidMode > 1) assembler.ioRegisters.update("VIDDATA", registerValue & 0xFF); // In case we're in bitmap mode, we need to ignore upper 8 bits.
 
-                    assembler.graphics.draw(assembler, registerValue);
+                    assembler.graphics.update(assembler, registerValue);
                     break;
             }
         }

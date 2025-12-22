@@ -137,7 +137,18 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
         if(vidMode > 1) for(let i = 0; i < data.length; i++) drawPixel(data[i]);
 
         // Text
-        else for(let i = 0; i < data.length; i++) drawCharacter(data[i]);
+        else {
+            // Background color cannot be changed in bitmap mode.
+            if(data[0] === "background") {
+                const colorIndex = assembler.graphics.matrix.point(0xA301, { isHalf: true });
+                const color = assembler.graphics.getRGB(colorIndex);
+
+                ctxRef.current.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
+                ctxRef.current.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            }
+
+            else for(let i = 0; i < data.length; i++) drawCharacter(data[i]);
+        }
     }
 
     function drawPixel(data) {

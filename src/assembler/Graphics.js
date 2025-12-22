@@ -34,13 +34,22 @@ export class Graphics {
         return [x, y];
     }
 
-    draw(assembler, value) {
+    update(assembler, value) {
         const vidMode = assembler.ioRegisters.getValue("VIDMODE");
-
         const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
-        const [x, y] = this.addressToPosition(vidAddr);
 
         assembler.graphics.matrix.update(vidAddr, value, { isHalf: vidMode > 1 });
+
+        // If we're in bitmap mode, then yes, drawing is certain.
+        if(vidMode > 1) this.draw(assembler, value);
+
+        // In case we're in the text mode, then it is not certain that we're drawing on the screen, maybe reserved address is updated.
+        else this.updateTextModeAddress(assembler, value);
+    }
+
+    draw(assembler, value) {
+        const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
+        const [x, y] = this.addressToPosition(vidAddr);
 
         // For speeds greather than or equal to 10kHz, we update the canvas instantly.
         if(assembler.speed >= 10000) {
@@ -69,6 +78,16 @@ export class Graphics {
                 this.storageAdd("text", [x, y, ascii, this.getRGB(color)]);
             }
         }
+    }
+
+    updateTextModeAddress(assembler, value) {
+        const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
+        
+        // [0x0000, 0x7FFF] is reserved for display.
+        if(vidAddr <= 0x7FFF) this.draw(assembler, value);
+
+        // [0xA300, 0xA301] is reserved for background color.
+        if(vidAddr === 0xA300 || vidAddr === 0xA301) self.postMessage({ action: "graphicsRedraw", data: ["background"] });
     }
 
     storageGet(mode) {
