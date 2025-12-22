@@ -138,14 +138,29 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
 
         // Text
         else {
+            const backgroundColor = assembler.graphics.getReserved("background");
+            const [scrollX, scrollY] = assembler.graphics.getReserved("scroll");
+            
             // Background color cannot be changed in bitmap mode.
-            if(data[0] === "background") drawBackground();
+            if(data === "background") drawBackground();
 
             else {
-                const backgroundColor = assembler.graphics.getReserved("background");
-                const [scrollX, scrollY] = assembler.graphics.getReserved("scroll");
+                const vram = assembler.graphics.matrix.getMatrix();
+
+                drawBackground();
+
+                assembler.graphics.forEachCharacter(address => {
+                    const ascii = vram[address];
+
+                    const colorIndex = vram[address + 1];
+                    const color = assembler.graphics.getRGB(colorIndex);
+                    
+                    if(ascii === 0) return;
+
+                    const [x, y] = assembler.graphics.addressToPosition(address);
+                    drawCharacter([x, y, ascii, color], backgroundColor, scrollX, scrollY);
+                });
                 
-                for(let i = 0; i < data.length; i++) drawCharacter(data[i], backgroundColor, scrollX, scrollY);
                 ctxRef.current.putImageData(imageDataRef.current, 0, 0);
             }
         }
