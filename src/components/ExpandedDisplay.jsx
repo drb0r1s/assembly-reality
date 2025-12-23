@@ -8,9 +8,16 @@ const ExpandedDisplay = () => {
 
     useEffect(() => {
         setTimeout(() => { expandedDisplayRef.current.style.opacity = "1" }, 10);
+
+        const disableExpandedDisplayOnKeydown = e => {
+            if(e.key === "Escape") disableExpandedDisplay();
+        }
+
+        window.addEventListener("keydown", disableExpandedDisplayOnKeydown);
+        return () => window.removeEventListener("keydown", disableExpandedDisplayOnKeydown);
     }, []);
     
-    function disabledExpandedDisplay() {
+    function disableExpandedDisplay() {
         expandedDisplayRef.current.style.opacity = "";
         setTimeout(() => Manager.set("isDisplayExpanded", false), 300);
     }
@@ -19,9 +26,9 @@ const ExpandedDisplay = () => {
         <div className="expanded-display" ref={expandedDisplayRef}>
             <button
                 className="expanded-display-x-button"
-                onClick={disabledExpandedDisplay}
+                onClick={disableExpandedDisplay}
             >
-                <img src={images.xIcon} alt="" />
+                <img src={images.xIcon} alt="X" />
             </button>
 
             <Display />

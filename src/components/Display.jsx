@@ -108,6 +108,7 @@ const Display = ({ style }) => {
 
     function redrawCanvas(data) {
         const vidMode = assembler.ioRegisters.getValue("VIDMODE");
+        console.log(data)
 
         // Bitmap
         if(vidMode > 1) for(let i = 0; i < data.length; i++) drawPixel(data[i]);

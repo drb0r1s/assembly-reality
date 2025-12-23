@@ -68,14 +68,14 @@ export class Graphics {
         // For speeds greather than or equal to 10kHz, we update the canvas instantly.
         if(assembler.speed >= 10000) {
             // Bitmap
-            if(vidMode > 1) self.postMessage({ action: "graphicsRedraw", data: [[x, y, this.getRGB(value)]]});
+            if(vidMode > 1) self.postMessage({ action: "graphicsRedraw", data: [[x, y, this.getRGB(value & 0xFF)]]});
 
             // Text
             else self.postMessage({ action: "graphicsRedraw" });
         }
 
         // In case speed is < 10kHz, we need to keep track of all bits that should be updated.
-        else if(vidMode > 1) this.storeBit([x, y, this.getRGB(value)]);
+        else if(vidMode > 1) this.storeBit([x, y, this.getRGB(value & 0xFF)]);
     }
 
     updateTextModeAddress(assembler, value) {

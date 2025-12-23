@@ -306,6 +306,7 @@ export class Assembler {
         // For speeds lower than 10kHz, we use this partial updates to update the canvas.
         if(this.speed < 10000) {
             const vidMode = this.ioRegisters.getValue("VIDMODE");
+            if(vidMode === 0) return;
             
             // Bitmap
             if(vidMode > 1) {
