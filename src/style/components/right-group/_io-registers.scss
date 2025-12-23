@@ -8,7 +8,7 @@
     bottom: 0;
 
     .io-registers-map {
-        height: calc(100% - 27px); // 27px (MiniHeader)
+        height: calc(100% - 27px); // 27px (DraggableHeader)
         width: 100%;
         @include center(column);
         justify-content: flex-start;

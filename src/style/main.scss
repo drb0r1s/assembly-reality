@@ -23,7 +23,7 @@ main {
     justify-content: flex-start;
     overflow: hidden;
 
-    .display {
+    .workspace {
         height: calc(100dvh - 38px); // 38px is header height
         width: 100%;
         @include center;

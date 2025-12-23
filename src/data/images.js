@@ -12,9 +12,10 @@ import xIcon from "../images/x-icon.svg";
 import visibilityIcon from "../images/visibility-icon.svg";
 import pageIcon from "../images/page-icon.svg";
 import addIcon from "../images/add-icon.svg";
+import expandIcon from "../images/expand-icon.svg";
 
 export const images = {
     // GENERAL
     arrowDownIcon, assembleIcon, runIcon, pauseIcon, stepIcon, resetIcon, keyboardIcon, keyboardBlueIcon, checkIcon,
-    xIcon, visibilityIcon, pageIcon, addIcon
+    xIcon, visibilityIcon, pageIcon, addIcon, expandIcon
 };

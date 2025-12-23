@@ -3,7 +3,8 @@ export const Manager = (() => {
         ["view", { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true }],
         ["speed", 4],
         ["isHighSpeed", false],
-        ["isRunning", false]
+        ["isRunning", false],
+        ["isDisplayExpanded", false]
     ]);
     
     const listeners = new Map();

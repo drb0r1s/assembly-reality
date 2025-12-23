@@ -86,7 +86,7 @@ main {
   justify-content: flex-start;
   overflow: hidden;
 }
-main .display {
+main .workspace {
   height: calc(100dvh - 38px);
   width: 100%;
   display: flex;
@@ -649,112 +649,25 @@ header .header-title {
   position: absolute;
   bottom: 0;
 }
-.right-group .right-group-content .io-devices .io-devices-content {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 10px;
-  padding: 10px 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-canvas-holder {
+.right-group .right-group-content .io-devices .io-devices-expand-button {
+  height: 30px;
+  width: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  position: relative;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-canvas-holder canvas {
-  height: 256px;
-  width: 256px;
-  background-color: black;
+  background-color: #0F0F0F;
   border: 1px solid #2F3336;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-canvas-holder strong {
-  color: #F4F4F4;
-  font-size: 36px;
-  font-family: SourceCodePro-Regular;
-  font-weight: normal;
-  text-align: center;
+  border-radius: 50%;
   position: absolute;
-  opacity: 1;
-  transition: 300ms;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-mini-display {
-  width: 256px;
-  display: grid;
-  grid-template-columns: repeat(16, 1fr);
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-mini-display .io-devices-mini-display-element {
-  height: 20px;
-  width: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  color: #D4D4D4;
-  font-size: 16px;
-  font-family: SourceCodePro-Regular;
-  background-color: #2F3336;
-  border-top: 3px solid black;
-  border-left: 3px solid black;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard {
-  width: 256px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  justify-content: space-between;
-  background-color: transparent;
-  border: 1px solid #2F3336;
-  border-radius: 5px;
-  outline: none;
-  padding: 5px 12px;
+  top: 37px;
+  right: 10px;
   cursor: pointer;
   transition: 300ms;
 }
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard:hover {
-  border: 1px solid #405A85;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard .io-devices-keyboard-left-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 8px;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard .io-devices-keyboard-left-group .io-devices-keyboard-image-holder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  position: relative;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard .io-devices-keyboard-left-group .io-devices-keyboard-image-holder img {
-  transition: 300ms;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard .io-devices-keyboard-left-group .io-devices-keyboard-image-holder img:last-child {
-  opacity: 0;
-  position: absolute;
-  left: 0;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard p {
-  color: #F4F4F4;
-  font-size: 14px;
-  font-family: SourceCodePro-Regular;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard .io-devices-keyboard-key {
-  opacity: 0;
-  transition: 300ms;
-}
-.right-group .right-group-content .io-devices .io-devices-content .io-devices-keyboard-active {
-  border: 1px solid #405A85;
+.right-group .right-group-content .io-devices .io-devices-expand-button:hover {
+  background-color: #405A85;
+  border: 1px solid #F4F4F4;
 }
 .right-group .right-group-content .cpu-registers {
   height: 290px;
@@ -892,7 +805,7 @@ header .header-title {
   padding-left: none;
 }
 
-.mini-header {
+.draggable-header {
   height: 27px;
   width: 100%;
   display: flex;
@@ -907,7 +820,7 @@ header .header-title {
   padding: 0 12px;
   cursor: ns-resize;
 }
-.mini-header strong {
+.draggable-header strong {
   color: #F4F4F4;
   font-size: 14px;
   font-family: Roboto-SemiBold;
@@ -987,4 +900,162 @@ header .header-title {
   color: #F4F4F4;
   font-size: 16px;
   font-family: Roboto-Regular;
+}
+
+.display {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.display .display-canvas-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  position: relative;
+}
+.display .display-canvas-holder canvas {
+  height: 256px;
+  width: 256px;
+  background-color: black;
+  border: 1px solid #2F3336;
+}
+.display .display-canvas-holder strong {
+  color: #F4F4F4;
+  font-size: 36px;
+  font-family: SourceCodePro-Regular;
+  font-weight: normal;
+  text-align: center;
+  position: absolute;
+  opacity: 1;
+  transition: 300ms;
+}
+.display .display-mini-display {
+  width: 256px;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 3px;
+}
+.display .display-mini-display .display-mini-display-element {
+  height: 17px;
+  width: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  color: #D4D4D4;
+  font-size: 16px;
+  font-family: SourceCodePro-Regular;
+  background-color: #2F3336;
+}
+.display .display-keyboard {
+  width: 256px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: transparent;
+  border: 1px solid #2F3336;
+  border-radius: 5px;
+  outline: none;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: 300ms;
+}
+.display .display-keyboard:hover {
+  border: 1px solid #405A85;
+}
+.display .display-keyboard .display-keyboard-left-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 8px;
+}
+.display .display-keyboard .display-keyboard-left-group .display-keyboard-image-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  position: relative;
+}
+.display .display-keyboard .display-keyboard-left-group .display-keyboard-image-holder img {
+  transition: 300ms;
+}
+.display .display-keyboard .display-keyboard-left-group .display-keyboard-image-holder img:last-child {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+}
+.display .display-keyboard p {
+  color: #F4F4F4;
+  font-size: 14px;
+  font-family: SourceCodePro-Regular;
+}
+.display .display-keyboard .display-keyboard-key {
+  opacity: 0;
+  transition: 300ms;
+}
+.display .display-keyboard-active {
+  border: 1px solid #405A85;
+}
+
+.expanded-display {
+  height: 100dvh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: black;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: 300ms;
+  z-index: 6;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.expanded-display .expanded-display-x-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+.expanded-display .display {
+  justify-content: center;
+}
+.expanded-display .display .display-canvas-holder canvas {
+  height: 512px;
+  width: 512px;
+}
+.expanded-display .display .display-canvas-holder strong {
+  font-size: 72px;
+}
+.expanded-display .display .display-mini-display {
+  width: 512px;
+  gap: 6px;
+}
+.expanded-display .display .display-mini-display .display-mini-display-element {
+  height: 32px;
+  width: 26px;
+}
+.expanded-display .display .display-keyboard {
+  width: 512px;
 }/*# sourceMappingURL=main.css.map */

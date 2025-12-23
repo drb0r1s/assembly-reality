@@ -1,0 +1,102 @@
+.display {
+    height: 100%;
+    width: 100%;
+    @include center(column);
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .display-canvas-holder {
+        @include center;
+        position: relative;
+
+        canvas {
+            height: 256px;
+            width: 256px;
+            background-color: black;
+            border: 1px solid #2F3336;
+        }
+
+        strong {
+            color: #F4F4F4;
+            font-size: 36px;
+            font-family: SourceCodePro-Regular;
+            font-weight: normal;
+            text-align: center;
+            position: absolute;
+            opacity: 1;
+            transition: 300ms;
+        }
+    }
+
+    .display-mini-display {
+        width: 256px;
+        display: grid;
+        grid-template-columns: repeat(16, 1fr);
+        gap: 3px;
+
+        .display-mini-display-element {
+            height: 17px;
+            width: 13px;
+            @include center;
+            color: #D4D4D4;
+            font-size: 16px;
+            font-family: SourceCodePro-Regular;
+            background-color: #2F3336;
+        }
+    }
+
+    .display-keyboard {
+        width: 256px;
+        @include center;
+        justify-content: space-between;
+        background-color: transparent;
+        border: 1px solid #2F3336;
+        border-radius: 5px;
+        outline: none;
+        padding: 5px 12px;
+        cursor: pointer;
+        transition: 300ms;
+
+        &:hover {
+            border: 1px solid $blue;
+        }
+
+        .display-keyboard-left-group {
+            @include center;
+            gap: 8px;
+
+            .display-keyboard-image-holder {
+                @include center;
+                position: relative;
+
+                img {
+                    transition: 300ms;
+
+                    &:last-child {
+                        opacity: 0;
+                        position: absolute;
+                        left: 0;
+                    }
+                }
+            }
+        }
+
+        p {
+            color: #F4F4F4;
+            font-size: 14px;
+            font-family: SourceCodePro-Regular;
+        }
+
+        .display-keyboard-key {
+            opacity: 0;
+            transition: 300ms;
+        }
+    }
+
+    .display-keyboard-active {
+        border: 1px solid $blue;
+    }
+}
