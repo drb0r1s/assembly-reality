@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import MiniHeader from "../MiniHeader";
+import DraggableHeader from "../DraggableHeader";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useManagerValue } from "../../hooks/useManagerValue";
@@ -27,7 +27,7 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
     
     return(
         <div className="io-registers" ref={ioRegistersRef}>
-            <MiniHeader
+            <DraggableHeader
                 title="Input / Output Registers"
                 ref={headerRef}
             />

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import MiniHeader from "../MiniHeader";
+import DraggableHeader from "../DraggableHeader";
 import HighSpeedBlock from "../HighSpeedBlock";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
@@ -26,7 +26,7 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
     
     return(
         <div className="cpu-registers" ref={cpuRegistersRef}>
-            <MiniHeader
+            <DraggableHeader
                 title="CPU Registers"
                 ref={headerRef}
             />
