@@ -9,6 +9,7 @@ const Display = ({ style }) => {
         
     const [_, setMemoryVersion] = useState(0);
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
+    const [isCanvasStrongDisabled, setIsCanvasStrongDisabled] = useState(false);
     
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
@@ -19,6 +20,9 @@ const Display = ({ style }) => {
     const paletteRef = useRef(null);
 
     useEffect(() => {
+        const vidMode = assembler.ioRegisters.getValue("VIDMODE");
+        setIsCanvasStrongDisabled(vidMode !== 0);
+        
         const unsubscribeMiniDisplayPing = Manager.subscribe("miniDisplayPing", () => setMemoryVersion(prevVersion => prevVersion + 1));
         const unsubscribeMemoryReset = Manager.subscribe("ramReset", () => setMemoryVersion(prevVersion => prevVersion + 1));
 
@@ -73,6 +77,10 @@ const Display = ({ style }) => {
             window.removeEventListener("keyup", handleKeyup);
         }
     }, [keyboard.isActive]);
+
+    useEffect(() => {
+        if(isCanvasStrongDisabled) canvasStrongRef.current.style.opacity = "0";
+    }, [isCanvasStrongDisabled]);
 
     function initializeCanvas() {
         const canvas = canvasRef.current;
