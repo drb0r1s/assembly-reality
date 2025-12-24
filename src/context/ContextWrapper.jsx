@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { GlobalContext } from "./GlobalContext";
 import { useWorker } from "../hooks/useWorker";
+import { useSharedCanvas } from "../hooks/useSharedCanvas";
 import { Assembler } from "../assembler/Assembler";
 
 const ContextWrapper = ({ children }) => {
@@ -11,13 +12,14 @@ const ContextWrapper = ({ children }) => {
 
     const assembler = useRef(new Assembler(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer)).current;
     const assemblerWorker = useWorker();
+    const sharedCanvas = useSharedCanvas();
 
     useEffect(() => {
         if(assemblerWorker) assemblerWorker.postMessage({ action: "init", payload: { cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer } });
     }, [assemblerWorker]);
 
     return(
-        <GlobalContext.Provider value={{ assembler, assemblerWorker }}>
+        <GlobalContext.Provider value={{ assembler, assemblerWorker, sharedCanvas }}>
             {children}
         </GlobalContext.Provider>
     );

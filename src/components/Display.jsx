@@ -5,7 +5,7 @@ import { TextModeData } from "../assembler/TextModeData";
 import { images } from "../data/images";
 
 const Display = ({ style }) => {
-    const { assembler, assemblerWorker } = useContext(GlobalContext);
+    const { assembler, assemblerWorker, sharedCanvas } = useContext(GlobalContext);
         
     const [_, setMemoryVersion] = useState(0);
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
@@ -14,10 +14,8 @@ const Display = ({ style }) => {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
     const canvasStrongRef = useRef(null);
-    
-    const imageDataRef = useRef(null);
+
     const frameBufferRef = useRef(null);
-    const paletteRef = useRef(null);
 
     useEffect(() => {
         const vidMode = assembler.ioRegisters.getValue("VIDMODE");
@@ -91,34 +89,44 @@ const Display = ({ style }) => {
 
         ctx.imageSmoothingEnabled = true;
 
-        const imageData = ctx.createImageData(256, 256);
-        const frameBuffer = new Uint32Array(imageData.data.buffer);
+        ctxRef.current = ctx;
 
-        const palette = new Uint32Array(256);
+        // If shared imageData wasn't initialized yet, do it once.
+        if(!sharedCanvas.current.imageData) {
+            const imageData = ctx.createImageData(256, 256);
+            const palette = new Uint32Array(256);
 
-        for(let i = 0; i < 256; i++) {
-            const r = (i >> 5) & 7;
-            const g = (i >> 2) & 7;
-            const b = i & 3;
+            for(let i = 0; i < 256; i++) {
+                const r = (i >> 5) & 7;
+                const g = (i >> 2) & 7;
+                const b = i & 3;
 
-            const R = (r * 255 / 7) | 0;
-            const G = (g * 255 / 7) | 0;
-            const B = (b * 255 / 3) | 0;
+                const R = (r * 255 / 7) | 0;
+                const G = (g * 255 / 7) | 0;
+                const B = (b * 255 / 3) | 0;
 
-            palette[i] = (255 << 24) | (B << 16) | (G << 8) | R;
+                palette[i] = (255 << 24) | (B << 16) | (G << 8) | R;
+            }
+
+            sharedCanvas.current.imageData = imageData;
+            sharedCanvas.current.palette = palette;
         }
 
-        ctxRef.current = ctx;
-        imageDataRef.current = imageData;
+        // Otherwise, draw everything that was on the other canvas.
+        else ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
+
+        const frameBuffer = new Uint32Array(sharedCanvas.current.imageData.data.buffer);
         frameBufferRef.current = frameBuffer;
-        paletteRef.current = palette;
     }
 
     function redrawCanvas(data) {
         const vidMode = assembler.ioRegisters.getValue("VIDMODE");
 
         // Bitmap
-        if(vidMode > 1) for(let i = 0; i < data.length; i++) drawPixel(data[i]);
+        if(vidMode > 1) {
+            for(let i = 0; i < data.length; i++) drawPixel(data[i]);
+            ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
+        }
 
         // Text
         else {
@@ -145,7 +153,7 @@ const Display = ({ style }) => {
                     drawCharacter([x, y, ascii, color], backgroundColor, scrollX, scrollY);
                 });
                 
-                ctxRef.current.putImageData(imageDataRef.current, 0, 0);
+                ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
             }
         }
     }
@@ -154,14 +162,21 @@ const Display = ({ style }) => {
         const [x, y, color] = data;
         const { r, g, b } = color;
 
-        ctxRef.current.fillStyle = `rgb(${r}, ${g}, ${b})`;
-        ctxRef.current.fillRect(x, y, 1, 1);
+        const imageData = sharedCanvas.current.imageData;
+        const screenSize = 256;
+
+        const px = (y * screenSize + x) * 4;
+
+        imageData.data[px] = r;
+        imageData.data[px + 1] = g;
+        imageData.data[px + 2] = b;
+        imageData.data[px + 3] = 255;
     }
 
     function drawCharacter(data, backgroundColor, scrollX, scrollY) {
         const [x, y, ascii, color] = data;
 
-        const imageData = imageDataRef.current;
+        const imageData = sharedCanvas.current.imageData;
 
         const character = {
             height: 16,
@@ -218,7 +233,7 @@ const Display = ({ style }) => {
         const backgroundColor = assembler.graphics.getReserved("background");
         const { r, g, b } = backgroundColor;
 
-        const imageData = imageDataRef.current;
+        const imageData = sharedCanvas.current.imageData;
 
         for(let i = 0; i < imageData.data.length; i += 4) {
             imageData.data[i] = r;
@@ -234,7 +249,7 @@ const Display = ({ style }) => {
         canvasStrongRef.current.style.opacity = "";
 
         frameBufferRef.current.fill(0xFF000000);
-        ctxRef.current.putImageData(imageDataRef.current, 0, 0);
+        ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
     }
     
     return(
