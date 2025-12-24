@@ -65,10 +65,8 @@ export const HexCalculator = {
         if(first === second) SR.Z = 1;
         else if(SR.Z) SR.Z = 0;
         
-        else {
-            if(first < second) SR.C = 1;
-            else SR.C = 0;
-        }
+        if(first < second) SR.C = 1;
+        else if(SR.C) SR.C = 0;
 
         return(
             (SR.M << 4) |
