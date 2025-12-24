@@ -86,6 +86,9 @@ export class Graphics {
 
         // [0xA300, 0xA301] is reserved for background color.
         if(vidAddr === 0xA300 || vidAddr === 0xA301) self.postMessage({ action: "graphicsRedraw", data: "background" });
+    
+        // [0xA302, 0xA305] is reserved for scroll (horizontal and vertical).
+        if(vidAddr >= 0xA302 && vidAddr <= 0xA305) self.postMessage({ action: "graphicsRedraw", data: "scroll" });
     }
 
     forEachCharacter(callback) {
