@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { Manager } from "../Manager";
-import { TextModeData } from "../assembler/TextModeData";
 import { images } from "../data/images";
 
 const Display = ({ style }) => {
@@ -139,7 +138,8 @@ const Display = ({ style }) => {
         else {
             const backgroundColor = assembler.graphics.getReserved("background");
             const [scrollX, scrollY] = assembler.graphics.getReserved("scroll");
-
+            const text = assembler.graphics.getText();
+            
             const vram = assembler.graphics.matrix.getMatrix();
 
             drawBackground();
@@ -153,7 +153,7 @@ const Display = ({ style }) => {
                 if(ascii === 0) return;
 
                 const [x, y] = assembler.graphics.addressToPosition(address);
-                drawCharacter([x, y, ascii, color], backgroundColor, scrollX, scrollY);
+                drawCharacter([x, y, ascii, color], backgroundColor, scrollX, scrollY, text);
             });
                 
             ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
@@ -175,7 +175,7 @@ const Display = ({ style }) => {
         imageData.data[px + 3] = 255;
     }
 
-    function drawCharacter(data, backgroundColor, scrollX, scrollY) {
+    function drawCharacter(data, backgroundColor, scrollX, scrollY, text) {
         const [x, y, ascii, color] = data;
 
         const imageData = sharedCanvas.current.imageData;
@@ -209,8 +209,8 @@ const Display = ({ style }) => {
             const y = screen.y + i;
             if(y < 0 || y >= screenSize) continue; // This line of pixels is off the screen on y.
             
-            const firstHalf = TextModeData.TEXT[character.bits + i * 2];
-            const secondHalf = TextModeData.TEXT[character.bits + i * 2 + 1];
+            const firstHalf = text[character.bits + i * 2];
+            const secondHalf = text[character.bits + i * 2 + 1];
                 
             const lineBits = (firstHalf << 8) | secondHalf;
 

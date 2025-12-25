@@ -73,16 +73,20 @@ export class Assembler {
         }
 
         if(statement.type === "Instant") {
-            // ORG is the special type of instant, we need to rely on the actual implementation of the instant here to get the correct shape.
+            // ORG is a special type of instant, we need to rely on the actual implementation of the instant here to get the correct shape.
             if(statement.name === "ORG") Instants.ORG(this, statement);
+            // DB is a special type of instant, because of its ability to use special character \ for Exact Mode.
+            // Therefore, we need to actually compute the value of .DB in order to get the proper movement of free pointers.
+            else if(statement.name === "DB") Instants.DB(this, statement);
 
+            // DW
             else {
                 const operand = statement.operands[0];
                 let lengthOfInstant = 0;
 
                 // In case we need to write strings in memory, we need to get the length of the string.
                 // However, if we want to use 16-bit value for each character (DW), then the shape of the instant in memory is going to be twice the length of the string.
-                if(operand.valueType === "string.double") lengthOfInstant = statement.name === "DW" ? 2 * operand.value.length : operand.value.length;
+                if(operand.valueType === "string.double") lengthOfInstant = 2 * operand.value.length;
                 else lengthOfInstant = statement.isHalf ? 1 : 2;
 
                 this.ram.advance(lengthOfInstant);

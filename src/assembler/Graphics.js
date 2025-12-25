@@ -10,6 +10,11 @@ export class Graphics {
         this.matrix.values.set(TextModeData.TEXT, TextModeData.TEXT_START);
         this.matrix.values.set(TextModeData.PALETTE, TextModeData.PALETTE_START);
 
+        // [0x8000, 0x9FFF] is reserved for text.
+        this.text = this.matrix.values.subarray(TextModeData.TEXT_START, TextModeData.TEXT_END);
+        // [0xA000, 0xA2FF] is reserved for palette.
+        this.palette = this.matrix.values.subarray(TextModeData.PALETTE_START, TextModeData.PALETTE_END);
+
         this.rgbTable = new Array(256);
 
         for(let i = 0; i < 256; i++) {
@@ -35,6 +40,14 @@ export class Graphics {
                     this.matrix.point(0xA304)
                 ];
         }
+    }
+
+    getText() {
+        return this.text;
+    }
+
+    getPalette() {
+        return this.palette;
     }
     
     getRGB(value) {
@@ -112,6 +125,10 @@ export class Graphics {
 
     reset() {
         this.matrix.reset();
+
+        this.matrix.values.set(TextModeData.TEXT, TextModeData.TEXT_START);
+        this.matrix.values.set(TextModeData.PALETTE, TextModeData.PALETTE_START);
+
         this.storedBits = [];
         
         clearInterval(this.intervalId);

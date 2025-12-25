@@ -55,6 +55,10 @@ export const Instants = {
             result = [intValue];
         }
 
+        // Here we introduce the possibility of using special character \ in order to signal that the next 8-bit value is going to be written in the memory exactly as it is written in a string (not as an ASCII value), this is known as Exact Mode.
+        // DB "\xAB" => "AB" is written in the memory.
+        // DB "AB" => ASCII(A), ASCII(B) is written in the memory.
+        // IMPORTANT: This functionality is DB-exclusive, DW doesn't support this.
         else if(operand.valueType === "string.double") {
             const characters = operand.value.split("");
             
@@ -66,25 +70,32 @@ export const Instants = {
             for(let i = 0; i < characters.length; i++) {
                 const character = characters[i];
 
-                if(exactModeValue.length === 2) {
-                    exactMode = false;
-
-                    result.push(parseInt(exactModeValue, 16));
-                    exactModeValue = "";
-                }
-
                 if(character === "\\") {
+                    // Edge case: DB "\xA\x03...", "\xA" is written as "0A" in memory.
+                    if(exactModeValue.length > 0) {
+                        result.push(parseInt(exactModeValue, 16));
+                        exactModeValue = "";
+                    }
+
                     exactMode = true;
                     continue;
                 }
 
                 if(["x", "X"].indexOf(character) > -1 && exactMode) continue;
 
-                if(exactMode) exactModeValue += character;
+                if(exactMode) {
+                    exactModeValue += character;
+
+                    if(exactModeValue.length === 2) {
+                        exactMode = false;
+
+                        result.push(parseInt(exactModeValue, 16));
+                        exactModeValue = "";
+                    }
+                }
+                
                 else result.push(character.charCodeAt(0));
             }
-
-            console.log(result)
         }
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
