@@ -113,6 +113,8 @@ export class Graphics {
     reset() {
         this.matrix.reset();
         this.storedBits = [];
+        
+        clearInterval(this.intervalId);
         this.intervalId = null;
     }
 }
