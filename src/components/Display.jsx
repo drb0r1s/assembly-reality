@@ -18,6 +18,7 @@ const Display = ({ style }) => {
     const frameBufferRef = useRef(null);
 
     useEffect(() => {
+        // "Assembly Reality" title updating.
         const vidMode = assembler.ioRegisters.getValue("VIDMODE");
         setIsCanvasStrongDisabled(vidMode !== 0);
         
@@ -65,14 +66,20 @@ const Display = ({ style }) => {
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
         }
 
+        const handleClick = e => {
+            if(!e.target.classList.contains("display-keyboard-group")) setKeyboard({ isActive: false, activeCharacter: "" });
+        }
+
         if(keyboard.isActive) {
             window.addEventListener("keydown", handleKeydown);
             window.addEventListener("keyup", handleKeyup);
+            window.addEventListener("click", handleClick);
         }
 
         return () => {
             window.removeEventListener("keydown", handleKeydown);
             window.removeEventListener("keyup", handleKeyup);
+            window.removeEventListener("click", handleClick);
         }
     }, [keyboard.isActive]);
 
@@ -267,32 +274,34 @@ const Display = ({ style }) => {
             </div>
 
             <button
-                className={`display-keyboard ${keyboard.isActive ? "display-keyboard-active" : ""}`}
+                className={`display-keyboard ${keyboard.isActive ? "display-keyboard-active" : ""} display-keyboard-group`}
                 onClick={e => {
                     if(e.detail === 0) return; // This is used to prevent triggering the click event with a spacebar.
                     setKeyboard(prevKeyboard => { return { ...prevKeyboard, isActive: !prevKeyboard.isActive } });
                 }}
             >
-                <div className="display-keyboard-left-group">
-                    <div className="display-keyboard-image-holder">
+                <div className="display-keyboard-left-group display-keyboard-group">
+                    <div className="display-keyboard-image-holder display-keyboard-group">
                         <img
                             src={images.keyboardIcon}
                             alt="KEYBOARD"
+                            className="display-keyboard-group"
                             style={keyboard.isActive ? { opacity: "0" } : {}}
                         />
 
                         <img
                             src={images.keyboardBlueIcon}
                             alt="KEYBOARD"
+                            className="display-keyboard-group"
                             style={keyboard.isActive ? { opacity: "1" } : {}}
                         />
                     </div>
 
-                    <p>Keyboard</p>
+                    <p className="display-keyboard-group">Keyboard</p>
                 </div>
 
                 <p
-                    className="display-keyboard-key"
+                    className="display-keyboard-key display-keyboard-group"
                     style={keyboard.activeCharacter ? { opacity: "1" } : {}}
                 >{keyboard.activeCharacter}</p>
             </button>
