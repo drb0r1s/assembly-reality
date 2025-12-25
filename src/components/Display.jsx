@@ -100,22 +100,7 @@ const Display = ({ style }) => {
         // If shared imageData wasn't initialized yet, do it once.
         if(!sharedCanvas.current.imageData) {
             const imageData = ctx.createImageData(256, 256);
-            const palette = new Uint32Array(256);
-
-            for(let i = 0; i < 256; i++) {
-                const r = (i >> 5) & 7;
-                const g = (i >> 2) & 7;
-                const b = i & 3;
-
-                const R = (r * 255 / 7) | 0;
-                const G = (g * 255 / 7) | 0;
-                const B = (b * 255 / 3) | 0;
-
-                palette[i] = (255 << 24) | (B << 16) | (G << 8) | R;
-            }
-
             sharedCanvas.current.imageData = imageData;
-            sharedCanvas.current.palette = palette;
         }
 
         // Otherwise, draw everything that was on the other canvas.
