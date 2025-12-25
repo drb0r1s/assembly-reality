@@ -57,7 +57,34 @@ export const Instants = {
 
         else if(operand.valueType === "string.double") {
             const characters = operand.value.split("");
-            result = characters.map(character => character.charCodeAt(0));
+            
+            let exactMode = false;
+            let exactModeValue = "";
+
+            result = [];
+
+            for(let i = 0; i < characters.length; i++) {
+                const character = characters[i];
+
+                if(exactModeValue.length === 2) {
+                    exactMode = false;
+
+                    result.push(parseInt(exactModeValue, 16));
+                    exactModeValue = "";
+                }
+
+                if(character === "\\") {
+                    exactMode = true;
+                    continue;
+                }
+
+                if(["x", "X"].indexOf(character) > -1 && exactMode) continue;
+
+                if(exactMode) exactModeValue += character;
+                else result.push(character.charCodeAt(0));
+            }
+
+            console.log(result)
         }
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
