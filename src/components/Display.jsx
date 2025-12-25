@@ -246,7 +246,7 @@ const Display = ({ style }) => {
         >
             <div className="display-canvas-holder">
                 <canvas ref={canvasRef}></canvas>
-                <strong ref={canvasStrongRef}>Assembly Simulator</strong>
+                <strong ref={canvasStrongRef}>Assembly Reality</strong>
             </div>
 
             <div className="display-mini-display">

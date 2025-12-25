@@ -81,7 +81,7 @@ const Header = () => {
                 </div>
             </div>
 
-            <strong className="header-title">16-bit Assembly Simulator</strong>
+            <strong className="header-title">Assembly Reality</strong>
         </header>
     );
 }
