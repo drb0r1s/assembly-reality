@@ -15,6 +15,9 @@ export const Interrupts = {
             case "timer":
                 assembler.ioRegisters.update("IRQSTATUS", assembler.ioRegisters.getValue("IRQSTATUS") | 0b010, { force: true });
                 break;
+            case "graphics":
+                assembler.ioRegisters.update("IRQSTATUS", assembler.ioRegisters.getValue("IRQSTATUS") | 0b100, { force: true });
+                break;
         }
 
         Interrupts.process(assembler);
@@ -22,7 +25,8 @@ export const Interrupts = {
         function checkIRQMASK() {
             switch(type) {
                 case "keyboard": return irqMask & 1; // 1st LSB
-                case "timer": return (irqMask >> 1) & 1;
+                case "timer": return (irqMask >> 1) & 1; // 2nd LSB
+                case "graphics": return (irqMask >> 2) & 1; // 3rd LSB
             }
         }
     },

@@ -1,5 +1,6 @@
 import { Matrix } from "./Matrix";
 import { TextModeData } from "./TextModeData";
+import { Interrupts } from "./Interrupts";
 
 export class Graphics {
     constructor(graphicsBuffer) {
@@ -20,6 +21,7 @@ export class Graphics {
         }
 
         this.storedBits = []; // An array of bits waiting to be updated in bitmap mode for speeds < 10kHz.
+        this.intervalId = null;
     }
 
     getReserved(key) {
@@ -53,13 +55,10 @@ export class Graphics {
         assembler.graphics.matrix.update(vidAddr, value, { isHalf: vidMode > 1 });
 
         // If we're in bitmap mode, then yes, drawing is certain.
-        if(vidMode > 1) this.draw(assembler, value);
-
-        // In case we're in the text mode, then it is not certain that we're drawing on the screen, maybe reserved address is updated.
-        else this.updateTextModeAddress(assembler, value);
+        if(vidMode > 1) this.drawBit(assembler, value);
     }
 
-    draw(assembler, value) {
+    drawBit(assembler, value) {
         const vidMode = assembler.ioRegisters.getValue("VIDMODE");
 
         const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
@@ -69,26 +68,10 @@ export class Graphics {
         if(assembler.speed >= 10000) {
             // Bitmap
             if(vidMode > 1) self.postMessage({ action: "graphicsRedraw", data: [[x, y, this.getRGB(value & 0xFF)]]});
-
-            // Text
-            else self.postMessage({ action: "graphicsRedraw" });
         }
 
         // In case speed is < 10kHz, we need to keep track of all bits that should be updated.
         else if(vidMode > 1) this.storeBit([x, y, this.getRGB(value & 0xFF)]);
-    }
-
-    updateTextModeAddress(assembler, value) {
-        const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
-        
-        // [0x0000, 0x7FFF] is reserved for display.
-        if(vidAddr <= 0x7FFF) this.draw(assembler, value);
-
-        // [0xA300, 0xA301] is reserved for background color.
-        if(vidAddr === 0xA300 || vidAddr === 0xA301) self.postMessage({ action: "graphicsRedraw", data: "background" });
-    
-        // [0xA302, 0xA305] is reserved for scroll (horizontal and vertical).
-        if(vidAddr >= 0xA302 && vidAddr <= 0xA305) self.postMessage({ action: "graphicsRedraw", data: "scroll" });
     }
 
     forEachCharacter(callback) {
@@ -109,8 +92,27 @@ export class Graphics {
         this.storedBits = [];
     }
 
+    startVsyncInterval(assembler) {
+        // Having vsync interval only makes sense for speeds over 10kHz, .executeVsync is used otherwise.
+        if(assembler.speed < 10000) return;
+        this.intervalId = setInterval(() => this.executeVsync(assembler), 20);
+    }
+
+    stopVsyncInterval() {
+        if(this.intervalId === null) return;
+
+        clearInterval(this.intervalId);
+        this.intervalId = null;
+    }
+
+    executeVsync(assembler) {
+        self.postMessage({ action: "graphicsRedraw" });
+        Interrupts.trigger(assembler, "graphics");
+    }
+
     reset() {
         this.matrix.reset();
         this.storedBits = [];
+        this.intervalId = null;
     }
 }

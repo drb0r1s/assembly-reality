@@ -318,7 +318,7 @@ export class Assembler {
             }
 
             // Text
-            else self.postMessage({ action: "graphicsRedraw" });
+            else this.graphics.executeVsync(this);
         }
     }
 

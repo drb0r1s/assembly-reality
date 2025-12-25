@@ -132,29 +132,24 @@ const Display = ({ style }) => {
         else {
             const backgroundColor = assembler.graphics.getReserved("background");
             const [scrollX, scrollY] = assembler.graphics.getReserved("scroll");
-            
-            // Background color cannot be changed in bitmap mode.
-            if(data === "background") drawBackground();
 
-            else {
-                const vram = assembler.graphics.matrix.getMatrix();
+            const vram = assembler.graphics.matrix.getMatrix();
 
-                drawBackground();
+            drawBackground();
 
-                assembler.graphics.forEachCharacter(address => {
-                    const ascii = vram[address];
+            assembler.graphics.forEachCharacter(address => {
+                const ascii = vram[address];
 
-                    const colorIndex = vram[address + 1];
-                    const color = assembler.graphics.getRGB(colorIndex);
+                const colorIndex = vram[address + 1];
+                const color = assembler.graphics.getRGB(colorIndex);
                     
-                    if(ascii === 0) return;
+                if(ascii === 0) return;
 
-                    const [x, y] = assembler.graphics.addressToPosition(address);
-                    drawCharacter([x, y, ascii, color], backgroundColor, scrollX, scrollY);
-                });
+                const [x, y] = assembler.graphics.addressToPosition(address);
+                drawCharacter([x, y, ascii, color], backgroundColor, scrollX, scrollY);
+            });
                 
-                ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
-            }
+            ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
         }
     }
 

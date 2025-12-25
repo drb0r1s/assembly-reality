@@ -306,9 +306,19 @@ export const Executable = {
                     break;
                 // VIDMODE
                 case 7:
-                    // Why do we do this? In order to be able to send proper message to the UI thread and tell that "Assembly Reality" title should be enabled/disabled from the canvas.
-                    if(registerValue > 0) self.postMessage({ action: "graphicsEnabled" });
-                    else self.postMessage({ action: "graphicsDisabled" });
+                    if(registerValue > 0) {
+                        assembler.graphics.startVsyncInterval(assembler);
+
+                        // Why do we do this? In order to be able to send proper message to the UI thread and tell that "Assembly Reality" title should be enabled/disabled from the canvas.
+                        self.postMessage({ action: "graphicsEnabled" });
+                    }
+
+                    else {
+                        // When display is disabled, it is important to terminate the interval.
+                        assembler.graphics.stopVsyncInterval();
+
+                        self.postMessage({ action: "graphicsDisabled" });
+                    }
                     
                     break;
                 // VIDADDR
