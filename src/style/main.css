@@ -494,7 +494,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
 }
-.memory .memory-map-holder .memory-map:nth-child(2) {
+.memory .memory-map-holder .memory-map:nth-child(3) {
   border-top: 1px solid #2F3336;
 }
 .memory .memory-map-holder .memory-map .memory-map-columns {

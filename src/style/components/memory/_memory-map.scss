@@ -4,7 +4,7 @@
     @include center(column);
 
     // In case MemoryMap is spllited.
-    &:nth-child(2) {
+    &:nth-child(3) {
         border-top: 1px solid #2F3336;
     }
 
