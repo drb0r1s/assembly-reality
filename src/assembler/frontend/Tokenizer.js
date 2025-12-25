@@ -16,7 +16,7 @@ export const Tokenizer = {
         keyword: new RegExp(`(?<=^|\\s)${rootKeywordsExpression}`, "g"),
         "half.register": new RegExp(`(?<=\\s)(${rootHalfRegistersExpression})(?=\\s|,|$)`, "g"),
         register: new RegExp(`(?<=\\s)(${rootDefaultRegistersExpression})(?=\\s|,|$)`, "g"),
-        "number.hex": /(?<=\s0x)([0-9A-Fa-f]+)(?=\s|,|$)/g,
+        "number.hex": /(?<=\s0(x|X))([0-9A-Fa-f]+)(?=\s|,|$)/g,
         "number.decimal": /(?<=\s)([0-9]+)(?=\s|,|$)/g,
         "label.definition": /^[a-zA-Z0-9_]+(?=:)/g,
         "label.reference": /(?<=\s)([a-zA-Z0-9_]+)(?=(\s|,|$))/g,

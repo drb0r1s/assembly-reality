@@ -21,8 +21,8 @@ export const tokenizer = {
         // Numbers
         [/\s([0-9]+)(?=\s|,|$)/, "number"], // Decimal
         [/\s\[([0-9]+)\](?=\s|,|$)/, "memoryNumber"], // Memory decimal
-        [/\s(0x[0-9A-Fa-f]+)(?=\s|,|$)/, "number"], // Hexadecimal
-        [/\s\[(0x[0-9A-Fa-f]+)\](?=\s|,|$)/, "memoryNumber"], // Memory hexadecimal
+        [/\s(0(x|X)[0-9A-Fa-f]+)(?=\s|,|$)/, "number"], // Hexadecimal
+        [/\s\[(0(x|X)[0-9A-Fa-f]+)\](?=\s|,|$)/, "memoryNumber"], // Memory hexadecimal
         
         // Labels
         [/^[a-zA-Z0-9_]+(?=:)/, "definitionLabel"], // Definition label
