@@ -131,7 +131,11 @@ export class Assembler {
                     const mFlag = (this.cpuRegisters.getValue("SR") >> 4) & 1;
                     if(this.isTimerActive && mFlag) return Interrupts.checkTimer(this);
                     
+                    if(this.isTimerActive) this.isTimerActive = false; // Let's update this variable to false, to keep the state of Assembler consistent.
+
                     clearInterval(this.intervalId);
+                    //this.graphics.stopVsyncInterval(); // If execution is done, there is no need to keep updating the screen.
+
                     resolve({ executed: true });
 
                     this.updateUI();

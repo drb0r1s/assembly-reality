@@ -121,14 +121,15 @@ const Display = ({ style }) => {
 
         // Text
         else {
-            const backgroundColor = assembler.graphics.getReserved("background");
             const [scrollX, scrollY] = assembler.graphics.getReserved("scroll");
             const text = assembler.graphics.getText();
             
             const vram = assembler.graphics.matrix.getMatrix();
 
+            // BACKGROUND
             drawBackground();
 
+            // CHARACTERS
             assembler.graphics.forEachCharacter(address => {
                 const ascii = vram[address];
 
@@ -138,11 +139,40 @@ const Display = ({ style }) => {
                 if(ascii === 0) return;
 
                 const [x, y] = assembler.graphics.addressToPosition(address);
-                drawCharacter([x, y, ascii, color], backgroundColor, scrollX, scrollY, text);
+                drawCharacter([x, y, ascii, color], scrollX, scrollY, text);
+            });
+
+            // SPRITES
+            assembler.graphics.forEachSprite((styleAddress, positionAddress) => {
+                const ascii = vram[styleAddress];
+
+                const colorIndex = vram[styleAddress + 1];
+                const color = assembler.graphics.getRGBFromVRAM(colorIndex);
+
+                const x = vram[positionAddress];
+                const y = vram[positionAddress + 1];
+
+                drawSprite([x, y, ascii, color], text);
             });
                 
             ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
         }
+    }
+
+    function drawBackground() {
+        const backgroundColor = assembler.graphics.getReserved("background");
+        const { r, g, b } = backgroundColor;
+
+        const imageData = sharedCanvas.current.imageData;
+
+        for(let i = 0; i < imageData.data.length; i += 4) {
+            imageData.data[i] = r;
+            imageData.data[i + 1] = g;
+            imageData.data[i + 2] = b;
+            imageData.data[i + 3] = 255;
+        }
+
+        ctxRef.current.putImageData(imageData, 0, 0);
     }
 
     function drawPixel(data) {
@@ -160,7 +190,7 @@ const Display = ({ style }) => {
         imageData.data[px + 3] = 255;
     }
 
-    function drawCharacter(data, backgroundColor, scrollX, scrollY, text) {
+    function drawCharacter(data, scrollX, scrollY, text) {
         const [x, y, ascii, color] = data;
 
         const imageData = sharedCanvas.current.imageData;
@@ -204,32 +234,53 @@ const Display = ({ style }) => {
                 if(x < 0 || x >= screenSize) continue; // This pixel is off the screen on x.
                 
                 const lineBit = (lineBits >> (15 - j)) & 1;
-                const usedColor = lineBit ? color : backgroundColor;
+                if(lineBit === 0) continue; // This means that specific pixel is "transparent". 
 
                 const px = (y * screenSize + x) * 4;
 
-                imageData.data[px] = usedColor.r;
-                imageData.data[px + 1] = usedColor.g;
-                imageData.data[px + 2] = usedColor.b;
+                imageData.data[px] = color.r;
+                imageData.data[px + 1] = color.g;
+                imageData.data[px + 2] = color.b;
                 imageData.data[px + 3] = 255;
             }
         }
     }
 
-    function drawBackground() {
-        const backgroundColor = assembler.graphics.getReserved("background");
-        const { r, g, b } = backgroundColor;
+    function drawSprite(data, text) {
+        const [x, y, ascii, color] = data;
 
         const imageData = sharedCanvas.current.imageData;
 
-        for(let i = 0; i < imageData.data.length; i += 4) {
-            imageData.data[i] = r;
-            imageData.data[i + 1] = g;
-            imageData.data[i + 2] = b;
-            imageData.data[i + 3] = 255;
-        }
+        const character = {
+            height: 16,
+            width: 8,
+            bits: ascii * 32, // 32 bits are reserved for each ASCII character.
+            top: y,
+            left: x,
+            bottom: y * 16,
+            right: x * 8
+        };
+        
+        const screenSize = 256;
 
-        ctxRef.current.putImageData(imageData, 0, 0);
+        for(let i = 0; i < character.height; i++) {
+            const firstHalf = text[character.bits + i * 2];
+            const secondHalf = text[character.bits + i * 2 + 1];
+                
+            const lineBits = (firstHalf << 8) | secondHalf;
+
+            for(let j = 0; j < character.width * 2; j++) {
+                const lineBit = (lineBits >> (15 - j)) & 1;
+                if(lineBit === 0) continue; // This means that specific pixel is "transparent".
+
+                const px = ((y + i) * screenSize + (x + j)) * 4;
+
+                imageData.data[px] = color.r;
+                imageData.data[px + 1] = color.g;
+                imageData.data[px + 2] = color.b;
+                imageData.data[px + 3] = 255;
+            }
+        }
     }
 
     function resetCanvas() {

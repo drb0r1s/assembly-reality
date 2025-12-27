@@ -11,9 +11,9 @@ export class Graphics {
         this.matrix.values.set(TextModeData.PALETTE, TextModeData.PALETTE_START);
 
         // [0x8000, 0x9FFF] is reserved for text.
-        this.text = this.matrix.values.subarray(TextModeData.TEXT_START, TextModeData.TEXT_END);
+        this.text = this.matrix.values.subarray(TextModeData.TEXT_START, TextModeData.TEXT_END + 1);
         // [0xA000, 0xA2FF] is reserved for palette.
-        this.palette = this.matrix.values.subarray(TextModeData.PALETTE_START, TextModeData.PALETTE_END);
+        this.palette = this.matrix.values.subarray(TextModeData.PALETTE_START, TextModeData.PALETTE_END + 1);
 
         this.rgbTable = new Array(256);
 
@@ -100,6 +100,17 @@ export class Graphics {
     forEachCharacter(callback) {
         // [0x0000, 0x7FFF] is reserved for display.
         for(let address = 0; address <= 0x7FFF; address += 2) callback(address);
+    }
+
+    forEachSprite(callback) {
+        // [0xA306, 0xA325] is reserved for sprites.
+        // The format (address, address + 2) represents (styleAddress, positionAddress).
+        for(let address = 0xA306; address <= 0xA325; address += 4) {
+            const ascii = this.matrix.point(address, { isHalf: true });
+            if(ascii === 0) continue;
+            
+            callback(address, address + 2);
+        }
     }
 
     getStoredBits() {
