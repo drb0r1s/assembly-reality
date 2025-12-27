@@ -133,7 +133,7 @@ const Display = ({ style }) => {
                 const ascii = vram[address];
 
                 const colorIndex = vram[address + 1];
-                const color = assembler.graphics.getRGB(colorIndex);
+                const color = assembler.graphics.getRGBFromVRAM(colorIndex);
                     
                 if(ascii === 0) return;
 

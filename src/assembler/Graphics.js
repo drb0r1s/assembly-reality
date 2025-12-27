@@ -33,7 +33,7 @@ export class Graphics {
         switch(key) {
             case "background":
                 const backgroundColorIndex = this.matrix.point(0xA301, { isHalf: true });
-                return this.getRGB(backgroundColorIndex);
+                return this.getRGBFromVRAM(backgroundColorIndex);
             case "scroll":
                 return [
                     this.matrix.point(0xA302),
@@ -52,6 +52,16 @@ export class Graphics {
     
     getRGB(value) {
         return this.rgbTable[value];
+    }
+
+    getRGBFromVRAM(value) {
+        const base = value * 3;
+
+        const r = this.palette[base];
+        const g = this.palette[base + 1];
+        const b = this.palette[base + 2];
+
+        return { r, g, b };
     }
 
     addressToPosition(address) {
