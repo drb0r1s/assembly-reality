@@ -259,7 +259,9 @@ export const Executable = {
 
     out: (assembler, executable, args) => {
         const { first } = Decoder.decode(assembler, executable, args);
+        
         const registerAValue = assembler.cpuRegisters.getValue("A");
+        const prevVidMode = assembler.ioRegisters.getValue("VIDMODE"); // Needed for modes switching.
 
         Decoder.run(executable, {
             "register": () => {
@@ -306,18 +308,34 @@ export const Executable = {
                     break;
                 // VIDMODE
                 case 7:
-                    if(registerValue > 0) {
-                        assembler.graphics.startVsyncInterval(assembler);
+                    switch(registerValue) {
+                        // DISABLED
+                        case 0:
+                            assembler.graphics.reset();
+                            self.postMessage({ action: "graphicsDisabled" });
 
-                        // Why do we do this? In order to be able to send proper message to the UI thread and tell that "Assembly Reality" title should be enabled/disabled from the canvas.
-                        self.postMessage({ action: "graphicsEnabled" });
-                    }
+                            break;
+                        // TEXT (1) or BITMAP (2)
+                        case 1:
+                        case 2:
+                            self.postMessage({ action: "graphicsEnabled", data: registerValue });
+                            break;
+                        // CLEAR
+                        case 3:
+                            assembler.ioRegisters.update("VIDMODE", prevVidMode);
+                            assembler.graphics.clear();
 
-                    else {
-                        // When display is disabled, it is important to terminate the interval.
-                        assembler.graphics.stopVsyncInterval();
+                            self.postMessage({ action: "graphicsRedraw" });
 
-                        self.postMessage({ action: "graphicsDisabled" });
+                            break;
+                        // RESET
+                        case 4:
+                            assembler.ioRegisters.update("VIDMODE", 0);
+                            assembler.graphics.reset();
+
+                            self.postMessage({ action: "graphicsDisabled" });
+
+                            break;
                     }
                     
                     break;

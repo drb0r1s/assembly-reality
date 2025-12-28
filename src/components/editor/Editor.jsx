@@ -99,7 +99,7 @@ const Editor = () => {
                     Manager.trigger("ioRegistersPing");
                     break;
                 case "graphicsEnabled":
-                    Manager.trigger("graphicsEnabled");
+                    Manager.trigger("graphicsEnabled", data);
                     break;
                 case "graphicsDisabled":
                     Manager.trigger("graphicsDisabled");

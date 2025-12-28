@@ -144,6 +144,11 @@ export class Graphics {
         Interrupts.trigger(assembler, "graphics");
     }
 
+    // .clear is used if VIDMODE is 3, .reset should not be used for that.
+    clear() {
+        this.matrix.reset();
+    }
+
     reset() {
         this.matrix.reset();
 

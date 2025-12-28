@@ -24,8 +24,16 @@ const Display = ({ style }) => {
         const unsubscribeMiniDisplayPing = Manager.subscribe("miniDisplayPing", () => setMemoryVersion(prevVersion => prevVersion + 1));
         const unsubscribeMemoryReset = Manager.subscribe("ramReset", () => setMemoryVersion(prevVersion => prevVersion + 1));
 
-        const unsubscribeGraphicsEnabled = Manager.subscribe("graphicsEnabled", () => { canvasStrongRef.current.style.opacity = "0" });
-        const unsubscribeGraphicsDisabled = Manager.subscribe("graphicsDisabled", () => { canvasStrongRef.current.style.opacity = "" });
+        const unsubscribeGraphicsEnabled = Manager.subscribe("graphicsEnabled", data => {
+            canvasStrongRef.current.style.opacity = "0";
+            if(data === 2) drawMemory();
+        });
+
+        const unsubscribeGraphicsDisabled = Manager.subscribe("graphicsDisabled", () => {
+            canvasStrongRef.current.style.opacity = "";
+            resetCanvas();
+        });
+
         const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", redrawCanvas);
         const unsubscribeGraphicsReset = Manager.subscribe("graphicsReset", resetCanvas);
 
@@ -115,8 +123,14 @@ const Display = ({ style }) => {
 
         // Bitmap
         if(vidMode > 1) {
-            for(let i = 0; i < data.length; i++) drawPixel(data[i]);
-            ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
+            // data is undefined only if "graphicsRedraw" is triggered when VIDMODE is set to 3 (CLEAN).
+            if(data === undefined) drawBackground({ isBitmap: true });
+
+            // data is properly defined, meaning "graphicsRedraw" is triggered by the updating system.
+            else {
+                for(let i = 0; i < data.length; i++) drawPixel(data[i]);
+                ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
+            }
         }
 
         // Text
@@ -159,8 +173,25 @@ const Display = ({ style }) => {
         }
     }
 
-    function drawBackground() {
-        const backgroundColor = assembler.graphics.getReserved("background");
+    function drawMemory() {
+        const vram = assembler.graphics.matrix.getMatrix();
+
+        for(let address = 0; address < vram.length; address++) {
+            const [x, y] = assembler.graphics.addressToPosition(address);
+
+            const colorIndex = assembler.graphics.matrix.point(address);
+            const color = assembler.graphics.getRGB(colorIndex & 0xFF);
+            
+            drawPixel([x, y, color]);
+        }
+
+        ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
+    }
+
+    function drawBackground(options) {
+        const isBitmap = options?.isBitmap ? options.isBitmap : false;
+
+        const backgroundColor = isBitmap ? { r: 0, g: 0, b: 0 } : assembler.graphics.getReserved("background");
         const { r, g, b } = backgroundColor;
 
         const imageData = sharedCanvas.current.imageData;
