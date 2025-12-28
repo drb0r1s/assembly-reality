@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { useMonaco } from "@monaco-editor/react";
 import { tokenizer } from "../data/richEditor/tokenizer";
 import { colors, rules } from "../data/richEditor/style";
-import { keywords } from "../data/richEditor/keywords";
+import { Keywords } from "../assembler/frontend/Keywords";
 
 export const useRichEditor = () => {
     const editorRef = useRef(null);
@@ -21,7 +21,7 @@ export const useRichEditor = () => {
                 const text = model.getValue();
 
                 const suggestions = {
-                    keyword: keywords.map(keyword => ({
+                    keyword: Keywords.list.map(keyword => ({
                         label: keyword,
                         kind: monaco.languages.CompletionItemKind.Keyword,
                         insertText: keyword,

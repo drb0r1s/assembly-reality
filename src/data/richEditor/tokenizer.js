@@ -1,22 +1,22 @@
-import { keywordsRegex, middleKeywordsRegex } from "./keywords";
-import { defaultRegistersRegex, memoryDefaultRegistersRegex, halfRegistersRegex, memoryHalfRegistersRegex } from "./registers";
+import { Keywords } from "../../assembler/frontend/Keywords";
+import { Registers } from "../../assembler/frontend/Registers";
 
 export const tokenizer = {
     root: [
         // Keywords
         
-        [keywordsRegex, "keyword"],
-        [middleKeywordsRegex, "keyword"],
+        [Keywords.expression.regex, "keyword"],
+        [Keywords.expression.middleRegex, "keyword"],
 
         // Registers
 
         // Default registers
-        [defaultRegistersRegex, "register"],
-        [memoryDefaultRegistersRegex, "memoryRegister"], // Memory default registers
+        [Registers.expression.default.regex, "register"],
+        [Registers.expression.default.memory, "memoryRegister"], // Memory default registers
 
         // Half registers
-        [halfRegistersRegex, "halfRegister"],
-        [memoryHalfRegistersRegex, "memoryHalfRegister"], // Memory half registers
+        [Registers.expression.half.regex, "halfRegister"],
+        [Registers.expression.half.memory, "memoryHalfRegister"], // Memory half registers
 
         // Numbers
         [/\s([0-9]+)(?=\s|,|$)/, "number"], // Decimal

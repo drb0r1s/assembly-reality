@@ -1,4 +1,4 @@
-export const keywords = [
+const list = [
     "HLT", "MOV", "MOVB", "ADD", "ADDB", "SUB", "SUBB", "INC", "INCB", "DEC", "DECB",
     "CMP", "CMPB", "JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE",
     "PUSH", "PUSHB", "POP", "POPB", "CALL", "RET", "MUL", "MULB", "DIV", "DIVB", "AND", "ANDB",
@@ -7,11 +7,18 @@ export const keywords = [
 ];
 
 // .sort() is needed here to fix the common issue of matching "keywordB" without considering "B".
-export const rootKeywordsExpression = `(${[...keywords].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`;
-
+const expressionRoot = `(${[...list].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`;
 // This is a default keyword regex, requiring a keyword to be at the beginning of the line.
-export const keywordsRegex = new RegExp(`^${rootKeywordsExpression}`);
+const expressionRegex = new RegExp(`^${expressionRoot}`);
 // This is a special (middle) keyword regex, in case keyword is located in the middle of the line. (e.g. DW)
-export const middleKeywordsRegex = new RegExp(`\\s${rootKeywordsExpression}`);
+const expressionMiddleRegex = new RegExp(`\\s${expressionRoot}`);
 
-export const jumpKeywords = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL"];
+export const Keywords = {
+    list,
+    
+    expression: {
+        root: expressionRoot,
+        regex: expressionRegex,
+        middleRegex: expressionMiddleRegex
+    }
+};

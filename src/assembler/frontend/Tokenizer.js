@@ -1,6 +1,6 @@
 import { AssemblerError } from "../AssemblerError";
-import { rootKeywordsExpression } from "../../data/richEditor/keywords";
-import { rootDefaultRegistersExpression, rootHalfRegistersExpression } from "../../data/richEditor/registers";
+import { Keywords } from "./Keywords";
+import { Registers } from "./Registers";
 
 export const Tokenizer = {
     // Patterns are ordered from the highest to the lowest priority.
@@ -10,12 +10,12 @@ export const Tokenizer = {
         "string.single": /(?<=\')([^'\\]|\\.)*(?=\')/g,
         "memory.number.hex": /(?<=\s\[0x)([0-9A-Fa-f]+)(?=\](\s|,|$))/g,
         "memory.number.decimal": /(?<=\s\[)([0-9]+)(?=\](\s|,|$))/g,
-        "memory.half.register": new RegExp(`(?<=\\[)(${rootHalfRegistersExpression})(?=\\](\\s|,|$))`, "g"),
-        "memory.register": new RegExp(`(?<=\\[)(${rootDefaultRegistersExpression})(?=\\](\\s|,|$))`, "g"),
+        "memory.half.register": new RegExp(`(?<=\\[)(${Registers.expression.half.root})(?=\\](\\s|,|$))`, "g"),
+        "memory.register": new RegExp(`(?<=\\[)(${Registers.expression.default.root})(?=\\](\\s|,|$))`, "g"),
         "memory.label.reference": /(?<=\s\[)([a-zA-Z0-9_]+)(?=\](\s|,|$))/g,
-        keyword: new RegExp(`(?<=^|\\s)${rootKeywordsExpression}`, "g"),
-        "half.register": new RegExp(`(?<=\\s)(${rootHalfRegistersExpression})(?=\\s|,|$)`, "g"),
-        register: new RegExp(`(?<=\\s)(${rootDefaultRegistersExpression})(?=\\s|,|$)`, "g"),
+        keyword: new RegExp(`(?<=^|\\s)${Keywords.expression.root}`, "g"),
+        "half.register": new RegExp(`(?<=\\s)(${Registers.expression.half.root})(?=\\s|,|$)`, "g"),
+        register: new RegExp(`(?<=\\s)(${Registers.expression.default.root})(?=\\s|,|$)`, "g"),
         "number.hex": /(?<=\s0(x|X))([0-9A-Fa-f]+)(?=\s|,|$)/g,
         "number.decimal": /(?<=\s)([0-9]+)(?=\s|,|$)/g,
         "label.definition": /^[a-zA-Z0-9_]+(?=:)/g,
