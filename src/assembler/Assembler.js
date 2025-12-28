@@ -1,15 +1,15 @@
 import { AssemblerError } from "./AssemblerError";
-import { CPURegisters } from "./CPURegisters";
-import { IORegisters } from "./IORegisters";
-import { RAM } from "./RAM";
-import { Labels } from "./Labels";
-import { Graphics } from "./Graphics";
+import { CPURegisters } from "./components/CPURegisters";
+import { IORegisters } from "./components/IORegisters";
+import { RAM } from "./components/RAM";
+import { Labels } from "./components/Labels";
+import { Graphics } from "./components/Graphics";
 import { Tokenizer } from "./frontend/Tokenizer";
 import { AST } from "./frontend/AST";
 import { Instructions } from "./frontend/Instructions";
 import { Instants } from "./frontend/Instants";
 import { Executor } from "./backend/Executor";
-import { Interrupts } from "./Interrupts";
+import { Interrupts } from "./helpers/Interrupts";
 
 export class Assembler {
     constructor(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer) {

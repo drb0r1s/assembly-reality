@@ -1,6 +1,6 @@
 import { AssemblerError } from "../AssemblerError";
-import { CPURegisters } from "../CPURegisters";
-import { ByteNumber } from "../ByteNumber";
+import { CPURegisters } from "../components/CPURegisters";
+import { ByteNumber } from "../helpers/ByteNumber";
 
 export const Encoder = {
     oneOperand: (instruction, combinations) => {

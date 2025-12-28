@@ -1,4 +1,4 @@
-import { Stack } from "./Stack";
+import { Stack } from "../structures/Stack";
 
 export const Interrupts = {
     trigger: (assembler, type) => {

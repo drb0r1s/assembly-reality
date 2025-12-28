@@ -1,5 +1,5 @@
-import { AssemblerError } from "./AssemblerError";
-import { Matrix } from "./Matrix";
+import { AssemblerError } from "../AssemblerError";
+import { Matrix } from "../structures/Matrix";
 
 export class RAM {
     constructor(ramBuffer) {

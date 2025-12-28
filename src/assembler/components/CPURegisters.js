@@ -1,4 +1,4 @@
-import { ByteNumber } from "./ByteNumber";
+import { ByteNumber } from "../helpers/ByteNumber";
 
 const allRegisters = [
     "A", "B", "C", "D",

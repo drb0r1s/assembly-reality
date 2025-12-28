@@ -1,5 +1,5 @@
 import { AssemblerError } from "../AssemblerError";
-import { ByteNumber } from "../ByteNumber";
+import { ByteNumber } from "../helpers/ByteNumber";
 
 export const Instants = {
     DW: (assembler, instant) => {

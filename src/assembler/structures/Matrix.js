@@ -1,4 +1,4 @@
-import { ByteNumber } from "./ByteNumber";
+import { ByteNumber } from "../helpers/ByteNumber";
 
 export class Matrix {
     constructor(buffer, rowSize) {

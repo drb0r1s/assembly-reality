@@ -1,6 +1,6 @@
-import { Matrix } from "./Matrix";
-import { TextModeData } from "./TextModeData";
-import { Interrupts } from "./Interrupts";
+import { Matrix } from "../structures/Matrix";
+import { TextModeData } from "../data/TextModeData";
+import { Interrupts } from "../helpers/Interrupts";
 
 export class Graphics {
     constructor(graphicsBuffer) {

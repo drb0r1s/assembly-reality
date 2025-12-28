@@ -1,5 +1,5 @@
 import { Assembler } from "../assembler/Assembler";
-import { Interrupts } from "../assembler/Interrupts";
+import { Interrupts } from "../assembler/helpers/Interrupts";
 
 let assembler = null;
 

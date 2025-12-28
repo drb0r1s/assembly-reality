@@ -1,4 +1,4 @@
-import { AssemblerError } from "./AssemblerError";
+import { AssemblerError } from "../AssemblerError";
 
 export class Labels {
     constructor() {

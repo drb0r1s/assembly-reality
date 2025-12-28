@@ -1,6 +1,6 @@
 import { Decoder } from "./Decoder";
 import { HexCalculator } from "./HexCalculator";
-import { Stack } from "../Stack";
+import { Stack } from "../structures/Stack";
 
 export const Executable = {
     halt: assembler => {

@@ -1,5 +1,5 @@
-import { AssemblerError } from "./AssemblerError";
-import { Interrupts } from "./Interrupts";
+import { AssemblerError } from "../AssemblerError";
+import { Interrupts } from "../helpers/Interrupts";
 
 const allRegisters = [
     "IRQMASK", "IRQSTATUS", "IRQEOI",
