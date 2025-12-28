@@ -7,7 +7,7 @@ const list = [
 ];
 
 // .sort() is needed here to fix the common issue of matching "keywordB" without considering "B".
-const expressionRoot = `(${[...list].sort((a, b) => b.length - a.length).join("|")})(?=\\s|$)`;
+const expressionRoot = `(${[...list].sort((a, b) => b.length - a.length).join("|")})(?=\\s|;|\\/\\/|$)`;
 // This is a default keyword regex, requiring a keyword to be at the beginning of the line.
 const expressionRegex = new RegExp(`^${expressionRoot}`);
 // This is a special (middle) keyword regex, in case keyword is located in the middle of the line. (e.g. DW)

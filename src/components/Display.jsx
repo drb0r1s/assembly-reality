@@ -123,8 +123,8 @@ const Display = ({ style }) => {
 
         // Bitmap
         if(vidMode > 1) {
-            // data is undefined only if "graphicsRedraw" is triggered when VIDMODE is set to 3 (CLEAN).
-            if(data === undefined) drawBackground({ isBitmap: true });
+            // data is "clear" only if "graphicsRedraw" is triggered when VIDMODE is set to 3 (CLEAN).
+            if(data === "clear") drawBackground({ isBitmap: true });
 
             // data is properly defined, meaning "graphicsRedraw" is triggered by the updating system.
             else {

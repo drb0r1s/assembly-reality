@@ -318,6 +318,7 @@ export const Executable = {
                         // TEXT (1) or BITMAP (2)
                         case 1:
                         case 2:
+                            assembler.graphics.startVsyncInterval(assembler);
                             self.postMessage({ action: "graphicsEnabled", data: registerValue });
                             break;
                         // CLEAR
@@ -325,7 +326,7 @@ export const Executable = {
                             assembler.ioRegisters.update("VIDMODE", prevVidMode);
                             assembler.graphics.clear();
 
-                            self.postMessage({ action: "graphicsRedraw" });
+                            self.postMessage({ action: "graphicsRedraw", data: "clear" });
 
                             break;
                         // RESET

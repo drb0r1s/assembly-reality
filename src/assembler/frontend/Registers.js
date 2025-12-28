@@ -6,8 +6,8 @@ const registers = {
 };
 
 const expressionDefaultRegistersRoot = [...registers.default, ...registers.system].join("|");
-const expressionDefaultRegistersRegex = new RegExp(`\\s(${expressionDefaultRegistersRoot})(?=\\s|,|$)`);
-const expressionMemoryDefaultRegistersRegex = new RegExp(`\\s\\[(${expressionDefaultRegistersRoot})\\](?=\\s|,|$)`);
+const expressionDefaultRegistersRegex = new RegExp(`\\s(${expressionDefaultRegistersRoot})(?=\\s|,|;|\\/\\/|$)`);
+const expressionMemoryDefaultRegistersRegex = new RegExp(`\\[(${expressionDefaultRegistersRoot})\\](?=\\s|,|;|\\/\\/|$)`);
 
 // HALF REGISTERS
 for(let i = 0; i < registers.default.length; i++) {
@@ -15,8 +15,8 @@ for(let i = 0; i < registers.default.length; i++) {
 }
 
 const expressionHalfRegistersRoot = registers.half.join("|");
-const expressionHalfRegistersRegex = new RegExp(`\\s(${expressionHalfRegistersRoot})(?=\\s|,|$)`);
-const expressionMemoryHalfRegistersRegex = new RegExp(`\\s\\[(${expressionHalfRegistersRoot})\\](?=\\s|,|$)`);
+const expressionHalfRegistersRegex = new RegExp(`\\s(${expressionHalfRegistersRoot})(?=\\s|,|;|\\/\\/|$)`);
+const expressionMemoryHalfRegistersRegex = new RegExp(`\\s\\[(${expressionHalfRegistersRoot})\\](?=\\s|,|;|\\/\\/|$)`);
 
 export const Registers = {
     list: registers,
