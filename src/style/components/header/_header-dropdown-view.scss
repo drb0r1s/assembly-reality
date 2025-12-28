@@ -1,5 +1,5 @@
 .header-dropdown-view {
-    width: 150px;
+    width: 200px;
     @include center(column);
     gap: 7px;
 
@@ -18,13 +18,24 @@
             background-color: $blue;
         }
 
-        p {
-            color: #F4F4F4;
-            font-size: 14px;
-            font-family: Roboto-Regular;
+        .header-dropdown-view-button-left-group {
+            @include center;
+            gap: 10px;
+
+            img {
+                height: 22px;
+                width: 22px;
+                object-fit: contain;
+            }
+            
+            p {
+                color: #F4F4F4;
+                font-size: 14px;
+                font-family: Roboto-Regular;
+            }
         }
 
-        img {
+        .header-dropdown-view-check-icon {
             opacity: 0;
             transition: 300ms;
         }

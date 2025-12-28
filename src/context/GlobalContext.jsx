@@ -1,2 +1,7 @@
 import { createContext } from "react";
-export const GlobalContext = createContext({ assembler: null, assemblerWorker: null });
+
+export const GlobalContext = createContext({
+    assembler: null,
+    assemblerWorker: null,
+    sharedCanvas: null
+});

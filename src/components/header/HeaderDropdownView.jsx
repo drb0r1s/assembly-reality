@@ -43,11 +43,15 @@ const HeaderDropdownView = () => {
                     key={index}
                     onClick={() => updateView(button)}
                 >
-                    <p>{button}</p>
+                    <div className="header-dropdown-view-button-left-group">
+                        <img src={images.windowIcon} alt="WINDOW" />
+                        <p>{button}</p>
+                    </div>
 
                     <img
                         src={images.checkIcon}
                         alt="CHECK"
+                        className="header-dropdown-view-check-icon"
                         style={getView(button) ? { opacity: "1" } : {}}
                     />
                 </button>;

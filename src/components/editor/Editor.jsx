@@ -56,6 +56,35 @@ const Editor = () => {
             assemblerWorker.postMessage({ action: "step" });
         });
 
+        const unsubscribeCodeTransfer = Manager.subscribe("codeTransfer", data => {
+            if(codes[pages.active].length === 0) setCodes(prevCodes => {
+                const newCodes = [];
+
+                for(let i = 0; i < prevCodes.length; i++) {
+                    if(i === pages.active) newCodes.push(data);
+                    else newCodes.push(prevCodes[i]);
+                }
+
+                return newCodes;
+            });
+
+            else {
+                setPages(prevPages => {
+                    return {
+                        list: [...prevPages.list, `New page (${prevPages.list.length + 1})`],
+                        active: prevPages.list.length
+                    };
+                });
+
+                setCodes(prevCodes => [...prevCodes, data]);
+            }
+        });
+
+        const unsubscribeCodeRequest = Manager.subscribe("codeRequest", () => Manager.trigger("codeResponse", {
+            title: pages.list[pages.active],
+            content: codes[pages.active]
+        }));
+
         assemblerWorker.onmessage = e => {
             const { action, data, error } = e.data;
 
@@ -115,12 +144,14 @@ const Editor = () => {
             unsubscribeRun();
             unsubscribePause();
             unsubscribeStep();
+            unsubscribeCodeTransfer();
+            unsubscribeCodeRequest();
         };
     }, [pages.active, codes[pages.active], speed]);
 
     function addPage() {
         setPages(prevPages => {
-            const newPagesList = [...prevPages.list, "New page"];
+            const newPagesList = [...prevPages.list, `New page (${prevPages.list.length})`];
             return { list: newPagesList, active: newPagesList.length - 1 };
         });
 

@@ -11,6 +11,7 @@
     transition: 300ms;
     z-index: 5;
 
+    @import "./header-dropdown-file";
     @import "./header-dropdown-view";
     @import "./header-dropdown-speed";
 }

@@ -3,6 +3,11 @@ import { images } from "./images";
 export const headerButtons = {
     dropdown: [
         {
+            title: "File",
+            icon: images.arrowDownIcon
+        },
+
+        {
             title: "View",
             icon: images.arrowDownIcon
         },
