@@ -1,60 +1,154 @@
 import { AssemblerError } from "../AssemblerError";
 
 export const HexCalculator = {
-    ADD: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (first + second) & max;
+    ADD: (assembler, first, second, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const result = (first + second) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+        
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = (first + second > max) ? 1 : 0;
+
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
-    SUB: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (first - second) & max;
+    SUB: (assembler, first, second, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const result = (first - second) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+        
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = first < second ? 1 : 0;
+
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
     // Even though the following two functions don't need "second" as a parameter, for synchronization, it has to stay as a placeholder.
-    INC: (first, _, options) => HexCalculator.ADD(first, 1, options),
-    DEC: (first, _, options) => HexCalculator.SUB(first, 1, options),
+    INC: (assembler, first, _, options) => HexCalculator.ADD(assembler, first, 1, options),
+    DEC: (assembler, first, _, options) => HexCalculator.SUB(assembler, first, 1, options),
 
-    MUL: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (first * second) & max;
+    MUL: (assembler, first, second, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const result = (first * second) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+        
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = (first * second > max) ? 1 : 0;
+
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
-    DIV: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-
+    DIV: (assembler, first, second, options) => {
         if(first === 0) throw new AssemblerError("DivisionByZero");
-        return Math.floor(second / first) & max;
+
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const result = Math.floor(second / first) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+        
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = 0;
+
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
-    AND: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (first & second) & max;
+    AND: (assembler, first, second, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const result = (first & second) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = 0;
+        
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
-    OR: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (first | second) & max;
+    OR: (assembler, first, second, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const result = (first | second) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+        
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = 0;
+        
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
-    XOR: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (first ^ second) & max;
+    XOR: (assembler, first, second, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const result = (first ^ second) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = 0;
+
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
-    NOT: (first, _, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (~first) & max;
+    NOT: (assembler, first, _, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const result = (~first) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = 0;
+
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
-    SHL: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (first << second) & max;
+    SHL: (assembler, first, second, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const msb = options?.isHalf ? 0x80 : 0x8000;
+
+        const result = (first << second) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = (first & msb) ? 1 : 0;
+
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result;
     },
 
-    SHR: (first, second, options) => {
-        const max = options?.isHalf ? 0xFF : 0xFFFF
-        return (first >>> second) & max; // >>> is used for unsigned shift right
+    SHR: (assembler, first, second, options) => {
+        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const lsb = first & 1;
+
+        const result = (first >>> second) & max;
+
+        const SR = assembler.cpuRegisters.constructSR();
+
+        SR.Z = result === 0 ? 1 : 0;
+        SR.C = lsb;
+
+        assembler.cpuRegisters.updateSR(SR);
+
+        return result; // >>> is used for unsigned shift right
     },
 
     // CMP relies on SR flags (C and Z).
@@ -62,18 +156,12 @@ export const HexCalculator = {
     CMP: (assembler, first, second) => {
         const SR = assembler.cpuRegisters.constructSR();
 
-        if(first === second) SR.Z = 1;
-        else if(SR.Z) SR.Z = 0;
-        
-        if(first < second) SR.C = 1;
-        else if(SR.C) SR.C = 0;
+        SR.Z = 0;
+        SR.C = 0;
 
-        return(
-            (SR.M << 4) |
-            (SR.C << 3) |
-            (SR.Z << 2) |
-            (SR.F << 1) |
-            (SR.H << 0)
-        );
+        if(first === second) SR.Z = 1;
+        else if(first < second) SR.C = 1;
+
+        assembler.cpuRegisters.updateSR(SR);
     }
 };

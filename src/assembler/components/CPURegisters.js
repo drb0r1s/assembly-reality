@@ -90,6 +90,11 @@ export class CPURegisters {
         else Atomics.store(this.registers, this.getIndex(register), value);
     }
 
+    updateSR(newSR) {
+        const newSRBinary = (newSR.M << 4) | (newSR.C << 3) | (newSR.Z << 2) | (newSR.F << 1) | (newSR.H << 0);
+        Atomics.store(this.registers, this.getIndex("SR"), newSRBinary);
+    }
+
     reset() {
         for(let i = 0; i < this.registers.length; i++) {
             Atomics.store(this.registers, i, 0);

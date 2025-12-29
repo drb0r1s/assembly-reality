@@ -43,43 +43,43 @@ export const Executable = {
         Decoder.run(executable, {
             // ONE OPERAND
             [registerType]: () => {
-                const operation = HexCalculator[instruction](first.registerValue, usedRegister.registerValue, { isHalf });
+                const operation = HexCalculator[instruction](assembler, first.registerValue, usedRegister.registerValue, { isHalf });
                 assembler.cpuRegisters.update(usedRegister.register, operation);
             },
 
             "memory.register": () => {
-                const operation = HexCalculator[instruction](first.memoryPoint, usedRegister.registerValue, { isHalf });
+                const operation = HexCalculator[instruction](assembler, first.memoryPoint, usedRegister.registerValue, { isHalf });
                 assembler.cpuRegisters.update(usedRegister.register, operation);
             },
 
             "memory.number.*": () => {
-                const operation = HexCalculator[instruction](first.memoryPoint, usedRegister.registerValue, { isHalf });
+                const operation = HexCalculator[instruction](assembler, first.memoryPoint, usedRegister.registerValue, { isHalf });
                 assembler.cpuRegisters.update(usedRegister.register, operation);
             },
 
             "number.*": () => {
-                const operation = HexCalculator[instruction](first.value, usedRegister.registerValue, { isHalf });
+                const operation = HexCalculator[instruction](assembler, first.value, usedRegister.registerValue, { isHalf });
                 assembler.cpuRegisters.update(usedRegister.register, operation);
             },
             
             // TWO OPERANDS
             [`${registerType} ${registerType}`]: () => {
-                const operation = HexCalculator[instruction](first.registerValue, second.registerValue, { isHalf });
+                const operation = HexCalculator[instruction](assembler, first.registerValue, second.registerValue, { isHalf });
                 assembler.cpuRegisters.update(first.register, operation);
             },
         
             [`${registerType} memory.register`]: () => {
-                const operation = HexCalculator[instruction](first.registerValue, second.memoryPoint, { isHalf });
+                const operation = HexCalculator[instruction](assembler, first.registerValue, second.memoryPoint, { isHalf });
                 assembler.cpuRegisters.update(first.register, operation);
             },
         
             [`${registerType} memory.number.*`]: () => {
-                const operation = HexCalculator[instruction](first.registerValue, second.memoryPoint, { isHalf });
+                const operation = HexCalculator[instruction](assembler, first.registerValue, second.memoryPoint, { isHalf });
                 assembler.cpuRegisters.update(first.register, operation);
             },
         
             [`${registerType} number.*`]: () => {
-                const operation = HexCalculator[instruction](first.registerValue, second.value, { isHalf });
+                const operation = HexCalculator[instruction](assembler, first.registerValue, second.value, { isHalf });
                 assembler.cpuRegisters.update(first.register, operation);
             }
         });
@@ -92,25 +92,10 @@ export const Executable = {
         const registerType = isHalf ? "half.register" : "register";
 
         Decoder.run(executable, {
-            [`${registerType} ${registerType}`]: () => {
-                const flags = HexCalculator.CMP(assembler, first.registerValue, second.registerValue);
-                assembler.cpuRegisters.update("SR", flags);
-            },
-
-            [`${registerType} memory.register`]: () => {
-                const flags = HexCalculator.CMP(assembler, first.registerValue, second.memoryPoint);
-                assembler.cpuRegisters.update("SR", flags);
-            },
-
-            [`${registerType} memory.number.*`]: () => {
-                const flags = HexCalculator.CMP(assembler, first.registerValue, second.memoryPoint);
-                assembler.cpuRegisters.update("SR", flags);
-            },
-
-            [`${registerType} number.*`]: () => {
-                const flags = HexCalculator.CMP(assembler, first.registerValue, second.value);
-                assembler.cpuRegisters.update("SR", flags);
-            }
+            [`${registerType} ${registerType}`]: () => HexCalculator.CMP(assembler, first.registerValue, second.registerValue),
+            [`${registerType} memory.register`]: () => HexCalculator.CMP(assembler, first.registerValue, second.memoryPoint),
+            [`${registerType} memory.number.*`]: () => HexCalculator.CMP(assembler, first.registerValue, second.memoryPoint),
+            [`${registerType} number.*`]: () => HexCalculator.CMP(assembler, first.registerValue, second.value)
         });
     },
 
