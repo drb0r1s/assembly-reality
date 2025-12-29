@@ -1,4 +1,5 @@
 import { ByteNumber } from "../helpers/ByteNumber";
+import { AssemblerError } from "../AssemblerError";
 
 const allRegisters = [
     "A", "B", "C", "D",
@@ -68,6 +69,8 @@ export class CPURegisters {
     }
 
     update(register, value) {
+        if(register === "SP" && value > 0x101F) throw new AssemblerError("StackPointerLimit");
+
         // 8-bit
         if(register.endsWith("H") || register.endsWith("L")) {
             const fullRegister = register[0];
