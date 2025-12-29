@@ -9,7 +9,7 @@ import { images } from "../../data/images";
 const Editor = () => {
     const { assemblerWorker } = useContext(GlobalContext);
     
-    const [pages, setPages] = useState({ list: ["New page"], active: 0 });
+    const [pages, setPages] = useState({ list: ["New page"], active: 0, counter: 0 });
     const [codes, setCodes] = useState([""]);
     const [error, setError] = useState({ type: "", content: "" });
 
@@ -71,8 +71,9 @@ const Editor = () => {
             else {
                 setPages(prevPages => {
                     return {
-                        list: [...prevPages.list, `New page (${prevPages.list.length + 1})`],
-                        active: prevPages.list.length
+                        list: [...prevPages.list, `New page (${prevPages.counter + 1})`],
+                        active: prevPages.list.length,
+                        counter: prevPages.counter + 1
                     };
                 });
 
@@ -151,8 +152,13 @@ const Editor = () => {
 
     function addPage() {
         setPages(prevPages => {
-            const newPagesList = [...prevPages.list, `New page (${prevPages.list.length})`];
-            return { list: newPagesList, active: newPagesList.length - 1 };
+            const newPagesList = [...prevPages.list, `New page (${prevPages.counter + 1})`];
+            
+            return {
+                list: newPagesList,
+                active: newPagesList.length - 1,
+                counter: prevPages.counter + 1
+            };
         });
 
         setCodes(prevCodes => [...prevCodes, ""]);
@@ -164,11 +170,19 @@ const Editor = () => {
 
         setPages(prevPages => {
             let newActive = prevPages.active;
-            if(prevPages.active === target) newActive--; // Go to the previous page.
+            
+            if(
+                prevPages.active === target ||
+                newActive > target
+            ) newActive--; // Go to the previous page.
             
             const newList = prevPages.list.filter((_, index) => index !== target);
             
-            return { list: newList, active: newActive };
+            return {
+                list: newList,
+                active: newActive,
+                counter: prevPages.counter
+            };
         });
 
         setCodes(prevCodes => {
