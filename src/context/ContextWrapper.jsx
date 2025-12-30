@@ -15,7 +15,7 @@ const ContextWrapper = ({ children }) => {
     const sharedCanvas = useSharedCanvas();
 
     useEffect(() => {
-        if(assemblerWorker) assemblerWorker.postMessage({ action: "init", payload: { cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer } });
+        if(assemblerWorker) assemblerWorker.postMessage({ action: "init", data: { cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer } });
     }, [assemblerWorker]);
 
     return(

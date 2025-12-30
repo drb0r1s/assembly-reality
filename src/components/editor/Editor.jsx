@@ -34,14 +34,14 @@ const Editor = () => {
     useEffect(() => {
         const unsubscribeAssemble = Manager.subscribe("assemble", () => {
             if(!assemblerWorker) return;
-            assemblerWorker.postMessage({ action: "assemble", payload: codes[pages.active] });
+            assemblerWorker.postMessage({ action: "assemble", data: codes[pages.active] });
         });
 
         const unsubscribeRun = Manager.subscribe("run", () => {
             if(!assemblerWorker) return;
 
             Manager.set("isRunning", true);
-            assemblerWorker.postMessage({ action: "run", payload: parseInt(speed) });
+            assemblerWorker.postMessage({ action: "run", data: parseInt(speed) });
         });
 
         const unsubscribePause = Manager.subscribe("pause", () => {

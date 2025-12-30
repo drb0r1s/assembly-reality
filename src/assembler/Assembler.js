@@ -2,8 +2,9 @@ import { AssemblerError } from "./AssemblerError";
 import { CPURegisters } from "./components/CPURegisters";
 import { IORegisters } from "./components/IORegisters";
 import { RAM } from "./components/RAM";
-import { Labels } from "./components/Labels";
 import { Graphics } from "./components/Graphics";
+import { Labels } from "./components/Labels";
+import { Keyboard } from "./components/Keyboard";
 import { Tokenizer } from "./frontend/Tokenizer";
 import { AST } from "./frontend/AST";
 import { Instructions } from "./frontend/Instructions";
@@ -19,8 +20,9 @@ export class Assembler {
         this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
         this.ioRegisters = new IORegisters(ioRegistersBuffer);
         this.ram = new RAM(ramBuffer);
-        this.labels = new Labels();
         this.graphics = new Graphics(graphicsBuffer);
+        this.labels = new Labels();
+        this.keyboard = new Keyboard(this);
         this.intervalId = null;
     }
     
@@ -339,6 +341,7 @@ export class Assembler {
         this.ram.reset();
         this.graphics.reset();
         this.labels.reset();
+        this.keyboard.reset();
         
         clearInterval(this.intervalId);
         this.intervalId = null;

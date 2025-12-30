@@ -1,5 +1,4 @@
 import { AssemblerError } from "../AssemblerError";
-import { Interrupts } from "../helpers/Interrupts";
 
 const allRegisters = [
     "IRQMASK", "IRQSTATUS", "IRQEOI",
@@ -71,32 +70,6 @@ export class IORegisters {
         // IO Register TMRCOUNTER updates too fast, there is not a real point in showing that real-time.
         // For that register, it is fine to rely on the standard updating system.
         if(register !== "TMRCOUNTER") self.postMessage({ action: "ioRegistersUpdate" });
-    }
-
-    // KEYDOWN event affects the KBDSTATUS register by adding 1.
-    keydown(character) {
-        const kbdStatus = this.getValue("KBDSTATUS");
-        let newKbdStatus = 0;
-
-        // Here we need to check if U or D are active, in order to set the E (overflow).
-        if((kbdStatus & 0b011) !== 0) newKbdStatus |= 0b100;
-        newKbdStatus |= 0b001;
-
-        this.update("KBDSTATUS", newKbdStatus, { force: true });
-        this.update("KBDDATA", character, { force: true });
-    }
-
-    // KEYUP event affects the KBDSTATUS register by adding 2.
-    keyup(character) {
-        const kbdStatus = this.getValue("KBDSTATUS");
-        let newKbdStatus = 0;
-
-        // Here we need to check if U or D are active, in order to set the E (overflow).
-        if((kbdStatus & 0b011) !== 0) newKbdStatus |= 0b100;
-        newKbdStatus |= 0b010;
-
-        this.update("KBDSTATUS", newKbdStatus, { force: true });
-        this.update("KBDDATA", character, { force: true });
     }
 
     reset() {

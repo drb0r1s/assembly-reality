@@ -54,21 +54,31 @@ const Display = ({ style }) => {
         const handleKeydown = e => {
             if(e.repeat) return;
 
-            const character = e.key.charCodeAt(0);
-            assembler.ioRegisters.keydown(character);
+            assemblerWorker.postMessage({ action: "keyboardEvent", data: { 
+                type: "keydown",
+                character: e.key.charCodeAt(0)
+            }});
 
-            Manager.trigger("ioRegistersPing");
-            assemblerWorker.postMessage({ action: "ioRegistersKeyboard" }); // Trigger the interrupt.
+            //const character = e.key.charCodeAt(0);
+            //assembler.ioRegisters.keydown(character);
+
+            //Manager.trigger("ioRegistersPing");
+            //assemblerWorker.postMessage({ action: "ioRegistersKeyboard" }); // Trigger the interrupt.
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
         }
 
         const handleKeyup = e => {
-            const character = e.key.charCodeAt(0);
-            assembler.ioRegisters.keyup(character);
+            assemblerWorker.postMessage({ action: "keyboardEvent", data: { 
+                type: "keyup",
+                character: e.key.charCodeAt(0)
+            }});
+            
+            //const character = e.key.charCodeAt(0);
+            //assembler.ioRegisters.keyup(character);
 
-            Manager.trigger("ioRegistersPing");
-            assemblerWorker.postMessage({ action: "ioRegistersKeyboard" }); // Trigger the interrupt.
+            //Manager.trigger("ioRegistersPing");
+            //assemblerWorker.postMessage({ action: "ioRegistersKeyboard" }); // Trigger the interrupt.
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
         }

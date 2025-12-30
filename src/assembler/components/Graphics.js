@@ -140,6 +140,7 @@ export class Graphics {
     }
 
     executeVsync(assembler) {
+        assembler.keyboard.processEvents();
         self.postMessage({ action: "graphicsRedraw" });
         Interrupts.trigger(assembler, "graphics");
     }

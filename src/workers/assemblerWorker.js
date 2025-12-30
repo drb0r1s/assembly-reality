@@ -4,18 +4,18 @@ import { Interrupts } from "../assembler/helpers/Interrupts";
 let assembler = null;
 
 self.onmessage = async e => {
-    const { action, payload } = e.data;
+    const { action, data } = e.data;
 
     let result = null;
 
     switch(action) {
         case "init":
             // Since we use SharedArrayBuffer class in order to use the same memory reference on both threads, it is important to pass that buffer into the assembler, before performing anything else.
-            assembler = new Assembler(payload.cpuRegistersBuffer, payload.ioRegistersBuffer, payload.ramBuffer, payload.graphicsBuffer);
+            assembler = new Assembler(data.cpuRegistersBuffer, data.ioRegistersBuffer, data.ramBuffer, data.graphicsBuffer);
             
             break;
         case "assemble":
-            result = assembler.assemble(payload); // payload: code
+            result = assembler.assemble(data); // data: code
             
             if(result?.error) self.postMessage({ action, error: result.error });
             else self.postMessage({ action, data: result });
@@ -25,7 +25,7 @@ self.onmessage = async e => {
         // All interactions with the UI are done using "instructionExecuted" action.
         case "run":
             // This method is asynchronous, because of the speed simulation.
-            result = await assembler.execute(payload); // payload: speed
+            result = await assembler.execute(data); // data: speed
 
             if(result?.error) self.postMessage({ action, error: result.error });
             else self.postMessage({ action, data: result });
@@ -52,6 +52,9 @@ self.onmessage = async e => {
             break;
         case "ioRegistersKeyboard":
             Interrupts.trigger(assembler, "keyboard");
+            break;
+        case "keyboardEvent":
+            assembler.keyboard.addEvent(data); // data: { type, key }
             break;
     }
 };
