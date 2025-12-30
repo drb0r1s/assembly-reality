@@ -1,5 +1,4 @@
 import { Assembler } from "../assembler/Assembler";
-import { Interrupts } from "../assembler/helpers/Interrupts";
 
 let assembler = null;
 
@@ -51,7 +50,7 @@ self.onmessage = async e => {
 
             break;
         case "ioRegistersKeyboard":
-            Interrupts.trigger(assembler, "keyboard");
+            assembler.interrupts.trigger("keyboard");
             break;
         case "keyboardEvent":
             assembler.keyboard.addEvent(data); // data: { type, key }

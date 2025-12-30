@@ -1,8 +1,16 @@
 import { AssemblerError } from "../AssemblerError";
 import { ByteNumber } from "../helpers/ByteNumber";
 
-export const Instants = {
-    DW: (assembler, instant) => {
+export class Instants {
+    constructor(ram) {
+        this.ram = ram;
+
+        this.DW = this.DW.bind(this);
+        this.DB = this.DB.bind(this);
+        this.ORG = this.ORG.bind(this);
+    }
+
+    DW(instant) {
         const operand = instant.operands[0];
         const maxValue = 65535;
 
@@ -32,10 +40,10 @@ export const Instants = {
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
-        assembler.ram.write(result);
-    },
+        this.ram.write(result);
+    }
 
-    DB: (assembler, instant) => {
+    DB(instant) {
         const operand = instant.operands[0];
         const maxValue = 255;
 
@@ -100,10 +108,10 @@ export const Instants = {
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
-        assembler.ram.write(result);
-    },
+        this.ram.write(result);
+    }
 
-    ORG: (assembler, instant) => {
+    ORG(instant) {
         const operand = instant.operands[0];
         const maxValue = 0x101F;
 
@@ -125,6 +133,6 @@ export const Instants = {
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
-        assembler.ram.adjustFree(result);
+        this.ram.adjustFree(result);
     }
-};
+}

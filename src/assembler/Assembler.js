@@ -20,9 +20,11 @@ export class Assembler {
         this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
         this.ioRegisters = new IORegisters(ioRegistersBuffer);
         this.ram = new RAM(ramBuffer);
-        this.graphics = new Graphics(graphicsBuffer);
+        this.graphics = new Graphics(this, graphicsBuffer);
         this.labels = new Labels();
-        this.keyboard = new Keyboard(this);
+        this.interrupts = new Interrupts(this);
+        this.keyboard = new Keyboard(this.ioRegisters, this.interrupts);
+        this.instants = new Instants(this.ram);
         this.intervalId = null;
     }
     
@@ -76,10 +78,10 @@ export class Assembler {
 
         if(statement.type === "Instant") {
             // ORG is a special type of instant, we need to rely on the actual implementation of the instant here to get the correct shape.
-            if(statement.name === "ORG") Instants.ORG(this, statement);
+            if(statement.name === "ORG") this.instants.ORG(statement);
             // DB is a special type of instant, because of its ability to use special character \ for Exact Mode.
             // Therefore, we need to actually compute the value of .DB in order to get the proper movement of free pointers.
-            else if(statement.name === "DB") Instants.DB(this, statement);
+            else if(statement.name === "DB") this.instants.DB(statement);
 
             // DW
             else {
@@ -111,9 +113,9 @@ export class Assembler {
         }
 
         if(statement.type === "Instant") {
-            const instantMethod = Instants[statement.name];
+            const instantMethod = this.instants[statement.name];
 
-            if(instantMethod) instantMethod(this, statement);
+            if(instantMethod) instantMethod(statement);
             else throw new AssemblerError("UnknownInstant", { name: statement.name }, statement.line);
         }
     }
@@ -131,7 +133,7 @@ export class Assembler {
                     this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 ) {
                     const mFlag = (this.cpuRegisters.getValue("SR") >> 4) & 1;
-                    if(this.isTimerActive && mFlag) return Interrupts.checkTimer(this);
+                    if(this.isTimerActive && mFlag) return this.interrupts.checkTimer();
                     
                     if(this.isTimerActive) this.isTimerActive = false; // Let's update this variable to false, to keep the state of Assembler consistent.
 
@@ -159,7 +161,7 @@ export class Assembler {
 
                 instructionCounter++;
 
-                Interrupts.checkTimer(this);
+                this.interrupts.checkTimer();
             });
         });
     }
@@ -181,13 +183,15 @@ export class Assembler {
     }
 
     executeInstruction(cell, instructionCounter = null) {
-        const executable = Executor.codes[cell];
+        const executor = new Executor(this);
+
+        const executable = executor.codes[cell];
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
         const args = this.collectArgs(executable.length);
         const oldAddress = this.cpuRegisters.getValue("IP");
 
-        Executor[executable.instruction](this, executable, args);
+        executor[executable.instruction](executable, args);
 
         this.nextInstruction(executable, oldAddress);
 
@@ -328,7 +332,7 @@ export class Assembler {
             }
 
             // Text
-            else this.graphics.executeVsync(this);
+            else this.graphics.executeVsync();
         }
     }
 

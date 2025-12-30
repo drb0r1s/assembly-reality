@@ -1,8 +1,13 @@
 import { AssemblerError } from "../AssemblerError";
 import { ByteNumber } from "../helpers/ByteNumber";
 
-export const Decoder = {
-    decode: (assembler, executable, args) => {
+export class Decoder {
+    constructor(cpuRegisters, ram) {
+        this.cpuRegisters = cpuRegisters;
+        this.ram = ram;
+    }
+
+    decode(executable, args) {
         argumentsCheck(executable, args);
 
         const isHalf = isInstructionHalf(executable.instruction);
@@ -23,26 +28,26 @@ export const Decoder = {
                 case "half.register":
                     decoded[prop] = {
                         ...decoded[prop],
-                        register: assembler.cpuRegisters.get(decoded[prop].value),
-                        registerValue: assembler.cpuRegisters.getValueByIndex(decoded[prop].value)
+                        register: this.cpuRegisters.get(decoded[prop].value),
+                        registerValue: this.cpuRegisters.getValueByIndex(decoded[prop].value)
                     };
 
                     break;
                 case "memory.register":
-                    const registerValue = assembler.cpuRegisters.getValueByIndex(decoded[prop].value);
+                    const registerValue = this.cpuRegisters.getValueByIndex(decoded[prop].value);
 
                     decoded[prop] = {
                         ...decoded[prop],
-                        register: assembler.cpuRegisters.get(decoded[prop].value),
+                        register: this.cpuRegisters.get(decoded[prop].value),
                         registerValue,
-                        memoryPoint: assembler.ram.matrix.point(registerValue, { isHalf })
+                        memoryPoint: this.ram.matrix.point(registerValue, { isHalf })
                     };
 
                     break;
                 case "memory.number.*":
                     decoded[prop] = {
                         ...decoded[prop],
-                        memoryPoint: assembler.ram.matrix.point(decoded[prop].value, { isHalf })
+                        memoryPoint: this.ram.matrix.point(decoded[prop].value, { isHalf })
                     };
 
                     break;
@@ -75,15 +80,15 @@ export const Decoder = {
 
             return cells;
         }
-    },
+    }
 
-    run: (executable, runnables) => {
+    run(executable, runnables) {
         const runnable = runnables[executable.type];
 
         if(!runnable) throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
         runnable();
     }
-};
+}
 
 function argumentsCheck(executable, args) {
     if(args.length !== executable.length - 1) throw new AssemblerError("InvalidNumberOfArguments", {

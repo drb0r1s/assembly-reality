@@ -1,26 +1,31 @@
 import { AssemblerError } from "../AssemblerError";
 
-export const Stack = {
-    push: (assembler, value, options) => {
+export class Stack {
+    constructor(cpuRegisters, ram) {
+        this.cpuRegisters = cpuRegisters;
+        this.ram = ram;
+    }
+
+    push(value, options) {
         const isHalf = options?.isHalf ? options.isHalf : false;
         
-        assembler.ram.matrix.update(assembler.cpuRegisters.getValue("SP"), value, { isHalf, isStack: true });
+        this.ram.matrix.update(this.cpuRegisters.getValue("SP"), value, { isHalf, isStack: true });
 
         const numberOfCells = isHalf ? 1 : 2;
-        assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") - numberOfCells);
-    },
+        this.cpuRegisters.update("SP", this.cpuRegisters.getValue("SP") - numberOfCells);
+    }
 
-    pop: (assembler, popRegister, options) => {
+    pop(popRegister, options) {
         const isHalf = options?.isHalf ? options.isHalf : false;
         const numberOfCells = isHalf ? 1 : 2;
         
-        if(assembler.cpuRegisters.getValue("SP") + numberOfCells > assembler.ram.stackStart) throw new AssemblerError("StackUnderflow");
+        if(this.cpuRegisters.getValue("SP") + numberOfCells > this.ram.stackStart) throw new AssemblerError("StackUnderflow");
         
-        assembler.cpuRegisters.update("SP", assembler.cpuRegisters.getValue("SP") + numberOfCells);
+        this.cpuRegisters.update("SP", this.cpuRegisters.getValue("SP") + numberOfCells);
         
-        const popped = assembler.ram.matrix.point(assembler.cpuRegisters.getValue("SP"), { isHalf, isStack: true });
-        if(popRegister) assembler.cpuRegisters.update(popRegister, popped);
+        const popped = this.ram.matrix.point(this.cpuRegisters.getValue("SP"), { isHalf, isStack: true });
+        if(popRegister) this.cpuRegisters.update(popRegister, popped);
 
         return popped;
     }
-};
+}

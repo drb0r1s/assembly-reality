@@ -1,9 +1,9 @@
 import { Matrix } from "../structures/Matrix";
 import { TextModeData } from "../data/TextModeData";
-import { Interrupts } from "../helpers/Interrupts";
 
 export class Graphics {
-    constructor(graphicsBuffer) {
+    constructor(assembler, graphicsBuffer) {
+        this.assembler = assembler;
         this.matrix = new Matrix(graphicsBuffer, 256);
 
         // Initializing text and pallete, by writing them in graphics memory on specific addresses.
@@ -71,24 +71,24 @@ export class Graphics {
         return [x, y];
     }
 
-    update(assembler, value) {
-        const vidMode = assembler.ioRegisters.getValue("VIDMODE");
-        const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
+    update(value) {
+        const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
+        const vidAddr = this.assembler.ioRegisters.getValue("VIDADDR");
 
-        assembler.graphics.matrix.update(vidAddr, value, { isHalf: vidMode > 1 });
+        this.assembler.graphics.matrix.update(vidAddr, value, { isHalf: vidMode > 1 });
 
         // If we're in bitmap mode, then yes, drawing is certain.
-        if(vidMode > 1) this.drawBit(assembler, value);
+        if(vidMode > 1) this.drawBit(value);
     }
 
-    drawBit(assembler, value) {
-        const vidMode = assembler.ioRegisters.getValue("VIDMODE");
+    drawBit(value) {
+        const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
 
-        const vidAddr = assembler.ioRegisters.getValue("VIDADDR");
+        const vidAddr = this.assembler.ioRegisters.getValue("VIDADDR");
         const [x, y] = this.addressToPosition(vidAddr);
 
         // For speeds greather than or equal to 10kHz, we update the canvas instantly.
-        if(assembler.speed >= 10000) {
+        if(this.assembler.speed >= 10000) {
             // Bitmap
             if(vidMode > 1) self.postMessage({ action: "graphicsRedraw", data: [[x, y, this.getRGB(value & 0xFF)]]});
         }
@@ -126,10 +126,10 @@ export class Graphics {
         this.storedBits = [];
     }
 
-    startVsyncInterval(assembler) {
+    startVsyncInterval() {
         // Having vsync interval only makes sense for speeds over 10kHz, .executeVsync is used otherwise.
-        if(assembler.speed < 10000) return;
-        this.intervalId = setInterval(() => this.executeVsync(assembler), 20);
+        if(this.assembler.speed < 10000) return;
+        this.intervalId = setInterval(() => this.executeVsync(), 20);
     }
 
     stopVsyncInterval() {
@@ -139,10 +139,10 @@ export class Graphics {
         this.intervalId = null;
     }
 
-    executeVsync(assembler) {
-        assembler.keyboard.processEvents();
+    executeVsync() {
+        this.assembler.keyboard.processEvents();
         self.postMessage({ action: "graphicsRedraw" });
-        Interrupts.trigger(assembler, "graphics");
+        this.assembler.interrupts.trigger("graphics");
     }
 
     // .clear is used if VIDMODE is 3, .reset should not be used for that.
