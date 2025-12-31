@@ -128,11 +128,8 @@ export class Assembler {
             let instructionCounter = 0;
 
             this.startExecutionInterval(() => {                
-                // The end of instruction execution is reached only if one of two cases:
-                if(
-                    (this.ram.instructions.indexOf(this.cpuRegisters.getValue("IP")) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
-                    this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
-                ) {
+                // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
+                if(this.isHalted) {
                     const mFlag = this.cpuRegisters.getSRFlag("M");
                     if(this.isTimerActive && mFlag) return this.interrupts.checkTimer();
                     
@@ -221,7 +218,11 @@ export class Assembler {
 
         const instructionIndex = this.ram.instructions.indexOf(this.cpuRegisters.getValue("IP"));
 
-        if(instructionIndex === this.ram.instructions.length - 1) this.cpuRegisters.update("IP", this.ram.matrix.getAddress(this.ram.free.i, this.ram.free.j));
+        if(instructionIndex === this.ram.instructions.length - 1) {
+            this.isHalted = true;
+            this.cpuRegisters.update("IP", this.ram.matrix.getAddress(this.ram.free.i, this.ram.free.j));
+        }
+        
         else this.cpuRegisters.update("IP", this.ram.instructions[instructionIndex + 1]);
     }
 
