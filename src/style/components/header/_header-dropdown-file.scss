@@ -40,4 +40,13 @@
             z-index: 1;
         }
     }
+
+    .header-dropdown-file-autosave-button {
+        justify-content: space-between;
+
+        .header-dropdown-file-autosave-button-left-group {
+            @include center;
+            gap: 10px;
+        }
+    }
 }

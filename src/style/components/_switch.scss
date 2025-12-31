@@ -1,0 +1,30 @@
+.switch {
+    height: 25px;
+    width: 42px;
+    @include center;
+    justify-content: flex-start;
+    background-color: #818080;
+    border-radius: 18px;
+    position: relative;
+    cursor: pointer;
+    transition: 300ms;
+
+    .switch-ball {
+        height: 21px;
+        width: 21px;
+        background-color: #0F0F0F;
+        border-radius: 50%;
+        position: absolute;
+        left: 2px;
+        transition: 300ms;
+    }
+
+    .switch-ball-active {
+        background-color: $blue;
+        left: calc(100% - 21px - 2px);
+    }
+}
+
+.switch-active {
+    background-color: #D9D9D9;
+}

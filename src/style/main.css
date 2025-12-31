@@ -168,6 +168,16 @@ header .header-dropdown .header-dropdown-file button input {
   position: absolute;
   z-index: 1;
 }
+header .header-dropdown .header-dropdown-file .header-dropdown-file-autosave-button {
+  justify-content: space-between;
+}
+header .header-dropdown .header-dropdown-file .header-dropdown-file-autosave-button .header-dropdown-file-autosave-button-left-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+}
 header .header-dropdown .header-dropdown-view {
   width: 200px;
   display: flex;
@@ -1116,4 +1126,36 @@ header .header-title {
 }
 .expanded-display .display .display-keyboard {
   width: 512px;
+}
+
+.switch {
+  height: 25px;
+  width: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  background-color: #818080;
+  border-radius: 18px;
+  position: relative;
+  cursor: pointer;
+  transition: 300ms;
+}
+.switch .switch-ball {
+  height: 21px;
+  width: 21px;
+  background-color: #0F0F0F;
+  border-radius: 50%;
+  position: absolute;
+  left: 2px;
+  transition: 300ms;
+}
+.switch .switch-ball-active {
+  background-color: #405A85;
+  left: calc(100% - 21px - 2px);
+}
+
+.switch-active {
+  background-color: #D9D9D9;
 }/*# sourceMappingURL=main.css.map */

@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import Switch from "../Switch";
+import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../Manager";
 import { images } from "../../data/images";
 
@@ -8,6 +10,8 @@ const HeaderDropdownFile = () => {
     
     const buttons = ["Import", "Export"];
     const buttonIcons = [images.importIcon, images.exportIcon];
+
+    const isAutosaveActive = useManagerValue("isAutosaveActive");
 
     useEffect(() => {
         const unsubscribeCodeResponse = Manager.subscribe("codeResponse", setCodeFile);
@@ -69,6 +73,18 @@ const HeaderDropdownFile = () => {
                     <p>{button}</p>
                 </button>;
             })}
+
+            <button
+                className="header-dropdown-file-autosave-button"
+                onClick={() => Manager.set("isAutosaveActive", !isAutosaveActive)}
+            >
+                <div className="header-dropdown-file-autosave-button-left-group">
+                    <img src={images.saveIcon} alt="SAVE" />
+                    <p>Autosave</p>
+                </div>
+
+                <Switch isActive={isAutosaveActive} />
+            </button>
         </div>
     );
 }

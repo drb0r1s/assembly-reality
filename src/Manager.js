@@ -4,7 +4,8 @@ export const Manager = (() => {
         ["speed", 4],
         ["isHighSpeed", false],
         ["isRunning", false],
-        ["isDisplayExpanded", false]
+        ["isDisplayExpanded", false],
+        ["isAutosaveActive", false]
     ]);
     
     const listeners = new Map();
