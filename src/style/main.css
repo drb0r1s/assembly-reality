@@ -1123,6 +1123,7 @@ header .header-title {
 .expanded-display .display .display-text-display .display-text-display-element {
   height: 32px;
   width: 26px;
+  font-size: 32px;
 }
 .expanded-display .display .display-keyboard {
   width: 512px;
