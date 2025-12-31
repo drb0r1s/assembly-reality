@@ -59,12 +59,6 @@ const Display = ({ style }) => {
                 character: e.key.charCodeAt(0)
             }});
 
-            //const character = e.key.charCodeAt(0);
-            //assembler.ioRegisters.keydown(character);
-
-            //Manager.trigger("ioRegistersPing");
-            //assemblerWorker.postMessage({ action: "ioRegistersKeyboard" }); // Trigger the interrupt.
-
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
         }
 
@@ -73,12 +67,6 @@ const Display = ({ style }) => {
                 type: "keyup",
                 character: e.key.charCodeAt(0)
             }});
-            
-            //const character = e.key.charCodeAt(0);
-            //assembler.ioRegisters.keyup(character);
-
-            //Manager.trigger("ioRegistersPing");
-            //assemblerWorker.postMessage({ action: "ioRegistersKeyboard" }); // Trigger the interrupt.
 
             setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
         }

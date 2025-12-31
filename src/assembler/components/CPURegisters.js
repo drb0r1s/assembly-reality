@@ -68,6 +68,18 @@ export class CPURegisters {
         return this.getValue(register);
     }
 
+    getSRFlag(flag) {
+        const SR = this.getValue("SR");
+
+        switch(flag) {
+            case "M": return (SR >> 4) & 1;
+            case "C": return (SR >> 3) & 1;
+            case "Z": return (SR >> 2) & 1;
+            case "F": return (SR >> 1) & 1;
+            case "H": return SR & 1;
+        }
+    }
+
     update(register, value) {
         if(register === "SP" && value > 0x101F) throw new AssemblerError("StackPointerLimit");
 

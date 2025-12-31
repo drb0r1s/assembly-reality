@@ -25,7 +25,8 @@ export class Assembler {
         this.interrupts = new Interrupts(this);
         this.keyboard = new Keyboard(this.ioRegisters, this.interrupts);
         this.instants = new Instants(this.ram);
-        this.intervalId = null;
+        this.executionIntervalId = null;
+        this.frameIntervalId = null;
     }
     
     assemble(text) {
@@ -126,19 +127,18 @@ export class Assembler {
         return new Promise((resolve, reject) => {
             let instructionCounter = 0;
 
-            this.setAssemblerInterval(() => {                
+            this.startExecutionInterval(() => {                
                 // The end of instruction execution is reached only if one of two cases:
                 if(
                     (this.ram.instructions.indexOf(this.cpuRegisters.getValue("IP")) === -1) || // The Instruction Pointer (IP) has visited every instruction and jumped out of the instructions array (because there was no HLT at the end to stop it).
                     this.isHalted // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 ) {
-                    const mFlag = (this.cpuRegisters.getValue("SR") >> 4) & 1;
+                    const mFlag = this.cpuRegisters.getSRFlag("M");
                     if(this.isTimerActive && mFlag) return this.interrupts.checkTimer();
                     
                     if(this.isTimerActive) this.isTimerActive = false; // Let's update this variable to false, to keep the state of Assembler consistent.
 
-                    clearInterval(this.intervalId);
-                    //this.graphics.stopVsyncInterval(); // If execution is done, there is no need to keep updating the screen.
+                    this.stopExecutionInterval();
 
                     resolve({ executed: true });
 
@@ -226,9 +226,9 @@ export class Assembler {
     }
 
     pause() {
-        if(!this.intervalId) return;
+        if(!this.executionIntervalId) return;
 
-        clearInterval(this.intervalId);
+        this.stopExecutionInterval();
         return this.getAssemblerState();
     }
 
@@ -252,21 +252,21 @@ export class Assembler {
         return args;
     }
 
-    setAssemblerInterval(callback) {
+    startExecutionInterval(callback) {
         const delay = 1000 / this.speed; // ms per instruction
 
         // High speeds (> 1kHz) require < 1ms per instruction, which is not possible in browser.
         // As a solution to that, we're going to execute multiple instructions at once, to simulate that < 1ms speed.
         const isHighSpeed = this.speed > 1000;
 
-        if(this.intervalId) clearInterval(this.intervalId);
+        this.stopExecutionInterval();
 
         if(isHighSpeed) {
             let prevNow = performance.now();
             let leftover = 0;
 
             // Here we do not want to call one callback immediately, like we do for low speeds.
-            this.intervalId = setInterval(() => {
+            this.executionIntervalId = setInterval(() => {
                 const now = performance.now();
 
                 const passedTime = now - prevNow;
@@ -298,8 +298,47 @@ export class Assembler {
         else {
             // The first iteration.
             callback();
-            this.intervalId = setInterval(callback, delay);
+            this.executionIntervalId = setInterval(callback, delay);
         }
+    }
+
+    stopExecutionInterval() {
+        if(this.executionIntervalId === null) return;
+
+        clearInterval(this.executionIntervalId);
+        this.executionIntervalId = null;
+    }
+
+    startFrameInterval() {
+        if(this.speed < 10000 || this.frameIntervalId !== null) return;
+        this.frameIntervalId = setInterval(() => this.loadFrame(), 20);
+    }
+
+    stopFrameInterval() {
+        if(this.frameIntervalId === null) return;
+
+        clearInterval(this.frameIntervalId);
+        this.frameIntervalId = null;
+    }
+
+    loadFrame() {
+        // IOREGISTERS
+        self.postMessage({ action: "ioRegistersPing" });
+
+        // KEYBOARD
+        const mFlag = this.cpuRegisters.getSRFlag("M");
+        if(mFlag === 1) this.keyboard.processEvents();
+
+        // GRAPHICS - TEXT MODE
+        const vidMode = this.ioRegisters.getValue("VIDMODE");
+        if(vidMode === 1) this.graphics.executeVsync();
+
+        // FIRST: If assembler is halted, interval should immediately be terminated.
+        // SECOND: Just in case .loadFrame() is called with frame interval and neither intervals nor text mode is active, it is important to terminate the interval.
+        if(
+            this.isHalted ||
+            (mFlag !== 1 && vidMode !== 1)
+        ) this.stopFrameInterval();
     }
 
     getAssemblerState() {
@@ -316,12 +355,15 @@ export class Assembler {
 
     updateUI() {
         self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
+        // If timer is active, it is important to update TMRCOUNTER, since it's updates are based on the updating system, not like other IO Registers.
+        if(this.isTimerActive) self.postMessage({ action: "ioRegistersTimerPing" });
         
+        this.loadFrame();
+
         // For speeds lower than 10kHz, we use this partial updates to update the canvas.
         if(this.speed < 10000) {
             const vidMode = this.ioRegisters.getValue("VIDMODE");
-            if(vidMode === 0) return;
-            
+
             // Bitmap
             if(vidMode > 1) {
                 const storedBits = this.graphics.getStoredBits();
@@ -330,9 +372,6 @@ export class Assembler {
                 self.postMessage({ action: "graphicsRedraw", data: storedBits });
                 this.graphics.clearStoredBits();
             }
-
-            // Text
-            else this.graphics.executeVsync();
         }
     }
 
@@ -347,7 +386,6 @@ export class Assembler {
         this.labels.reset();
         this.keyboard.reset();
         
-        clearInterval(this.intervalId);
-        this.intervalId = null;
+        this.stopExecutionInterval();
     }
 };

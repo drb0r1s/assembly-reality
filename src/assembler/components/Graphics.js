@@ -126,21 +126,7 @@ export class Graphics {
         this.storedBits = [];
     }
 
-    startVsyncInterval() {
-        // Having vsync interval only makes sense for speeds over 10kHz, .executeVsync is used otherwise.
-        if(this.assembler.speed < 10000) return;
-        this.intervalId = setInterval(() => this.executeVsync(), 20);
-    }
-
-    stopVsyncInterval() {
-        if(this.intervalId === null) return;
-
-        clearInterval(this.intervalId);
-        this.intervalId = null;
-    }
-
     executeVsync() {
-        this.assembler.keyboard.processEvents();
         self.postMessage({ action: "graphicsRedraw" });
         this.assembler.interrupts.trigger("graphics");
     }

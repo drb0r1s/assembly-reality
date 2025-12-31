@@ -280,7 +280,7 @@ export class Executable {
                         // TEXT (1) or BITMAP (2)
                         case 1:
                         case 2:
-                            this.assembler.graphics.startVsyncInterval();
+                            this.assembler.startFrameInterval();
                             self.postMessage({ action: "graphicsEnabled", data: registerValue });
                             break;
                         // CLEAR
@@ -351,7 +351,11 @@ export class Executable {
 
     interrupt(executable) {
         if(executable.instruction === "CLI") this.assembler.cpuRegisters.update("SR", this.assembler.cpuRegisters.getValue("SR") & 0b01111);
-        if(executable.instruction === "STI") this.assembler.cpuRegisters.update("SR", this.assembler.cpuRegisters.getValue("SR") | 0b10000);
+        
+        if(executable.instruction === "STI") {
+            this.assembler.startFrameInterval();
+            this.assembler.cpuRegisters.update("SR", this.assembler.cpuRegisters.getValue("SR") | 0b10000);
+        }
     
         if(executable.instruction === "IRET") {
             // 1. The return address (IP) and the status register are restored from the stack in this order.

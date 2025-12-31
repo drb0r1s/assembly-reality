@@ -7,7 +7,7 @@ export class Interrupts {
     }
 
     trigger(type) {
-        const mFlag = (this.assembler.cpuRegisters.getValue("SR") >> 4) & 1; // M is the 5th LSB in SR.
+        const mFlag = this.assembler.cpuRegisters.getSRFlag("M");
         const irqMask = this.assembler.ioRegisters.getValue("IRQMASK");
 
         if(mFlag === 0 || !checkIRQMASK()) return;
@@ -40,7 +40,7 @@ export class Interrupts {
         // 2. If interrupts are enabled globally (M = 1) and interrupts for the requesting device are also enabled in the IRQMASK register:
 
         // (a) If the processor is at halt (H = 1), the halt flag is cleared (H = 0) and the processor becomes active.
-        const hFlag = this.assembler.cpuRegisters.getValue("SR") & 1;
+        const hFlag = this.assembler.cpuRegisters.getSRFlag("H");
         
         if(hFlag) {
             this.assembler.isHalted = false;

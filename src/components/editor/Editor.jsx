@@ -122,11 +122,14 @@ const Editor = () => {
                     Manager.trigger("graphicsReset");
 
                     break;
-                case "miniDisplayUpdate":
+                case "miniDisplayPing":
                     Manager.trigger("miniDisplayPing");
                     break;
-                case "ioRegistersUpdate":
+                case "ioRegistersPing":
                     Manager.trigger("ioRegistersPing");
+                    break;
+                case "ioRegistersTimerPing":
+                    Manager.trigger("ioRegistersTimerPing");
                     break;
                 case "graphicsEnabled":
                     Manager.trigger("graphicsEnabled", data);

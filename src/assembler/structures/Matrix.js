@@ -57,10 +57,6 @@ export class Matrix {
             const [secondRow, secondColumn] = this.getLocation(address + adjustments[1]);
             this.setCell(secondRow, secondColumn, secondCell);
         }
-    
-        // Addresses reserved for mini display.
-        // We're checking if rowSize is 16 in order to confirm this was called by RAM and not by Graphics!
-        if(this.rowSize === 16 && address >= 4096 && address <= 4128) self.postMessage({ action: "miniDisplayUpdate" });
     }
 
     point(address, options) {

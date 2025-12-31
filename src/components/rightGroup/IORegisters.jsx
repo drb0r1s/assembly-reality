@@ -21,8 +21,22 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
     });
 
     useEffect(() => {
-        const unsubscribeIORegisterPing = Manager.subscribe("ioRegistersPing", () => setIORegisters(assembler.ioRegisters.construct()));
-        return unsubscribeIORegisterPing;
+        // IMPORTANT: assembler.loadFrame() is too fast for TMRCOUNTER.
+        // TMRCOUNTER will be updated through the update system.
+        const unsubscribeIORegistersPing = Manager.subscribe("ioRegistersPing", () => setIORegisters(prevIORegisters => { return {
+            ...assembler.ioRegisters.construct(),
+            TMRCOUNTER: prevIORegisters.TMRCOUNTER
+        }}));
+
+        const unsubscribeIORegistersTimerPing = Manager.subscribe("ioRegistersTimerPing", () => setIORegisters(prevIORegisters => { return {
+            ...prevIORegisters,
+            TMRCOUNTER: assembler.ioRegisters.getValue("TMRCOUNTER")
+        }}));
+
+        return () => {
+            unsubscribeIORegistersPing();
+            unsubscribeIORegistersTimerPing();
+        };
     }, []);
     
     return(
