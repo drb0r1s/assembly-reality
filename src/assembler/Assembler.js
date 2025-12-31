@@ -136,6 +136,7 @@ export class Assembler {
                     if(this.isTimerActive) this.isTimerActive = false; // Let's update this variable to false, to keep the state of Assembler consistent.
 
                     this.stopExecutionInterval();
+                    this.stopFrameInterval();
 
                     resolve({ executed: true });
 
@@ -333,13 +334,6 @@ export class Assembler {
         // GRAPHICS - TEXT MODE
         const vidMode = this.ioRegisters.getValue("VIDMODE");
         if(vidMode === 1) this.graphics.executeVsync();
-
-        // FIRST: If assembler is halted, interval should immediately be terminated.
-        // SECOND: Just in case .loadFrame() is called with frame interval and neither intervals nor text mode is active, it is important to terminate the interval.
-        if(
-            this.isHalted ||
-            (mFlag !== 1 && vidMode !== 1)
-        ) this.stopFrameInterval();
     }
 
     getAssemblerState() {
@@ -358,11 +352,11 @@ export class Assembler {
         self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
         // If timer is active, it is important to update TMRCOUNTER, since it's updates are based on the updating system, not like other IO Registers.
         if(this.isTimerActive) self.postMessage({ action: "ioRegistersTimerPing" });
-        
-        this.loadFrame();
 
         // For speeds lower than 10kHz, we use this partial updates to update the canvas.
         if(this.speed < 10000) {
+            this.loadFrame();
+
             const vidMode = this.ioRegisters.getValue("VIDMODE");
 
             // Bitmap

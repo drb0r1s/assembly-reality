@@ -12,8 +12,7 @@ export class Executable {
 
     halt() {
         this.assembler.isHalted = true;
-        // 0b00001 only because H flag is the last one in the SR sequence.
-        this.assembler.cpuRegisters.update("SR", this.assembler.cpuRegisters.getValue("SR") | 0b00001);
+        this.assembler.cpuRegisters.updateSR({ H: 1 });
     }
 
     move(executable, args) {
@@ -350,11 +349,11 @@ export class Executable {
     }
 
     interrupt(executable) {
-        if(executable.instruction === "CLI") this.assembler.cpuRegisters.update("SR", this.assembler.cpuRegisters.getValue("SR") & 0b01111);
+        if(executable.instruction === "CLI") this.assembler.cpuRegisters.updateSR({ M: 0 });
         
         if(executable.instruction === "STI") {
             this.assembler.startFrameInterval();
-            this.assembler.cpuRegisters.update("SR", this.assembler.cpuRegisters.getValue("SR") | 0b10000);
+            this.assembler.cpuRegisters.updateSR({ M: 1 });
         }
     
         if(executable.instruction === "IRET") {

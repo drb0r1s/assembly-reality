@@ -21,7 +21,7 @@ const Display = ({ style }) => {
         const vidMode = assembler.ioRegisters.getValue("VIDMODE");
         setIsCanvasStrongDisabled(vidMode !== 0);
         
-        const unsubscribeMiniDisplayPing = Manager.subscribe("miniDisplayPing", () => setMemoryVersion(prevVersion => prevVersion + 1));
+        const unsubscribeTextDisplayPing = Manager.subscribe("textDisplayPing", () => setMemoryVersion(prevVersion => prevVersion + 1));
         const unsubscribeMemoryReset = Manager.subscribe("ramReset", () => setMemoryVersion(prevVersion => prevVersion + 1));
 
         const unsubscribeGraphicsEnabled = Manager.subscribe("graphicsEnabled", data => {
@@ -40,7 +40,7 @@ const Display = ({ style }) => {
         initializeCanvas();
         
         return () => {
-            unsubscribeMiniDisplayPing();
+            unsubscribeTextDisplayPing();
             unsubscribeMemoryReset();
 
             unsubscribeGraphicsEnabled();
@@ -329,11 +329,11 @@ const Display = ({ style }) => {
                 <strong ref={canvasStrongRef}>Assembly Reality</strong>
             </div>
 
-            <div className="display-mini-display">
-                {assembler.ram.matrix.arrayify({ miniDisplay: true }).map((element, index) => {
+            <div className="display-text-display">
+                {assembler.ram.matrix.arrayify({ textDisplay: true }).map((element, index) => {
                     return <p
                         key={index}
-                        className="display-mini-display-element"
+                        className="display-text-display-element"
                     >{element !== 0 ? String.fromCharCode(element) : ""}</p>;
                 })}
             </div>

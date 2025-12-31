@@ -106,7 +106,17 @@ export class CPURegisters {
     }
 
     updateSR(newSR) {
-        const newSRBinary = (newSR.M << 4) | (newSR.C << 3) | (newSR.Z << 2) | (newSR.F << 1) | (newSR.H << 0);
+        const SR = this.constructSR();
+
+        const updatedSR = {
+            M: newSR?.M !== undefined ? newSR.M : SR.M,
+            C: newSR?.C !== undefined ? newSR.C : SR.C,
+            Z: newSR?.Z !== undefined ? newSR.Z : SR.Z,
+            F: newSR?.F !== undefined ? newSR.F : SR.F,
+            H: newSR?.H !== undefined ? newSR.H : SR.H,
+        };
+
+        const newSRBinary = (updatedSR.M << 4) | (updatedSR.C << 3) | (updatedSR.Z << 2) | (updatedSR.F << 1) | (updatedSR.H << 0);
         Atomics.store(this.registers, this.getIndex("SR"), newSRBinary);
     }
 

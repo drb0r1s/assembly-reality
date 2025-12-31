@@ -2,6 +2,7 @@
     width: 200px;
     @include center(column);
     gap: 7px;
+    cursor: default;
 
     button {
         width: 100%;

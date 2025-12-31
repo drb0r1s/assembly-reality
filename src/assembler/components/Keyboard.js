@@ -19,7 +19,7 @@ export class Keyboard {
             this.interrupts.trigger("keyboard");
         }
 
-        self.postMessage({ action: "miniDisplayPing" });
+        self.postMessage({ action: "textDisplayPing" });
     }
 
     // KEYDOWN event affects the KBDSTATUS register by adding 1.

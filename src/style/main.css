@@ -130,6 +130,7 @@ header .header-dropdown .header-dropdown-file {
   justify-content: center;
   flex-direction: column;
   gap: 7px;
+  cursor: default;
 }
 header .header-dropdown .header-dropdown-file button {
   width: 100%;
@@ -995,13 +996,13 @@ header .header-title {
   opacity: 1;
   transition: 300ms;
 }
-.display .display-mini-display {
+.display .display-text-display {
   width: 256px;
   display: grid;
   grid-template-columns: repeat(16, 1fr);
   gap: 3px;
 }
-.display .display-mini-display .display-mini-display-element {
+.display .display-text-display .display-text-display-element {
   height: 17px;
   width: 13px;
   display: flex;
@@ -1105,11 +1106,11 @@ header .header-title {
 .expanded-display .display .display-canvas-holder strong {
   font-size: 72px;
 }
-.expanded-display .display .display-mini-display {
+.expanded-display .display .display-text-display {
   width: 512px;
   gap: 6px;
 }
-.expanded-display .display .display-mini-display .display-mini-display-element {
+.expanded-display .display .display-text-display .display-text-display-element {
   height: 32px;
   width: 26px;
 }

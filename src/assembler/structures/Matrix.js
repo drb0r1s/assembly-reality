@@ -69,7 +69,7 @@ export class Matrix {
     }
 
     arrayify(options) {
-        if(options?.miniDisplay) return Array.from(this.values.slice(-32));
+        if(options?.textDisplay) return Array.from(this.values.slice(-32));
         return Array.from(this.values);
     }
 

@@ -44,7 +44,7 @@ export class Interrupts {
         
         if(hFlag) {
             this.assembler.isHalted = false;
-            this.assembler.cpuRegisters.update("SR", this.assembler.cpuRegisters.getValue("SR") & 0b11110);
+            this.assembler.cpuRegisters.updateSR({ H: 0 });
         }
 
         // (b) The status register and the return address (IP) are pushed to the stack in this order.
@@ -52,7 +52,7 @@ export class Interrupts {
         this.stack.push(this.assembler.cpuRegisters.getValue("IP"));
 
         // (c) Interrupts get disabled globally (M = 0). This way interrupt nesting is prevented.
-        this.assembler.cpuRegisters.update("SR", this.assembler.cpuRegisters.getValue("SR") & 0b01111);
+        this.assembler.cpuRegisters.updateSR({ M: 0 });
 
         // (d) The processor jumps to address 0x0003 (interrupt vector).
         this.assembler.cpuRegisters.update("IP", 0x0003);
