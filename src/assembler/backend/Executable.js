@@ -279,7 +279,6 @@ export class Executable {
                         // TEXT (1) or BITMAP (2)
                         case 1:
                         case 2:
-                            this.assembler.startFrameInterval();
                             self.postMessage({ action: "graphicsEnabled", data: registerValue });
                             break;
                         // CLEAR
@@ -352,7 +351,6 @@ export class Executable {
         if(executable.instruction === "CLI") this.assembler.cpuRegisters.updateSR({ M: 0 });
         
         if(executable.instruction === "STI") {
-            this.assembler.startFrameInterval();
             this.assembler.cpuRegisters.updateSR({ M: 1 });
         }
     

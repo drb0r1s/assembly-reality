@@ -10,6 +10,7 @@ import { AST } from "./frontend/AST";
 import { Instructions } from "./frontend/Instructions";
 import { Instants } from "./frontend/Instants";
 import { Executor } from "./backend/Executor";
+import { Refresh } from "./structures/Refresh";
 import { Interrupts } from "./helpers/Interrupts";
 
 export class Assembler {
@@ -23,10 +24,10 @@ export class Assembler {
         this.graphics = new Graphics(this, graphicsBuffer);
         this.labels = new Labels();
         this.interrupts = new Interrupts(this);
+        this.Refresh = new Refresh(this);
         this.keyboard = new Keyboard(this.ioRegisters, this.interrupts);
         this.instants = new Instants(this.ram);
         this.executionIntervalId = null;
-        this.frameIntervalId = null;
     }
     
     assemble(text) {
@@ -124,6 +125,8 @@ export class Assembler {
     execute(speed) {
         this.speed = speed;
 
+        this.Refresh.startInterval();
+
         return new Promise((resolve, reject) => {
             let instructionCounter = 0;
 
@@ -136,11 +139,9 @@ export class Assembler {
                     if(this.isTimerActive) this.isTimerActive = false; // Let's update this variable to false, to keep the state of Assembler consistent.
 
                     this.stopExecutionInterval();
-                    this.stopFrameInterval();
+                    this.Refresh.stopInterval();
 
                     resolve({ executed: true });
-
-                    this.updateUI();
 
                     return;
                 }
@@ -193,18 +194,18 @@ export class Assembler {
 
         this.nextInstruction(executable, oldAddress);
 
-        const updatesPerSecond = 2;
+        const updatesPerSecond = this.speed >= 10000 ? 2 : 4;
 
         // If instructionCounter is defined, that means that we're in a "running" mode.
         if(instructionCounter) {
             let updatePerInstructions = Math.floor(this.speed / updatesPerSecond);
             if (updatePerInstructions < 1) updatePerInstructions = 1;
 
-            if(instructionCounter % updatePerInstructions === 0) this.updateUI();
+            if(instructionCounter % updatePerInstructions === 0) this.Refresh.triggerSlow();
         }
 
         // Otherwise, we're just executing one instruction ("step" mode).
-        else this.updateUI();
+        else this.Refresh.slow({ force: true });
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
@@ -311,31 +312,6 @@ export class Assembler {
         this.executionIntervalId = null;
     }
 
-    startFrameInterval() {
-        if(this.speed < 10000 || this.frameIntervalId !== null) return;
-        this.frameIntervalId = setInterval(() => this.loadFrame(), 20);
-    }
-
-    stopFrameInterval() {
-        if(this.frameIntervalId === null) return;
-
-        clearInterval(this.frameIntervalId);
-        this.frameIntervalId = null;
-    }
-
-    loadFrame() {
-        // IOREGISTERS
-        self.postMessage({ action: "ioRegistersPing" });
-
-        // KEYBOARD
-        const mFlag = this.cpuRegisters.getSRFlag("M");
-        if(mFlag === 1) this.keyboard.processEvents();
-
-        // GRAPHICS - TEXT MODE
-        const vidMode = this.ioRegisters.getValue("VIDMODE");
-        if(vidMode === 1) this.graphics.executeVsync();
-    }
-
     getAssemblerState() {
         // If speed is too high (over 10kHz), we won't update cpuRegisters and RAM.
         if(this.speed < 10000) return {
@@ -348,28 +324,6 @@ export class Assembler {
         return {};
     }
 
-    updateUI() {
-        self.postMessage({ action: "instructionExecuted", data: this.getAssemblerState() });
-        // If timer is active, it is important to update TMRCOUNTER, since it's updates are based on the updating system, not like other IO Registers.
-        if(this.isTimerActive) self.postMessage({ action: "ioRegistersTimerPing" });
-
-        // For speeds lower than 10kHz, we use this partial updates to update the canvas.
-        if(this.speed < 10000) {
-            this.loadFrame();
-
-            const vidMode = this.ioRegisters.getValue("VIDMODE");
-
-            // Bitmap
-            if(vidMode > 1) {
-                const storedBits = this.graphics.getStoredBits();
-                if(storedBits.length === 0) return;
-
-                self.postMessage({ action: "graphicsRedraw", data: storedBits });
-                this.graphics.clearStoredBits();
-            }
-        }
-    }
-
     reset() {
         this.speed = 4;
         this.isHalted = false;
@@ -379,6 +333,7 @@ export class Assembler {
         this.ram.reset();
         this.graphics.reset();
         this.labels.reset();
+        this.Refresh.reset();
         this.keyboard.reset();
         
         this.stopExecutionInterval();

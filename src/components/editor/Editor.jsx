@@ -102,7 +102,6 @@ const Editor = () => {
 
                     break;
                 // We receive the message with the action "run" only when the execution has ended.
-                // NOTE: In the past, "run" action used to .trigger "ramUpdate" and "cpuRegistersPing", with new update (calling assembler.updateUI() at the end of the execution) it's no longer useful.
                 case "run":
                     Manager.set("isRunning", false);
                     break;

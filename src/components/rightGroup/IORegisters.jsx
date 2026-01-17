@@ -21,7 +21,6 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
     });
 
     useEffect(() => {
-        // IMPORTANT: assembler.loadFrame() is too fast for TMRCOUNTER.
         // TMRCOUNTER will be updated through the update system.
         const unsubscribeIORegistersPing = Manager.subscribe("ioRegistersPing", () => setIORegisters(prevIORegisters => { return {
             ...assembler.ioRegisters.construct(),
