@@ -118,6 +118,7 @@ const Editor = () => {
                     Manager.trigger("ramReset");
                     Manager.trigger("cpuRegistersPing");
                     Manager.trigger("ioRegistersPing");
+                    Manager.trigger("ioRegistersTimerPing");
                     Manager.trigger("graphicsReset");
 
                     break;
