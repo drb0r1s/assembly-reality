@@ -44,6 +44,13 @@ const Editor = () => {
             assemblerWorker.postMessage({ action: "run", data: parseInt(speed) });
         });
 
+        const unsubscribeAssembleRun = Manager.subscribe("assembleRun", () => {
+            if(!assemblerWorker) return;
+
+            Manager.set("isRunning", true);
+            assemblerWorker.postMessage({ action: "assembleRun", data: { code: codes[pages.active], speed: parseInt(speed) } });
+        });
+
         const unsubscribePause = Manager.subscribe("pause", () => {
             if(!assemblerWorker) return;
 
@@ -146,6 +153,7 @@ const Editor = () => {
         return () => {
             unsubscribeAssemble();
             unsubscribeRun();
+            unsubscribeAssembleRun();
             unsubscribePause();
             unsubscribeStep();
             unsubscribeCodeTransfer();

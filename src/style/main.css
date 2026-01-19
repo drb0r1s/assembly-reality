@@ -986,6 +986,7 @@ header .header-title {
   overflow-y: auto;
 }
 .display .display-buttons {
+  width: 235px;
   display: flex;
   align-items: center;
   justify-content: center;

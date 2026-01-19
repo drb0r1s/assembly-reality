@@ -325,7 +325,10 @@ const Display = ({ style, isExpanded }) => {
             className="display"
             style={style}
         >
-            {isExpanded && <AssemblerButtons className="display-buttons" />}
+            {isExpanded && <AssemblerButtons
+                className="display-buttons"
+                isExpanded={isExpanded}
+            />}
 
             <div className="display-canvas-holder">
                 <canvas ref={canvasRef}></canvas>
