@@ -16,6 +16,7 @@ export class Refresh {
         clearInterval(this.intervalId);
         this.intervalId = null;
 
+        // We need to show anything that wasn't refreshed after ending the interval.
         this.triggerSlow();
         this.do();
     }

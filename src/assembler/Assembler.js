@@ -11,6 +11,7 @@ import { Instructions } from "./frontend/Instructions";
 import { Instants } from "./frontend/Instants";
 import { Executor } from "./backend/Executor";
 import { Refresh } from "./structures/Refresh";
+import { ExecutionInterval } from "./structures/ExecutionInterval";
 import { Interrupts } from "./helpers/Interrupts";
 
 export class Assembler {
@@ -24,10 +25,10 @@ export class Assembler {
         this.graphics = new Graphics(this, graphicsBuffer);
         this.labels = new Labels();
         this.interrupts = new Interrupts(this);
-        this.Refresh = new Refresh(this);
         this.keyboard = new Keyboard(this.ioRegisters, this.interrupts);
+        this.refresh = new Refresh(this);
+        this.executionInterval = new ExecutionInterval(() => this.speed);
         this.instants = new Instants(this.ram);
-        this.executionIntervalId = null;
     }
     
     assemble(text) {
@@ -125,12 +126,12 @@ export class Assembler {
     execute(speed) {
         this.speed = speed;
 
-        this.Refresh.startInterval();
+        this.refresh.startInterval();
 
         return new Promise((resolve, reject) => {
             let instructionCounter = 0;
 
-            this.startExecutionInterval(() => {                
+            this.executionInterval.start(() => {                
                 // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 if(this.isHalted) {
                     const mFlag = this.cpuRegisters.getSRFlag("M");
@@ -138,8 +139,8 @@ export class Assembler {
                     
                     if(this.isTimerActive) this.isTimerActive = false; // Let's update this variable to false, to keep the state of Assembler consistent.
 
-                    this.stopExecutionInterval();
-                    this.Refresh.stopInterval();
+                    this.executionInterval.stop();
+                    this.refresh.stopInterval();
 
                     resolve({ executed: true });
 
@@ -197,15 +198,18 @@ export class Assembler {
         const updatesPerSecond = this.speed >= 10000 ? 2 : 4;
 
         // If instructionCounter is defined, that means that we're in a "running" mode.
-        if(instructionCounter) {
+        if(instructionCounter !== null) {
             let updatePerInstructions = Math.floor(this.speed / updatesPerSecond);
-            if (updatePerInstructions < 1) updatePerInstructions = 1;
+            if(updatePerInstructions < 1) updatePerInstructions = 1;
 
-            if(instructionCounter % updatePerInstructions === 0) this.Refresh.triggerSlow();
+            console.log(instructionCounter, updatePerInstructions)
+            if(instructionCounter % updatePerInstructions === 0) console.log("bro", instructionCounter, updatePerInstructions)
+
+            if(instructionCounter % updatePerInstructions === 0) this.refresh.triggerSlow();
         }
 
         // Otherwise, we're just executing one instruction ("step" mode).
-        else this.Refresh.slow({ force: true });
+        else this.refresh.slow({ force: true });
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
@@ -229,9 +233,9 @@ export class Assembler {
     }
 
     pause() {
-        if(!this.executionIntervalId) return;
+        this.executionInterval.stop();
+        this.refresh.stopInterval();
 
-        this.stopExecutionInterval();
         return this.getAssemblerState();
     }
 
@@ -255,63 +259,6 @@ export class Assembler {
         return args;
     }
 
-    startExecutionInterval(callback) {
-        const delay = 1000 / this.speed; // ms per instruction
-
-        // High speeds (> 1kHz) require < 1ms per instruction, which is not possible in browser.
-        // As a solution to that, we're going to execute multiple instructions at once, to simulate that < 1ms speed.
-        const isHighSpeed = this.speed > 1000;
-
-        this.stopExecutionInterval();
-
-        if(isHighSpeed) {
-            let prevNow = performance.now();
-            let leftover = 0;
-
-            // Here we do not want to call one callback immediately, like we do for low speeds.
-            this.executionIntervalId = setInterval(() => {
-                const now = performance.now();
-
-                const passedTime = now - prevNow;
-                prevNow = now;
-
-                // This constant uses the formula to calculate instructions per clock cycle, with respect to leftovers.
-                const numberOfInstructions = (passedTime * this.speed) / 1000 + leftover;
-                let instructionsToExecute = Math.floor(numberOfInstructions);
-
-                leftover = numberOfInstructions - instructionsToExecute;
-
-                if(instructionsToExecute <= 0) return;
-
-                // In general, relation between speed and clock cycles is calculated to be approx. speed / 100 = clock cycle.
-                // Because of that, we will rely on this constant to speed up the execution if instructionsToExecute is too high.
-                const speedToClockCycleRatio = this.speed / 100;
-
-                while(instructionsToExecute > 0) {
-                    // There is a possibility that calculated real instructions per clock cycle (instructionsToExecute) are not fast enough for our simulation.
-                    // Because of that, as mentioned above, we use speedToClockCycleRatio.
-                    const executedInstructions = Math.min(speedToClockCycleRatio, instructionsToExecute);
-                    for(let i = 0; i < executedInstructions; i++) callback();
-
-                    instructionsToExecute -= executedInstructions;
-                }
-            }, 1);
-        }
-
-        else {
-            // The first iteration.
-            callback();
-            this.executionIntervalId = setInterval(callback, delay);
-        }
-    }
-
-    stopExecutionInterval() {
-        if(this.executionIntervalId === null) return;
-
-        clearInterval(this.executionIntervalId);
-        this.executionIntervalId = null;
-    }
-
     getAssemblerState() {
         // If speed is too high (over 10kHz), we won't update cpuRegisters and RAM.
         if(this.speed < 10000) return {
@@ -333,9 +280,8 @@ export class Assembler {
         this.ram.reset();
         this.graphics.reset();
         this.labels.reset();
-        this.Refresh.reset();
         this.keyboard.reset();
-        
-        this.stopExecutionInterval();
+        this.refresh.reset();
+        this.executionInterval.reset();
     }
 };
