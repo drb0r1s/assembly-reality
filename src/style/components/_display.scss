@@ -5,8 +5,46 @@
     justify-content: flex-start;
     gap: 10px;
     padding: 10px 0;
+    position: relative;
     overflow-x: hidden;
     overflow-y: auto;
+
+    .display-buttons {
+        @include center(column);
+        align-items: flex-start;
+        gap: 10px;
+        position: absolute;
+        top: 50%;
+        left: calc(50% - 256px - 30px); // center - half of canvas - gap
+        transform: translate(-100%, -50%);
+        z-index: 1;
+
+        .assembler-button {
+            @include center;
+            gap: 12px;
+            background-color: transparent;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px;
+            transition: 300ms;
+
+            &:hover {
+                background-color: $blue;
+            }
+
+            img {
+                height: 32px;
+                width: 32px;
+                object-fit: contain;
+            }
+
+            p {
+                color: #F4F4F4;
+                font-size: 24px;
+            }
+        }
+    }
 
     .display-canvas-holder {
         @include center;

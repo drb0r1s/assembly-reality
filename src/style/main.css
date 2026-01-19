@@ -288,7 +288,7 @@ header .header-left-group .header-buttons {
   flex-direction: row;
   gap: 3px;
 }
-header .header-left-group .header-buttons .header-regular-button,
+header .header-left-group .header-buttons .assembler-button,
 header .header-left-group .header-buttons .header-dropdown-button {
   display: flex;
   align-items: center;
@@ -302,11 +302,11 @@ header .header-left-group .header-buttons .header-dropdown-button {
   padding: 5px;
   transition: 300ms;
 }
-header .header-left-group .header-buttons .header-regular-button:hover,
+header .header-left-group .header-buttons .assembler-button:hover,
 header .header-left-group .header-buttons .header-dropdown-button:hover {
   background-color: #405A85;
 }
-header .header-left-group .header-buttons .header-regular-button p,
+header .header-left-group .header-buttons .assembler-button p,
 header .header-left-group .header-buttons .header-dropdown-button p {
   color: #F4F4F4;
   font-size: 14px;
@@ -329,10 +329,10 @@ header .header-left-group .header-dropdown-buttons .header-dropdown-button span 
   margin-left: 8px;
   padding: 3px;
 }
-header .header-left-group .header-regular-buttons {
+header .header-left-group .header-assembler-buttons {
   gap: 7px;
 }
-header .header-left-group .header-regular-buttons .header-regular-button img {
+header .header-left-group .header-assembler-buttons .header-assembler-button img {
   height: 22px;
   width: 22px;
   -o-object-fit: contain;
@@ -732,6 +732,7 @@ header .header-title {
   right: 10px;
   cursor: pointer;
   transition: 300ms;
+  z-index: 1;
 }
 .right-group .right-group-content .io-devices .io-devices-expand-button:hover {
   background-color: #405A85;
@@ -980,8 +981,48 @@ header .header-title {
   justify-content: flex-start;
   gap: 10px;
   padding: 10px 0;
+  position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+}
+.display .display-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 256px - 30px);
+  transform: translate(-100%, -50%);
+  z-index: 1;
+}
+.display .display-buttons .assembler-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 12px;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  transition: 300ms;
+}
+.display .display-buttons .assembler-button:hover {
+  background-color: #405A85;
+}
+.display .display-buttons .assembler-button img {
+  height: 32px;
+  width: 32px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.display .display-buttons .assembler-button p {
+  color: #F4F4F4;
+  font-size: 24px;
 }
 .display .display-canvas-holder {
   display: flex;
@@ -1105,6 +1146,7 @@ header .header-title {
   top: 10px;
   right: 10px;
   cursor: pointer;
+  z-index: 1;
 }
 .expanded-display .display {
   justify-content: center;

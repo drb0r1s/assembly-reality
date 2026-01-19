@@ -19,6 +19,7 @@
         right: 10px;
         cursor: pointer;
         transition: 300ms;
+        z-index: 1;
 
         &:hover {
             background-color: $blue;

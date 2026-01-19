@@ -22,7 +22,7 @@ header {
             @include center;
             gap: 3px;
 
-            .header-regular-button,
+            .assembler-button,
             .header-dropdown-button {
                 @include center;
                 gap: 4px;
@@ -61,10 +61,10 @@ header {
             }
         }
 
-        .header-regular-buttons {
+        .header-assembler-buttons {
             gap: 7px;
             
-            .header-regular-button img {
+            .header-assembler-button img {
                 height: 22px;
                 width: 22px;
                 object-fit: contain;

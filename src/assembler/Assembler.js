@@ -202,9 +202,6 @@ export class Assembler {
             let updatePerInstructions = Math.floor(this.speed / updatesPerSecond);
             if(updatePerInstructions < 1) updatePerInstructions = 1;
 
-            console.log(instructionCounter, updatePerInstructions)
-            if(instructionCounter % updatePerInstructions === 0) console.log("bro", instructionCounter, updatePerInstructions)
-
             if(instructionCounter % updatePerInstructions === 0) this.refresh.triggerSlow();
         }
 

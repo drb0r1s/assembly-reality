@@ -31,7 +31,7 @@ const ExpandedDisplay = () => {
                 <img src={images.xIcon} alt="X" />
             </button>
 
-            <Display />
+            <Display isExpanded={true} />
         </div>
     );
 }

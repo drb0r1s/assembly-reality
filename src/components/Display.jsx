@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useContext } from "react";
+import AssemblerButtons from "./AssemblerButtons";
 import { GlobalContext } from "../context/GlobalContext";
 import { Manager } from "../Manager";
 import { images } from "../data/images";
 
-const Display = ({ style }) => {
+const Display = ({ style, isExpanded }) => {
     const { assembler, assemblerWorker, sharedCanvas } = useContext(GlobalContext);
         
     const [_, setMemoryVersion] = useState(0);
@@ -324,6 +325,8 @@ const Display = ({ style }) => {
             className="display"
             style={style}
         >
+            {isExpanded && <AssemblerButtons className="display-buttons" />}
+
             <div className="display-canvas-holder">
                 <canvas ref={canvasRef}></canvas>
                 <strong ref={canvasStrongRef}>Assembly Reality</strong>

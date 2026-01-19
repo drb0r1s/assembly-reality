@@ -1,35 +1,13 @@
 import HeaderDropdown from "./HeaderDropdown";
+import AssemblerButtons from "../AssemblerButtons";
 import { useDropdown } from "../../hooks/useDropdown";
 import { headerButtons } from "../../data/headerButtons";
 import { useManagerValue } from "../../hooks/useManagerValue";
-import { Manager } from "../../Manager";
-import { images } from "../../data/images";
 
 const Header = () => {
     const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ view: false, speed: false });
 
     const speed = useManagerValue("speed");
-    const isRunning = useManagerValue("isRunning");
-
-    function handleButton(button) {
-        switch(button) {
-            case "Assemble":
-                Manager.trigger("assemble");
-                break;
-            case "Run":
-                Manager.trigger("run");
-                break;
-            case "Pause":
-                Manager.trigger("pause");
-                break;
-            case "Step":
-                Manager.trigger("step");
-                break;
-            case "Reset":
-                Manager.trigger("reset");
-                break;
-        }
-    }
 
     return(
         <header>
@@ -58,27 +36,7 @@ const Header = () => {
 
                 <div className="header-left-group-divider"></div>
 
-                <div className="header-buttons header-regular-buttons">
-                    {headerButtons.regular.map((button, index) => {
-                        if(button.title === "Run") return <div
-                            key={index}
-                            className="header-regular-button"
-                            onClick={() => handleButton(isRunning ? "Pause" : "Run")}
-                        >
-                            <img src={isRunning ? images.pauseIcon : images.runIcon} alt={isRunning ? "PAUSE" : "RUN"} />
-                            <p>{isRunning ? "Pause" : "Run"}</p>
-                        </div>;
-                        
-                        return <button
-                            key={index}
-                            className="header-regular-button"
-                            onClick={() => handleButton(button.title)}
-                        >
-                            <img src={button.icon} alt={button.title.toUpperCase()} />
-                            <p>{button.title}</p>
-                        </button>;
-                    })}
-                </div>
+                <AssemblerButtons className="header-buttons header-assembler-buttons" />
             </div>
 
             <strong className="header-title">Assembly Reality</strong>
