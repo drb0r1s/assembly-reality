@@ -312,9 +312,6 @@ header .header-left-group .header-buttons .header-dropdown-button p {
   font-size: 14px;
   font-family: Roboto-Regular;
 }
-header .header-left-group .header-buttons .assembler-button:first-child {
-  width: 110px;
-}
 header .header-left-group .header-dropdown-buttons .header-dropdown-button {
   position: relative;
 }

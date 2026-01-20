@@ -1,7 +1,6 @@
 import { useManagerValue } from "../hooks/useManagerValue";
 import { Manager } from "../Manager";
 import { images } from "../data/images";
-import { headerButtons } from "../data/headerButtons";
 
 const AssemblerButtons = ({ className, isExpanded }) => {
     const isRunning = useManagerValue("isRunning");
@@ -35,7 +34,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     onClick={isCodeAssembled ? () => {} : () => handleButton("assemble")}
                 >
                     <img src={images.assembleIcon} alt="ASSEMBLE" />
-                    <p>{isCodeAssembled ? "Assembled" : "Assemble"}</p>
+                    <p>Assemble</p>
                 </button>
 
                 <button
@@ -47,8 +46,8 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                 </button>
 
                 <button
-                    className="assembler-button"
-                    onClick={() => handleButton("step")}
+                    className={`assembler-button ${isRunning ? "assembler-button-disabled" : ""}`}
+                    onClick={isRunning ? () => {} : () => handleButton("step")}
                 >
                     <img src={images.stepIcon} alt="STEP" />
                     <p>Step</p>
