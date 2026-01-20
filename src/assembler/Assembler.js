@@ -131,17 +131,13 @@ export class Assembler {
         return new Promise((resolve, reject) => {
             let instructionCounter = 0;
 
-            this.executionInterval.start(() => {                
+            this.executionInterval.start(() => {     
+                const mFlag = this.cpuRegisters.getSRFlag("M");
+                
                 // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
-                if(this.isHalted) {
-                    const mFlag = this.cpuRegisters.getSRFlag("M");
-                    if(this.isTimerActive && mFlag) return this.interrupts.checkTimer();
-                    
-                    if(this.isTimerActive) this.isTimerActive = false; // Let's update this variable to false, to keep the state of Assembler consistent.
-
-                    this.executionInterval.stop();
-                    this.refresh.stopInterval();
-
+                // Note that execution will only stop if interrupts are disabled (M = 0), otherwise we won't stop the execution.
+                if(this.isHalted && !mFlag) {    
+                    this.stop();
                     resolve({ executed: true });
 
                     return;
@@ -234,6 +230,13 @@ export class Assembler {
         this.refresh.stopInterval();
 
         return this.getAssemblerState();
+    }
+
+    stop() {
+        if(this.isTimerActive) this.isTimerActive = false;
+
+        this.executionInterval.stop();
+        this.refresh.stopInterval();
     }
 
     collectArgs(length) {
