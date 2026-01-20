@@ -18,7 +18,7 @@ export const Tokenizer = {
         register: new RegExp(`(?<=(\\s|,))(${Registers.expression.default.root})(?=\\s|,|;|\\/\\/|$)`, "g"),
         "number.hex": /(?<=(\s|,)0(x|X))([0-9A-Fa-f]+)(?=\s|,|;|\/\/|$)/g,
         "number.decimal": /(?<=(\s|,))([0-9]+)(?=\s|,|;|\/\/|$)/g,
-        "label.definition": /^[a-zA-Z0-9_]+(?=:)/g,
+        "label.definition": /(?<=(^\s*))[a-zA-Z0-9_]+(?=:)/g,
         "label.reference": /(?<=(\s|,))([a-zA-Z0-9_]+)(?=(\s|,|;|\/\/|$))/g,
         symbol: /[,:\(\)]/g,
     },

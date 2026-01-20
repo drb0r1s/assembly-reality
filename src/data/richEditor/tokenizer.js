@@ -25,7 +25,7 @@ export const tokenizer = {
         [/\s\[(0(x|X)[0-9A-Fa-f]+)\](?=\s|,|$)/, "memoryNumber"], // Memory hexadecimal
         
         // Labels
-        [/^[a-zA-Z0-9_]+(?=:)/, "definitionLabel"], // Definition label
+        [/^\s*[a-zA-Z0-9_]+(?=:)/, "definitionLabel"], // Definition label
         [/\s([a-zA-Z0-9_]+)(?=\s|,|$)/, "referenceLabel"], // Reference label
         [/\s\[([a-zA-Z0-9_]+)\](?=\s|,|$)/, "memoryReferenceLabel"], // Memory reference label
         
