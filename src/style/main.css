@@ -312,6 +312,9 @@ header .header-left-group .header-buttons .header-dropdown-button p {
   font-size: 14px;
   font-family: Roboto-Regular;
 }
+header .header-left-group .header-buttons .assembler-button:first-child {
+  width: 110px;
+}
 header .header-left-group .header-dropdown-buttons .header-dropdown-button {
   position: relative;
 }
@@ -1202,4 +1205,12 @@ header .header-title {
 
 .switch-active {
   background-color: #D9D9D9;
+}
+
+.assembler-buttons .assembler-button-disabled {
+  opacity: 0.5;
+  cursor: default !important;
+}
+.assembler-buttons .assembler-button-disabled:hover {
+  background-color: transparent !important;
 }/*# sourceMappingURL=main.css.map */

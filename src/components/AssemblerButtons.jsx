@@ -5,41 +5,63 @@ import { headerButtons } from "../data/headerButtons";
 
 const AssemblerButtons = ({ className, isExpanded }) => {
     const isRunning = useManagerValue("isRunning");
+    const isCodeAssembled = useManagerValue("isCodeAssembled");
     
     function handleButton(button) {
         return Manager.trigger(button);
     }
     
-    return (
-        <div className={className}>
-            {(isExpanded ? headerButtons.expandedAssembler : headerButtons.assembler).map((button, index) => {
-                if(button.id === "run") return <button
-                    key={index}
+    return(
+        <div className={`assembler-buttons ${className}`}>
+            {isExpanded ? <>
+                <button
+                    className="assembler-button"
+                    onClick={() => handleButton(isRunning ? "pause" : isCodeAssembled ? "run" : "assembleRun")}
+                >
+                    <img src={isRunning ? images.pauseIcon : isCodeAssembled ? images.runIcon : images.assembleRunIcon} alt={isRunning ? "PAUSE" : isCodeAssembled ? "RUN" : "ASSEMBLE & RUN"} />
+                    <p>{isRunning ? "Pause" : isCodeAssembled ? "Run" : "Assemble & Run"}</p>
+                </button>
+
+                <button
+                    className="assembler-button"
+                    onClick={() => handleButton("reset")}
+                >
+                    <img src={images.resetIcon} alt="RESET" />
+                    <p>Reset</p>
+                </button>
+            </> : <>
+                <button
+                    className={`assembler-button ${isCodeAssembled ? "assembler-button-disabled" : ""}`}
+                    onClick={isCodeAssembled ? () => {} : () => handleButton("assemble")}
+                >
+                    <img src={images.assembleIcon} alt="ASSEMBLE" />
+                    <p>{isCodeAssembled ? "Assembled" : "Assemble"}</p>
+                </button>
+
+                <button
                     className="assembler-button"
                     onClick={() => handleButton(isRunning ? "pause" : "run")}
                 >
                     <img src={isRunning ? images.pauseIcon : images.runIcon} alt={isRunning ? "PAUSE" : "RUN"} />
                     <p>{isRunning ? "Pause" : "Run"}</p>
-                </button>;
+                </button>
 
-                if(button.id === "assembleRun") return <button
-                    key={index}
+                <button
                     className="assembler-button"
-                    onClick={() => handleButton(isRunning ? "pause" : "assembleRun")}
+                    onClick={() => handleButton("step")}
                 >
-                    <img src={isRunning ? images.pauseIcon : images.assembleRunIcon} alt={isRunning ? "PAUSE" : "ASSEMBLE & RUN"} />
-                    <p>{isRunning ? "Pause" : "Assemble & Run"}</p>
-                </button>;
+                    <img src={images.stepIcon} alt="STEP" />
+                    <p>Step</p>
+                </button>
 
-                return <button
-                    key={index}
+                <button
                     className="assembler-button"
-                    onClick={() => handleButton(button.id)}
+                    onClick={() => handleButton("reset")}
                 >
-                    <img src={button.icon} alt={button.title.toUpperCase()} />
-                    <p>{button.title}</p>
-                </button>;
-            })}
+                    <img src={images.resetIcon} alt="RESET" />
+                    <p>Reset</p>
+                </button>
+            </>}
         </div>
     );
 }

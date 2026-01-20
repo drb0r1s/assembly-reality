@@ -34,12 +34,14 @@ self.onmessage = async e => {
             const { code, speed } = data;
 
             result = assembler.assemble(code);
+            
             if(result?.error) self.postMessage({ action, error: result.error });
+            else self.postMessage({ action: "assemble", data: result });
 
             result = await assembler.execute(speed);
             
             if(result?.error) self.postMessage({ action, error: result.error });
-            else self.postMessage({ action, data: result });
+            else self.postMessage({ action: "run", data: result });
 
             break;
         case "pause":

@@ -17,6 +17,8 @@ const App = () => {
     useEffect(() => {
         const unsubscribe = Manager.subscribe("reset", () => {
             if(!assemblerWorker) return;
+            
+            Manager.set("isCodeAssembled", false);
             assemblerWorker.postMessage({ action: "reset" });
         });
         

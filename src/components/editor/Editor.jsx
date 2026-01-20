@@ -14,6 +14,7 @@ const Editor = () => {
     const [error, setError] = useState({ type: "", content: "" });
 
     const speed = useManagerValue("speed");
+    const isCodeAssembled = useManagerValue("isCodeAssembled");
 
     // THIS AUTOSAVE SYSTEM IS TEMPORARILY NOT IN USE
     // AUTOSAVE GET
@@ -31,9 +32,13 @@ const Editor = () => {
         }
     }, [pages, codes]);*/
 
+    useEffect(() => { if(isCodeAssembled) Manager.set("isCodeAssembled", false) }, [codes[pages.active]]);
+
     useEffect(() => {
         const unsubscribeAssemble = Manager.subscribe("assemble", () => {
             if(!assemblerWorker) return;
+
+            Manager.set("isCodeAssembled", true);
             assemblerWorker.postMessage({ action: "assemble", data: codes[pages.active] });
         });
 
@@ -47,7 +52,9 @@ const Editor = () => {
         const unsubscribeAssembleRun = Manager.subscribe("assembleRun", () => {
             if(!assemblerWorker) return;
 
+            Manager.set("isCodeAssembled", true);
             Manager.set("isRunning", true);
+
             assemblerWorker.postMessage({ action: "assembleRun", data: { code: codes[pages.active], speed: parseInt(speed) } });
         });
 
