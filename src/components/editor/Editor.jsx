@@ -14,6 +14,8 @@ const Editor = () => {
     const [error, setError] = useState({ type: "", content: "" });
 
     const speed = useManagerValue("speed");
+
+    const isCodeEmpty = useManagerValue("isCodeEmpty");
     const isCodeAssembled = useManagerValue("isCodeAssembled");
 
     // THIS AUTOSAVE SYSTEM IS TEMPORARILY NOT IN USE
@@ -32,7 +34,12 @@ const Editor = () => {
         }
     }, [pages, codes]);*/
 
-    useEffect(() => { if(isCodeAssembled) Manager.set("isCodeAssembled", false) }, [codes[pages.active]]);
+    useEffect(() => {
+        if(codes[pages.active].length === 0 && !isCodeEmpty) Manager.set("isCodeEmpty", true);
+        else if(codes[pages.active].length > 0 && isCodeEmpty) Manager.set("isCodeEmpty", false);
+
+        if(isCodeAssembled) Manager.set("isCodeAssembled", false);
+    }, [codes[pages.active]]);
 
     useEffect(() => {
         const unsubscribeAssemble = Manager.subscribe("assemble", () => {
