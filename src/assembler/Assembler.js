@@ -17,7 +17,6 @@ import { Interrupts } from "./helpers/Interrupts";
 export class Assembler {
     constructor(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer) {
         this.speed = 4; // Default speed (4Hz).
-        this.isTimerActive = false;
         this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
         this.ioRegisters = new IORegisters(ioRegistersBuffer);
         this.ram = new RAM(ramBuffer);
@@ -248,10 +247,13 @@ export class Assembler {
     }
 
     stop() {
-        if(this.isTimerActive) this.isTimerActive = false;
-
         this.executionInterval.stop();
         this.refresh.stopInterval();
+    }
+
+    isTimerActive() {
+        const tmrPreload = this.ioRegisters.getValue("TMRPRELOAD");
+        return tmrPreload !== 0;
     }
 
     collectArgs(length) {
@@ -288,7 +290,6 @@ export class Assembler {
 
     reset() {
         this.speed = 4;
-        this.isTimerActive = false;
         this.cpuRegisters.reset();
         this.ioRegisters.reset();
         this.ram.reset();

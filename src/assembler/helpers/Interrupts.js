@@ -54,7 +54,7 @@ export class Interrupts {
     }
 
     checkTimer() {
-        if(!this.assembler.isTimerActive) return;
+        if(!this.assembler.isTimerActive()) return;
 
         const tmrCounter = this.assembler.ioRegisters.getValue("TMRCOUNTER");
         

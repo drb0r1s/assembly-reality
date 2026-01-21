@@ -263,7 +263,6 @@ export class Executable {
                     break;
                 // TMRPRELOAD
                 case 3:
-                    this.assembler.isTimerActive = true;
                     this.assembler.ioRegisters.update("TMRCOUNTER", this.assembler.ioRegisters.getValue("TMRPRELOAD"), { force: true });
                     break;
                 // VIDMODE
