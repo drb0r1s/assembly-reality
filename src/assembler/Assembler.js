@@ -41,6 +41,9 @@ export class Assembler {
 
     deactivate() {
         this.cpuRegisters.updateSR({ H: 1 });
+        // Sometimes assembler can be halted, but slow elements (RAM and CPU Registers) are not up-to-date.
+        // It's important that we trigger one more slow update, just in case, to make everything synchronous.
+        this.refresh.triggerSlow();
     }
     
     assemble(text) {
