@@ -40,12 +40,7 @@ export class Interrupts {
         // 2. If interrupts are enabled globally (M = 1) and interrupts for the requesting device are also enabled in the IRQMASK register:
 
         // (a) If the processor is at halt (H = 1), the halt flag is cleared (H = 0) and the processor becomes active.
-        const hFlag = this.assembler.cpuRegisters.getSRFlag("H");
-        
-        if(hFlag) {
-            this.assembler.isHalted = false;
-            this.assembler.cpuRegisters.updateSR({ H: 0 });
-        }
+        if(!this.assembler.isActive()) this.assembler.activate();
 
         // (b) The status register and the return address (IP) are pushed to the stack in this order.
         this.stack.push(this.assembler.cpuRegisters.getValue("SR"));
@@ -56,16 +51,6 @@ export class Interrupts {
 
         // (d) The processor jumps to address 0x0003 (interrupt vector).
         this.assembler.cpuRegisters.update("IP", 0x0003);
-
-        // IMPORTANT: If H was 1, the code is no longer being executed!
-        // In that case, we need to restart the execution process.
-        // Also, to make sure that UI is updated properly, we need to send a message to the main UI, once .execute() is done (the same reason why we do it in assemblerWorker's "run").
-        if(hFlag) {
-            let result = await this.assembler.execute(this.assembler.speed);
-
-            if(result?.error) self.postMessage({ action, error: result.error });
-            else self.postMessage({ action: "run", data: result });
-        }
     }
 
     checkTimer() {

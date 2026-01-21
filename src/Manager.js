@@ -6,7 +6,9 @@ export const Manager = (() => {
         ["isRunning", false],
         ["isDisplayExpanded", false],
         ["isAutosaveActive", false],
-        ["isCodeAssembled", false]
+        ["isCodeEmpty", true],
+        ["isCodeAssembled", false],
+        ["isCodeExecuted", false]
     ]);
     
     const listeners = new Map();

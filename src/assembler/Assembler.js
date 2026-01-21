@@ -17,7 +17,6 @@ import { Interrupts } from "./helpers/Interrupts";
 export class Assembler {
     constructor(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer) {
         this.speed = 4; // Default speed (4Hz).
-        this.isHalted = false; // End the executing of the code.
         this.isTimerActive = false;
         this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
         this.ioRegisters = new IORegisters(ioRegistersBuffer);
@@ -29,6 +28,19 @@ export class Assembler {
         this.refresh = new Refresh(this);
         this.executionInterval = new ExecutionInterval(() => this.speed);
         this.instants = new Instants(this.ram);
+    }
+
+    isActive() {
+        const hFlag = this.cpuRegisters.getSRFlag("H");
+        return hFlag === 0;
+    }
+
+    activate() {
+        this.cpuRegisters.updateSR({ H: 0 });
+    }
+
+    deactivate() {
+        this.cpuRegisters.updateSR({ H: 1 });
     }
     
     assemble(text) {
@@ -136,7 +148,7 @@ export class Assembler {
                 
                 // The Instruction Pointer (IP) has reached the instruction HLT, meaning the execution stops immediately.
                 // Note that execution will only stop if interrupts are disabled (M = 0), otherwise we won't stop the execution.
-                if(this.isHalted && !mFlag) {    
+                if(!this.isActive() && !mFlag) {    
                     this.stop();
                     resolve({ executed: true });
 
@@ -147,7 +159,7 @@ export class Assembler {
                 const cell = this.ram.matrix.getCell(row, column);
 
                 try {
-                    if(!this.isHalted) this.executeInstruction(cell, instructionCounter);
+                    if(this.isActive()) this.executeInstruction(cell, instructionCounter);
                 }
 
                 catch(error) {
@@ -167,7 +179,7 @@ export class Assembler {
         const cell = this.ram.matrix.getCell(row, column);
 
         try {
-            if(!this.isHalted) this.executeInstruction(cell);
+            if(this.isActive()) this.executeInstruction(cell);
         }
 
         catch(error) {
@@ -205,7 +217,7 @@ export class Assembler {
         else this.refresh.slow({ force: true });
     }
 
-    // After the instruction is executed, we need to move the instruction pointer to the next instruction in the memory.instructions array.
+    // After the instruction is executed, we need to move the instruction pointer to the next instruction in the ram.instructions array.
     // However, if executed instruction was a halt, jump, function call, function return, or interrupt return, we shouldn't move the instruction pointer.
     nextInstruction(executable, oldAddress) {
         const jumpInstructions = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET", "IRET"];
@@ -218,7 +230,7 @@ export class Assembler {
         const instructionIndex = this.ram.instructions.indexOf(this.cpuRegisters.getValue("IP"));
 
         if(instructionIndex === this.ram.instructions.length - 1) {
-            this.isHalted = true;
+            this.deactivate();
             this.cpuRegisters.update("IP", this.ram.matrix.getAddress(this.ram.free.i, this.ram.free.j));
         }
         
@@ -273,7 +285,6 @@ export class Assembler {
 
     reset() {
         this.speed = 4;
-        this.isHalted = false;
         this.isTimerActive = false;
         this.cpuRegisters.reset();
         this.ioRegisters.reset();

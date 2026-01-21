@@ -11,8 +11,7 @@ export class Executable {
     }
 
     halt() {
-        this.assembler.isHalted = true;
-        this.assembler.cpuRegisters.updateSR({ H: 1 });
+        this.assembler.deactivate();
     }
 
     move(executable, args) {
