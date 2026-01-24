@@ -1,5 +1,5 @@
 import { useManagerValue } from "../../hooks/useManagerValue";
-import { Manager } from "../../Manager";
+import { Manager } from "../../helpers/Manager";
 import { images } from "../../data/images";
 
 const HeaderDropdownView = () => {

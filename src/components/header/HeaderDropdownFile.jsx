@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Switch from "../Switch";
 import { useManagerValue } from "../../hooks/useManagerValue";
-import { Manager } from "../../Manager";
+import { Manager } from "../../helpers/Manager";
 import { images } from "../../data/images";
 
 const HeaderDropdownFile = () => {

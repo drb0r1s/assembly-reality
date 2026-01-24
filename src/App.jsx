@@ -6,7 +6,7 @@ import RightGroup from "./components/rightGroup/RightGroup";
 import ExpandedDisplay from "./components/ExpandedDisplay";
 import { GlobalContext } from "./context/GlobalContext";
 import { useManagerValue } from "./hooks/useManagerValue";
-import { Manager } from "./Manager";
+import { Manager } from "./helpers/Manager";
 
 const App = () => {
     const { assembler, assemblerWorker } = useContext(GlobalContext);

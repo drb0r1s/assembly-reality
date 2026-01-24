@@ -3,7 +3,7 @@ import DraggableHeader from "../DraggableHeader";
 import HighSpeedBlock from "../HighSpeedBlock";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
-import { Manager } from "../../Manager";
+import { Manager } from "../../helpers/Manager";
 
 const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const { assembler } = useContext(GlobalContext);

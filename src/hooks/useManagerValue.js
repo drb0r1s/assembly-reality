@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Manager } from "../Manager";
+import { Manager } from "../helpers/Manager";
 
 export const useManagerValue = key => {
     const [value, setValue] = useState(Manager.get(key));

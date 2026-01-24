@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Range from "../Range";
 import { useManagerValue } from "../../hooks/useManagerValue";
-import { Manager } from "../../Manager";
+import { Manager } from "../../helpers/Manager";
 
 const HeaderDropdownSpeed = () => {
     const initialSpeed = useManagerValue("speed");

@@ -4,7 +4,7 @@ import EditorError from "./EditorError";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { useCodeAutosave } from "../../hooks/useCodeAutosave";
-import { Manager } from "../../Manager";
+import { Manager } from "../../helpers/Manager";
 import { images } from "../../data/images";
 
 const Editor = () => {

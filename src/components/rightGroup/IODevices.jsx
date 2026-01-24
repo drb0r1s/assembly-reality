@@ -4,7 +4,7 @@ import Display from "../Display";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
 import { useManagerValue } from "../../hooks/useManagerValue";
-import { Manager } from "../../Manager";
+import { Manager } from "../../helpers/Manager";
 import { images } from "../../data/images";
 
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {

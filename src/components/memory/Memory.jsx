@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import HighSpeedBlock from "../HighSpeedBlock";
 import MemoryMap from "./MemoryMap";
 import { GlobalContext } from "../../context/GlobalContext";
-import { Manager } from "../../Manager";
+import { Manager } from "../../helpers/Manager";
 
 const Memory = () => {
     const { assembler } = useContext(GlobalContext);

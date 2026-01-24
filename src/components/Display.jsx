@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import AssemblerButtons from "./AssemblerButtons";
 import { GlobalContext } from "../context/GlobalContext";
-import { Manager } from "../Manager";
+import { Manager } from "../helpers/Manager";
 import { images } from "../data/images";
 
 const Display = ({ style, isExpanded }) => {
