@@ -3,6 +3,7 @@ import RichEditor from "../RichEditor";
 import EditorError from "./EditorError";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useManagerValue } from "../../hooks/useManagerValue";
+import { useCodeAutosave } from "../../hooks/useCodeAutosave";
 import { Manager } from "../../Manager";
 import { images } from "../../data/images";
 
@@ -18,21 +19,7 @@ const Editor = () => {
     const isCodeEmpty = useManagerValue("isCodeEmpty");
     const isCodeAssembled = useManagerValue("isCodeAssembled");
 
-    // THIS AUTOSAVE SYSTEM IS TEMPORARILY NOT IN USE
-    // AUTOSAVE GET
-    /*useEffect(() => {
-        const savedCode = JSON.parse(localStorage.getItem("ASSEMBLY_REALITY_CODE"));
-
-        setPages(savedCode.pages);
-        setCodes(savedCode.codes);
-    }, []);
-
-    // AUTOSAVE SET
-    useEffect(() => {
-        return () => {
-            localStorage.setItem("ASSEMBLY_REALITY_CODE", JSON.stringify({ pages, codes }));
-        }
-    }, [pages, codes]);*/
+    useCodeAutosave({ pages, setPages, codes, setCodes });
 
     useEffect(() => {
         if(codes[pages.active].length === 0 && !isCodeEmpty) Manager.set("isCodeEmpty", true);

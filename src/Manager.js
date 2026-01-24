@@ -5,7 +5,7 @@ export const Manager = (() => {
         ["isHighSpeed", false],
         ["isRunning", false],
         ["isDisplayExpanded", false],
-        ["isAutosaveActive", false],
+        ["isAutosaveActive", getIsAutosaveActive()],
         ["isCodeEmpty", true],
         ["isCodeAssembled", false],
         ["isCodeExecuted", false]
@@ -44,3 +44,13 @@ export const Manager = (() => {
         }
     };
 })();
+
+function getIsAutosaveActive() {
+    const isAutosaveActive = localStorage.getItem("ASSEMBLY_REALITY_IS_AUTOSAVE_ACTIVE");
+    
+    if(isAutosaveActive === "true") return true;
+    if(isAutosaveActive === "false") return false;
+
+    localStorage.setItem("ASSEMBLY_REALITY_IS_AUTOSAVE_ACTIVE", false);
+    return false;
+}

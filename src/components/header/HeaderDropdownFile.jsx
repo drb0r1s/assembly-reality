@@ -76,7 +76,10 @@ const HeaderDropdownFile = () => {
 
             <button
                 className="header-dropdown-file-autosave-button"
-                onClick={() => Manager.set("isAutosaveActive", !isAutosaveActive)}
+                onClick={() => {
+                    localStorage.setItem("ASSEMBLY_REALITY_IS_AUTOSAVE_ACTIVE", !isAutosaveActive);
+                    Manager.set("isAutosaveActive", !isAutosaveActive);
+                }}
             >
                 <div className="header-dropdown-file-autosave-button-left-group">
                     <img src={images.saveIcon} alt="SAVE" />
