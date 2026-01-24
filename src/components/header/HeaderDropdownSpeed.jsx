@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Range from "../Range";
 import { useManagerValue } from "../../hooks/useManagerValue";
+import { Autosave } from "../../helpers/Autosave";
 import { Manager } from "../../helpers/Manager";
 
 const HeaderDropdownSpeed = () => {
@@ -14,6 +15,7 @@ const HeaderDropdownSpeed = () => {
     useEffect(() => {
         if(speed === initialSpeed) return;
 
+        Autosave.setItem("SPEED", speed);
         Manager.set("speed", speed);
         
         if(speed >= 10000 && !isHighSpeed) Manager.set("isHighSpeed", true);

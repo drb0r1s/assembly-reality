@@ -6,13 +6,8 @@ export const useCodeAutosave = ({ pages, setPages, codes, setCodes }) => {
     const isAutosaveActive = useManagerValue("isAutosaveActive");
     
     // AUTOSAVE GET
-    useEffect(() => {
-        if(!isAutosaveActive) {
-            Autosave.setItem("CODE", null);
-            return;
-        }
-    
-        const savedCode = Autosave.getItem("CODE");
+    useEffect(() => {    
+        const savedCode = Autosave.conditionalGetItem("CODE");
         if(!savedCode || !savedCode?.pages || !savedCode?.codes) return;
     
         if(typeof savedCode === "object") {
@@ -30,5 +25,5 @@ export const useCodeAutosave = ({ pages, setPages, codes, setCodes }) => {
         }, 500);
             
         return () => clearTimeout(id);
-    }, [pages, codes]);
+    }, [isAutosaveActive, pages, codes]);
 }

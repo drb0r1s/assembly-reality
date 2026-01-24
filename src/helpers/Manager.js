@@ -3,7 +3,7 @@ import { Autosave } from "./Autosave";
 export const Manager = (() => {
     const values = new Map([
         ["view", { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true }],
-        ["speed", 4],
+        ["speed", Autosave.conditionalGetItem("SPEED")],
         ["isHighSpeed", false],
         ["isRunning", false],
         ["isDisplayExpanded", false],
