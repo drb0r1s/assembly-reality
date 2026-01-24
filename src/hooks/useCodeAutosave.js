@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useManagerValue } from "./useManagerValue";
+import { Autosave } from "../helpers/Autosave";
 
 export const useCodeAutosave = ({ pages, setPages, codes, setCodes }) => {
     const isAutosaveActive = useManagerValue("isAutosaveActive");
@@ -7,11 +8,11 @@ export const useCodeAutosave = ({ pages, setPages, codes, setCodes }) => {
     // AUTOSAVE GET
     useEffect(() => {
         if(!isAutosaveActive) {
-            localStorage.setItem("ASSEMBLY_REALITY_CODE", null);
+            Autosave.setItem("CODE", null);
             return;
         }
     
-        const savedCode = JSON.parse(localStorage.getItem("ASSEMBLY_REALITY_CODE"));
+        const savedCode = Autosave.getItem("CODE");
         if(!savedCode || !savedCode?.pages || !savedCode?.codes) return;
     
         if(typeof savedCode === "object") {
@@ -25,7 +26,7 @@ export const useCodeAutosave = ({ pages, setPages, codes, setCodes }) => {
         if(!isAutosaveActive) return;
 
         const id = setTimeout(() => {
-            localStorage.setItem("ASSEMBLY_REALITY_CODE", JSON.stringify({ pages, codes }));
+            Autosave.setItem("CODE", { pages, codes });
         }, 500);
             
         return () => clearTimeout(id);

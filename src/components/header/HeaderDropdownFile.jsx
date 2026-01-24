@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Switch from "../Switch";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../helpers/Manager";
+import { Autosave } from "../../helpers/Autosave";
 import { images } from "../../data/images";
 
 const HeaderDropdownFile = () => {
@@ -77,7 +78,7 @@ const HeaderDropdownFile = () => {
             <button
                 className="header-dropdown-file-autosave-button"
                 onClick={() => {
-                    localStorage.setItem("ASSEMBLY_REALITY_IS_AUTOSAVE_ACTIVE", !isAutosaveActive);
+                    Autosave.setItem("IS_AUTOSAVE_ACTIVE", !isAutosaveActive);
                     Manager.set("isAutosaveActive", !isAutosaveActive);
                 }}
             >

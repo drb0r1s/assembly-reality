@@ -1,3 +1,5 @@
+import { Autosave } from "./Autosave";
+
 export const Manager = (() => {
     const values = new Map([
         ["view", { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true }],
@@ -5,7 +7,7 @@ export const Manager = (() => {
         ["isHighSpeed", false],
         ["isRunning", false],
         ["isDisplayExpanded", false],
-        ["isAutosaveActive", getIsAutosaveActive()],
+        ["isAutosaveActive", Autosave.getItem("IS_AUTOSAVE_ACTIVE")],
         ["isCodeEmpty", true],
         ["isCodeAssembled", false],
         ["isCodeExecuted", false]
@@ -44,13 +46,3 @@ export const Manager = (() => {
         }
     };
 })();
-
-function getIsAutosaveActive() {
-    const isAutosaveActive = localStorage.getItem("ASSEMBLY_REALITY_IS_AUTOSAVE_ACTIVE");
-    
-    if(isAutosaveActive === "true") return true;
-    if(isAutosaveActive === "false") return false;
-
-    localStorage.setItem("ASSEMBLY_REALITY_IS_AUTOSAVE_ACTIVE", false);
-    return false;
-}

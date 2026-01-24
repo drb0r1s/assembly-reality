@@ -6,6 +6,7 @@ import RightGroup from "./components/rightGroup/RightGroup";
 import ExpandedDisplay from "./components/ExpandedDisplay";
 import { GlobalContext } from "./context/GlobalContext";
 import { useManagerValue } from "./hooks/useManagerValue";
+import { Autosave } from "./helpers/Autosave";
 import { Manager } from "./helpers/Manager";
 
 const App = () => {
@@ -13,6 +14,8 @@ const App = () => {
     
     const view = useManagerValue("view");
     const isDisplayExpanded = useManagerValue("isDisplayExpanded");
+
+    useEffect(Autosave.initialize, []);
 
     useEffect(() => {
         const unsubscribe = Manager.subscribe("reset", () => {
