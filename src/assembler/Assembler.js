@@ -3,12 +3,13 @@ import { CPURegisters } from "./components/CPURegisters";
 import { IORegisters } from "./components/IORegisters";
 import { RAM } from "./components/RAM";
 import { Graphics } from "./components/Graphics";
-import { Labels } from "./components/Labels";
 import { Keyboard } from "./components/Keyboard";
 import { Tokenizer } from "./frontend/Tokenizer";
 import { AST } from "./frontend/AST";
 import { Instructions } from "./frontend/Instructions";
 import { Instants } from "./frontend/Instants";
+import { Labels } from "./frontend/Labels";
+import { Lines } from "./frontend/Lines";
 import { Executor } from "./backend/Executor";
 import { Refresh } from "./structures/Refresh";
 import { ExecutionInterval } from "./structures/ExecutionInterval";
@@ -22,6 +23,7 @@ export class Assembler {
         this.ram = new RAM(ramBuffer);
         this.graphics = new Graphics(this, graphicsBuffer);
         this.labels = new Labels();
+        this.lines = new Lines();
         this.interrupts = new Interrupts(this);
         this.keyboard = new Keyboard(this.ioRegisters, this.interrupts);
         this.refresh = new Refresh(this);
@@ -67,7 +69,7 @@ export class Assembler {
         
             this.cpuRegisters.update("IP", this.ram.instructions[0]);
 
-            console.log(ast, this.labels);
+            console.log(ast, this.labels, this.lines);
         }
 
         catch(error) {
@@ -79,6 +81,10 @@ export class Assembler {
             ram: {
                 instructions: this.ram.instructions,
                 stackStart: this.ram.stackStart
+            },
+
+            lines: {
+                collection: this.lines.collection
             }
         };
     }
@@ -90,6 +96,8 @@ export class Assembler {
 
         if(statement.type === "Instruction") {
             const lengthOfInstruction = Instructions[statement.name](statement, { getLength: true });
+            
+            this.lines.collect(statement.line, this.ram);
             this.ram.advance(lengthOfInstruction);
         }
 
@@ -295,6 +303,7 @@ export class Assembler {
         this.ram.reset();
         this.graphics.reset();
         this.labels.reset();
+        this.lines.reset();
         this.keyboard.reset();
         this.refresh.reset();
         this.executionInterval.reset();
