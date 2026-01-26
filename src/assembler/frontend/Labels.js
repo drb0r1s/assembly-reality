@@ -5,15 +5,15 @@ export class Labels {
         this.collection = {};
     }
 
-    collect(label, memory) {
+    collect(label, ram) {
         if(this.collection[label.name]) throw new AssemblerError("DuplicatedLabel", { label: label.name }, label.line);
 
-        const row = memory.free.i;
-        const column = memory.free.j;
+        const row = ram.free.i;
+        const column = ram.free.j;
 
         this.collection = {
             ...this.collection,
-            [label.name]: memory.matrix.getAddress(row, column).toString(16)
+            [label.name]: ram.matrix.getAddress(row, column).toString(16)
         };
     }
 
