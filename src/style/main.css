@@ -587,6 +587,7 @@ header .header-title {
   font-family: Roboto-Medium;
   border-left: 1px solid #2F3336;
   padding: 5px;
+  cursor: default;
 }
 .memory .memory-map-holder .memory-map .memory-map-columns p:first-child {
   width: 28px;
@@ -624,6 +625,7 @@ header .header-title {
   font-size: 13px;
   font-family: Roboto-Regular;
   padding: 5px;
+  cursor: default;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix {
   width: 100%;
@@ -642,6 +644,7 @@ header .header-title {
   font-family: SourceCodePro-Regular;
   border-left: 1px solid #2F3336;
   padding: 5px;
+  cursor: default;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element:last-child {
   border-right: 1px solid #2F3336;
@@ -655,10 +658,22 @@ header .header-title {
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction-pointer {
   background-color: #2F608B;
+  cursor: pointer;
+  transition: 300ms;
+}
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction-pointer:hover {
+  color: white;
+  background-color: #10284F;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction {
   color: black;
   background-color: #79b4eb;
+  cursor: pointer;
+  transition: 300ms;
+}
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction:hover {
+  color: white;
+  background-color: #10284F;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-display {
   background-color: #0F0F0F;
@@ -1210,4 +1225,12 @@ header .header-title {
 }
 .assembler-buttons .assembler-button-disabled:hover {
   background-color: transparent !important;
+}
+
+.rich-editor-highlighted-line {
+  background-color: #10284F;
+}
+
+.rich-editor-highlighted-line-gutter {
+  border-left: 3px solid #405A85;
 }/*# sourceMappingURL=main.css.map */

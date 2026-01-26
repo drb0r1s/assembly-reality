@@ -104,7 +104,8 @@ const Editor = () => {
 
             switch(action) {
                 case "assemble":
-                    Manager.trigger("ramUpdate", data);
+                    Manager.trigger("ramUpdate", data?.ram);
+                    Manager.trigger("linesUpdate", data?.lines);
                     Manager.trigger("cpuRegistersPing");
                     Manager.trigger("graphicsReset"); // If something was left on the canvas, it is a good idea to reset it, just in case.
 
@@ -119,6 +120,9 @@ const Editor = () => {
                     Manager.trigger("ramUpdate", data);
                     Manager.trigger("cpuRegistersPing");
 
+                    break;
+                case "step":
+                    console.log("a")
                     break;
                 case "reset":
                     Manager.set("isRunning", false);    

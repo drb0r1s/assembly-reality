@@ -18,10 +18,10 @@ const Memory = () => {
     const [isSplitActive, setIsSplitActive] = useState(false);
     
     useEffect(() => {
-        const unsubscribeRAMUpdate = Manager.subscribe("ramUpdate", data => {
-            if(data?.ram) setRAM({
-                instructions: data.ram.instructions,
-                stackStart: data.ram.stackStart
+        const unsubscribeRAMUpdate = Manager.subscribe("ramUpdate", ram => {
+            if(ram) setRAM({
+                instructions: ram.instructions,
+                stackStart: ram.stackStart
             });
 
             setCPURegisters(assembler.cpuRegisters.construct());
@@ -31,10 +31,15 @@ const Memory = () => {
             setRAM(initialRAM);
             setCPURegisters(assembler.cpuRegisters.construct());
         });
+
+        const unsubscribeLinesUpdate = Manager.subscribe("linesUpdate", lines => {
+            assembler.lines.collection = lines.collection;
+        });
     
         return () => {
             unsubscribeRAMUpdate();
             unsubscribeReset();
+            unsubscribeLinesUpdate();
         };
     }, []);
 

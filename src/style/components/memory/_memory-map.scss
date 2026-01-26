@@ -24,6 +24,7 @@
             font-family: Roboto-Medium;
             border-left: 1px solid #2F3336;
             padding: 5px;
+            cursor: default;
 
             &:first-child {
                 width: 28px;
@@ -56,6 +57,7 @@
                 font-size: 13px;
                 font-family: Roboto-Regular;
                 padding: 5px;
+                cursor: default;
             }
         }
 
@@ -73,6 +75,7 @@
                 font-family: SourceCodePro-Regular;
                 border-left: 1px solid #2F3336;
                 padding: 5px;
+                cursor: default;
 
                 &:last-child {
                     border-right: 1px solid #2F3336;
@@ -90,11 +93,25 @@
             
             .memory-map-matrix-element-instruction-pointer {
                 background-color: $ipColor;
+                cursor: pointer;
+                transition: 300ms;
+
+                &:hover {
+                    color: white;
+                    background-color: #10284F;
+                }
             }
 
             .memory-map-matrix-element-instruction {
                 color: black;
                 background-color: $ipLightColor;
+                cursor: pointer;
+                transition: 300ms;
+
+                &:hover {
+                    color: white;
+                    background-color: #10284F;
+                }
             }
 
             .memory-map-matrix-element-display {

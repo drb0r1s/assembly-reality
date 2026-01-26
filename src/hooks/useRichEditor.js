@@ -6,6 +6,9 @@ import { Keywords } from "../assembler/frontend/Keywords";
 
 export const useRichEditor = () => {
     const editorRef = useRef(null);
+    const decorationIdsRef = useRef([]);
+    const highlightLineRef = useRef(() => {});
+
     const monaco = useMonaco();
 
     useEffect(() => {
@@ -55,8 +58,26 @@ export const useRichEditor = () => {
         }
     }, [monaco]);
 
-    function handleEditorDidMount(editor) {
+    function handleEditorDidMount(editor, monacoInstance) {
         editorRef.current = editor;
+
+        highlightLineRef.current = line => {
+            decorationIdsRef.current = editorRef.current.deltaDecorations(
+                decorationIdsRef.current,
+                [
+                    {
+                        range: new monacoInstance.Range(line, 1, line, 1),
+                        options: {
+                            isWholeLine: true,
+                            className: "rich-editor-highlighted-line",
+                            linesDecorationsClassName: "rich-editor-highlighted-line-gutter"
+                        }
+                    }
+                ]
+            );
+
+            editorRef.current.revealLineInCenterIfOutsideViewport(line);
+        }
     }
 
     function getLabel(text) {
@@ -82,5 +103,9 @@ export const useRichEditor = () => {
         return newArray;
     }
 
-    return handleEditorDidMount;
+    function highlightLine(line) {
+        highlightLineRef.current(line);
+    }
+
+    return { handleEditorDidMount, highlightLine };
 }

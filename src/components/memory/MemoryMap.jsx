@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
+import { Manager } from "../../helpers/Manager";
 
 const MemoryMap = ({ ram, cpuRegisters, isSplitActive }) => {
     const { assembler } = useContext(GlobalContext);
@@ -27,6 +28,11 @@ const MemoryMap = ({ ram, cpuRegisters, isSplitActive }) => {
         return "";
     }
 
+    function highlightLine(index) {
+        const line = assembler.lines.collection[index];
+        Manager.trigger("highlightLine", line);
+    }
+
     return (
         <div
             className="memory-map"
@@ -51,6 +57,7 @@ const MemoryMap = ({ ram, cpuRegisters, isSplitActive }) => {
                         return <p
                             key={index}
                             className={`memory-map-matrix-element ${getCellClass(index)}`}
+                            onClick={() => highlightLine(index)}
                         >{element.toString(16).toUpperCase().padStart(2, "0")}</p>;
                     })}
                 </div>
