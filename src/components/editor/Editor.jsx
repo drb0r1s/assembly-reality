@@ -133,7 +133,7 @@ const Editor = () => {
                     Manager.trigger("ramReset");
                     Manager.trigger("cpuRegistersPing");
                     Manager.trigger("ioRegistersPing");
-                    Manager.trigger("ioRegistersTimerPing");
+                    Manager.trigger("ioRegistersSlowPing");
                     Manager.trigger("graphicsReset");
                     Manager.trigger("unhighlightLine");
 
@@ -144,8 +144,8 @@ const Editor = () => {
                 case "ioRegistersPing":
                     Manager.trigger("ioRegistersPing");
                     break;
-                case "ioRegistersTimerPing":
-                    Manager.trigger("ioRegistersTimerPing");
+                case "ioRegistersSlowPing":
+                    Manager.trigger("ioRegistersSlowPing");
                     break;
                 case "graphicsEnabled":
                     Manager.trigger("graphicsEnabled", data);

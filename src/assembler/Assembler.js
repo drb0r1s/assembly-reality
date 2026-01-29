@@ -226,7 +226,7 @@ export class Assembler {
         }
 
         // Otherwise, we're just executing one instruction ("step" mode).
-        else this.refresh.slow({ force: true });
+        else this.refresh.slow({ force: true, step: true });
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the ram.instructions array.

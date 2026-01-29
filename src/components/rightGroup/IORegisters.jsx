@@ -24,17 +24,25 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
         // TMRCOUNTER will be updated through the update system.
         const unsubscribeIORegistersPing = Manager.subscribe("ioRegistersPing", () => setIORegisters(prevIORegisters => { return {
             ...assembler.ioRegisters.construct(),
-            TMRCOUNTER: prevIORegisters.TMRCOUNTER
+            TMRCOUNTER: prevIORegisters.TMRCOUNTER,
+            VIDMODE: prevIORegisters.VIDMODE,
+            VIDADDR: prevIORegisters.VIDADDR,
+            VIDDATA: prevIORegisters.VIDDATA,
+            RNDGEN: prevIORegisters.RNDGEN
         }}));
 
-        const unsubscribeIORegistersTimerPing = Manager.subscribe("ioRegistersTimerPing", () => setIORegisters(prevIORegisters => { return {
+        const unsubscribeIORegistersSlowPing = Manager.subscribe("ioRegistersSlowPing", () => setIORegisters(prevIORegisters => { return {
             ...prevIORegisters,
-            TMRCOUNTER: assembler.ioRegisters.getValue("TMRCOUNTER")
+            TMRCOUNTER: assembler.ioRegisters.getValue("TMRCOUNTER"),
+            VIDMODE: assembler.ioRegisters.getValue("VIDMODE"),
+            VIDADDR: assembler.ioRegisters.getValue("VIDADDR"),
+            VIDDATA: assembler.ioRegisters.getValue("VIDDATA"),
+            RNDGEN: assembler.ioRegisters.getValue("RNDGEN")
         }}));
 
         return () => {
             unsubscribeIORegistersPing();
-            unsubscribeIORegistersTimerPing();
+            unsubscribeIORegistersSlowPing();
         };
     }, []);
     

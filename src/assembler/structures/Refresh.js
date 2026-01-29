@@ -36,8 +36,9 @@ export class Refresh {
             this.slowFlag = false;
             self.postMessage({ action: "instructionExecuted", data: this.assembler.getAssemblerState() });
 
-            // If timer is active, it is important to update TMRCOUNTER, since it's updates are based on the updating system, not like other IO Registers.
-            if(this.assembler.isTimerActive()) self.postMessage({ action: "ioRegistersTimerPing" });
+            self.postMessage({ action: "ioRegistersSlowPing" });
+
+            if(options?.step) this.graphics();
         }
     }
 
