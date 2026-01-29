@@ -197,7 +197,8 @@ export class Assembler {
             else console.error(error);
         }
 
-        return this.getAssemblerState();
+        const address = this.ram.matrix.getAddress(row, column);
+        return this.lines.collection[address];
     }
 
     executeInstruction(cell, instructionCounter = null) {
@@ -285,15 +286,12 @@ export class Assembler {
     }
 
     getAssemblerState() {
-        // If speed is too high (over 10kHz), we won't update cpuRegisters and RAM.
-        if(this.speed < 10000) return {
+        return {
             ram: {
                 instructions: this.ram.instructions,
                 stackStart: this.ram.stackStart
             }
         };
-
-        return {};
     }
 
     reset() {

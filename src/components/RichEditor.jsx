@@ -1,18 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Editor from "@monaco-editor/react";
 import { useRichEditor } from "../hooks/useRichEditor";
-import { Manager } from "../helpers/Manager";
 
 const RichEditor = ({ code, onChange }) => {
-    const { handleEditorDidMount, highlightLine } = useRichEditor();
-
-    useEffect(() => {
-        const unsubscribeHighlightLine = Manager.subscribe("highlightLine", line => {
-            highlightLine(line);
-        });
-
-        return unsubscribeHighlightLine;
-    }, []);
+    const handleEditorDidMount = useRichEditor();
     
     return(
         <div className="rich-editor" style={{ height: "calc(100% - 40px)", width: "100%" }}>

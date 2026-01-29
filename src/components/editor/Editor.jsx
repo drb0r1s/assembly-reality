@@ -117,12 +117,12 @@ const Editor = () => {
                 case "instructionExecuted":
                     if(speed >= 10000) return;
 
-                    Manager.trigger("ramUpdate", data);
+                    Manager.trigger("ramUpdate", data?.ram);
                     Manager.trigger("cpuRegistersPing");
 
                     break;
                 case "step":
-                    console.log("a")
+                    Manager.trigger("highlightLine", data);
                     break;
                 case "reset":
                     Manager.set("isRunning", false);    
@@ -132,6 +132,7 @@ const Editor = () => {
                     Manager.trigger("ioRegistersPing");
                     Manager.trigger("ioRegistersTimerPing");
                     Manager.trigger("graphicsReset");
+                    Manager.trigger("unhighlightLine");
 
                     break;
                 case "textDisplayPing":

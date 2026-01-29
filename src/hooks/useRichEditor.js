@@ -3,6 +3,7 @@ import { useMonaco } from "@monaco-editor/react";
 import { tokenizer } from "../data/richEditor/tokenizer";
 import { colors, rules } from "../data/richEditor/style";
 import { Keywords } from "../assembler/frontend/Keywords";
+import { Manager } from "../helpers/Manager";
 
 export const useRichEditor = () => {
     const editorRef = useRef(null);
@@ -10,6 +11,21 @@ export const useRichEditor = () => {
     const highlightLineRef = useRef(() => {});
 
     const monaco = useMonaco();
+
+    useEffect(() => {
+        const unsubscribeHighlightLine = Manager.subscribe("highlightLine", line => {
+            highlightLine(line);
+        });
+
+        const unsubscribeUnhighlightLine = Manager.subscribe("unhighlightLine", () => {
+            unhighlightLine();
+        });
+
+        return () => {
+            unsubscribeHighlightLine();
+            unsubscribeUnhighlightLine();
+        };
+    }, []);
 
     useEffect(() => {
         if(!monaco) return;
@@ -78,6 +94,8 @@ export const useRichEditor = () => {
 
             editorRef.current.revealLineInCenterIfOutsideViewport(line);
         }
+
+        editor.onMouseDown(unhighlightLine);
     }
 
     function getLabel(text) {
@@ -107,5 +125,12 @@ export const useRichEditor = () => {
         highlightLineRef.current(line);
     }
 
-    return { handleEditorDidMount, highlightLine };
+    function unhighlightLine() {
+        decorationIdsRef.current = editorRef.current.deltaDecorations(
+            decorationIdsRef.current,
+            []
+        );
+    }
+
+    return handleEditorDidMount;
 }
