@@ -29,6 +29,7 @@ export class Assembler {
         this.refresh = new Refresh(this);
         this.executionInterval = new ExecutionInterval(() => this.speed);
         this.instants = new Instants(this.ram);
+        this.executor = new Executor(this);
     }
 
     isActive() {
@@ -204,15 +205,13 @@ export class Assembler {
     }
 
     executeInstruction(cell, instructionCounter = null) {
-        const executor = new Executor(this);
-
-        const executable = executor.codes[cell];
+        const executable = this.executor.codes[cell];
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
         const args = this.collectArgs(executable.length);
         const oldAddress = this.cpuRegisters.getValue("IP");
 
-        executor[executable.instruction](executable, args);
+        this.executor[executable.instruction](executable, args);
 
         this.nextInstruction(executable, oldAddress);
 
