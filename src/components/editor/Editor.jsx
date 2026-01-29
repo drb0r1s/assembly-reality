@@ -113,6 +113,8 @@ const Editor = () => {
                 // We receive the message with the action "run" only when the execution has ended.
                 case "run":
                     Manager.set("isRunning", false);
+                    Manager.set("isExecuted", true);
+                    
                     break;
                 case "instructionExecuted":
                     if(speed >= 10000) return;
@@ -126,6 +128,7 @@ const Editor = () => {
                     break;
                 case "reset":
                     Manager.set("isRunning", false);    
+                    Manager.set("isExecuted", false);
                 
                     Manager.trigger("ramReset");
                     Manager.trigger("cpuRegistersPing");

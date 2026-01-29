@@ -185,11 +185,13 @@ export class Assembler {
     }
 
     executeOne() {
+        if(!this.isActive()) return -1; // -1 = No line to be highlighted.
+
         const [row, column] = this.ram.matrix.getLocation(this.cpuRegisters.getValue("IP"));
         const cell = this.ram.matrix.getCell(row, column);
 
         try {
-            if(this.isActive()) this.executeInstruction(cell);
+            this.executeInstruction(cell);
         }
 
         catch(error) {

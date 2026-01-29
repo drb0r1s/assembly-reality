@@ -4,12 +4,16 @@ import { images } from "../data/images";
 
 const AssemblerButtons = ({ className, isExpanded }) => {
     const isRunning = useManagerValue("isRunning");
+    const isExecuted = useManagerValue("isExecuted");
 
     const isCodeEmpty = useManagerValue("isCodeEmpty");
     const isCodeAssembled = useManagerValue("isCodeAssembled");
 
     const isAssembleDisabled = isCodeEmpty || isCodeAssembled;
-    const isAssembleRunDisabled = !isRunning && isCodeEmpty;
+    const isAssembleRunDisabled = (!isRunning && isCodeEmpty) || isExecuted;
+
+    const isRunDisabled = isExecuted || !isCodeAssembled;
+    const isStepDisabled = isRunning || isExecuted || !isCodeAssembled;
     
     function handleButton(button) {
         return Manager.trigger(button);
@@ -43,24 +47,24 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                 </button>
 
                 <button
-                    className="assembler-button"
-                    onClick={() => handleButton(isRunning ? "pause" : "run")}
+                    className={`assembler-button ${isRunDisabled ? "assembler-button-disabled" : ""}`}
+                    onClick={isRunDisabled ? () => {} : () => handleButton(isRunning ? "pause" : "run")}
                 >
                     <img src={isRunning ? images.pauseIcon : images.runIcon} alt={isRunning ? "PAUSE" : "RUN"} />
                     <p>{isRunning ? "Pause" : "Run"}</p>
                 </button>
 
                 <button
-                    className={`assembler-button ${isRunning ? "assembler-button-disabled" : ""}`}
-                    onClick={isRunning ? () => {} : () => handleButton("step")}
+                    className={`assembler-button ${isStepDisabled ? "assembler-button-disabled" : ""}`}
+                    onClick={isStepDisabled ? () => {} : () => handleButton("step")}
                 >
                     <img src={images.stepIcon} alt="STEP" />
                     <p>Step</p>
                 </button>
 
                 <button
-                    className="assembler-button"
-                    onClick={() => handleButton("reset")}
+                    className={`assembler-button ${!isCodeAssembled ? "assembler-button-disabled" : ""}`}
+                    onClick={!isCodeAssembled ? () => {} : () => handleButton("reset")}
                 >
                     <img src={images.resetIcon} alt="RESET" />
                     <p>Reset</p>

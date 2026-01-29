@@ -6,11 +6,11 @@ export const Manager = (() => {
         ["speed", Autosave.conditionalGetItem("SPEED")],
         ["isHighSpeed", false],
         ["isRunning", false],
+        ["isExecuted", false],
         ["isDisplayExpanded", false],
         ["isAutosaveActive", Autosave.getItem("IS_AUTOSAVE_ACTIVE")],
         ["isCodeEmpty", true],
-        ["isCodeAssembled", false],
-        ["isCodeExecuted", false]
+        ["isCodeAssembled", false]
     ]);
     
     const listeners = new Map();

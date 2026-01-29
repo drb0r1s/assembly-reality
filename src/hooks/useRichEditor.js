@@ -14,6 +14,7 @@ export const useRichEditor = () => {
 
     useEffect(() => {
         const unsubscribeHighlightLine = Manager.subscribe("highlightLine", line => {
+            if(line === -1 || line === undefined) return;
             highlightLine(line);
         });
 
