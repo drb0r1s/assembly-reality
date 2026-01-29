@@ -14,6 +14,16 @@ export const Manager = (() => {
     ]);
     
     const listeners = new Map();
+    const events = new Map();
+
+    let isSequence = false;
+    
+    function triggerEvent(event, data) {
+        const eventListeners = listeners.get(event);
+        if(!eventListeners) return;
+
+        for(const eventListener of eventListeners) eventListener(data);
+    }
 
     return {
         get: key => {
@@ -22,7 +32,9 @@ export const Manager = (() => {
 
         set: (key, value) => {
             values.set(key, value);
-            Manager.trigger(key, value);
+
+            if(isSequence) events.set(key, value);
+            else triggerEvent(key, value);
         },
 
         delete: key => {
@@ -30,10 +42,12 @@ export const Manager = (() => {
         },
 
         trigger: (event, data) => {
-            const eventListeners = listeners.get(event);
-            if(!eventListeners) return;
-            
-            for(const callback of eventListeners) callback(data);
+            if(isSequence) {
+                events.set(event, data);
+                return;
+            }
+
+            triggerEvent(event, data);
         },
 
         subscribe: (event, callback) => {
@@ -43,6 +57,16 @@ export const Manager = (() => {
             eventListeners.add(callback);
 
             return () => eventListeners.delete(callback);
+        },
+
+        sequence: callback => {
+            isSequence = true;
+            callback();
+            isSequence = false;
+
+            for(const [event, data] of events) triggerEvent(event, data);
+
+            events.clear();
         }
     };
 })();
