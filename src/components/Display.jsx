@@ -7,6 +7,8 @@ import { images } from "../data/images";
 const Display = ({ style, isExpanded }) => {
     const { assembler, assemblerWorker, sharedCanvas } = useContext(GlobalContext);
         
+    const matrix = assembler.ram.matrix.getMatrix().slice(-32);
+
     const [_, setMemoryVersion] = useState(0);
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
     const [isCanvasStrongDisabled, setIsCanvasStrongDisabled] = useState(false);
@@ -336,7 +338,9 @@ const Display = ({ style, isExpanded }) => {
             </div>
 
             <div className="display-text-display">
-                {assembler.ram.matrix.arrayify({ textDisplay: true }).map((element, index) => {
+                {Array.from({ length: matrix.length }, (_, index) => {
+                    const element = matrix[index];
+
                     return <p
                         key={index}
                         className="display-text-display-element"

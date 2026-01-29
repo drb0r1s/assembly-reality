@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import HighSpeedBlock from "../HighSpeedBlock";
 import MemoryMap from "./MemoryMap";
 import { GlobalContext } from "../../context/GlobalContext";
@@ -13,23 +13,20 @@ const Memory = () => {
     };
     
     const [ram, setRAM] = useState(initialRAM);
-    const [cpuRegisters, setCPURegisters] = useState(assembler.cpuRegisters.construct());
 
     const [isSplitActive, setIsSplitActive] = useState(false);
+
+    const toggleSplit = useCallback(() => {
+        setIsSplitActive(prevIsSplitActive => !prevIsSplitActive);
+    }, []);
     
     useEffect(() => {
         const unsubscribeRAMUpdate = Manager.subscribe("ramUpdate", ram => {
-            if(ram) setRAM({
-                instructions: ram.instructions,
-                stackStart: ram.stackStart
-            });
-
-            setCPURegisters(assembler.cpuRegisters.construct());
+            if(ram) setRAM(prevRAM => prevRAM.instructions === ram.instructions && prevRAM.stackStart === ram.stackStart ? prevRAM : ram);
         });
 
         const unsubscribeReset = Manager.subscribe("ramReset", () => {
             setRAM(initialRAM);
-            setCPURegisters(assembler.cpuRegisters.construct());
         });
 
         const unsubscribeLinesUpdate = Manager.subscribe("linesUpdate", lines => {
@@ -50,7 +47,7 @@ const Memory = () => {
                 
                 <button
                     className={isSplitActive ? "memory-header-split-button-active" : ""}
-                    onClick={() => setIsSplitActive(!isSplitActive)}
+                    onClick={toggleSplit}
                 >Split</button>
             </div>
 
@@ -59,15 +56,13 @@ const Memory = () => {
                 
                 <MemoryMap
                     ram={ram}
-                    cpuRegisters={cpuRegisters}
                     isSplitActive={isSplitActive}
                 />
 
-                {isSplitActive && <MemoryMap
+                {/*isSplitActive && <MemoryMap
                     ram={ram}
-                    cpuRegisters={cpuRegisters}
                     isSplitActive={isSplitActive}
-                />}
+                />*/}
             </div>
         </div>
     );

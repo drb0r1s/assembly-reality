@@ -68,11 +68,6 @@ export class Matrix {
         return ByteNumber.join([this.get(address + adjustments[0]), this.get(address + adjustments[1])]);
     }
 
-    arrayify(options) {
-        if(options?.textDisplay) return Array.from(this.values.slice(-32));
-        return Array.from(this.values);
-    }
-
     reset() {
         this.values.fill(0);
     }
