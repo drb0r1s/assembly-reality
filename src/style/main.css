@@ -659,21 +659,21 @@ header .header-title {
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction-pointer {
   background-color: #2F608B;
   cursor: pointer;
-  transition: 300ms;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction-pointer:hover {
   color: white;
   background-color: #10284F;
+  transition: 300ms;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction {
   color: black;
   background-color: #79b4eb;
   cursor: pointer;
-  transition: 300ms;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction:hover {
   color: white;
   background-color: #10284F;
+  transition: 300ms;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-display {
   background-color: #0F0F0F;

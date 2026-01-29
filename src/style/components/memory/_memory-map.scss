@@ -94,11 +94,11 @@
             .memory-map-matrix-element-instruction-pointer {
                 background-color: $ipColor;
                 cursor: pointer;
-                transition: 300ms;
 
                 &:hover {
                     color: white;
                     background-color: #10284F;
+                    transition: 300ms;
                 }
             }
 
@@ -106,11 +106,11 @@
                 color: black;
                 background-color: $ipLightColor;
                 cursor: pointer;
-                transition: 300ms;
 
                 &:hover {
                     color: white;
                     background-color: #10284F;
+                    transition: 300ms;
                 }
             }
 
