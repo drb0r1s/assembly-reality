@@ -16,10 +16,11 @@ const HeaderDropdownSpeed = () => {
         if(speed === initialSpeed) return;
 
         Autosave.setItem("SPEED", speed);
-        Manager.set("speed", speed);
-        
-        if(speed >= 10000 && !isHighSpeed) Manager.set("isHighSpeed", true);
-        if(speed < 10000 && isHighSpeed) Manager.set("isHighSpeed", false);
+
+        Manager.sequence(() => {
+            Manager.set("speed", speed);
+            Manager.set("isHighSpeed", speed >= 10000);
+        });
     }, [speed]);
     
     return(
