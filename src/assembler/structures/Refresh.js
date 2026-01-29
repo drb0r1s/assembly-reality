@@ -59,7 +59,7 @@ export class Refresh {
         const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
 
         // Bitmap
-        if(vidMode > 1 && this.assembler.speed < 10000) {
+        if(vidMode > 1) {
             const storedBits = this.assembler.graphics.getStoredBits();
             if(storedBits.length === 0) return;
 
