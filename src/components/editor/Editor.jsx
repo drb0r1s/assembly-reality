@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import RichEditor from "../RichEditor";
 import EditorError from "./EditorError";
 import { GlobalContext } from "../../context/GlobalContext";
@@ -14,58 +14,134 @@ const Editor = () => {
     const [codes, setCodes] = useState([""]);
     const [error, setError] = useState({ type: "", content: "" });
 
+    const codesRef = useRef(null);
+
     const speed = useManagerValue("speed");
+    const speedRef = useRef(speed);
 
     const isCodeEmpty = useManagerValue("isCodeEmpty");
     const isCodeAssembled = useManagerValue("isCodeAssembled");
 
     useCodeAutosave({ pages, setPages, codes, setCodes });
+    
+    useEffect(() => { codesRef.current = codes }, [codes]);
+    useEffect(() => { speedRef.current = speed }, [speed]);
 
     useEffect(() => {
-        if(codes[pages.active].length === 0 && !isCodeEmpty) Manager.set("isCodeEmpty", true);
-        else if(codes[pages.active].length > 0 && isCodeEmpty) Manager.set("isCodeEmpty", false);
+        const newIsEmpty = codes[pages.active].length === 0;
+        if(newIsEmpty !== isCodeEmpty) Manager.set("isCodeEmpty", newIsEmpty);
 
         if(isCodeAssembled) Manager.set("isCodeAssembled", false);
     }, [codes[pages.active]]);
 
     useEffect(() => {
-        const unsubscribeAssemble = Manager.subscribe("assemble", () => {
-            if(!assemblerWorker) return;
+        if(!assemblerWorker) return;
 
+        assemblerWorker.onmessage = e => {
+            const { action, data, error } = e.data;
+
+            if(error) {
+                setError(error);
+                return;
+            }
+
+            switch(action) {
+                case "assemble":
+                    Manager.sequence(() => {
+                        Manager.trigger("ramUpdate", data?.ram);
+                        Manager.trigger("linesUpdate", data?.lines);
+                        Manager.trigger("cpuRegistersPing");
+                        Manager.trigger("graphicsReset"); // If something was left on the canvas, it is a good idea to reset it, just in case.
+                    });
+
+                    break;
+                // We receive the message with the action "run" only when the execution has ended.
+                case "run":
+                    Manager.sequence(() => {
+                        Manager.set("isRunning", false);
+                        Manager.set("isExecuted", true);
+                    });
+                    
+                    break;
+                case "instructionExecuted":
+                    if(speedRef.current >= 10000) return;
+
+                    Manager.sequence(() => {
+                        Manager.trigger("ramUpdate", data?.ram);
+                        Manager.trigger("cpuRegistersPing");
+                    });
+
+                    break;
+                case "step":
+                    Manager.trigger("highlightLine", data);
+                    break;
+                case "reset":
+                    Manager.sequence(() => {
+                        Manager.set("isRunning", false);    
+                        Manager.set("isExecuted", false);
+                    
+                        Manager.trigger("ramReset");
+                        Manager.trigger("cpuRegistersPing");
+                        Manager.trigger("ioRegistersPing");
+                        Manager.trigger("ioRegistersSlowPing");
+                        Manager.trigger("graphicsReset");
+                        Manager.trigger("unhighlightLine");
+                    });
+
+                    break;
+                case "textDisplayPing":
+                    Manager.trigger("textDisplayPing");
+                    break;
+                case "ioRegistersPing":
+                    Manager.trigger("ioRegistersPing");
+                    break;
+                case "ioRegistersSlowPing":
+                    Manager.trigger("ioRegistersSlowPing");
+                    break;
+                case "graphicsEnabled":
+                    Manager.trigger("graphicsEnabled", data);
+                    break;
+                case "graphicsDisabled":
+                    Manager.trigger("graphicsDisabled");
+                    break;
+                case "graphicsRedraw":
+                    Manager.trigger("graphicsRedraw", data);
+                    break;
+            }
+        };
+    }, [assemblerWorker]);
+
+    useEffect(() => {
+        if(!assemblerWorker) return;
+
+        const unsubscribeAssemble = Manager.subscribe("assemble", () => {
             Manager.set("isCodeAssembled", true);
-            assemblerWorker.postMessage({ action: "assemble", data: codes[pages.active] });
+            assemblerWorker.postMessage({ action: "assemble", data: getActiveCode() });
         });
 
         const unsubscribeRun = Manager.subscribe("run", () => {
-            if(!assemblerWorker) return;
-
             Manager.set("isRunning", true);
-            assemblerWorker.postMessage({ action: "run", data: parseInt(speed) });
+            assemblerWorker.postMessage({ action: "run", data: parseInt(speedRef.current) });
         });
 
         const unsubscribeAssembleRun = Manager.subscribe("assembleRun", () => {
-            if(!assemblerWorker) return;
-
             Manager.set("isCodeAssembled", true);
             Manager.set("isRunning", true);
 
-            assemblerWorker.postMessage({ action: "assembleRun", data: { code: codes[pages.active], speed: parseInt(speed) } });
+            assemblerWorker.postMessage({ action: "assembleRun", data: { code: getActiveCode(), speed: parseInt(speedRef.current) } });
         });
 
         const unsubscribePause = Manager.subscribe("pause", () => {
-            if(!assemblerWorker) return;
-
             Manager.set("isRunning", false);
             assemblerWorker.postMessage({ action: "pause" });
         });
 
         const unsubscribeStep = Manager.subscribe("step", () => {
-            if(!assemblerWorker) return;
             assemblerWorker.postMessage({ action: "step" });
         });
 
         const unsubscribeCodeTransfer = Manager.subscribe("codeTransfer", data => {
-            if(codes[pages.active].length === 0) setCodes(prevCodes => {
+            if(getActiveCode().length === 0) setCodes(prevCodes => {
                 const newCodes = [];
 
                 for(let i = 0; i < prevCodes.length; i++) {
@@ -91,73 +167,8 @@ const Editor = () => {
 
         const unsubscribeCodeRequest = Manager.subscribe("codeRequest", () => Manager.trigger("codeResponse", {
             title: pages.list[pages.active],
-            content: codes[pages.active]
+            content: getActiveCode()
         }));
-
-        assemblerWorker.onmessage = e => {
-            const { action, data, error } = e.data;
-
-            if(error) {
-                setError(error);
-                return;
-            }
-
-            switch(action) {
-                case "assemble":
-                    Manager.trigger("ramUpdate", data?.ram);
-                    Manager.trigger("linesUpdate", data?.lines);
-                    Manager.trigger("cpuRegistersPing");
-                    Manager.trigger("graphicsReset"); // If something was left on the canvas, it is a good idea to reset it, just in case.
-
-                    break;
-                // We receive the message with the action "run" only when the execution has ended.
-                case "run":
-                    Manager.set("isRunning", false);
-                    Manager.set("isExecuted", true);
-                    
-                    break;
-                case "instructionExecuted":
-                    if(speed >= 10000) return;
-
-                    Manager.trigger("ramUpdate", data?.ram);
-                    Manager.trigger("cpuRegistersPing");
-
-                    break;
-                case "step":
-                    Manager.trigger("highlightLine", data);
-                    break;
-                case "reset":
-                    Manager.set("isRunning", false);    
-                    Manager.set("isExecuted", false);
-                
-                    Manager.trigger("ramReset");
-                    Manager.trigger("cpuRegistersPing");
-                    Manager.trigger("ioRegistersPing");
-                    Manager.trigger("ioRegistersSlowPing");
-                    Manager.trigger("graphicsReset");
-                    Manager.trigger("unhighlightLine");
-
-                    break;
-                case "textDisplayPing":
-                    Manager.trigger("textDisplayPing");
-                    break;
-                case "ioRegistersPing":
-                    Manager.trigger("ioRegistersPing");
-                    break;
-                case "ioRegistersSlowPing":
-                    Manager.trigger("ioRegistersSlowPing");
-                    break;
-                case "graphicsEnabled":
-                    Manager.trigger("graphicsEnabled", data);
-                    break;
-                case "graphicsDisabled":
-                    Manager.trigger("graphicsDisabled");
-                    break;
-                case "graphicsRedraw":
-                    Manager.trigger("graphicsRedraw", data);
-                    break;
-            }
-        };
 
         return () => {
             unsubscribeAssemble();
@@ -168,7 +179,11 @@ const Editor = () => {
             unsubscribeCodeTransfer();
             unsubscribeCodeRequest();
         };
-    }, [pages.active, codes[pages.active], speed]);
+    }, [assemblerWorker, speed]);
+
+    function getActiveCode() {
+        return codesRef.current[pages.active];
+    }
 
     function addPage() {
         setPages(prevPages => {
@@ -216,9 +231,9 @@ const Editor = () => {
             <div className="editor-pages">
                 {pages.list.map((page, index) => {
                     return <div
-                        key={index}
+                        key={page}
                         className={`editor-page ${index === pages.active ? "editor-active-page" : ""}`}
-                        onClick={() => setPages({...pages, active: index})}
+                        onClick={() => setPages(prevPages => { return {...prevPages, active: index} })}
                     >
                         <div className="editor-page-left-group">
                             <img src={images.pageIcon} alt="PAGE" />
