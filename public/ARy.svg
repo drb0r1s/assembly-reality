@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="79.999992mm"
+   height="80mm"
+   viewBox="0 0 79.999992 80"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <rect
+       x="143.76384"
+       y="104.55552"
+       width="281.71906"
+       height="149.57248"
+       id="rect1" />
+    <rect
+       x="143.76384"
+       y="104.55552"
+       width="281.71906"
+       height="149.57248"
+       id="rect1-4" />
+    <rect
+       x="143.76384"
+       y="104.55552"
+       width="281.71906"
+       height="149.57248"
+       id="rect1-4-5" />
+  </defs>
+  <rect
+     style="fill:#000000;fill-opacity:1;stroke-width:0.423523"
+     id="rect2"
+     width="80"
+     height="80"
+     x="-2.6884973e-07"
+     y="-1.2318294e-06" />
+  <g
+     id="g2"
+     transform="matrix(0.93225839,0,0,0.93225839,-4.408351,12.941928)"
+     style="fill:#f4f4f4;fill-opacity:1">
+    <text
+       xml:space="preserve"
+       transform="matrix(1.6780744,0,0,1.6780744,-233.01566,-184.30652)"
+       id="text1-2-1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-4-5);fill:#f4f4f4;fill-opacity:1;stroke-width:1.51181"><tspan
+         x="143.76367"
+         y="136.02568"
+         id="tspan3">A</tspan></text>
+    <g
+       id="g1"
+       transform="translate(26.081538,0.13584134)"
+       style="fill:#f4f4f4;fill-opacity:1">
+      <text
+         xml:space="preserve"
+         transform="matrix(1.6780744,0,0,1.6780744,-236.69939,-184.44197)"
+         id="text1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);fill:#f4f4f4;fill-opacity:1;stroke-width:1.51181"><tspan
+           x="143.76367"
+           y="136.02568"
+           id="tspan4">R</tspan></text>
+      <text
+         xml:space="preserve"
+         transform="matrix(1.6780744,0,0,1.6780744,-214.20272,-188.29983)"
+         id="text1-2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-4);fill:#f4f4f4;fill-opacity:1;stroke-width:1.51181"><tspan
+           x="143.76367"
+           y="136.02568"
+           id="tspan5">y</tspan></text>
+    </g>
+  </g>
+</svg>

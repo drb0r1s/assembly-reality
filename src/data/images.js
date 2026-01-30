@@ -1,3 +1,7 @@
+// ARy
+import ARy from "../images/ARy/ARy.svg";
+import ARyGrey from "../images/ARy/ARy-grey.svg";
+
 // GENERAL
 import arrowDownIcon from "../images/arrow-down-icon.svg";
 import assembleIcon from "../images/assemble-icon.svg";
@@ -20,6 +24,9 @@ import exportIcon from "../images/export-icon.svg";
 import saveIcon from "../images/save-icon.svg";
 
 export const images = {
+    // ARy
+    ARy, ARyGrey,
+
     // GENERAL
     arrowDownIcon, assembleIcon, runIcon, assembleRunIcon, pauseIcon, stepIcon, resetIcon, keyboardIcon, keyboardBlueIcon, checkIcon,
     xIcon, visibilityIcon, pageIcon, addIcon, expandIcon, windowIcon, importIcon, exportIcon, saveIcon

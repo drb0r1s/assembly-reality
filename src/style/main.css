@@ -286,6 +286,11 @@ header .header-left-group {
   flex-direction: row;
   gap: 7px;
 }
+header .header-left-group .header-left-group-logo {
+  height: 18px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
 header .header-left-group .header-left-group-divider {
   height: 19px;
   width: 1px;
@@ -719,6 +724,12 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   gap: 7px;
+}
+.right-group .right-group-content .signature img {
+  height: 80px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  margin-bottom: 10px;
 }
 .right-group .right-group-content .signature strong {
   color: #2F3336;

@@ -4,6 +4,12 @@
     @include center(column);
     gap: 7px;
 
+    img {
+        height: 80px;
+        object-fit: contain;
+        margin-bottom: 10px;
+    }
+
     strong {
         color: #2F3336;
         font-size: 24px;

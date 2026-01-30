@@ -12,6 +12,11 @@ header {
         @include center;
         gap: 7px;
 
+        .header-left-group-logo {
+            height: 18px;
+            object-fit: contain;
+        }
+
         .header-left-group-divider {
             height: 19px;
             width: 1px;
