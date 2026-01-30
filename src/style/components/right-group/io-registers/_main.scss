@@ -6,6 +6,7 @@
     background-color: black;
     position: absolute;
     bottom: 0;
+    z-index: 2;
 
     .io-registers-map {
         height: calc(100% - 27px); // 27px (DraggableHeader)

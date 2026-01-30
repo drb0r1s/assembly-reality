@@ -7,6 +7,7 @@
     background-color: black;
     position: absolute;
     bottom: 0;
+    z-index: 1;
 
     .cpu-registers-content {
         width: 100%;

@@ -776,6 +776,7 @@ header .header-title {
   background-color: black;
   position: absolute;
   bottom: 0;
+  z-index: 1;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content {
   width: 100%;
@@ -852,6 +853,7 @@ header .header-title {
   background-color: black;
   position: absolute;
   bottom: 0;
+  z-index: 2;
 }
 .right-group .right-group-content .io-registers .io-registers-map {
   height: calc(100% - 27px);
