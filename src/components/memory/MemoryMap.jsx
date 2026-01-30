@@ -63,15 +63,15 @@ const MemoryMap = ({ ram, isSplitActive }) => {
         >
             <div className="memory-map-columns">
                 {memoryMapColumns.map(column => {
-                    if (column === "empty") return <p key={column}></p>;
-                    return <p key={column}>{column}</p>;
+                    if (column === "empty") return <span key={column}></span>;
+                    return <span key={column}>{column}</span>;
                 })}
             </div>
 
             <div className="memory-map-content">
                 <div className="memory-map-rows">
                     {memoryMapRows.map(row => {
-                        return <p key={row}>{row}</p>;
+                        return <span key={row}>{row}</span>;
                     })}
                 </div>
 

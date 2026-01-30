@@ -1,42 +1,52 @@
 @font-face {
   font-family: Roboto-Black;
   src: url("../fonts/Roboto-Black.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: Roboto-Bold;
   src: url("../fonts/Roboto-Bold.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: Roboto-ExtraBold;
   src: url("../fonts/Roboto-ExtraBold.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: Roboto-ExtraLight;
   src: url("../fonts/Roboto-ExtraLight.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: Roboto-Light;
   src: url("../fonts/Roboto-Light.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: Roboto-Medium;
   src: url("../fonts/Roboto-Medium.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: Roboto-Regular;
   src: url("../fonts/Roboto-Regular.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: Roboto-SemiBold;
   src: url("../fonts/Roboto-SemiBold.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: Roboto-Thin;
   src: url("../fonts/Roboto-Thin.ttf");
+  font-display: swap;
 }
 @font-face {
   font-family: SourceCodePro-Regular;
   src: url("../fonts/SourceCodePro-Regular.ttf");
+  font-display: block;
 }
 ::-webkit-scrollbar {
   width: 6px;
@@ -575,7 +585,7 @@ header .header-title {
   justify-content: flex-start;
   border-bottom: 1px solid #2F3336;
 }
-.memory .memory-map-holder .memory-map .memory-map-columns p {
+.memory .memory-map-holder .memory-map .memory-map-columns span {
   height: 20px;
   width: 24px;
   display: flex;
@@ -589,11 +599,11 @@ header .header-title {
   padding: 5px;
   cursor: default;
 }
-.memory .memory-map-holder .memory-map .memory-map-columns p:first-child {
+.memory .memory-map-holder .memory-map .memory-map-columns span:first-child {
   width: 28px;
   border-left: none;
 }
-.memory .memory-map-holder .memory-map .memory-map-columns p:last-child {
+.memory .memory-map-holder .memory-map .memory-map-columns span:last-child {
   border-right: 1px solid #2F3336;
 }
 .memory .memory-map-holder .memory-map .memory-map-content {
@@ -614,7 +624,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
 }
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-rows p {
+.memory .memory-map-holder .memory-map .memory-map-content .memory-map-rows span {
   height: 20px;
   width: 28px;
   display: flex;
@@ -631,6 +641,7 @@ header .header-title {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(16, 1fr);
+  contain: layout paint style;
 }
 .memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element {
   height: 20px;
