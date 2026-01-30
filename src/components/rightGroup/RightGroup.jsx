@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import IODevices from "./IODevices";
-import CPURegisters from "./CPURegisters";
+import CPURegisters from "./cpuRegisters/CPURegisters";
 import IORegisters from "./IORegisters";
 import Signature from "./Signature";
 import { useManagerValue } from "../../hooks/useManagerValue";

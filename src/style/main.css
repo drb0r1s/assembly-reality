@@ -796,13 +796,13 @@ header .header-title {
   gap: 18px;
   padding: 0 12px;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register {
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register strong {
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register strong {
   width: 26px;
   color: #F4F4F4;
   font-size: 14px;
@@ -810,7 +810,7 @@ header .header-title {
   font-weight: normal;
   padding-right: 8px;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register p {
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register p {
   color: #F4F4F4;
   font-size: 14px;
   font-family: SourceCodePro-Regular;
@@ -818,20 +818,20 @@ header .header-title {
   border-left: 2px solid #2F3336;
   padding: 0 4px;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register .cpu-registers-row-sr-values {
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   border-left: 2px solid #2F3336;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register .cpu-registers-row-sr-values .cpu-registers-row-sr-value {
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags .cpu-register-sr-flag {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-registers-row-register .cpu-registers-row-sr-values .cpu-registers-row-sr-value p {
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags .cpu-register-sr-flag p {
   font-size: 11px;
   border-left: none;
 }
@@ -976,6 +976,7 @@ header .header-title {
   left: 0;
   display: none;
   transition: 300ms;
+  z-index: 1;
 }
 .high-speed-block .high-speed-block-container {
   width: 80%;

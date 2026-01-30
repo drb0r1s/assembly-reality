@@ -1,0 +1,27 @@
+.cpu-registers {
+    height: 290px;
+    width: 100%;
+    @include center(column);
+    justify-content: flex-start;
+    gap: 10px;
+    background-color: black;
+    position: absolute;
+    bottom: 0;
+
+    .cpu-registers-content {
+        width: 100%;
+        @include center(column);
+        gap: 7px;
+        position: relative;
+
+        .cpu-registers-row {
+            width: 100%;
+            @include center;
+            justify-content: flex-start;
+            gap: 18px;
+            padding: 0 12px;
+
+            @import "./cpu-register";
+        }
+    }
+}
