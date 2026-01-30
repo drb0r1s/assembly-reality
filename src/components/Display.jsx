@@ -7,7 +7,7 @@ import { images } from "../data/images";
 const Display = ({ style, isExpanded }) => {
     const { assembler, assemblerWorker, sharedCanvas } = useContext(GlobalContext);
         
-    const matrix = useMemo(() => assembler.ram.matrix.getMatrix().slice(-32), [assembler.ram.matrix]);
+    const matrix = assembler.ram.matrix.getMatrix().slice(-32);
 
     const [_, setMemoryVersion] = useState(0);
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
