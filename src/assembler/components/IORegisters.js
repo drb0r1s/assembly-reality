@@ -68,8 +68,6 @@ export class IORegisters {
     }
 
     reset() {
-        for(let i = 0; i < this.registers.length; i++) {
-            Atomics.store(this.registers, i, 0);
-        }
+        this.registers.fill(0);
     }
 };

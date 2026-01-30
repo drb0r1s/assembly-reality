@@ -12,31 +12,36 @@ export class RAM {
     write(cells) {
         let { i, j } = this.free;
 
+        const rows = 258;
+        const columns = 16;
+
         for(let k = 0; k < cells.length; k++) {
-            this.matrix.setCell(i, j, cells[k]);
+            const row = Math.floor((j + k) / columns) + i;
+            const column = (j + k) % columns;
 
-            if(j === 15) {
-                i++;
-                j = 0;
-            }
+            if(row >= rows) throw new AssemblerError("OutOfMemory");
 
-            else j++;
-
-            if(i >= this.matrix.getMatrix().length / 16) throw new AssemblerError("OutOfMemory");
+            this.matrix.setCell(row, column, cells[k]);
         }
 
-        this.free = { i, j }; // Updating last memory-free coordinates globally.
+        const finalPosition = j + cells.length;
+
+        i += Math.floor(finalPosition / columns);
+        j = finalPosition % columns;
+
+        if(i > rows) throw new AssemblerError("OutOfMemory");
+
+        this.free = { i, j };
     }
+
 
     advance(amount) {
         let { i, j } = this.free;
 
         j += amount;
 
-        while(j > 15) {
-            j -= 16;
-            i++;
-        }
+        i += Math.floor(j / 16);
+        j = j % 16;
 
         if(i >= this.matrix.getMatrix().length / 16) throw new AssemblerError("OutOfMemory");
 

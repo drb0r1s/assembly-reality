@@ -22,25 +22,23 @@ export class Keyboard {
 
     // KEYDOWN event affects the KBDSTATUS register by adding 1.
     keydown(character) {
-        const kbdStatus = this.ioRegisters.getValue("KBDSTATUS");
-        let newKbdStatus = 0;
-
-        // Here we need to check if U or D are active, in order to set the E (overflow).
-        if((kbdStatus & 0b011) !== 0) newKbdStatus |= 0b100;
-        newKbdStatus |= 0b001;
-
-        this.ioRegisters.update("KBDSTATUS", newKbdStatus, { force: true });
-        this.ioRegisters.update("KBDDATA", character, { force: true });
+        this.processKey("down", character);
     }
 
     // KEYUP event affects the KBDSTATUS register by adding 2.
     keyup(character) {
+        this.processKey("up", character);
+    }
+
+    processKey(type, character) {
         const kbdStatus = this.ioRegisters.getValue("KBDSTATUS");
         let newKbdStatus = 0;
 
         // Here we need to check if U or D are active, in order to set the E (overflow).
         if((kbdStatus & 0b011) !== 0) newKbdStatus |= 0b100;
-        newKbdStatus |= 0b010;
+        
+        if(type === "down") newKbdStatus |= 0b001;
+        else newKbdStatus |= 0b010;
 
         this.ioRegisters.update("KBDSTATUS", newKbdStatus, { force: true });
         this.ioRegisters.update("KBDDATA", character, { force: true });
