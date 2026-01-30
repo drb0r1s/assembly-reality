@@ -45,10 +45,10 @@ const Memory = () => {
             <div className="memory-header">
                 <strong>Memory</strong>
                 
-                <button
+                {/*<button
                     className={isSplitActive ? "memory-header-split-button-active" : ""}
                     onClick={toggleSplit}
-                >Split</button>
+                >Split</button>*/}
             </div>
 
             <div className="memory-map-holder">
