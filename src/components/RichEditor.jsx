@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Editor from "@monaco-editor/react";
 import { useRichEditor } from "../hooks/useRichEditor";
 
-const RichEditor = ({ code, onChange }) => {
+const RichEditor = React.memo(({ code, onChange }) => {
     const handleEditorDidMount = useRichEditor();
+
+    const richEditorStyle = useMemo(() => { return {
+        height: "calc(100% - 40px)",
+        width: "100%"
+    }}, []);
+
+    const editorOptions = useMemo(() => { return {
+        fontSize: 14,
+        fontFamily: "SourceCodePro-Regular"
+    }}, []);
     
     return(
-        <div className="rich-editor" style={{ height: "calc(100% - 40px)", width: "100%" }}>
+        <div className="rich-editor" style={richEditorStyle}>
             <Editor
                 height="100%"
                 defaultLanguage="assembly"
@@ -14,13 +24,10 @@ const RichEditor = ({ code, onChange }) => {
                 value={code}
                 onChange={onChange}
                 onMount={handleEditorDidMount}
-                options={{
-                    fontSize: 14,
-                    fontFamily: "SourceCodePro-Regular"
-                }}
+                options={editorOptions}
             />
         </div>
     );
-}
+});
 
-export default React.memo(RichEditor);
+export default RichEditor;

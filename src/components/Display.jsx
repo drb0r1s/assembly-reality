@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, useMemo, useCallback } from "react";
 import AssemblerButtons from "./AssemblerButtons";
 import { GlobalContext } from "../context/GlobalContext";
 import { Manager } from "../helpers/Manager";
@@ -7,7 +7,7 @@ import { images } from "../data/images";
 const Display = ({ style, isExpanded }) => {
     const { assembler, assemblerWorker, sharedCanvas } = useContext(GlobalContext);
         
-    const matrix = assembler.ram.matrix.getMatrix().slice(-32);
+    const matrix = useMemo(() => assembler.ram.matrix.getMatrix().slice(-32), [assembler.ram.matrix]);
 
     const [_, setMemoryVersion] = useState(0);
     const [keyboard, setKeyboard] = useState({ isActive: false, activeCharacter: "" });
@@ -18,6 +18,32 @@ const Display = ({ style, isExpanded }) => {
     const canvasStrongRef = useRef(null);
 
     const frameBufferRef = useRef(null);
+
+    const keyboardStyle = useMemo(() => { return { opacity: keyboard.isActive ? "1" : "0" } }, [keyboard.isActive]);
+
+    const handleKeydown = useCallback(e => {
+        if(e.repeat) return;
+
+        assemblerWorker.postMessage({ action: "keyboardEvent", data: { 
+            type: "keydown",
+            character: e.key.charCodeAt(0)
+        }});
+
+        setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
+    }, [assemblerWorker]);
+
+    const handleKeyup = useCallback(e => {
+        assemblerWorker.postMessage({ action: "keyboardEvent", data: { 
+            type: "keyup",
+            character: e.key.charCodeAt(0)
+        }});
+
+        setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
+    }, [assemblerWorker]);
+
+    const handleClick = useCallback(e => {
+        if(!e.target.classList.contains("display-keyboard-group")) setKeyboard({ isActive: false, activeCharacter: "" });
+    }, []);
 
     useEffect(() => {
         // "Assembly Reality" title updating.
@@ -54,30 +80,6 @@ const Display = ({ style, isExpanded }) => {
     }, []);
     
     useEffect(() => {
-        const handleKeydown = e => {
-            if(e.repeat) return;
-
-            assemblerWorker.postMessage({ action: "keyboardEvent", data: { 
-                type: "keydown",
-                character: e.key.charCodeAt(0)
-            }});
-
-            setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
-        }
-
-        const handleKeyup = e => {
-            assemblerWorker.postMessage({ action: "keyboardEvent", data: { 
-                type: "keyup",
-                character: e.key.charCodeAt(0)
-            }});
-
-            setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
-        }
-
-        const handleClick = e => {
-            if(!e.target.classList.contains("display-keyboard-group")) setKeyboard({ isActive: false, activeCharacter: "" });
-        }
-
         if(keyboard.isActive) {
             window.addEventListener("keydown", handleKeydown);
             window.addEventListener("keyup", handleKeyup);
@@ -361,14 +363,14 @@ const Display = ({ style, isExpanded }) => {
                             src={images.keyboardIcon}
                             alt="KEYBOARD"
                             className="display-keyboard-group"
-                            style={keyboard.isActive ? { opacity: "0" } : {}}
+                            style={keyboardStyle}
                         />
 
                         <img
                             src={images.keyboardBlueIcon}
                             alt="KEYBOARD"
                             className="display-keyboard-group"
-                            style={keyboard.isActive ? { opacity: "1" } : {}}
+                            style={keyboardStyle}
                         />
                     </div>
 

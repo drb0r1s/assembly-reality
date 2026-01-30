@@ -9,16 +9,23 @@ const HighSpeedBlock = () => {
     useEffect(() => {
         if(!highSpeedBlockRef.current) return;
 
+        let showTimeout, hideTimeout;
+
         if(isHighSpeed) {
             highSpeedBlockRef.current.style.display = "flex";
-            setTimeout(() => { highSpeedBlockRef.current.style.opacity = "1" }, 10);
+            showTimeout = setTimeout(() => { highSpeedBlockRef.current.style.opacity = "1" }, 10);
         }
 
         else {
             highSpeedBlockRef.current.style.opacity = "";
-            setTimeout(() => { highSpeedBlockRef.current.style.display = "" }, 300);
+            hideTimeout = setTimeout(() => { highSpeedBlockRef.current.style.display = "" }, 300);
         }
-    }, [highSpeedBlockRef, isHighSpeed]);
+
+        return () => {
+            clearTimeout(showTimeout);
+            clearTimeout(hideTimeout);
+        }
+    }, [isHighSpeed]);
     
     return(
         <div className="high-speed-block" ref={highSpeedBlockRef}>
