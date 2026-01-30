@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import DraggableHeader from "../DraggableHeader";
-import { GlobalContext } from "../../context/GlobalContext";
-import { useLinkedResizing } from "../../hooks/useLinkedResizing";
-import { useManagerValue } from "../../hooks/useManagerValue";
-import { Manager } from "../../helpers/Manager";
+import DraggableHeader from "../../DraggableHeader";
+import IORegister from "./IORegister";
+import { GlobalContext } from "../../../context/GlobalContext";
+import { useLinkedResizing } from "../../../hooks/useLinkedResizing";
+import { useManagerValue } from "../../../hooks/useManagerValue";
+import { Manager } from "../../../helpers/Manager";
 
 const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const { assembler } = useContext(GlobalContext);
@@ -54,23 +55,19 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
             />
 
             <div className="io-registers-map">
-                <div className="io-registers-map-row io-registers-map-header">
+                <div className="io-register io-registers-map-header">
                     <p>Address</p>
                     <p>Name</p>
                     <p>Value</p>
                 </div>
 
-                {Object.keys(ioRegisters).map((ioRegister, index) => {
-                    const ioRegisterValue = Object.values(ioRegisters)[index];
-                    
-                    return <div
-                        key={index}
-                        className="io-registers-map-row"
-                    >
-                        <p>{index.toString(16).toUpperCase().padStart(4, "0")}</p>
-                        <p>{ioRegister}</p>
-                        <p>{ioRegisterValue.toString(16).toUpperCase().padStart(4, "0")}</p>
-                    </div>;
+                {Object.entries(ioRegisters).map(([name, value], index) => {                    
+                    return <IORegister
+                        key={name}
+                        name={name}
+                        value={value}
+                        index={index}
+                    />;
                 })}
             </div>
         </div>

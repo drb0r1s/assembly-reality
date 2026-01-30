@@ -864,7 +864,7 @@ header .header-title {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row {
+.right-group .right-group-content .io-registers .io-registers-map .io-register {
   width: 100%;
   display: flex;
   align-items: center;
@@ -872,7 +872,7 @@ header .header-title {
   flex-direction: row;
   border-bottom: 1px solid #2F3336;
 }
-.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row p {
+.right-group .right-group-content .io-registers .io-registers-map .io-register p {
   height: 28px;
   width: 100%;
   display: flex;
@@ -886,7 +886,7 @@ header .header-title {
   border-right: 1px solid #2F3336;
   padding-left: 10px;
 }
-.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-row p:last-child {
+.right-group .right-group-content .io-registers .io-registers-map .io-register p:last-child {
   border-right: none;
 }
 .right-group .right-group-content .io-registers .io-registers-map .io-registers-map-header {

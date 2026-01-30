@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Manager } from "../helpers/Manager";
 import { useManagerValue } from "./useManagerValue";
 
 export const useLinkedResizing = ({ headerRef, elementRef, holderRef, collisionRefs }) => {    

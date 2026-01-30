@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import DraggableHeader from "../DraggableHeader";
 import Display from "../Display";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
@@ -16,6 +16,8 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     const ioDevicesHeight = useResizeObserver({ elementRef: ioDevicesRef });
     const lowerSectionHeight = useResizeObserver({ elementRef: lowerSection.ref }); // Here we need to take in the consideration a possibility that CPU Registers section can be disabled.
 
+    const displayHeight = useMemo(() => ioDevicesHeight - lowerSectionHeight - 27, [ioDevicesHeight, lowerSectionHeight]);
+
     useLinkedResizing({
         headerRef,
         elementRef: ioDevicesRef,
@@ -26,7 +28,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
     useEffect(() => {
         const ref = cpuRegistersRef?.current ? cpuRegistersRef : ioRegistersRef;
         setLowerSection({ ref })
-    }, [view]);
+    }, [view.cpuRegisters]);
 
     return(
         <div className="io-devices" ref={ioDevicesRef}>
@@ -43,7 +45,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
             </button>
             
             <Display
-                style={{ height: `${ioDevicesHeight - lowerSectionHeight - 27}px` }} // 27px (header height)
+                style={{ height: `${displayHeight}px` }} // 27px (header height)
             />
         </div>
     );

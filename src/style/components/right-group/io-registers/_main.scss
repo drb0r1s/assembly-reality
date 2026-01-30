@@ -15,27 +15,7 @@
         overflow-x: hidden;
         overflow-y: auto;
         
-        .io-registers-map-row {
-            width: 100%;
-            @include center;
-            border-bottom: 1px solid #2F3336;
-
-            p {
-                height: 28px;
-                width: 100%;
-                @include center;
-                justify-content: flex-start;
-                color: #F4F4F4;
-                font-size: 14px;
-                font-family: SourceCodePro-Regular;
-                border-right: 1px solid #2F3336;
-                padding-left: 10px;
-
-                &:last-child {
-                    border-right: none;
-                }
-            }
-        }
+        @import "./io-register";
         
         .io-registers-map-header {
             background-color: #0A0A0A;
