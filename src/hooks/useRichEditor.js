@@ -7,6 +7,7 @@ import { Manager } from "../helpers/Manager";
 
 export const useRichEditor = () => {
     const editorRef = useRef(null);
+    const providerRef = useRef(null);
     const decorationIdsRef = useRef([]);
     const highlightLineRef = useRef(() => {});
 
@@ -34,33 +35,6 @@ export const useRichEditor = () => {
         monaco.languages.register({ id: "assembly" });
         monaco.languages.setMonarchTokensProvider("assembly", { tokenizer });
 
-        let provider;
-
-        if(!editorRef.current?.providerRegistered) provider = monaco.languages.registerCompletionItemProvider("assembly", {
-            provideCompletionItems: model => {
-                const text = model.getValue();
-
-                const suggestions = {
-                    keyword: Keywords.list.map(keyword => ({
-                        label: keyword,
-                        kind: monaco.languages.CompletionItemKind.Keyword,
-                        insertText: keyword,
-                        documentation: `Assembly instruction: ${keyword}.`
-                    })),
-
-                    label: getLabel(text).map(label => ({
-                        label,
-                        kind: monaco.languages.CompletionItemKind.Variable,
-                        insertText: label,
-                        documentation: "User-defined label."
-                    }))
-                };
-
-                const suggestionsArray = [...suggestions.keyword, ...removeDuplicates(suggestions.label)];
-                return { suggestions: suggestionsArray };
-            }
-        });
-
         monaco.editor.defineTheme("assembly-dark", {
             base: "vs-dark",
             inherit: true,
@@ -71,19 +45,51 @@ export const useRichEditor = () => {
         monaco.editor.setTheme("assembly-dark");
 
         return () => {
-            provider?.dispose();
+            providerRef.current?.dispose();
         }
     }, [monaco]);
 
     function handleEditorDidMount(editor, monacoInstance) {
         editorRef.current = editor;
 
+        const monaco = monacoInstance;
+        if(!monaco) return;
+
+        if(!editorRef.current?.providerRegistered) {
+            providerRef.current = monaco.languages.registerCompletionItemProvider("assembly", {
+                provideCompletionItems: model => {
+                    const text = model.getValue();
+
+                    const suggestions = {
+                        keyword: Keywords.list.map(keyword => ({
+                            label: keyword,
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: keyword,
+                            documentation: `Assembly instruction: ${keyword}.`
+                        })),
+
+                        label: getLabel(text).map(label => ({
+                            label,
+                            kind: monaco.languages.CompletionItemKind.Variable,
+                            insertText: label,
+                            documentation: "User-defined label."
+                        }))
+                    };
+
+                    const suggestionsArray = [...suggestions.keyword, ...removeDuplicates(suggestions.label)];
+                    return { suggestions: suggestionsArray };
+                }
+            });
+
+            editorRef.current.providerRegistered = true;
+        }
+
         highlightLineRef.current = line => {
             decorationIdsRef.current = editorRef.current.deltaDecorations(
                 decorationIdsRef.current,
                 [
                     {
-                        range: new monacoInstance.Range(line, 1, line, 1),
+                        range: new monaco.Range(line, 1, line, 1),
                         options: {
                             isWholeLine: true,
                             className: "rich-editor-highlighted-line",
@@ -97,6 +103,7 @@ export const useRichEditor = () => {
         }
 
         editor.onMouseDown(unhighlightLine);
+        return () => editor.offMouseDown(unhighlightLine);
     }
 
     function getLabel(text) {
@@ -109,17 +116,14 @@ export const useRichEditor = () => {
     // If one label appears multiple times in the code, it will appear the same amount of times in the suggestions, as well.
     // That is why this function is needed, to get rid of duplicated suggestions.
     function removeDuplicates(array) {
-        const newArray = [];
-        const labels = [];
+        const suggestions = new Set();
 
-        for(let i = 0; i < array.length; i++) {
-            if(labels.indexOf(array[i].label) === -1) {
-                newArray.push(array[i]);
-                labels.push(array[i].label);
-            }
-        }
-
-        return newArray;
+        return array.filter(suggestion => {
+            if(suggestions.has(suggestion.label)) return false;
+            
+            suggestions.add(suggestion.label);
+            return true;
+        });
     }
 
     function highlightLine(line) {
