@@ -8,6 +8,7 @@ const MemoryCanvas = ({ ram }) => {
 
     const canvasRef = useRef(null);
     const rendererRef = useRef(null);
+    const hoveredCellRef = useRef(-1);
 
     const cell = useMemo(() => { return {
         height: 20,
@@ -36,7 +37,7 @@ const MemoryCanvas = ({ ram }) => {
         // Normalize coordinate system
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        rendererRef.current = new MemoryRenderer(ctx, assembler, ram, cell);
+        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, ram, cell);
         rendererRef.current.render();
 
         return () => { rendererRef.current = null; };
@@ -64,13 +65,42 @@ const MemoryCanvas = ({ ram }) => {
 
         const line = assembler.lines.collection[index];
         if(line) Manager.trigger("highlightLine", line);
-    };
+    }
+
+    function handleMouseMove(e) {
+        const canvas = canvasRef.current;
+        const rect = canvas.getBoundingClientRect();
+
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const row = Math.floor(y / cell.height);
+        const column = Math.floor(x / cell.width);
+
+        const index = row * cell.columns + column;
+
+        if(index !== hoveredCellRef.current) {
+            hoveredCellRef.current = index;
+
+            rendererRef.current?.hoverCell(index);
+            rendererRef.current?.render();
+        }
+    }
+
+    function handleMouseLeave() {
+        hoveredCellRef.current = -1;
+
+        rendererRef.current?.unhoverCell();
+        rendererRef.current?.render();
+    }
     
     return(
         <canvas
             ref={canvasRef}
             className="memory-canvas"
             onClick={handleClick}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
         />
     );
 }

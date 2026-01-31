@@ -1,9 +1,12 @@
 export class MemoryRenderer {
-    constructor(ctx, assembler, ram, cell) {
+    constructor(canvas, ctx, assembler, ram, cell) {
+        this.canvas = canvas;
         this.ctx = ctx;
         this.assembler = assembler;
         this.ram = ram;
         this.cell = cell;
+
+        this.hoveredCell = -1;
 
         this.matrix = assembler.ram.matrix.getMatrix();
 
@@ -20,7 +23,8 @@ export class MemoryRenderer {
         this.colors = {
             text: "#D4D4D4",
             ip: "#2F608B",
-            instruction: "#79b4eb",
+            instruction: "#79B4EB",
+            instructionHover: "#10284F",
             sp: "#BB3071",
             stack: "#F59CC5",
             textDisplay: "#0F0F0F",
@@ -42,7 +46,7 @@ export class MemoryRenderer {
             const x = column * this.cell.width;
             const y = row * this.cell.height;
 
-            const cellColor = this.getCellColor(i, IP, SP)
+            const cellColor = this.getCellColor(i, IP, SP);
 
             this.ctx.fillStyle = cellColor;
             this.ctx.fillRect(x, y, 24, 20);
@@ -83,12 +87,38 @@ export class MemoryRenderer {
 
     getCellColor(index, IP, SP) {
         if(index === SP) return this.colors.sp;
-        if(index === IP) return this.colors.ip;
+        
+        if(index === IP) {
+            if(index === this.hoveredCell) return this.colors.instructionHover;
+            return this.colors.ip;
+        }
 
-        if(this.ram.instructions.includes(index)) return this.colors.instruction;
-        if (index > SP && index <= this.ram.stackStart) return this.colors.stack;
-        if (index >= 0x1000 && index <= 0x101F) return this.colors.textDisplay;
+        if(index > SP && index <= this.ram.stackStart) return this.colors.stack;
+
+        if(this.ram.instructions.includes(index)) {
+            if(index === this.hoveredCell) return this.colors.instructionHover;
+            return this.colors.instruction;
+        }
+
+        if(index >= 0x1000 && index <= 0x101F) return this.colors.textDisplay;
 
         return this.colors.background;
+    }
+
+    hoverCell(index) {
+        const IP = this.assembler.cpuRegisters.getValue("IP");
+        const isInteractive = index === IP || this.ram.instructions.includes(index);
+
+        if(isInteractive) {
+            this.canvas.style.cursor = "pointer";
+            this.hoveredCell = index;
+        }
+
+        else this.unhoverCell();
+    }
+
+    unhoverCell() {
+        this.canvas.style.cursor = "default";
+        this.hoveredCell = -1;
     }
 }
