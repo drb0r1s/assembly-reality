@@ -22,14 +22,18 @@ export class MemoryRenderer {
 
         this.colors = {
             text: "#D4D4D4",
+            sp: "#BB3071",
+            stack: "#F59CC5",
             ip: "#2F608B",
             instruction: "#79B4EB",
             instructionHover: "#10284F",
-            sp: "#BB3071",
-            stack: "#F59CC5",
             textDisplay: "#0F0F0F",
             background: "#000000",
             divider: "#2F3336"
+        };
+
+        this.gradients = {
+            spIp: this.getGradient("#BB3071", "#2F608B")
         };
     }
 
@@ -86,6 +90,8 @@ export class MemoryRenderer {
     }
 
     getCellColor(index, IP, SP) {
+        if(index === SP && index === IP) return this.gradients.spIp;
+
         if(index === SP) return this.colors.sp;
         
         if(index === IP) {
@@ -103,6 +109,17 @@ export class MemoryRenderer {
         if(index >= 0x1000 && index <= 0x101F) return this.colors.textDisplay;
 
         return this.colors.background;
+    }
+
+    getGradient(firstColor, secondColor) {
+        const gradient = this.ctx.createLinearGradient(0, this.cell.height, this.cell.width, 0);
+
+        gradient.addColorStop(0.0, firstColor);
+        gradient.addColorStop(0.5, firstColor);
+        gradient.addColorStop(0.5, secondColor);
+        gradient.addColorStop(1.0, secondColor);
+
+        return gradient;
     }
 
     hoverCell(index) {

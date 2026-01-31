@@ -1,5 +1,6 @@
 import { useEffect, useRef, useContext, useMemo } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
+import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../helpers/Manager";
 import { MemoryRenderer } from "../../helpers/MemoryRenderer";
 
@@ -16,6 +17,8 @@ const MemoryCanvas = ({ ram }) => {
         rows: 258,
         columns: 16
     }}, []);
+
+    const isCodeAssembled = useManagerValue("isCodeAssembled");
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -53,6 +56,8 @@ const MemoryCanvas = ({ ram }) => {
     ]);
 
     function handleClick(e) {
+        if(!isCodeAssembled) return;
+
         const rect = canvasRef.current.getBoundingClientRect();
 
         const x = e.clientX - rect.left;
@@ -68,6 +73,8 @@ const MemoryCanvas = ({ ram }) => {
     }
 
     function handleMouseMove(e) {
+        if(!isCodeAssembled) return;
+
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
 
@@ -88,6 +95,8 @@ const MemoryCanvas = ({ ram }) => {
     }
 
     function handleMouseLeave() {
+        if(!isCodeAssembled) return;
+
         hoveredCellRef.current = -1;
 
         rendererRef.current?.unhoverCell();
