@@ -560,7 +560,7 @@ header .header-title {
   background-color: #405A85;
   border: 1px solid transparent;
 }
-.memory .memory-map-holder {
+.memory .memory-matrix-holder {
   height: calc(100dvh - 38px - 27px);
   width: 100%;
   display: flex;
@@ -569,7 +569,7 @@ header .header-title {
   flex-direction: column;
   position: relative;
 }
-.memory .memory-map-holder .memory-map {
+.memory .memory-matrix-holder .memory-matrix {
   height: 100%;
   width: 100%;
   display: flex;
@@ -577,10 +577,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
 }
-.memory .memory-map-holder .memory-map:nth-child(3) {
-  border-top: 1px solid #2F3336;
-}
-.memory .memory-map-holder .memory-map .memory-map-columns {
+.memory .memory-matrix-holder .memory-matrix .memory-matrix-columns {
   height: 20px;
   width: 100%;
   display: flex;
@@ -590,7 +587,7 @@ header .header-title {
   justify-content: flex-start;
   border-bottom: 1px solid #2F3336;
 }
-.memory .memory-map-holder .memory-map .memory-map-columns span {
+.memory .memory-matrix-holder .memory-matrix .memory-matrix-columns span {
   height: 20px;
   width: 24px;
   display: flex;
@@ -604,14 +601,14 @@ header .header-title {
   padding: 5px;
   cursor: default;
 }
-.memory .memory-map-holder .memory-map .memory-map-columns span:first-child {
+.memory .memory-matrix-holder .memory-matrix .memory-matrix-columns span:first-child {
   width: 28px;
   border-left: none;
 }
-.memory .memory-map-holder .memory-map .memory-map-columns span:last-child {
+.memory .memory-matrix-holder .memory-matrix .memory-matrix-columns span:last-child {
   border-right: 1px solid #2F3336;
 }
-.memory .memory-map-holder .memory-map .memory-map-content {
+.memory .memory-matrix-holder .memory-matrix .memory-matrix-content {
   height: calc(100dvh - 38px - 27px - 20px);
   width: 100%;
   display: flex;
@@ -623,13 +620,13 @@ header .header-title {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-rows {
+.memory .memory-matrix-holder .memory-matrix .memory-matrix-content .memory-matrix-rows {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-rows span {
+.memory .memory-matrix-holder .memory-matrix .memory-matrix-content .memory-matrix-rows span {
   height: 20px;
   width: 28px;
   display: flex;
@@ -642,57 +639,9 @@ header .header-title {
   padding: 5px;
   cursor: default;
 }
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(16, 1fr);
-  contain: layout paint style;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element {
-  height: 20px;
-  width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  color: #D4D4D4;
-  font-size: 14px;
-  font-family: SourceCodePro-Regular;
-  border-left: 1px solid #2F3336;
-  padding: 5px;
-  cursor: default;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element:last-child {
-  border-right: 1px solid #2F3336;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-stack-pointer {
-  background-color: #BB3071;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-stack {
-  color: black;
-  background-color: #F59CC5;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction-pointer {
-  background-color: #2F608B;
-  cursor: pointer;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction-pointer:hover {
-  color: white;
-  background-color: #10284F;
-  transition: 300ms;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction {
-  color: black;
-  background-color: #79b4eb;
-  cursor: pointer;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-instruction:hover {
-  color: white;
-  background-color: #10284F;
-  transition: 300ms;
-}
-.memory .memory-map-holder .memory-map .memory-map-content .memory-map-matrix .memory-map-matrix-element-display {
-  background-color: #0F0F0F;
+.memory .memory-matrix-holder .memory-matrix .memory-matrix-content .memory-canvas {
+  height: 5160px;
+  width: 384px;
 }
 
 .right-group {

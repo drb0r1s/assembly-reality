@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useContext } from "react";
 import HighSpeedBlock from "../HighSpeedBlock";
-import MemoryMap from "./MemoryMap";
+import MemoryMatrix from "./MemoryMatrix";
 import { GlobalContext } from "../../context/GlobalContext";
 import { Manager } from "../../helpers/Manager";
 
@@ -13,12 +13,6 @@ const Memory = () => {
     };
     
     const [ram, setRAM] = useState(initialRAM);
-
-    const [isSplitActive, setIsSplitActive] = useState(false);
-
-    const toggleSplit = useCallback(() => {
-        setIsSplitActive(prevIsSplitActive => !prevIsSplitActive);
-    }, []);
     
     useEffect(() => {
         const unsubscribeRAMUpdate = Manager.subscribe("ramUpdate", ram => {
@@ -44,25 +38,11 @@ const Memory = () => {
         <div className="memory">
             <div className="memory-header">
                 <strong>Memory</strong>
-                
-                {/*<button
-                    className={isSplitActive ? "memory-header-split-button-active" : ""}
-                    onClick={toggleSplit}
-                >Split</button>*/}
             </div>
 
-            <div className="memory-map-holder">
+            <div className="memory-matrix-holder">
                 <HighSpeedBlock />
-                
-                <MemoryMap
-                    ram={ram}
-                    isSplitActive={isSplitActive}
-                />
-
-                {/*isSplitActive && <MemoryMap
-                    ram={ram}
-                    isSplitActive={isSplitActive}
-                />*/}
+                <MemoryMatrix ram={ram} />
             </div>
         </div>
     );

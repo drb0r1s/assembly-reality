@@ -1,0 +1,61 @@
+.memory-matrix {
+    height: 100%;
+    width: 100%;
+    @include center(column);
+
+    .memory-matrix-columns {
+        height: 20px;
+        width: 100%;
+        @include center;
+        justify-content: flex-start;
+        border-bottom: 1px solid #2F3336;
+
+        span {
+            height: 20px;
+            width: 24px;
+            @include center;
+            color: #D8D8D8;
+            font-size: 13px;
+            font-family: Roboto-Medium;
+            border-left: 1px solid #2F3336;
+            padding: 5px;
+            cursor: default;
+
+            &:first-child {
+                width: 28px;
+                border-left: none;
+            }
+
+            &:last-child {
+                border-right: 1px solid #2F3336;
+            }
+        }
+    }
+
+    .memory-matrix-content {
+        height: calc(100dvh - 38px - 27px - 20px); // 38px (header height) + 27px (memory-header height) + 20px (memory-map-columns height)
+        width: 100%;
+        @include center;
+        align-items: flex-start;
+        justify-content: flex-start;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        .memory-matrix-rows {
+            @include center(column);
+
+            span {
+                height: 20px;
+                width: 28px;
+                @include center;
+                color: #D8D8D8;
+                font-size: 13px;
+                font-family: Roboto-Regular;
+                padding: 5px;
+                cursor: default;
+            }
+        }
+
+        @import "./memory-canvas";
+    }
+}
