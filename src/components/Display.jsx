@@ -153,8 +153,6 @@ const Display = ({ style, isExpanded }) => {
 
                 const colorIndex = vram[address + 1];
                 const color = assembler.graphics.getRGBFromVRAM(colorIndex);
-                    
-                if(ascii === 0) return;
 
                 const [x, y] = assembler.graphics.addressToPosition(address);
                 drawCharacter([x, y, ascii, color], scrollX, scrollY, text);
