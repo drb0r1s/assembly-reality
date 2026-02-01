@@ -16,7 +16,6 @@ export const tokenizer = {
 
         // Half registers
         [Registers.expression.half.regex, "halfRegister"],
-        [Registers.expression.half.memory, "memoryHalfRegister"], // Memory half registers
 
         // Numbers
         [/\s([0-9]+)([dD]?)(?=\s|,|$)/, "number"], // Decimal

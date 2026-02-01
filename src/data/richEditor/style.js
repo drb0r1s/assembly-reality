@@ -15,7 +15,6 @@ export const rules = [
     { token: "register", foreground: "4EC9B0" },
     { token: "memoryRegister", foreground: "3DA18C" },
     { token: "halfRegister", foreground: "DCDCAA" },
-    { token: "memoryHalfRegister", foreground: "C5B26E" },
     { token: "number", foreground: "B5CEA8" },
     { token: "memoryNumber", foreground: "9BB98E" },
     { token: "stringDouble", foreground: "CE9178" },
