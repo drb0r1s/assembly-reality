@@ -67,7 +67,7 @@ export class Instants {
             const intValue = parseInt(operand.value, 2);
             if(intValue > maxValue) throw new AssemblerError("BinaryLimit8", {}, instant.line);
             
-            result = ByteNumber.divide(intValue);
+            result = [intValue];
         }
 
         else if(operand.valueType === "number.hex") {
