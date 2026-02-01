@@ -46,7 +46,6 @@ function parseType(instruction, operand) {
         case "register": return [cpuRegisters.getIndex(operand.value)];
         case "half.register": return [cpuRegisters.getIndex(operand.value)];
         case "memory.register": return [0, cpuRegisters.getIndex(operand.value)];
-        case "memory.half.register": return [cpuRegisters.getIndex(operand.value)];
         case "memory.number.hex":
             const intMemoryHexValue = parseInt(operand.value, 16);
             if(intMemoryHexValue > data.maxMemoryValue) throw new AssemblerError("HexMemoryLimit", {}, instruction.line);

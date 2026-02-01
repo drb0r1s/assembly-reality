@@ -16,7 +16,6 @@ for(let i = 0; i < registers.default.length; i++) {
 
 const expressionHalfRegistersRoot = registers.half.join("|");
 const expressionHalfRegistersRegex = new RegExp(`\\s(${expressionHalfRegistersRoot})(?=\\s|,|;|\\/\\/|$)`);
-const expressionMemoryHalfRegistersRegex = new RegExp(`\\s\\[(${expressionHalfRegistersRoot})\\](?=\\s|,|;|\\/\\/|$)`);
 
 export const Registers = {
     list: registers,
@@ -30,8 +29,7 @@ export const Registers = {
 
         half: {
             root: expressionHalfRegistersRoot,
-            regex: expressionHalfRegistersRegex,
-            memory: expressionMemoryHalfRegistersRegex
+            regex: expressionHalfRegistersRegex
         }
     }
 };

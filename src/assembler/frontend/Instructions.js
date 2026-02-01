@@ -16,7 +16,6 @@ export const Instructions = {
     MOV: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "register register": 0x01,
         "register memory.register": 0x02,
-        "register memory.half.register": 0x02,
         "register memory.number.*": 0x03,
         "memory.register register": 0x04,
         "memory.number.* register": 0x05,
@@ -28,14 +27,11 @@ export const Instructions = {
     MOVB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x09,
         "half.register memory.register": 0x0A,
-        "half.register memory.half.register": 0x0A,
         "half.register memory.number.*": 0x0B,
         "memory.register half.register": 0x0C,
-        "memory.half.register half.register": 0x0C,
         "memory.number.* half.register": 0x0D,
         "half.register number.*": 0x0E,
         "memory.register number.*": 0x0F,
-        "memory.half.register number.*": 0x0F,
         "memory.number.* number.*": 0x10
     }),
 
@@ -49,7 +45,6 @@ export const Instructions = {
     ADDB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x15,
         "half.register memory.register": 0x16,
-        "half.register memory.half.register": 0x16,
         "half.register memory.number.*": 0x17,
         "half.register number.*": 0x18
     }),
@@ -64,7 +59,6 @@ export const Instructions = {
     SUBB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x1D,
         "half.register memory.register": 0x1E,
-        "half.register memory.half.register": 0x1E,
         "half.register memory.number.*": 0x1F,
         "half.register number.*": 0x20
     }),
@@ -95,7 +89,6 @@ export const Instructions = {
     CMPB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x29,
         "half.register memory.register": 0x2A,
-        "half.register memory.half.register": 0x2A,
         "half.register memory.number.*": 0x2B,
         "half.register number.*": 0x2C
     }),
@@ -210,7 +203,6 @@ export const Instructions = {
     MULB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
         "half.register": 0x4C,
         "memory.register": 0x4D,
-        "memory.half.register": 0x4D,
         "memory.number.*": 0x4E,
         "number.*": 0x4F
     }),
@@ -225,7 +217,6 @@ export const Instructions = {
     DIVB: (instruction, options) => options?.getLength ? LengthOf.oneOperand(instruction) : Encoder.oneOperand(instruction, {
         "half.register": 0x54,
         "memory.register": 0x55,
-        "memory.half.register": 0x55,
         "memory.number.*": 0x56,
         "number.*": 0x57
     }),
@@ -240,7 +231,6 @@ export const Instructions = {
     ANDB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x5C,
         "half.register memory.register": 0x5D,
-        "half.register memory.half.register": 0x5D,
         "half.register memory.number.*": 0x5E,
         "half.register number.*": 0x5F
     }),
@@ -255,7 +245,6 @@ export const Instructions = {
     ORB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x64,
         "half.register memory.register": 0x65,
-        "half.register memory.half.register": 0x65,
         "half.register memory.number.*": 0x66,
         "half.register number.*": 0x67
     }),
@@ -270,7 +259,6 @@ export const Instructions = {
     XORB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x6C,
         "half.register memory.register": 0x6D,
-        "half.register memory.half.register": 0x6D,
         "half.register memory.number.*": 0x6E,
         "half.register number.*": 0x6F
     }),
@@ -293,7 +281,6 @@ export const Instructions = {
     SHLB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x76,
         "half.register memory.register": 0x77,
-        "half.register memory.half.register": 0x77,
         "half.register memory.number.*": 0x78,
         "half.register number.*": 0x79
     }),
@@ -308,7 +295,6 @@ export const Instructions = {
     SHRB: (instruction, options) => options?.getLength ? LengthOf.twoOperands(instruction) : Encoder.twoOperands(instruction, {
         "half.register half.register": 0x7E,
         "half.register memory.register": 0x7F,
-        "half.register memory.half.register": 0x7F,
         "half.register memory.number.*": 0x80,
         "half.register number.*": 0x81
     }),
