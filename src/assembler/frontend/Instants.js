@@ -1,6 +1,32 @@
 import { AssemblerError } from "../AssemblerError";
 import { ByteNumber } from "../helpers/ByteNumber";
 
+const bases = {
+    binary: 2,
+    octal: 8,
+    decimal: 10,
+    hex: 16
+};
+
+const baseNames = {
+    binary: "Binary",
+    octal: "Octal",
+    decimal: "Decimal",
+    hex: "Hex"
+};
+
+const maxValues = {
+    DW: 65535,
+    DB: 255,
+    ORG: 0x101F
+};
+
+const limitSuffixes = {
+    DW: "Limit16",
+    DB: "Limit8",
+    ORG: "MemoryLimit"
+};
+
 export class Instants {
     constructor(ram) {
         this.ram = ram;
@@ -12,30 +38,11 @@ export class Instants {
 
     DW(instant) {
         const operand = instant.operands[0];
-        const maxValue = 65535;
 
         let result = null;
 
-        if(operand.valueType === "number.decimal") {
-            const intValue = parseInt(operand.value);
-            if(intValue > maxValue) throw new AssemblerError("DecimalLimit16", {}, instant.line);
-            
-            result = ByteNumber.divide(intValue);
-        }
-
-        else if(operand.valueType === "number.binary") {
-            const intValue = parseInt(operand.value, 2);
-            if(intValue > maxValue) throw new AssemblerError("BinaryLimit16", {}, instant.line);
-            
-            result = ByteNumber.divide(intValue);
-        }
-
-        else if(operand.valueType === "number.hex") {
-            const intValue = parseInt(operand.value, 16);
-            if(intValue > maxValue) throw new AssemblerError("HexLimit16", {}, instant.line);
-            
-            result = ByteNumber.divide(intValue);
-        }
+        // number.decimal, number.binary, number.octal, number.hex
+        if(operand.valueType.startsWith("number.")) result = processNumber(instant, operand);
 
         else if(operand.valueType === "string.double") {
             const characters = operand.value.split("");
@@ -52,30 +59,11 @@ export class Instants {
 
     DB(instant) {
         const operand = instant.operands[0];
-        const maxValue = 255;
 
         let result = null;
 
-        if(operand.valueType === "number.decimal") {
-            const intValue = parseInt(operand.value);
-            if(intValue > maxValue) throw new AssemblerError("DecimalLimit8", {}, instant.line);
-
-            result = [intValue];
-        }
-
-        else if(operand.valueType === "number.binary") {
-            const intValue = parseInt(operand.value, 2);
-            if(intValue > maxValue) throw new AssemblerError("BinaryLimit8", {}, instant.line);
-            
-            result = [intValue];
-        }
-
-        else if(operand.valueType === "number.hex") {
-            const intValue = parseInt(operand.value, 16);
-            if(intValue > maxValue) throw new AssemblerError("HexLimit8", {}, instant.line);
-            
-            result = [intValue];
-        }
+        // number.decimal, number.binary, number.octal, number.hex
+        if(operand.valueType.startsWith("number.")) result = processNumber(instant, operand);
 
         // Here we introduce the possibility of using special character \ in order to signal that the next 8-bit value is going to be written in the memory exactly as it is written in a string (not as an ASCII value), this is known as Exact Mode.
         // DB "\xAB" => "AB" is written in the memory.
@@ -127,33 +115,32 @@ export class Instants {
 
     ORG(instant) {
         const operand = instant.operands[0];
-        const maxValue = 0x101F;
 
         let result = null;
 
-        if(operand.valueType === "number.decimal") {
-            const intValue = parseInt(operand.value);
-            if(intValue > maxValue) throw new AssemblerError("DecimalMemoryLimit", {}, instant.line);
-
-            result = intValue;
-        }
-
-        else if(operand.valueType === "number.binary") {
-            const intValue = parseInt(operand.value, 2);
-            if(intValue > maxValue) throw new AssemblerError("BinaryMemoryLimit", {}, instant.line);
-
-            result = intValue;
-        }
-
-        else if(operand.valueType === "number.hex") {
-            const intValue = parseInt(operand.value, 16);
-            if(intValue > maxValue) throw new AssemblerError("HexMemoryLimit", {}, instant.line);
-        
-            result = intValue;
-        }
+        if(operand.valueType.startsWith("number.")) result = processNumber(instant, operand);
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
 
         this.ram.adjustFree(result);
+    }
+}
+
+function processNumber(instant, operand) {
+    const maxValue = maxValues[instant.name];
+
+    const type = operand.valueType.split(".")[1];
+
+    const base = bases[type];
+    const baseName = baseNames[type];
+    const limitSuffix = limitSuffixes[instant.name];
+
+    const intValue = parseInt(operand.value, base);
+    if(intValue > maxValue) throw new AssemblerError(`${baseName}${limitSuffix}`, {}, instant.line);
+    
+    switch(instant.name) {
+        case "DW": return ByteNumber.divide(intValue);
+        case "DB": return [intValue];
+        case "ORG": return intValue;
     }
 }
