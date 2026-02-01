@@ -19,8 +19,8 @@ export const tokenizer = {
         [Registers.expression.half.memory, "memoryHalfRegister"], // Memory half registers
 
         // Numbers
-        [/\s([0-9]+)(?=\s|,|$)/, "number"], // Decimal
-        [/\s\[([0-9]+)\](?=\s|,|$)/, "memoryNumber"], // Memory decimal
+        [/\s([0-9]+)([dD]?)(?=\s|,|$)/, "number"], // Decimal
+        [/\s\[([0-9]+)([dD]?)\](?=\s|,|$)/, "memoryNumber"], // Memory decimal
         [/\s(0[xX][0-9A-Fa-f]+)(?=\s|,|$)/, "number"], // Hexadecimal
         [/\s\[(0[xX][0-9A-Fa-f]+)\](?=\s|,|$)/, "memoryNumber"], // Memory hexadecimal
         [/\s(0[oO][0-7]+)(?=\s|,|$)/, "number"], // Octal
