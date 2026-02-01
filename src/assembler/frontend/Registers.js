@@ -6,8 +6,8 @@ const registers = {
 };
 
 const expressionDefaultRegistersRoot = [...registers.default, ...registers.system].join("|");
-const expressionDefaultRegistersRegex = new RegExp(`\\s(${expressionDefaultRegistersRoot})(?=\\s|,|;|\\/\\/|$)`);
-const expressionMemoryDefaultRegistersRegex = new RegExp(`\\[(${expressionDefaultRegistersRoot})\\](?=\\s|,|;|\\/\\/|$)`);
+const expressionDefaultRegistersRegex = new RegExp(`(\\s|,)(${expressionDefaultRegistersRoot})(?=\\s|,|;|\\/\\/|$)`);
+const expressionMemoryDefaultRegistersRegex = new RegExp(`(\\s|,)\\[(${expressionDefaultRegistersRoot})\\](?=\\s|,|;|\\/\\/|$)`);
 
 // HALF REGISTERS
 for(let i = 0; i < registers.default.length; i++) {

@@ -32,6 +32,9 @@ export class AssemblerError {
             case "BinaryLimit16": return "16-bit operand must have a value between 0b and 1111111111111111b!";
             case "BinaryLimit8": return "8-bit operand must have a value between 0b and 11111111b!";
             case "BinaryMemoryLimit": return "Binary memory pointer operand must have a value between 0b and 1000000011111b!";
+            case "OctalLimit16": return "16-bit operand must have a value between 0o00 and 0o177777!";
+            case "OctalLimit8": return "8-bit operand must have a value between 0o0 and 0o377!";
+            case "OctalMemoryLimit": return "Octal memory pointer operand must have a value between 0o00 and 0o10037!";
             case "HexLimit16": return "16-bit operand must have a value between 0x0000 and 0xFFFF!";
             case "HexLimit8": return "8-bit operand must have a value between 0x00 and 0xFF!";
             case "HexMemoryLimit": return "Hex memory pointer operand must have a value between 0x0000 and 0x101F!";

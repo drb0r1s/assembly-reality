@@ -31,9 +31,11 @@ function getLengths(instruction) {
         "memory.register": 2,
         "memory.number.decimal": 2,
         "memory.number.binary": 2,
+        "memory.number.octal": 2,
         "memory.number.hex": 2,
         "number.decimal": instruction.isHalf ? 1 : 2,
         "number.binary": instruction.isHalf ? 1 : 2,
+        "number.octal": instruction.isHalf ? 1 : 2,
         "number.hex": instruction.isHalf ? 1 : 2,
         "label.reference": 2,
         "memory.label.reference": 2

@@ -52,6 +52,11 @@ function parseType(instruction, operand) {
             if(intMemoryHexValue > data.maxMemoryValue) throw new AssemblerError("HexMemoryLimit", {}, instruction.line);
             
             return ByteNumber.divide(intMemoryHexValue);
+        case "memory.number.octal":
+            const intMemoryOctalValue = parseInt(operand.value, 8);
+            if(intMemoryOctalValue > data.maxMemoryValue) throw new AssemblerError("OctalMemoryLimit", {}, instruction.line);
+            
+            return ByteNumber.divide(intMemoryOctalValue);
         case "memory.number.binary":
             const intMemoryBinaryValue = parseInt(operand.value, 2);
             if(intMemoryBinaryValue > data.maxMemoryValue) throw new AssemblerError("BinaryMemoryLimit", {}, instruction.line);
@@ -68,6 +73,12 @@ function parseType(instruction, operand) {
             
             if(instruction.isHalf) return [intHexValue];
             return ByteNumber.divide(intHexValue);
+        case "number.octal":
+            const intOctalValue = parseInt(operand.value, 8);
+            if(intOctalValue > data.maxValue) throw new AssemblerError(`OctalLimit${data.bits}`, {}, instruction.line);
+            
+            if(instruction.isHalf) return [intOctalValue];
+            return ByteNumber.divide(intOctalValue);
         case "number.binary":
             const intBinaryValue = parseInt(operand.value, 2);
             if(intBinaryValue > data.maxValue) throw new AssemblerError(`BinaryLimit${data.bits}`, {}, instruction.line);
@@ -115,8 +126,8 @@ function getInstructionCell(instruction, operands, combinations) {
     // number.hex => number.*
     function generalizeType(valueType) {
         const generalization = [
-            "number.decimal", "number.binary", "number.hex",
-            "memory.number.decimal", "memory.number.binary", "memory.number.hex",
+            "number.decimal", "number.binary", "number.octal", "number.hex",
+            "memory.number.decimal", "memory.number.binary", "memory.number.octal", "memory.number.hex",
             "label.reference", "memory.label.reference"
         ];
 

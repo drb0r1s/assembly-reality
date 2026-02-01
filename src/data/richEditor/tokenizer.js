@@ -23,6 +23,8 @@ export const tokenizer = {
         [/\s\[([0-9]+)\](?=\s|,|$)/, "memoryNumber"], // Memory decimal
         [/\s(0[xX][0-9A-Fa-f]+)(?=\s|,|$)/, "number"], // Hexadecimal
         [/\s\[(0[xX][0-9A-Fa-f]+)\](?=\s|,|$)/, "memoryNumber"], // Memory hexadecimal
+        [/\s(0[oO][0-7]+)(?=\s|,|$)/, "number"], // Octal
+        [/\s\[(0[oO][0-7]+)\](?=\s|,|$)/, "memoryNumber"], // Memory octal
         [/\s([01]+)[bB](?=\s|,|$)/, "number"], // Binary
         [/\s\[([01]+)[bB]\](?=\s|,|$)/, "memoryNumber"], // Memory binary
         
