@@ -1,12 +1,12 @@
 export class MemoryRenderer {
-    constructor(canvas, ctx, assembler, ram, cell) {
+    constructor(canvas, ctx, assembler, ram, cellProps, hoveredCell) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.assembler = assembler;
         this.ram = ram;
-        this.cell = cell;
+        this.cellProps = cellProps;
 
-        this.hoveredCell = -1;
+        this.hoveredCell = hoveredCell;
 
         this.matrix = assembler.ram.matrix.getMatrix();
 
@@ -18,7 +18,7 @@ export class MemoryRenderer {
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle";
 
-        this.textYOffset = Math.round(this.cell.height * 0.53); // 0.53 is a constant used to make cells exactly centered relative to rows.
+        this.textYOffset = Math.round(this.cellProps.height * 0.53); // 0.53 is a constant used to make cells exactly centered relative to rows.
 
         this.colors = {
             text: "#D4D4D4",
@@ -44,16 +44,16 @@ export class MemoryRenderer {
         const SP = this.assembler.cpuRegisters.getValue("SP");
 
         for(let i = 0; i < this.matrix.length; i++) {
-            const row = Math.floor(i / 16);
-            const column = i % 16;
+            const row = Math.floor(i / this.cellProps.columns);
+            const column = i % this.cellProps.columns;
 
-            const x = column * this.cell.width;
-            const y = row * this.cell.height;
+            const x = column * this.cellProps.width;
+            const y = row * this.cellProps.height;
 
             const cellColor = this.getCellColor(i, IP, SP);
 
             this.ctx.fillStyle = cellColor;
-            this.ctx.fillRect(x, y, 24, 20);
+            this.ctx.fillRect(x, y, this.cellProps.width, this.cellProps.height);
 
             if(
                 cellColor === this.colors.instruction ||
@@ -64,7 +64,7 @@ export class MemoryRenderer {
 
             this.ctx.fillText(
                 this.hexTable[this.matrix[i]],
-                x + this.cell.width / 2,
+                x + this.cellProps.width / 2,
                 y + this.textYOffset
             );
         }
@@ -78,8 +78,8 @@ export class MemoryRenderer {
 
         this.ctx.beginPath();
 
-        for (let column = 0; column < 16; column++) {
-            const x = column * 24;
+        for(let column = 0; column < this.cellProps.columns; column++) {
+            const x = column * this.cellProps.width;
 
             // 0.5 is a dpi constant (1 / 2).
             this.ctx.moveTo(x + 0.5, 0);
@@ -89,30 +89,30 @@ export class MemoryRenderer {
         this.ctx.stroke();
     }
 
-    getCellColor(index, IP, SP) {
-        if(index === SP && index === IP) return this.gradients.spIp;
+    getCellColor(cell, IP, SP) {
+        if(cell === SP && cell === IP) return this.gradients.spIp;
 
-        if(index === SP) return this.colors.sp;
+        if(cell === SP) return this.colors.sp;
         
-        if(index === IP) {
-            if(index === this.hoveredCell) return this.colors.instructionHover;
+        if(cell === IP) {
+            if(cell === this.hoveredCell) return this.colors.instructionHover;
             return this.colors.ip;
         }
 
-        if(index > SP && index <= this.ram.stackStart) return this.colors.stack;
+        if(cell > SP && cell <= this.ram.stackStart) return this.colors.stack;
 
-        if(this.ram.instructions.includes(index)) {
-            if(index === this.hoveredCell) return this.colors.instructionHover;
+        if(this.ram.instructions.includes(cell)) {
+            if(cell === this.hoveredCell) return this.colors.instructionHover;
             return this.colors.instruction;
         }
 
-        if(index >= 0x1000 && index <= 0x101F) return this.colors.textDisplay;
+        if(cell >= 0x1000 && cell <= 0x101F) return this.colors.textDisplay;
 
         return this.colors.background;
     }
 
     getGradient(firstColor, secondColor) {
-        const gradient = this.ctx.createLinearGradient(0, this.cell.height, this.cell.width, 0);
+        const gradient = this.ctx.createLinearGradient(0, this.cellProps.height, this.cellProps.width, 0);
 
         gradient.addColorStop(0.0, firstColor);
         gradient.addColorStop(0.5, firstColor);
@@ -122,13 +122,13 @@ export class MemoryRenderer {
         return gradient;
     }
 
-    hoverCell(index) {
+    hoverCell(cell) {
         const IP = this.assembler.cpuRegisters.getValue("IP");
-        const isInteractive = index === IP || this.ram.instructions.includes(index);
+        const isInteractive = cell === IP || this.ram.instructions.includes(cell);
 
         if(isInteractive) {
             this.canvas.style.cursor = "pointer";
-            this.hoveredCell = index;
+            this.hoveredCell = cell;
         }
 
         else this.unhoverCell();

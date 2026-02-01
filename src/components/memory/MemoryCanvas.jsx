@@ -11,7 +11,7 @@ const MemoryCanvas = ({ ram }) => {
     const rendererRef = useRef(null);
     const hoveredCellRef = useRef(-1);
 
-    const cell = useMemo(() => { return {
+    const cellProps = useMemo(() => { return {
         height: 20,
         width: 24,
         rows: 258,
@@ -26,8 +26,8 @@ const MemoryCanvas = ({ ram }) => {
 
         const dpr = window.devicePixelRatio || 1;
 
-        const cssWidth = cell.width * cell.columns;
-        const cssHeight = cell.height * cell.rows;
+        const cssWidth = cellProps.width * cellProps.columns;
+        const cssHeight = cellProps.height * cellProps.rows;
 
         // CSS size
         canvas.style.width = cssWidth + "px";
@@ -39,21 +39,15 @@ const MemoryCanvas = ({ ram }) => {
 
         // Normalize coordinate system
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, ram, cell);
-        rendererRef.current.render();
-
-        return () => { rendererRef.current = null; };
-    }, [assembler, ram]);
+    }, []);
 
     useEffect(() => {
-        rendererRef.current?.render();
-    }, [
-        assembler.cpuRegisters.getValue("IP"),
-        assembler.cpuRegisters.getValue("SP"),
-        ram.instructions,
-        ram.stackStart
-    ]);
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+
+        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, ram, cellProps, hoveredCellRef.current);
+        rendererRef.current.render();
+    }, [assembler, ram]);
 
     function handleClick(e) {
         if(!isCodeAssembled) return;
@@ -63,12 +57,12 @@ const MemoryCanvas = ({ ram }) => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const row = Math.floor(y / cell.height);
-        const column = Math.floor(x / cell.width);
+        const row = Math.floor(y / cellProps.height);
+        const column = Math.floor(x / cellProps.width);
 
-        const index = row * cell.columns + column;
+        const cell = row * cellProps.columns + column;
 
-        const line = assembler.lines.collection[index];
+        const line = assembler.lines.collection[cell];
         if(line) Manager.trigger("highlightLine", line);
     }
 
@@ -81,15 +75,15 @@ const MemoryCanvas = ({ ram }) => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const row = Math.floor(y / cell.height);
-        const column = Math.floor(x / cell.width);
+        const row = Math.floor(y / cellProps.height);
+        const column = Math.floor(x / cellProps.width);
 
-        const index = row * cell.columns + column;
+        const cell = row * cellProps.columns + column;
 
-        if(index !== hoveredCellRef.current) {
-            hoveredCellRef.current = index;
+        if(cell !== hoveredCellRef.current) {
+            hoveredCellRef.current = cell;
 
-            rendererRef.current?.hoverCell(index);
+            rendererRef.current?.hoverCell(cell);
             rendererRef.current?.render();
         }
     }
