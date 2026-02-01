@@ -23,6 +23,13 @@ export class Instants {
             result = ByteNumber.divide(intValue);
         }
 
+        else if(operand.valueType === "number.binary") {
+            const intValue = parseInt(operand.value, 2);
+            if(intValue > maxValue) throw new AssemblerError("BinaryLimit16", {}, instant.line);
+            
+            result = ByteNumber.divide(intValue);
+        }
+
         else if(operand.valueType === "number.hex") {
             const intValue = parseInt(operand.value, 16);
             if(intValue > maxValue) throw new AssemblerError("HexLimit16", {}, instant.line);
@@ -54,6 +61,13 @@ export class Instants {
             if(intValue > maxValue) throw new AssemblerError("DecimalLimit8", {}, instant.line);
 
             result = [intValue];
+        }
+
+        else if(operand.valueType === "number.binary") {
+            const intValue = parseInt(operand.value, 2);
+            if(intValue > maxValue) throw new AssemblerError("BinaryLimit8", {}, instant.line);
+            
+            result = ByteNumber.divide(intValue);
         }
 
         else if(operand.valueType === "number.hex") {
@@ -120,6 +134,13 @@ export class Instants {
         if(operand.valueType === "number.decimal") {
             const intValue = parseInt(operand.value);
             if(intValue > maxValue) throw new AssemblerError("DecimalMemoryLimit", {}, instant.line);
+
+            result = intValue;
+        }
+
+        else if(operand.valueType === "number.binary") {
+            const intValue = parseInt(operand.value, 2);
+            if(intValue > maxValue) throw new AssemblerError("BinaryMemoryLimit", {}, instant.line);
 
             result = intValue;
         }
