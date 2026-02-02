@@ -14,16 +14,17 @@ const Editor = () => {
     const [codes, setCodes] = useState([""]);
     const [error, setError] = useState({ type: "", content: "" });
 
-    const codesRef = useRef(null);
+    const pagesRef = useRef(pages);
+    const codesRef = useRef(codes);
 
     const speed = useManagerValue("speed");
     const speedRef = useRef(speed);
 
     const isCodeEmpty = useManagerValue("isCodeEmpty");
-    const isCodeAssembled = useManagerValue("isCodeAssembled");
 
     useCodeAutosave({ pages, setPages, codes, setCodes });
     
+    useEffect(() => { pagesRef.current = pages }, [pages]);
     useEffect(() => { codesRef.current = codes }, [codes]);
     useEffect(() => { speedRef.current = speed }, [speed]);
 
@@ -31,7 +32,7 @@ const Editor = () => {
         const newIsEmpty = codes[pages.active].length === 0;
         if(newIsEmpty !== isCodeEmpty) Manager.set("isCodeEmpty", newIsEmpty);
 
-        if(isCodeAssembled) Manager.set("isCodeAssembled", false);
+        Manager.set("isAssembled", false);
     }, [codes[pages.active]]);
 
     useEffect(() => {
@@ -77,9 +78,6 @@ const Editor = () => {
                     break;
                 case "reset":
                     Manager.sequence(() => {
-                        Manager.set("isRunning", false);    
-                        Manager.set("isExecuted", false);
-                    
                         Manager.trigger("ramReset");
                         Manager.trigger("cpuRegistersPing");
                         Manager.trigger("ioRegistersPing");
@@ -115,7 +113,12 @@ const Editor = () => {
         if(!assemblerWorker) return;
 
         const unsubscribeAssemble = Manager.subscribe("assemble", () => {
-            Manager.set("isCodeAssembled", true);
+            Manager.sequence(() => {
+                Manager.set("isMemoryEmpty", false);
+                Manager.set("isAssembled", true);
+                Manager.set("isExecuted", false);
+            });
+
             assemblerWorker.postMessage({ action: "assemble", data: getActiveCode() });
         });
 
@@ -125,8 +128,11 @@ const Editor = () => {
         });
 
         const unsubscribeAssembleRun = Manager.subscribe("assembleRun", () => {
-            Manager.set("isCodeAssembled", true);
-            Manager.set("isRunning", true);
+            Manager.sequence(() => {
+                Manager.set("isMemoryEmpty", false);
+                Manager.set("isAssembled", true);
+                Manager.set("isRunning", true);
+            });
 
             assemblerWorker.postMessage({ action: "assembleRun", data: { code: getActiveCode(), speed: parseInt(speedRef.current) } });
         });
@@ -145,28 +151,18 @@ const Editor = () => {
                 const newCodes = [];
 
                 for(let i = 0; i < prevCodes.length; i++) {
-                    if(i === pages.active) newCodes.push(data);
+                    if(i === pagesRef.current.active) newCodes.push(data);
                     else newCodes.push(prevCodes[i]);
                 }
 
                 return newCodes;
             });
 
-            else {
-                setPages(prevPages => {
-                    return {
-                        list: [...prevPages.list, `New page (${prevPages.counter + 1})`],
-                        active: prevPages.list.length,
-                        counter: prevPages.counter + 1
-                    };
-                });
-
-                setCodes(prevCodes => [...prevCodes, data]);
-            }
+            else addPage(data);
         });
 
         const unsubscribeCodeRequest = Manager.subscribe("codeRequest", () => Manager.trigger("codeResponse", {
-            title: pages.list[pages.active],
+            title: pagesRef.current.list[pagesRef.current.active],
             content: getActiveCode()
         }));
 
@@ -182,10 +178,12 @@ const Editor = () => {
     }, [assemblerWorker, speed]);
 
     function getActiveCode() {
-        return codesRef.current[pages.active];
+        return codesRef.current[pagesRef.current.active];
     }
 
-    function addPage() {
+    function addPage(content = "") {
+        clearMemory();
+
         setPages(prevPages => {
             const newPagesList = [...prevPages.list, `New page (${prevPages.counter + 1})`];
             
@@ -196,12 +194,14 @@ const Editor = () => {
             };
         });
 
-        setCodes(prevCodes => [...prevCodes, ""]);
+        setCodes(prevCodes => [...prevCodes, content]);
     }
 
     function deletePage(e, target) {
         e.stopPropagation();
         if(!target) return; // The first page cannot be deleted.
+
+        clearMemory();
 
         setPages(prevPages => {
             let newActive = prevPages.active;
@@ -225,6 +225,15 @@ const Editor = () => {
             return newCodes;
         });
     }
+
+    function switchPage(active) {
+        clearMemory();
+        setPages(prevPages => { return {...prevPages, active} });
+    }
+
+    function clearMemory() {
+        Manager.trigger("reset");
+    }
     
     return(
         <div className="editor">
@@ -233,7 +242,7 @@ const Editor = () => {
                     return <div
                         key={page}
                         className={`editor-page ${index === pages.active ? "editor-active-page" : ""}`}
-                        onClick={() => setPages(prevPages => { return {...prevPages, active: index} })}
+                        onClick={() => switchPage(index)}
                     >
                         <div className="editor-page-left-group">
                             <img src={images.pageIcon} alt="PAGE" />

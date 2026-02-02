@@ -4,13 +4,14 @@ export const Manager = (() => {
     const values = new Map([
         ["view", { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true }],
         ["speed", Autosave.conditionalGetItem("SPEED")],
-        ["isHighSpeed", false],
-        ["isRunning", false],
-        ["isExecuted", false],
-        ["isDisplayExpanded", false],
         ["isAutosaveActive", Autosave.getItem("IS_AUTOSAVE_ACTIVE")],
+        ["isDisplayExpanded", false],
+        ["isHighSpeed", false],
         ["isCodeEmpty", true],
-        ["isCodeAssembled", false]
+        ["isMemoryEmpty", true],
+        ["isAssembled", false],
+        ["isRunning", false],
+        ["isExecuted", false]
     ]);
     
     const listeners = new Map();

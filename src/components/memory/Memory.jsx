@@ -24,7 +24,7 @@ const Memory = () => {
         });
 
         const unsubscribeLinesUpdate = Manager.subscribe("linesUpdate", lines => {
-            assembler.lines.collection = lines.collection;
+            if(lines?.collection) assembler.lines.collection = lines.collection;
         });
     
         return () => {

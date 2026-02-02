@@ -21,7 +21,13 @@ const App = () => {
         const unsubscribe = Manager.subscribe("reset", () => {
             if(!assemblerWorker) return;
             
-            Manager.set("isCodeAssembled", false);
+            Manager.sequence(() => {
+                Manager.set("isMemoryEmpty", true);
+                Manager.set("isAssembled", false);
+                Manager.set("isRunning", false);
+                Manager.set("isExecuted", false);
+            });
+            
             assemblerWorker.postMessage({ action: "reset" });
         });
         

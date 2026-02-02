@@ -18,7 +18,7 @@ const MemoryCanvas = ({ ram }) => {
         columns: 16
     }}, []);
 
-    const isCodeAssembled = useManagerValue("isCodeAssembled");
+    const isMemoryEmpty = useManagerValue("isMemoryEmpty");
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -50,7 +50,7 @@ const MemoryCanvas = ({ ram }) => {
     }, [assembler, ram]);
 
     function handleClick(e) {
-        if(!isCodeAssembled) return;
+        if(isMemoryEmpty) return;
 
         const rect = canvasRef.current.getBoundingClientRect();
 
@@ -67,7 +67,7 @@ const MemoryCanvas = ({ ram }) => {
     }
 
     function handleMouseMove(e) {
-        if(!isCodeAssembled) return;
+        if(isMemoryEmpty) return;
 
         const canvas = canvasRef.current;
         const rect = canvas.getBoundingClientRect();
@@ -89,7 +89,7 @@ const MemoryCanvas = ({ ram }) => {
     }
 
     function handleMouseLeave() {
-        if(!isCodeAssembled) return;
+        if(isMemoryEmpty) return;
 
         hoveredCellRef.current = -1;
 

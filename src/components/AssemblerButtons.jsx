@@ -3,17 +3,18 @@ import { Manager } from "../helpers/Manager";
 import { images } from "../data/images";
 
 const AssemblerButtons = ({ className, isExpanded }) => {
+    const isCodeEmpty = useManagerValue("isCodeEmpty");
+    const isMemoryEmpty = useManagerValue("isMemoryEmpty");
+
+    const isAssembled = useManagerValue("isAssembled");
     const isRunning = useManagerValue("isRunning");
     const isExecuted = useManagerValue("isExecuted");
 
-    const isCodeEmpty = useManagerValue("isCodeEmpty");
-    const isCodeAssembled = useManagerValue("isCodeAssembled");
+    const isAssembleDisabled = isCodeEmpty || isAssembled || isRunning;
+    const isAssembleRunDisabled = (isCodeEmpty && isMemoryEmpty) || isExecuted;
 
-    const isAssembleDisabled = isCodeEmpty || isCodeAssembled;
-    const isAssembleRunDisabled = (!isRunning && isCodeEmpty) || isExecuted;
-
-    const isRunDisabled = isExecuted || !isCodeAssembled;
-    const isStepDisabled = isRunning || isExecuted || !isCodeAssembled;
+    const isRunDisabled = isMemoryEmpty || isExecuted;
+    const isStepDisabled = isMemoryEmpty || isRunning || isExecuted;
     
     function handleButton(button) {
         return Manager.trigger(button);
@@ -24,10 +25,10 @@ const AssemblerButtons = ({ className, isExpanded }) => {
             {isExpanded ? <>
                 <button
                     className={`assembler-button ${isAssembleRunDisabled ? "assembler-button-disabled" : ""}`}
-                    onClick={isAssembleRunDisabled ? () => {} : () => handleButton(isRunning ? "pause" : isCodeAssembled ? "run" : "assembleRun")}
+                    onClick={isAssembleRunDisabled ? () => {} : () => handleButton(isRunning ? "pause" : isMemoryEmpty ? "assembleRun" : "run")}
                 >
-                    <img src={isRunning ? images.pauseIcon : isCodeAssembled ? images.runIcon : images.assembleRunIcon} alt={isRunning ? "PAUSE" : isCodeAssembled ? "RUN" : "ASSEMBLE & RUN"} />
-                    <p>{isRunning ? "Pause" : isCodeAssembled ? "Run" : "Assemble & Run"}</p>
+                    <img src={isRunning ? images.pauseIcon : isMemoryEmpty ? images.assembleRunIcon : images.runIcon} alt={isRunning ? "PAUSE" : isMemoryEmpty ? "ASSEMBLE & RUN" : "RUN"} />
+                    <p>{isRunning ? "Pause" : isMemoryEmpty ? "Assemble & Run" : "Run"}</p>
                 </button>
 
                 <button
@@ -63,8 +64,8 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                 </button>
 
                 <button
-                    className={`assembler-button ${!isCodeAssembled ? "assembler-button-disabled" : ""}`}
-                    onClick={!isCodeAssembled ? () => {} : () => handleButton("reset")}
+                    className={`assembler-button ${isMemoryEmpty ? "assembler-button-disabled" : ""}`}
+                    onClick={isMemoryEmpty ? () => {} : () => handleButton("reset")}
                 >
                     <img src={images.resetIcon} alt="RESET" />
                     <p>Reset</p>

@@ -50,6 +50,8 @@ export class Assembler {
     
     assemble(text) {
         try {
+            if(text === null || text === undefined || text?.length === 0) return;
+
             const tokens = Tokenizer.tokenize(text);
             let ast = AST.build(tokens);
 
