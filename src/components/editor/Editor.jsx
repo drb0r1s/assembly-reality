@@ -74,7 +74,8 @@ const Editor = () => {
 
                     break;
                 case "step":
-                    Manager.trigger("highlightLine", data);
+                    if(data === -1) Manager.set("isExecuted", true);
+                    else Manager.trigger("highlightLine", data);
                     break;
                 case "reset":
                     Manager.sequence(() => {
