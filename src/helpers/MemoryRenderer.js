@@ -90,7 +90,10 @@ export class MemoryRenderer {
     }
 
     getCellColor(cell, IP, SP) {
-        if(cell === SP && cell === IP) return this.gradients.spIp;
+        if(cell === SP && cell === IP) {
+            if(cell === this.hoveredCell) return this.colors.instructionHover;
+            return this.gradients.spIp;
+        }
 
         if(cell === SP) return this.colors.sp;
         
