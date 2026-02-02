@@ -3,7 +3,7 @@ header {
     width: 100%;
     @include center;
     justify-content: space-between;
-    background-color: #0F0F0F;
+    background-color: $primaryBackground;
     padding: 0 12px;
 
     @import "./header-dropdown";
@@ -20,7 +20,7 @@ header {
         .header-left-group-divider {
             height: 19px;
             width: 1px;
-            background-color: rgba($color: #F4F4F4, $alpha: .3);
+            background-color: rgba($color: $primaryText, $alpha: .3);
         }
         
         .header-buttons {
@@ -43,7 +43,7 @@ header {
                 }
 
                 p {
-                    color: #F4F4F4;
+                    color: $primaryText;
                     font-size: 14px;
                     font-family: Roboto-Regular;
                 }
@@ -56,7 +56,7 @@ header {
             span {
                 @include center;
                 width: 83px;
-                color: #F4F4F4;
+                color: $primaryText;
                 font-size: 14px;
                 font-family: SourceCodePro-Regular;
                 background-color: #274677;

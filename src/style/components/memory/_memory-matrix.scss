@@ -14,7 +14,7 @@
             height: 20px;
             width: 24px;
             @include center;
-            color: #D8D8D8;
+            color: $tertiaryText;
             font-size: 13px;
             font-family: Roboto-Medium;
             border-left: 1px solid #2F3336;
@@ -48,7 +48,7 @@
                 height: 20px;
                 width: 28px;
                 @include center;
-                color: #D8D8D8;
+                color: $tertiaryText;
                 font-size: 13px;
                 font-family: Roboto-Regular;
                 padding: 5px;

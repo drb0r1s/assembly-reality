@@ -6,7 +6,7 @@
     cursor: default;
 
     strong {
-        color: #F4F4F4;
+        color: $primaryText;
         font-size: 18px;
         font-family: Roboto-SemiBold;
         font-weight: normal;
@@ -20,10 +20,10 @@
 
         button {
             width: 75px;
-            color: #F4F4F4;
+            color: $primaryText;
             font-size: 14px;
             font-family: Roboto-Regular;
-            background-color: #0A0A0A;
+            background-color: $secondaryBackground;
             border: 1px solid transparent;
             border-radius: 10px;
             padding: 10px 0;

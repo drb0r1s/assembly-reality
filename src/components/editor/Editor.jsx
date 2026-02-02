@@ -184,7 +184,7 @@ const Editor = () => {
         return codesRef.current[pagesRef.current.active];
     }
 
-    function addPage(content = "") {
+    function addPage(content) {
         clearMemory();
 
         setPages(prevPages => {
@@ -261,7 +261,7 @@ const Editor = () => {
 
                 <button
                     className="editor-add-button"
-                    onClick={addPage}
+                    onClick={() => addPage("")}
                 >
                     <img src={images.addIcon} alt="ADD" />
                 </button>

@@ -4,7 +4,7 @@
 
     strong {
         width: 26px;
-        color: #F4F4F4;
+        color: $primaryText;
         font-size: 14px;
         font-family: Roboto-Medium;
         font-weight: normal;
@@ -12,10 +12,10 @@
     }
 
     p {
-        color: #F4F4F4;
+        color: $primaryText;
         font-size: 14px;
         font-family: SourceCodePro-Regular;
-        background-color: #0F0F0F;
+        background-color: $primaryBackground;
         border-left: 2px solid #2F3336;
         padding: 0 4px;
         user-select: none;

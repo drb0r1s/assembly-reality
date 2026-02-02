@@ -1,7 +1,7 @@
 .header-dropdown {
     @include center(column);
     align-items: flex-start;
-    background-color: #0F0F0F;
+    background-color: $primaryBackground;
     border-radius: 5px;
     opacity: 0;
     padding: 7px;

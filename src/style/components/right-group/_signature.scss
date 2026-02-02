@@ -11,14 +11,14 @@
     }
 
     strong {
-        color: #2F3336;
+        color: $textDisplayBackground;
         font-size: 24px;
         font-family: SourceCodePro-Regular;
         font-weight: normal;
     }
 
     p {
-        color: #2F3336;
+        color: $textDisplayBackground;
         font-size: 14px;
         font-family: SourceCodePro-Regular;
     }

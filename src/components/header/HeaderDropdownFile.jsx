@@ -75,6 +75,8 @@ const HeaderDropdownFile = () => {
                 </button>;
             })}
 
+            <div className="header-dropdown-file-divider"></div>
+
             <button
                 className="header-dropdown-file-autosave-button"
                 onClick={() => {

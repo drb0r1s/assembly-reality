@@ -12,19 +12,19 @@
         @include center;
         flex-shrink: 0;
         justify-content: space-between;
-        background-color: #0F0F0F;
+        background-color: $primaryBackground;
         border-bottom: 1px solid #2F3336;
         padding: 0 12px;
 
         strong {
-            color: #F4F4F4;
+            color: $primaryText;
             font-size: 14px;
             font-family: Roboto-SemiBold;
             font-weight: normal;
         }
 
         button {
-            color: #F4F4F4;
+            color: $primaryText;
             font-size: 12px;
             font-family: Roboto-Regular;
             background-color: transparent;

@@ -27,7 +27,7 @@
         }
 
         p {
-            color: #F4F4F4;
+            color: $primaryText;
             font-size: 14px;
             font-family: Roboto-Regular;
         }
@@ -39,6 +39,12 @@
             position: absolute;
             z-index: 1;
         }
+    }
+
+    .header-dropdown-file-divider {
+        height: 1px;
+        width: 100%;
+        background-color: rgba($color: $primaryText, $alpha: .3);
     }
 
     .header-dropdown-file-autosave-button {

@@ -9,7 +9,7 @@
     .range-line {
         height: 5px;
         width: 100%;
-        background-color: #F4F4F4;
+        background-color: $primaryText;
         border-radius: 10px;
     }
 
@@ -34,7 +34,7 @@
         transition: background-color 300ms ease;
 
         &:hover {
-            background-color: #2e4469;
+            background-color: #2E4469;
         }
     }
 }

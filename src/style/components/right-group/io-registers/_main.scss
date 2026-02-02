@@ -19,7 +19,7 @@
         @import "./io-register";
         
         .io-registers-map-header {
-            background-color: #0A0A0A;
+            background-color: $secondaryBackground;
             position: sticky;
             top: 0;
 

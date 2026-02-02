@@ -41,7 +41,7 @@
             }
 
             p {
-                color: #F4F4F4;
+                color: $primaryText;
                 font-size: 24px;
             }
         }
@@ -59,7 +59,7 @@
         }
 
         strong {
-            color: #F4F4F4;
+            color: $primaryText;
             font-size: 36px;
             font-family: SourceCodePro-Regular;
             font-weight: normal;
@@ -80,10 +80,10 @@
             height: 17px;
             width: 13px;
             @include center;
-            color: #D4D4D4;
+            color: $secondaryText;
             font-size: 16px;
             font-family: SourceCodePro-Regular;
-            background-color: #2F3336;
+            background-color: $textDisplayBackground;
         }
     }
 
@@ -124,7 +124,7 @@
         }
 
         p {
-            color: #F4F4F4;
+            color: $primaryText;
             font-size: 14px;
             font-family: SourceCodePro-Regular;
         }

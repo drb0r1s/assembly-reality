@@ -24,7 +24,7 @@
             justify-content: space-between;
             gap: 12px;
             flex-shrink: 0;
-            background-color: #0F0F0F;
+            background-color: $primaryBackground;
             border: 1px solid transparent;
             border-radius: 5px;
             opacity: .7;
@@ -33,7 +33,7 @@
             transition: 300ms;
 
             &:hover {
-                background-color: #2B2A2A;
+                background-color: $tertiaryBackground;
 
                 button {
                     opacity: 1;
@@ -51,7 +51,7 @@
                 }
 
                 p {
-                    color: #F4F4F4;
+                    color: $primaryText;
                     font-size: 14px;
                     font-family: Roboto-Regular;
                 }
@@ -74,7 +74,7 @@
         }
 
         .editor-active-page {
-            background-color: #2B2A2A;
+            background-color: $tertiaryBackground;
             opacity: 1;
             cursor: default;
         }
@@ -84,14 +84,14 @@
             width: 30px;
             @include center;
             flex-shrink: 0;
-            background-color: #0F0F0F;
+            background-color: $primaryBackground;
             border: none;
             border-radius: 50%;
             cursor: pointer;
             transition: 300ms;
 
             &:hover {
-                background-color: #2B2A2A;
+                background-color: $tertiaryBackground;
             }
 
             img {
