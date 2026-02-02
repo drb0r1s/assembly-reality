@@ -3,41 +3,71 @@
     @include center(column);
     gap: 7px;
 
-    button {
+    .header-dropdown-view-theme-button {
         width: 100%;
         @include center;
         justify-content: space-between;
+        gap: 10px;
         background-color: transparent;
         border: none;
         border-radius: 5px;
         padding: 5px;
-        cursor: pointer;
+        position: relative;
         transition: 300ms;
 
-        &:hover {
-            background-color: $blue;
-        }
-
-        .header-dropdown-view-button-left-group {
+        .header-dropdown-view-theme-button-left-group {
             @include center;
             gap: 10px;
-
-            img {
-                height: 22px;
-                width: 22px;
-                object-fit: contain;
-            }
-            
-            p {
-                color: #F4F4F4;
-                font-size: 14px;
-                font-family: Roboto-Regular;
-            }
         }
+    }
 
-        .header-dropdown-view-check-icon {
-            opacity: 0;
+    .header-dropdown-view-divider {
+        height: 1px;
+        width: 100%;
+        background-color: rgba($color: $primaryText, $alpha: .3);
+    }
+
+    .header-dropdown-view-sections {
+        width: 100%;
+        @include center(column);
+        gap: 7px;
+        
+        button {
+            width: 100%;
+            @include center;
+            justify-content: space-between;
+            background-color: transparent;
+            border: none;
+            border-radius: 5px;
+            padding: 5px;
+            cursor: pointer;
             transition: 300ms;
+
+            &:hover {
+                background-color: $blue;
+            }
+
+            .header-dropdown-view-button-left-group {
+                @include center;
+                gap: 10px;
+
+                img {
+                    height: 22px;
+                    width: 22px;
+                    object-fit: contain;
+                }
+                
+                p {
+                    color: $primaryText;
+                    font-size: 14px;
+                    font-family: Roboto-Regular;
+                }
+            }
+
+            .header-dropdown-view-check-icon {
+                opacity: 0;
+                transition: 300ms;
+            }
         }
     }
 }

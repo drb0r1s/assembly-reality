@@ -1,9 +1,13 @@
+import Switch from "../Switch";
 import { useManagerValue } from "../../hooks/useManagerValue";
+import { Autosave } from "../../helpers/Autosave";
 import { Manager } from "../../helpers/Manager";
 import { images } from "../../data/images";
 
 const HeaderDropdownView = () => {
+    const theme = useManagerValue("theme");
     const view = useManagerValue("view");
+
     const buttons = ["Memory", "I/O Devices", "CPU Registers", "I/O Registers"];
 
     function getView(button) {
@@ -38,24 +42,43 @@ const HeaderDropdownView = () => {
     
     return(
         <div className="header-dropdown-view">
-            {buttons.map((button, index) => {
-                return <button
-                    key={index}
-                    onClick={() => updateView(button)}
-                >
-                    <div className="header-dropdown-view-button-left-group">
-                        <img src={images.windowIcon} alt="WINDOW" />
-                        <p>{button}</p>
-                    </div>
+            <button
+                className="header-dropdown-view-theme-button"
+                onClick={() => {
+                    Autosave.setItem("THEME", theme === "light" ? "dark" : "light");
+                    Manager.set("theme", theme === "light" ? "dark" : "light");
+                }}
+            >
+                <div className="header-dropdown-view-theme-button-left-group">
+                    <img src={images.themeIcon} alt="SAVE" />
+                    <p>Theme</p>
+                </div>
 
-                    <img
-                        src={images.checkIcon}
-                        alt="CHECK"
-                        className="header-dropdown-view-check-icon"
-                        style={getView(button) ? { opacity: "1" } : {}}
-                    />
-                </button>;
-            })}
+                <Switch isActive={theme === "light"} />
+            </button>
+
+            <div className="header-dropdown-view-divider"></div>
+
+            <div className="header-dropdown-view-sections">
+                {buttons.map((button, index) => {
+                    return <button
+                        key={index}
+                        onClick={() => updateView(button)}
+                    >
+                        <div className="header-dropdown-view-button-left-group">
+                            <img src={images.windowIcon} alt="WINDOW" />
+                            <p>{button}</p>
+                        </div>
+
+                        <img
+                            src={images.checkIcon}
+                            alt="CHECK"
+                            className="header-dropdown-view-check-icon"
+                            style={getView(button) ? { opacity: "1" } : {}}
+                        />
+                    </button>;
+                })}
+            </div>
         </div>
     );
 }

@@ -22,6 +22,9 @@ import windowIcon from "../images/window-icon.svg";
 import importIcon from "../images/import-icon.svg";
 import exportIcon from "../images/export-icon.svg";
 import saveIcon from "../images/save-icon.svg";
+import themeIcon from "../images/theme-icon.svg";
+import sunIcon from "../images/sun-icon.svg";
+import moonIcon from "../images/moon-icon.svg";
 
 export const images = {
     // ARy
@@ -29,5 +32,5 @@ export const images = {
 
     // GENERAL
     arrowDownIcon, assembleIcon, runIcon, assembleRunIcon, pauseIcon, stepIcon, resetIcon, keyboardIcon, keyboardBlueIcon, checkIcon,
-    xIcon, visibilityIcon, pageIcon, addIcon, expandIcon, windowIcon, importIcon, exportIcon, saveIcon
+    xIcon, visibilityIcon, pageIcon, addIcon, expandIcon, windowIcon, importIcon, exportIcon, saveIcon, themeIcon, sunIcon, moonIcon
 };
