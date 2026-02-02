@@ -54,12 +54,12 @@
         canvas {
             height: 256px;
             width: 256px;
-            background-color: $mainBackground;
+            background-color: black;
             border: 1px solid #2F3336;
         }
 
         strong {
-            color: $primaryText;
+            color: #F4F4F4;
             font-size: 36px;
             font-family: SourceCodePro-Regular;
             font-weight: normal;

@@ -1,6 +1,5 @@
 // ARy
 import ARy from "../images/ARy/ARy.svg?react";
-import ARyGrey from "../images/ARy/ARy-grey.svg?react";
 
 // GENERAL
 import ArrowDownIcon from "../images/arrow-down-icon.svg?react";
@@ -25,7 +24,7 @@ import ThemeIcon from "../images/theme-icon.svg?react";
 
 export const Images = {
     // ARy
-    ARy, ARyGrey,
+    ARy,
 
     // GENERAL
     ArrowDownIcon, AssembleIcon, RunIcon, AssembleRunIcon, PauseIcon, StepIcon, ResetIcon, KeyboardIcon, CheckIcon,

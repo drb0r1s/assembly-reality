@@ -747,6 +747,7 @@ header .header-title {
 .right-group .right-group-content .signature .signature-logo {
   height: 80px;
   width: 130px;
+  color: var(--textDisplayBackground);
   -o-object-fit: contain;
      object-fit: contain;
   margin-bottom: 10px;
@@ -1107,11 +1108,11 @@ header .header-title {
 .display .display-canvas-holder canvas {
   height: 256px;
   width: 256px;
-  background-color: var(--mainBackground);
+  background-color: black;
   border: 1px solid #2F3336;
 }
 .display .display-canvas-holder strong {
-  color: var(--primaryText);
+  color: #F4F4F4;
   font-size: 36px;
   font-family: SourceCodePro-Regular;
   font-weight: normal;
