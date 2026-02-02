@@ -1,71 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   width="100.086mm"
-   height="61.931763mm"
-   viewBox="0 0 100.086 61.931763"
+   width="378.27728"
+   height="234.07159"
+   viewBox="0 0 100.08581 61.931629"
    version="1.1"
-   id="svg1"
+   id="svg4"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs1">
-    <rect
-       x="143.76384"
-       y="104.55552"
-       width="281.71906"
-       height="149.57248"
-       id="rect1" />
-    <rect
-       x="143.76384"
-       y="104.55552"
-       width="281.71906"
-       height="149.57248"
-       id="rect1-4" />
-    <rect
-       x="143.76384"
-       y="104.55552"
-       width="281.71906"
-       height="149.57248"
-       id="rect1-4-5" />
-  </defs>
+     id="defs1" />
   <g
-     id="layer1"
-     transform="translate(-10.091998,-5.7929972)">
+     style="fill:#f4f4f4;fill-opacity:1"
+     id="g4"
+     transform="translate(-2.3063416e-4,-0.00448538)">
+    <path
+       d="m 144.87301,136.02763 7.66134,-22.74135 h 3.25867 l 7.66134,22.74135 h -3.05067 l -3.95201,-12.72268 q -0.58933,-1.90666 -1.17866,-3.77867 -0.55467,-1.90666 -1.07467,-3.88267 h -0.13867 q -0.55467,1.97601 -1.10933,3.88267 -0.55467,1.87201 -1.144,3.77867 l -3.98667,12.72268 z m 4.02133,-6.93334 v -2.32267 h 10.43468 v 2.32267 z"
+       id="text1"
+       style="font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';white-space:pre;stroke-width:1.51181"
+       transform="matrix(2.23678,0,0,2.23678,-324.049,-253.392)"
+       aria-label="A" />
     <g
-       id="g2"
-       transform="matrix(1.332943,0,0,1.332943,-3.3600609,-1.9287382)"
-       style="fill:#f4f4f4;fill-opacity:1">
-      <text
-         xml:space="preserve"
-         transform="matrix(1.6780744,0,0,1.6780744,-233.01566,-184.30652)"
-         id="text1-2-1"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-4-5);fill:#f4f4f4;fill-opacity:1;stroke-width:1.51181"><tspan
-           x="143.76367"
-           y="136.02568"
-           id="tspan3">A</tspan></text>
-      <g
-         id="g1"
-         transform="translate(26.081538,0.13584134)"
-         style="fill:#f4f4f4;fill-opacity:1">
-        <text
-           xml:space="preserve"
-           transform="matrix(1.6780744,0,0,1.6780744,-236.69939,-184.44197)"
-           id="text1"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);fill:#f4f4f4;fill-opacity:1;stroke-width:1.51181"><tspan
-             x="143.76367"
-             y="136.02568"
-             id="tspan4">R</tspan></text>
-        <text
-           xml:space="preserve"
-           transform="matrix(1.6780744,0,0,1.6780744,-214.20272,-188.29983)"
-           id="text1-2"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1-4);fill:#f4f4f4;fill-opacity:1;stroke-width:1.51181"><tspan
-             x="143.76367"
-             y="136.02568"
-             id="tspan5">y</tspan></text>
-      </g>
+       style="fill:#f4f4f4;fill-opacity:1"
+       id="g3">
+      <path
+         d="m 147.23034,136.02763 v -22.74135 h 7.07201 q 2.32267,0 4.09067,0.624 1.80267,0.58933 2.808,2.01067 1.04,1.38666 1.04,3.744 0,2.288 -1.04,3.77867 -1.00533,1.49067 -2.808,2.25334 -1.768,0.728 -4.09067,0.728 h -4.19467 v 9.60267 z m 2.87734,-11.96001 h 3.77867 q 2.66933,0 4.056,-1.07467 1.42134,-1.10933 1.42134,-3.328 0,-2.21867 -1.42134,-3.12 -1.38667,-0.936 -4.056,-0.936 h -3.77867 z m 3.60533,1.56 2.28801,-1.52533 6.93334,11.92534 h -3.29334 z"
+         id="text2"
+         style="font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';white-space:pre;stroke-width:1.51181"
+         transform="matrix(2.23678,0,0,2.23678,-294.194,-253.391)"
+         aria-label="R" />
+      <path
+         d="m 148.30501,143.27297 q -0.55467,0 -1.17867,-0.104 -0.58933,-0.104 -1.04,-0.24266 l 0.58933,-2.25334 q 0.34667,0.104 0.72801,0.17333 0.416,0.0693 0.79733,0.0693 1.768,0 2.87734,-1.04 1.10933,-1.00534 1.73333,-2.56534 l 0.52,-1.248 -7.86934,-16.88268 h 2.87734 l 4.12533,9.32534 q 0.48534,1.10933 1.00534,2.392 0.55466,1.248 1.07467,2.496 h 0.13866 q 0.45067,-1.21333 0.90134,-2.46133 0.48533,-1.28267 0.90133,-2.42667 l 3.67467,-9.32534 h 2.704 l -7.41867,18.23468 q -0.624,1.664 -1.56,2.98134 -0.936,1.352 -2.32267,2.11466 -1.352,0.76267 -3.25867,0.76267 z"
+         id="text3"
+         style="font-size:34.6667px;font-family:'Source Code Pro';-inkscape-font-specification:'Source Code Pro, Normal';white-space:pre;stroke-width:1.51181"
+         transform="matrix(2.23678,0,0,2.23678,-264.207,-258.534)"
+         aria-label="y" />
     </g>
   </g>
 </svg>
