@@ -1,6 +1,6 @@
 import { useManagerValue } from "../hooks/useManagerValue";
 import { Manager } from "../helpers/Manager";
-import { images } from "../data/images";
+import { Images } from "../data/Images";
 
 const AssemblerButtons = ({ className, isExpanded }) => {
     const isCodeEmpty = useManagerValue("isCodeEmpty");
@@ -27,7 +27,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isAssembleRunDisabled ? "assembler-button-disabled" : ""}`}
                     onClick={isAssembleRunDisabled ? () => {} : () => handleButton(isRunning ? "pause" : isMemoryEmpty ? "assembleRun" : "run")}
                 >
-                    <img src={isRunning ? images.pauseIcon : isMemoryEmpty ? images.assembleRunIcon : images.runIcon} alt={isRunning ? "PAUSE" : isMemoryEmpty ? "ASSEMBLE & RUN" : "RUN"} />
+                    {isRunning ? <Images.PauseIcon /> : isMemoryEmpty ? <Images.AssembleRunIcon /> : <Images.RunIcon />}
                     <p>{isRunning ? "Pause" : isMemoryEmpty ? "Assemble & Run" : "Run"}</p>
                 </button>
 
@@ -35,7 +35,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className="assembler-button"
                     onClick={() => handleButton("reset")}
                 >
-                    <img src={images.resetIcon} alt="RESET" />
+                    <Images.ResetIcon />
                     <p>Reset</p>
                 </button>
             </> : <>
@@ -43,7 +43,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isAssembleDisabled ? "assembler-button-disabled" : ""}`}
                     onClick={isAssembleDisabled ? () => {} : () => handleButton("assemble")}
                 >
-                    <img src={images.assembleIcon} alt="ASSEMBLE" />
+                    <Images.AssembleIcon />
                     <p>Assemble</p>
                 </button>
 
@@ -51,7 +51,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isRunDisabled ? "assembler-button-disabled" : ""}`}
                     onClick={isRunDisabled ? () => {} : () => handleButton(isRunning ? "pause" : "run")}
                 >
-                    <img src={isRunning ? images.pauseIcon : images.runIcon} alt={isRunning ? "PAUSE" : "RUN"} />
+                    {isRunning ? <Images.PauseIcon /> : <Images.RunIcon />}
                     <p>{isRunning ? "Pause" : "Run"}</p>
                 </button>
 
@@ -59,7 +59,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isStepDisabled ? "assembler-button-disabled" : ""}`}
                     onClick={isStepDisabled ? () => {} : () => handleButton("step")}
                 >
-                    <img src={images.stepIcon} alt="STEP" />
+                    <Images.StepIcon />
                     <p>Step</p>
                 </button>
 
@@ -67,7 +67,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isMemoryEmpty ? "assembler-button-disabled" : ""}`}
                     onClick={isMemoryEmpty ? () => {} : () => handleButton("reset")}
                 >
-                    <img src={images.resetIcon} alt="RESET" />
+                    <Images.ResetIcon />
                     <p>Reset</p>
                 </button>
             </>}

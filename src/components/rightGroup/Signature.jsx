@@ -1,9 +1,10 @@
-import { images } from "../../data/images";
+import { Images } from "../../data/Images";
 
 const Signature = () => {
     return(
         <div className="signature">
-            <img src={images.ARyGrey} alt="ARy" />
+            <Images.ARyGrey className="signature-logo" />
+            
             <strong>Assembly Reality</strong>
             <p>by Boris Marinković</p>
         </div>

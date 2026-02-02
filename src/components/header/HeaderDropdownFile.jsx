@@ -3,14 +3,13 @@ import Switch from "../Switch";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../helpers/Manager";
 import { Autosave } from "../../helpers/Autosave";
-import { images } from "../../data/images";
+import { Images } from "../../data/Images";
 
 const HeaderDropdownFile = () => {
     const [codeFile, setCodeFile] = useState({ title: "", content: "" });
     const inputRef = useRef(null);
     
     const buttons = ["Import", "Export"];
-    const buttonIcons = [images.importIcon, images.exportIcon];
 
     const isAutosaveActive = useManagerValue("isAutosaveActive");
 
@@ -70,7 +69,7 @@ const HeaderDropdownFile = () => {
                         onChange={handleImport}
                     />}
 
-                    <img src={buttonIcons[index]} alt={button.toUpperCase()} />
+                    {index === 0 ? <Images.ImportIcon /> : <Images.ExportIcon />}
                     <p>{button}</p>
                 </button>;
             })}
@@ -85,7 +84,7 @@ const HeaderDropdownFile = () => {
                 }}
             >
                 <div className="header-dropdown-file-autosave-button-left-group">
-                    <img src={images.saveIcon} alt="SAVE" />
+                    <Images.SaveIcon />
                     <p>Autosave</p>
                 </div>
 

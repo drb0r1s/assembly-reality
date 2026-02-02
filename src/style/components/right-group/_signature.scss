@@ -4,8 +4,9 @@
     @include center(column);
     gap: 7px;
 
-    img {
+    .signature-logo {
         height: 80px;
+        width: 130px;
         object-fit: contain;
         margin-bottom: 10px;
     }

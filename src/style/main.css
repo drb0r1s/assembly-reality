@@ -48,6 +48,28 @@
   src: url("../fonts/SourceCodePro-Regular.ttf");
   font-display: block;
 }
+:root {
+  --primaryText: #F4F4F4;
+  --secondaryText: #D4D4D4;
+  --tertiaryText: #D8D8D8;
+  --mainBackground: black;
+  --primaryBackground: #0F0F0F;
+  --secondaryBackground: #0A0A0A;
+  --tertiaryBackground: #2B2A2A;
+  --textDisplayBackground: #2F3336;
+}
+
+[data-theme=light] {
+  --primaryText: #1A1A1A;
+  --secondaryText: #4A4A4A;
+  --tertiaryText: #7A7A7A;
+  --mainBackground: white;
+  --primaryBackground: #F4F5F7;
+  --secondaryBackground: #ECEEF1;
+  --tertiaryBackground: #DADDE2;
+  --textDisplayBackground: #E6E9ED;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -77,7 +99,7 @@
 }
 
 body {
-  background-color: black;
+  background-color: var(--mainBackground);
   overflow: hidden;
 }
 
@@ -88,7 +110,7 @@ button {
 main {
   height: 100dvh;
   width: 100vw;
-  background-color: black;
+  background-color: var(--mainBackground);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -114,7 +136,7 @@ header {
   justify-content: center;
   flex-direction: row;
   justify-content: space-between;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   padding: 0 12px;
 }
 header .header-dropdown {
@@ -123,7 +145,7 @@ header .header-dropdown {
   justify-content: center;
   flex-direction: column;
   align-items: flex-start;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   border-radius: 5px;
   opacity: 0;
   padding: 7px;
@@ -131,7 +153,7 @@ header .header-dropdown {
   left: 0;
   top: 48px;
   transition: 300ms;
-  z-index: 5;
+  z-index: 6;
 }
 header .header-dropdown .header-dropdown-file {
   width: 200px;
@@ -167,7 +189,7 @@ header .header-dropdown .header-dropdown-file button img {
      object-fit: contain;
 }
 header .header-dropdown .header-dropdown-file button p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Regular;
 }
@@ -181,7 +203,7 @@ header .header-dropdown .header-dropdown-file button input {
 header .header-dropdown .header-dropdown-file .header-dropdown-file-divider {
   height: 1px;
   width: 100%;
-  background-color: rgba(244, 244, 244, 0.3);
+  background-color: rgba(var(--primaryText), 0.3);
 }
 header .header-dropdown .header-dropdown-file .header-dropdown-file-autosave-button {
   justify-content: space-between;
@@ -226,7 +248,7 @@ header .header-dropdown .header-dropdown-view .header-dropdown-view-theme-button
 header .header-dropdown .header-dropdown-view .header-dropdown-view-divider {
   height: 1px;
   width: 100%;
-  background-color: rgba(244, 244, 244, 0.3);
+  background-color: rgba(var(--primaryText), 0.3);
 }
 header .header-dropdown .header-dropdown-view .header-dropdown-view-sections {
   width: 100%;
@@ -267,7 +289,7 @@ header .header-dropdown .header-dropdown-view .header-dropdown-view-sections but
      object-fit: contain;
 }
 header .header-dropdown .header-dropdown-view .header-dropdown-view-sections button .header-dropdown-view-button-left-group p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Regular;
 }
@@ -286,7 +308,7 @@ header .header-dropdown .header-dropdown-speed {
   cursor: default;
 }
 header .header-dropdown .header-dropdown-speed strong {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 18px;
   font-family: Roboto-SemiBold;
   font-weight: normal;
@@ -302,10 +324,10 @@ header .header-dropdown .header-dropdown-speed .header-dropdown-speed-buttons {
 }
 header .header-dropdown .header-dropdown-speed .header-dropdown-speed-buttons button {
   width: 75px;
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Regular;
-  background-color: #0A0A0A;
+  background-color: var(--secondaryBackground);
   border: 1px solid transparent;
   border-radius: 10px;
   padding: 10px 0;
@@ -327,14 +349,14 @@ header .header-left-group {
   gap: 7px;
 }
 header .header-left-group .header-left-group-logo {
-  height: 18px;
+  width: 30px;
   -o-object-fit: contain;
      object-fit: contain;
 }
 header .header-left-group .header-left-group-divider {
   height: 19px;
   width: 1px;
-  background-color: rgba(244, 244, 244, 0.3);
+  background-color: rgba(var(--primaryText), 0.3);
 }
 header .header-left-group .header-buttons {
   display: flex;
@@ -363,7 +385,7 @@ header .header-left-group .header-buttons .header-dropdown-button:hover {
 }
 header .header-left-group .header-buttons .assembler-button p,
 header .header-left-group .header-buttons .header-dropdown-button p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Regular;
 }
@@ -376,7 +398,7 @@ header .header-left-group .header-dropdown-buttons .header-dropdown-button span 
   justify-content: center;
   flex-direction: row;
   width: 83px;
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
   background-color: #274677;
@@ -421,7 +443,7 @@ header .header-title {
   gap: 10px;
   justify-content: flex-start;
   flex-shrink: 0;
-  background-color: black;
+  background-color: var(--mainBackground);
   border-bottom: 1px solid #2F3336;
   overflow-x: auto;
   overflow-y: hidden;
@@ -435,7 +457,7 @@ header .header-title {
   justify-content: space-between;
   gap: 12px;
   flex-shrink: 0;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   border: 1px solid transparent;
   border-radius: 5px;
   opacity: 0.7;
@@ -444,7 +466,7 @@ header .header-title {
   transition: 300ms;
 }
 .editor .editor-pages .editor-page:hover {
-  background-color: #2B2A2A;
+  background-color: var(--tertiaryBackground);
 }
 .editor .editor-pages .editor-page:hover button {
   opacity: 1;
@@ -463,7 +485,7 @@ header .header-title {
      object-fit: contain;
 }
 .editor .editor-pages .editor-page .editor-page-left-group p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Regular;
 }
@@ -485,7 +507,7 @@ header .header-title {
      object-fit: contain;
 }
 .editor .editor-pages .editor-active-page {
-  background-color: #2B2A2A;
+  background-color: var(--tertiaryBackground);
   opacity: 1;
   cursor: default;
 }
@@ -497,14 +519,14 @@ header .header-title {
   justify-content: center;
   flex-direction: row;
   flex-shrink: 0;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   border: none;
   border-radius: 50%;
   cursor: pointer;
   transition: 300ms;
 }
 .editor .editor-pages .editor-add-button:hover {
-  background-color: #2B2A2A;
+  background-color: var(--tertiaryBackground);
 }
 .editor .editor-pages .editor-add-button img {
   height: 20px;
@@ -539,7 +561,7 @@ header .header-title {
   cursor: pointer;
 }
 .editor .editor-error p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
   display: -webkit-box;
@@ -571,18 +593,18 @@ header .header-title {
   flex-direction: row;
   flex-shrink: 0;
   justify-content: space-between;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   border-bottom: 1px solid #2F3336;
   padding: 0 12px;
 }
 .memory .memory-header strong {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-SemiBold;
   font-weight: normal;
 }
 .memory .memory-header button {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 12px;
   font-family: Roboto-Regular;
   background-color: transparent;
@@ -634,7 +656,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  color: #D8D8D8;
+  color: var(--tertiaryText);
   font-size: 13px;
   font-family: Roboto-Medium;
   border-left: 1px solid #2F3336;
@@ -673,7 +695,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  color: #D8D8D8;
+  color: var(--tertiaryText);
   font-size: 13px;
   font-family: Roboto-Regular;
   padding: 5px;
@@ -714,20 +736,21 @@ header .header-title {
   flex-direction: column;
   gap: 7px;
 }
-.right-group .right-group-content .signature img {
+.right-group .right-group-content .signature .signature-logo {
   height: 80px;
+  width: 130px;
   -o-object-fit: contain;
      object-fit: contain;
   margin-bottom: 10px;
 }
 .right-group .right-group-content .signature strong {
-  color: #2F3336;
+  color: var(--textDisplayBackground);
   font-size: 24px;
   font-family: SourceCodePro-Regular;
   font-weight: normal;
 }
 .right-group .right-group-content .signature p {
-  color: #2F3336;
+  color: var(--textDisplayBackground);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
 }
@@ -739,7 +762,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: black;
+  background-color: var(--mainBackground);
   position: absolute;
   bottom: 0;
 }
@@ -750,7 +773,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   border: 1px solid #2F3336;
   border-radius: 50%;
   position: absolute;
@@ -773,7 +796,7 @@ header .header-title {
   flex-direction: column;
   justify-content: flex-start;
   gap: 10px;
-  background-color: black;
+  background-color: var(--mainBackground);
   position: absolute;
   bottom: 0;
   z-index: 1;
@@ -806,17 +829,17 @@ header .header-title {
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register strong {
   width: 26px;
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Medium;
   font-weight: normal;
   padding-right: 8px;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   border-left: 2px solid #2F3336;
   padding: 0 4px;
   -webkit-user-select: none;
@@ -861,7 +884,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: black;
+  background-color: var(--mainBackground);
   position: absolute;
   bottom: 0;
   z-index: 2;
@@ -893,7 +916,7 @@ header .header-title {
   justify-content: center;
   flex-direction: row;
   justify-content: flex-start;
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
   border-right: 1px solid #2F3336;
@@ -903,7 +926,7 @@ header .header-title {
   border-right: none;
 }
 .right-group .right-group-content .io-registers .io-registers-map .io-registers-map-header {
-  background-color: #0A0A0A;
+  background-color: var(--secondaryBackground);
   position: sticky;
   top: 0;
 }
@@ -922,14 +945,14 @@ header .header-title {
   flex-direction: row;
   flex-shrink: 0;
   justify-content: space-between;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   border-top: 1px solid #2F3336;
   border-bottom: 1px solid #2F3336;
   padding: 0 12px;
   cursor: ns-resize;
 }
 .draggable-header strong {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-SemiBold;
   font-weight: normal;
@@ -949,7 +972,7 @@ header .header-title {
 .range .range-line {
   height: 5px;
   width: 100%;
-  background-color: #F4F4F4;
+  background-color: var(--primaryText);
   border-radius: 10px;
 }
 .range .range-filled-line {
@@ -982,7 +1005,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(var(--mainBackground), 0.8);
   opacity: 0;
   position: absolute;
   top: 0;
@@ -1006,7 +1029,7 @@ header .header-title {
      object-fit: contain;
 }
 .high-speed-block .high-speed-block-container p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 16px;
   font-family: Roboto-Regular;
 }
@@ -1062,7 +1085,7 @@ header .header-title {
      object-fit: contain;
 }
 .display .display-buttons .assembler-button p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 24px;
 }
 .display .display-canvas-holder {
@@ -1075,11 +1098,11 @@ header .header-title {
 .display .display-canvas-holder canvas {
   height: 256px;
   width: 256px;
-  background-color: black;
+  background-color: var(--mainBackground);
   border: 1px solid #2F3336;
 }
 .display .display-canvas-holder strong {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 36px;
   font-family: SourceCodePro-Regular;
   font-weight: normal;
@@ -1101,10 +1124,10 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  color: #D4D4D4;
+  color: var(--secondaryText);
   font-size: 16px;
   font-family: SourceCodePro-Regular;
-  background-color: #2F3336;
+  background-color: var(--textDisplayBackground);
 }
 .display .display-keyboard {
   width: 256px;
@@ -1147,7 +1170,7 @@ header .header-title {
   left: 0;
 }
 .display .display-keyboard p {
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
 }
@@ -1166,7 +1189,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  background-color: black;
+  background-color: var(--mainBackground);
   opacity: 0;
   position: fixed;
   top: 0;
@@ -1229,7 +1252,7 @@ header .header-title {
 .switch .switch-ball {
   height: 21px;
   width: 21px;
-  background-color: #0F0F0F;
+  background-color: var(--primaryBackground);
   border-radius: 50%;
   position: absolute;
   left: 2px;

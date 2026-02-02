@@ -1,5 +1,5 @@
 export class MemoryRenderer {
-    constructor(canvas, ctx, assembler, ram, cellProps, hoveredCell, registerColoring) {
+    constructor(canvas, ctx, assembler, ram, cellProps, hoveredCell, theme, registerColoring) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.assembler = assembler;
@@ -7,6 +7,8 @@ export class MemoryRenderer {
         this.cellProps = cellProps;
 
         this.hoveredCell = hoveredCell;
+
+        this.theme = theme;
         this.registerColoring = registerColoring;
 
         this.matrix = assembler.ram.matrix.getMatrix();
@@ -21,7 +23,7 @@ export class MemoryRenderer {
 
         this.textYOffset = Math.round(this.cellProps.height * 0.53); // 0.53 is a constant used to make cells exactly centered relative to rows.
 
-        this.colors = {
+        this.colors = theme === "dark" ? {
             text: "#D4D4D4",
             sp: "#BB3071",
             stack: "#F59CC5",
@@ -35,6 +37,20 @@ export class MemoryRenderer {
             textDisplay: "#0F0F0F",
             background: "#000000",
             divider: "#2F3336"
+        } : {
+            text: "#1A1A1A",
+            sp: "#9B1F5C",
+            stack: "#C05A8A",
+            ip: "#1F4E73",
+            instruction: "#1E6FB8",
+            instructionHover: "#D9E7F5",
+            A: "#2F5A16",
+            B: "#9A5206",
+            C: "#4A176F",
+            D: "#B71818",
+            textDisplay: "#F4F5F7",
+            background: "#FFFFFF",
+            divider: "#DADDE2" 
         };
 
         this.gradients = {

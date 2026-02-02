@@ -2,7 +2,7 @@
     height: 100dvh;
     width: 100vw;
     @include center;
-    background-color: black;
+    background-color: $mainBackground;
     opacity: 0;
     position: fixed;
     top: 0;

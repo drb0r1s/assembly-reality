@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useManagerValue } from "../hooks/useManagerValue";
-import { images } from "../data/images";
+import { Images } from "../data/Images";
 
 const HighSpeedBlock = () => {
     const highSpeedBlockRef = useRef(null);
@@ -30,7 +30,7 @@ const HighSpeedBlock = () => {
     return(
         <div className="high-speed-block" ref={highSpeedBlockRef}>
             <div className="high-speed-block-container">
-                <img src={images.visibilityIcon} alt="VISIBILITY" />
+                <Images.VisibilityIcon />
                 <p>This window is disabled due to high execution speed (over 10kHz).</p>
             </div>
         </div>

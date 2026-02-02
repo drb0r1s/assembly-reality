@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react"
 import { useMonaco } from "@monaco-editor/react";
+import { useManagerValue } from "./useManagerValue";
 import { tokenizer } from "../data/richEditor/tokenizer";
-import { colors, rules } from "../data/richEditor/style";
+import { dark, light } from "../data/richEditor/style";
 import { Keywords } from "../assembler/frontend/Keywords";
 import { Manager } from "../helpers/Manager";
 
@@ -12,6 +13,7 @@ export const useRichEditor = () => {
     const highlightLineRef = useRef(() => {});
 
     const monaco = useMonaco();
+    const theme = useManagerValue("theme");
 
     useEffect(() => {
         const unsubscribeHighlightLine = Manager.subscribe("highlightLine", line => {
@@ -38,16 +40,23 @@ export const useRichEditor = () => {
         monaco.editor.defineTheme("assembly-dark", {
             base: "vs-dark",
             inherit: true,
-            rules,
-            colors,
+            rules: dark.rules,
+            colors: dark.colors,
         });
 
-        monaco.editor.setTheme("assembly-dark");
+        monaco.editor.defineTheme("assembly-light", {
+            base: "vs",
+            inherit: true,
+            rules: light.rules,
+            colors: light.colors,
+        });
+
+        monaco.editor.setTheme(`assembly-${theme}`);
 
         return () => {
             providerRef.current?.dispose();
         }
-    }, [monaco]);
+    }, [monaco, theme]);
 
     function handleEditorDidMount(editor, monacoInstance) {
         editorRef.current = editor;

@@ -1,20 +1,20 @@
-import { images } from "./images";
+import { Images } from "./Images";
 
 export const headerButtons = {
     dropdown: [
         {
             title: "File",
-            icon: images.arrowDownIcon
+            Icon: Images.ArrowDownIcon
         },
 
         {
             title: "View",
-            icon: images.arrowDownIcon
+            Icon: Images.ArrowDownIcon
         },
 
         {
             title: "Speed",
-            icon: images.arrowDownIcon
+            Icon: Images.ArrowDownIcon
         }
     ],
 
@@ -22,25 +22,25 @@ export const headerButtons = {
         {
             id: "assemble",
             title: "Assemble",
-            icon: images.assembleIcon
+            Icon: Images.AssembleIcon
         },
 
         {
             id: "run",
             title: "Run",
-            icon: images.runIcon
+            Icon: Images.RunIcon
         },
 
         {
             id: "step",
             title: "Step",
-            icon: images.stepIcon
+            Icon: Images.StepIcon
         },
 
         {
             id: "reset",
             title: "Reset",
-            icon: images.resetIcon
+            Icon: Images.ResetIcon
         }
     ],
 
@@ -48,13 +48,13 @@ export const headerButtons = {
         {
             id: "assembleRun",
             title: "Assemble & Run",
-            icon: images.assembleRunIcon
+            Icon: Images.AssembleRunIcon
         },
 
         {
             id: "reset",
             title: "Reset",
-            icon: images.resetIcon
+            Icon: Images.ResetIcon
         }
     ]
 };

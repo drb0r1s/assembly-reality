@@ -5,7 +5,7 @@ import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../helpers/Manager";
-import { images } from "../../data/images";
+import { Images } from "../../data/Images";
 
 const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
     const [lowerSection, setLowerSection] = useState({ ref: null }); // This state has to contain the elements inside the object, under the ref property, because of the way React is updating ref objects.
@@ -41,7 +41,7 @@ const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRe
                 className="io-devices-expand-button"
                 onClick={() => Manager.set("isDisplayExpanded", true)}
             >
-                <img src={images.expandIcon} alt="EXPAND" />
+                <Images.ExpandIcon />
             </button>
             
             <Display

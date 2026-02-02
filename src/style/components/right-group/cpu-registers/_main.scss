@@ -4,7 +4,7 @@
     @include center(column);
     justify-content: flex-start;
     gap: 10px;
-    background-color: black;
+    background-color: $mainBackground;
     position: absolute;
     bottom: 0;
     z-index: 1;

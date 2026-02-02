@@ -5,7 +5,7 @@ import { GlobalContext } from "../../context/GlobalContext";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { useCodeAutosave } from "../../hooks/useCodeAutosave";
 import { Manager } from "../../helpers/Manager";
-import { images } from "../../data/images";
+import { Images } from "../../data/Images";
 
 const Editor = () => {
     const { assemblerWorker } = useContext(GlobalContext);
@@ -248,14 +248,14 @@ const Editor = () => {
                         onClick={() => switchPage(index)}
                     >
                         <div className="editor-page-left-group">
-                            <img src={images.pageIcon} alt="PAGE" />
+                            <Images.PageIcon />
                             <p>{page}</p>
                         </div>
 
                         <button
                             style={index === 0 ? { opacity: "0" } : {}}
                             onClick={e => deletePage(e, index)}
-                        ><img src={images.xIcon} alt="X" /></button>
+                        ><Images.XIcon /></button>
                     </div>;
                 })}
 
@@ -263,7 +263,7 @@ const Editor = () => {
                     className="editor-add-button"
                     onClick={() => addPage("")}
                 >
-                    <img src={images.addIcon} alt="ADD" />
+                    <Images.AddIcon />
                 </button>
             </div>
 

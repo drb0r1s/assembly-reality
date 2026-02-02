@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useContext, useMemo, useCallback } from "r
 import AssemblerButtons from "./AssemblerButtons";
 import { GlobalContext } from "../context/GlobalContext";
 import { Manager } from "../helpers/Manager";
-import { images } from "../data/images";
+import { Images } from "../data/Images";
 
 const Display = ({ style, isExpanded }) => {
     const { assembler, assemblerWorker, sharedCanvas } = useContext(GlobalContext);
@@ -358,16 +358,12 @@ const Display = ({ style, isExpanded }) => {
             >
                 <div className="display-keyboard-left-group display-keyboard-group">
                     <div className="display-keyboard-image-holder display-keyboard-group">
-                        <img
-                            src={images.keyboardIcon}
-                            alt="KEYBOARD"
+                        <Images.KeyboardIcon
                             className="display-keyboard-group"
                             style={keyboardStyleInverse}
                         />
-
-                        <img
-                            src={images.keyboardBlueIcon}
-                            alt="KEYBOARD"
+                        
+                        <Images.KeyboardBlueIcon
                             className="display-keyboard-group"
                             style={keyboardStyle}
                         />

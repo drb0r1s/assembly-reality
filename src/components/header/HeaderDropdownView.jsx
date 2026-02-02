@@ -2,7 +2,7 @@ import Switch from "../Switch";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Autosave } from "../../helpers/Autosave";
 import { Manager } from "../../helpers/Manager";
-import { images } from "../../data/images";
+import { Images } from "../../data/Images";
 
 const HeaderDropdownView = () => {
     const theme = useManagerValue("theme");
@@ -50,7 +50,7 @@ const HeaderDropdownView = () => {
                 }}
             >
                 <div className="header-dropdown-view-theme-button-left-group">
-                    <img src={images.themeIcon} alt="SAVE" />
+                    <Images.ThemeIcon />
                     <p>Theme</p>
                 </div>
 
@@ -66,13 +66,11 @@ const HeaderDropdownView = () => {
                         onClick={() => updateView(button)}
                     >
                         <div className="header-dropdown-view-button-left-group">
-                            <img src={images.windowIcon} alt="WINDOW" />
+                            <Images.WindowIcon />
                             <p>{button}</p>
                         </div>
 
-                        <img
-                            src={images.checkIcon}
-                            alt="CHECK"
+                        <Images.CheckIcon
                             className="header-dropdown-view-check-icon"
                             style={getView(button) ? { opacity: "1" } : {}}
                         />

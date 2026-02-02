@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import Display from "./Display";
 import { Manager } from "../helpers/Manager";
-import { images } from "../data/images";
+import { Images } from "../data/Images";
 
 const ExpandedDisplay = () => {
     const expandedDisplayRef = useRef(null);
@@ -28,7 +28,7 @@ const ExpandedDisplay = () => {
                 className="expanded-display-x-button"
                 onClick={disableExpandedDisplay}
             >
-                <img src={images.xIcon} alt="X" />
+                <Images.XIcon />
             </button>
 
             <Display isExpanded={true} />
