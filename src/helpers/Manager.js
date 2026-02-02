@@ -4,6 +4,7 @@ export const Manager = (() => {
     const values = new Map([
         ["view", { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true }],
         ["speed", Autosave.conditionalGetItem("SPEED")],
+        ["registerColoring", { A: false, B: false, C: false, D: false }],
         ["isAutosaveActive", Autosave.getItem("IS_AUTOSAVE_ACTIVE")],
         ["isDisplayExpanded", false],
         ["isHighSpeed", false],

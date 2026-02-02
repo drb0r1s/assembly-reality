@@ -52,6 +52,7 @@ const Editor = () => {
                         Manager.trigger("ramUpdate", data?.ram);
                         Manager.trigger("linesUpdate", data?.lines);
                         Manager.trigger("cpuRegistersPing");
+                        Manager.trigger("cpuRegistersCollectionUpdate", data?.cpuRegisters);
                         Manager.trigger("graphicsReset"); // If something was left on the canvas, it is a good idea to reset it, just in case.
                     });
 
@@ -81,6 +82,7 @@ const Editor = () => {
                     Manager.sequence(() => {
                         Manager.trigger("ramReset");
                         Manager.trigger("cpuRegistersPing");
+                        Manager.trigger("cpuRegistersCollectionUpdate", { collection: {} });
                         Manager.trigger("ioRegistersPing");
                         Manager.trigger("ioRegistersSlowPing");
                         Manager.trigger("graphicsReset");

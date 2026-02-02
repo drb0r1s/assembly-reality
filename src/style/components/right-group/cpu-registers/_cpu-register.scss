@@ -1,5 +1,6 @@
 .cpu-register {
     @include center;
+    cursor: default;
 
     strong {
         width: 26px;
@@ -17,6 +18,7 @@
         background-color: #0F0F0F;
         border-left: 2px solid #2F3336;
         padding: 0 4px;
+        user-select: none;
     }
 
     .cpu-register-sr-flags {
@@ -32,6 +34,14 @@
             }
         }
     }
+}
+
+.cpu-a-register p,
+.cpu-b-register p,
+.cpu-c-register p,
+.cpu-d-register p {
+    cursor: pointer;
+    transition: background-color 300ms ease;
 }
 
 .cpu-ip-register p {

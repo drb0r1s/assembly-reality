@@ -18,7 +18,15 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
 
     useEffect(() => {
         const unsubscribeCPURegisterPing = Manager.subscribe("cpuRegistersPing", () => setCPURegisters(assembler.cpuRegisters.construct()));
-        return unsubscribeCPURegisterPing;
+        
+        const unsubscribeCPURegistersCollectionUpdate = Manager.subscribe("cpuRegistersCollectionUpdate", data => {
+            if(data?.collection) assembler.cpuRegisters.collection = data.collection;
+        });
+
+        return () => {
+            unsubscribeCPURegisterPing();
+            unsubscribeCPURegistersCollectionUpdate();
+        };
     }, []);
 
     useLinkedResizing({

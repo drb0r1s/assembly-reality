@@ -19,6 +19,7 @@ const MemoryCanvas = ({ ram }) => {
     }}, []);
 
     const isMemoryEmpty = useManagerValue("isMemoryEmpty");
+    const registerColoring = useManagerValue("registerColoring");
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -45,9 +46,9 @@ const MemoryCanvas = ({ ram }) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
 
-        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, ram, cellProps, hoveredCellRef.current);
+        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, ram, cellProps, hoveredCellRef.current, registerColoring);
         rendererRef.current.render();
-    }, [assembler, ram]);
+    }, [assembler, ram, registerColoring]);
 
     function handleClick(e) {
         if(isMemoryEmpty) return;

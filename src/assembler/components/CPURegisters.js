@@ -11,6 +11,7 @@ export class CPURegisters {
     constructor(cpuRegistersBuffer) {
         this.registers = new Uint16Array(cpuRegistersBuffer);
         this.registerIndexes = {};
+        this.collection = {};
 
         allRegisters.forEach((register, index) => { this.registerIndexes[register] = index });
     }
@@ -120,9 +121,53 @@ export class CPURegisters {
         Atomics.store(this.registers, this.getIndex("SR"), newSRBinary);
     }
 
+    collect(operands, ram, lengthOfInstruction) {
+        const row = ram.free.i;
+        const column = ram.free.j;
+
+        const address = ram.matrix.getAddress(row, column);
+        
+        // For performance purposes, we'll use the rule that there are either 1 or 3 operands.
+        if(operands.length === 1) {
+            if(isRegister(operands[0])) this.collection = {
+                ...this.collection,
+                [address + 1]: operands[0].value
+            };
+        }
+
+        else if(operands.length === 3) {
+            const first = operands[0];
+
+            if(isRegister(first)) this.collection = {
+                ...this.collection,
+                [address + 1]: first.value
+            };
+
+            const second = operands[2];
+
+            if(isRegister(second)) this.collection = {
+                ...this.collection,
+                [address + lengthOfInstruction - 1]: second.value
+            };
+        }
+    }
+
     reset() {
         for(let i = 0; i < this.registers.length; i++) {
             Atomics.store(this.registers, i, 0);
         }
+
+        this.collection = {};
     }
 };
+
+function isRegister(operand) {
+    const targetRegisters = ["A", "B", "C", "D"];
+
+    if(
+        operand.valueType === "register" &&
+        targetRegisters.indexOf(operand.value) > -1
+    ) return true;
+
+    return false;
+}

@@ -762,6 +762,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
+  cursor: default;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register strong {
   width: 26px;
@@ -778,6 +779,9 @@ header .header-title {
   background-color: #0F0F0F;
   border-left: 2px solid #2F3336;
   padding: 0 4px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags {
   display: flex;
@@ -795,6 +799,13 @@ header .header-title {
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags .cpu-register-sr-flag p {
   font-size: 11px;
   border-left: none;
+}
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-a-register p,
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-b-register p,
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-c-register p,
+.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-d-register p {
+  cursor: pointer;
+  transition: background-color 300ms ease;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-ip-register p {
   background-color: #2F608B;

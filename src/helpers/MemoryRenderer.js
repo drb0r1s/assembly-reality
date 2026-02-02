@@ -1,5 +1,5 @@
 export class MemoryRenderer {
-    constructor(canvas, ctx, assembler, ram, cellProps, hoveredCell) {
+    constructor(canvas, ctx, assembler, ram, cellProps, hoveredCell, registerColoring) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.assembler = assembler;
@@ -7,6 +7,7 @@ export class MemoryRenderer {
         this.cellProps = cellProps;
 
         this.hoveredCell = hoveredCell;
+        this.registerColoring = registerColoring;
 
         this.matrix = assembler.ram.matrix.getMatrix();
 
@@ -27,6 +28,10 @@ export class MemoryRenderer {
             ip: "#2F608B",
             instruction: "#79B4EB",
             instructionHover: "#10284F",
+            A: "#3D691D",
+            B: "#C06A08",
+            C: "#60218E",
+            D: "#E81E1E",
             textDisplay: "#0F0F0F",
             background: "#000000",
             divider: "#2F3336"
@@ -107,6 +112,11 @@ export class MemoryRenderer {
         if(this.ram.instructions.includes(cell)) {
             if(cell === this.hoveredCell) return this.colors.instructionHover;
             return this.colors.instruction;
+        }
+
+        if(this.assembler.cpuRegisters.collection[cell]) {
+            const register = this.assembler.cpuRegisters.collection[cell];
+            if(this.registerColoring[register]) return this.colors[register];
         }
 
         if(cell >= 0x1000 && cell <= 0x101F) return this.colors.textDisplay;

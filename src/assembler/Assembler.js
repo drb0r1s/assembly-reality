@@ -71,8 +71,6 @@ export class Assembler {
             for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
         
             this.cpuRegisters.update("IP", this.ram.instructions[0]);
-
-            console.log(ast, this.labels, this.lines);
         }
 
         catch(error) {
@@ -81,6 +79,10 @@ export class Assembler {
         }
 
         return {
+            cpuRegisters: {
+                collection: this.cpuRegisters.collection
+            },
+
             ram: {
                 instructions: this.ram.instructions,
                 stackStart: this.ram.stackStart
@@ -100,6 +102,7 @@ export class Assembler {
         if(statement.type === "Instruction") {
             const lengthOfInstruction = Instructions[statement.name](statement, { getLength: true });
             
+            this.cpuRegisters.collect(statement.operands, this.ram, lengthOfInstruction); // Looking for A, B, C, D registers.
             this.lines.collect(statement.line, this.ram);
             this.ram.advance(lengthOfInstruction);
         }
