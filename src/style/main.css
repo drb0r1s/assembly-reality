@@ -111,6 +111,10 @@ button {
   outline: none;
 }
 
+svg {
+  color: var(--primaryText);
+}
+
 main {
   height: 100dvh;
   width: 100vw;

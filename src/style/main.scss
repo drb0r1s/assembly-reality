@@ -15,6 +15,10 @@ button {
     outline: none;
 }
 
+svg {
+    color: $primaryText;
+}
+
 main {
     height: 100dvh;
     width: 100vw;

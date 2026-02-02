@@ -11,7 +11,6 @@ import PauseIcon from "../images/pause-icon.svg?react";
 import StepIcon from "../images/step-icon.svg?react";
 import ResetIcon from "../images/reset-icon.svg?react";
 import KeyboardIcon from "../images/keyboard-icon.svg?react";
-import KeyboardBlueIcon from "../images/keyboard-blue-icon.svg?react";
 import CheckIcon from "../images/check-icon.svg?react";
 import XIcon from "../images/x-icon.svg?react";
 import VisibilityIcon from "../images/visibility-icon.svg?react";
@@ -29,6 +28,6 @@ export const Images = {
     ARy, ARyGrey,
 
     // GENERAL
-    ArrowDownIcon, AssembleIcon, RunIcon, AssembleRunIcon, PauseIcon, StepIcon, ResetIcon, KeyboardIcon, KeyboardBlueIcon, CheckIcon,
+    ArrowDownIcon, AssembleIcon, RunIcon, AssembleRunIcon, PauseIcon, StepIcon, ResetIcon, KeyboardIcon, CheckIcon,
     XIcon, VisibilityIcon, PageIcon, AddIcon, ExpandIcon, WindowIcon, ImportIcon, ExportIcon, SaveIcon, ThemeIcon
 };
