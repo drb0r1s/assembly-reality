@@ -19,8 +19,7 @@ const Display = ({ style, isExpanded }) => {
 
     const frameBufferRef = useRef(null);
 
-    const keyboardStyle = useMemo(() => { return { opacity: keyboard.isActive ? "1" : "0" } }, [keyboard.isActive]);
-    const keyboardStyleInverse = useMemo(() => { return { opacity: keyboard.isActive ? "0" : "1" } }, [keyboard.isActive]);
+    const keyboardStyle = useMemo(() => { return { color: keyboard.isActive ? "#405A85" : "#F4F4F4" } }, [keyboard.isActive]);
 
     const handleKeydown = useCallback(e => {
         if(e.repeat) return;
@@ -357,14 +356,9 @@ const Display = ({ style, isExpanded }) => {
                 }}
             >
                 <div className="display-keyboard-left-group display-keyboard-group">
-                    <div className="display-keyboard-image-holder display-keyboard-group">
+                    <div className="display-keyboard-icon-holder display-keyboard-group">
                         <Images.KeyboardIcon
-                            className="display-keyboard-group"
-                            style={keyboardStyleInverse}
-                        />
-                        
-                        <Images.KeyboardBlueIcon
-                            className="display-keyboard-group"
+                            className="display-keyboard-group display-keyboard-icon"
                             style={keyboardStyle}
                         />
                     </div>

@@ -69,7 +69,7 @@ const HeaderDropdownFile = () => {
                         onChange={handleImport}
                     />}
 
-                    {index === 0 ? <Images.ImportIcon /> : <Images.ExportIcon />}
+                    {index === 0 ? <Images.ImportIcon className="header-dropdown-file-button-icon" /> : <Images.ExportIcon className="header-dropdown-file-button-icon" />}
                     <p>{button}</p>
                 </button>;
             })}
@@ -84,7 +84,7 @@ const HeaderDropdownFile = () => {
                 }}
             >
                 <div className="header-dropdown-file-autosave-button-left-group">
-                    <Images.SaveIcon />
+                    <Images.SaveIcon className="header-dropdown-file-autosave-button-icon" />
                     <p>Autosave</p>
                 </div>
 

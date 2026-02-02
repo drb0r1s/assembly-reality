@@ -34,7 +34,7 @@
                 background-color: $blue;
             }
 
-            img {
+            .assembler-button-icon {
                 height: 32px;
                 width: 32px;
                 object-fit: contain;
@@ -107,18 +107,12 @@
             @include center;
             gap: 8px;
 
-            .display-keyboard-image-holder {
+            .display-keyboard-icon-holder {
                 @include center;
                 position: relative;
 
-                img {
+                .display-keyboard-icon {
                     transition: 300ms;
-
-                    &:last-child {
-                        opacity: 0;
-                        position: absolute;
-                        left: 0;
-                    }
                 }
             }
         }

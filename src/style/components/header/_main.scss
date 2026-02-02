@@ -20,7 +20,7 @@ header {
         .header-left-group-divider {
             height: 19px;
             width: 1px;
-            background-color: rgba($color: $primaryText, $alpha: .3);
+            background-color: rgba(var(--primaryTextRGB), 0.3);
         }
         
         .header-buttons {
@@ -69,7 +69,7 @@ header {
         .header-assembler-buttons {
             gap: 7px;
             
-            .header-assembler-button img {
+            .header-assembler-button .assembler-button-icon {
                 height: 22px;
                 width: 22px;
                 object-fit: contain;

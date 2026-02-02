@@ -1,9 +1,11 @@
 :root {
     --primaryText: #F4F4F4;
+    --primaryTextRGB: 244, 244, 244;
     --secondaryText: #D4D4D4;
     --tertiaryText: #D8D8D8;
 
     --mainBackground: black;
+    --mainBackgroundRGB: 0, 0, 0;
     --primaryBackground: #0F0F0F;
     --secondaryBackground: #0A0A0A;
     --tertiaryBackground: #2B2A2A;
@@ -12,10 +14,12 @@
 
 [data-theme="light"] {
     --primaryText: #1A1A1A;
+    --primaryTextRGB: 26, 26, 26;
     --secondaryText: #4A4A4A;
     --tertiaryText: #7A7A7A;
 
     --mainBackground: white;
+    --mainBackgroundRGB: 255, 255, 255;
     --primaryBackground: #F4F5F7;
     --secondaryBackground: #ECEEF1;
     --tertiaryBackground: #DADDE2;

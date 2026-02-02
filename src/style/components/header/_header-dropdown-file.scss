@@ -20,7 +20,7 @@
             background-color: $blue;
         }
 
-        img {
+        .header-dropdown-file-button-icon {
             height: 22px;
             width: 22px;
             object-fit: contain;
@@ -44,7 +44,7 @@
     .header-dropdown-file-divider {
         height: 1px;
         width: 100%;
-        background-color: rgba($color: $primaryText, $alpha: .3);
+        background-color: rgba(var(--primaryTextRGB), 0.3);
     }
 
     .header-dropdown-file-autosave-button {

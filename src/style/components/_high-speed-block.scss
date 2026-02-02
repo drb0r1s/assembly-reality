@@ -2,7 +2,7 @@
     height: 100%;
     width: 100%;
     @include center;
-    background-color: rgba($color: $mainBackground, $alpha: .8);
+    background-color: rgba(var(--mainBackgroundRGB), .8);
     opacity: 0;
     position: absolute;
     top: 0;
@@ -16,10 +16,11 @@
         @include center;
         gap: 12px;
 
-        img {
+        .high-speed-block-icon {
             height: 32px;
             width: 32px;
             object-fit: contain;
+            flex-shrink: 0;
         }
 
         p {

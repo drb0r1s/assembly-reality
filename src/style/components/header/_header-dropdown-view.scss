@@ -24,7 +24,7 @@
     .header-dropdown-view-divider {
         height: 1px;
         width: 100%;
-        background-color: rgba($color: $primaryText, $alpha: .3);
+        background-color: rgba(var(--primaryTextRGB), 0.3);
     }
 
     .header-dropdown-view-sections {
@@ -51,7 +51,7 @@
                 @include center;
                 gap: 10px;
 
-                img {
+                .header-dropdown-file-autosave-button-icon {
                     height: 22px;
                     width: 22px;
                     object-fit: contain;

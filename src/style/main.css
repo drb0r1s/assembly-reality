@@ -50,9 +50,11 @@
 }
 :root {
   --primaryText: #F4F4F4;
+  --primaryTextRGB: 244, 244, 244;
   --secondaryText: #D4D4D4;
   --tertiaryText: #D8D8D8;
   --mainBackground: black;
+  --mainBackgroundRGB: 0, 0, 0;
   --primaryBackground: #0F0F0F;
   --secondaryBackground: #0A0A0A;
   --tertiaryBackground: #2B2A2A;
@@ -61,9 +63,11 @@
 
 [data-theme=light] {
   --primaryText: #1A1A1A;
+  --primaryTextRGB: 26, 26, 26;
   --secondaryText: #4A4A4A;
   --tertiaryText: #7A7A7A;
   --mainBackground: white;
+  --mainBackgroundRGB: 255, 255, 255;
   --primaryBackground: #F4F5F7;
   --secondaryBackground: #ECEEF1;
   --tertiaryBackground: #DADDE2;
@@ -182,7 +186,7 @@ header .header-dropdown .header-dropdown-file button {
 header .header-dropdown .header-dropdown-file button:hover {
   background-color: #405A85;
 }
-header .header-dropdown .header-dropdown-file button img {
+header .header-dropdown .header-dropdown-file button .header-dropdown-file-button-icon {
   height: 22px;
   width: 22px;
   -o-object-fit: contain;
@@ -203,7 +207,7 @@ header .header-dropdown .header-dropdown-file button input {
 header .header-dropdown .header-dropdown-file .header-dropdown-file-divider {
   height: 1px;
   width: 100%;
-  background-color: rgba(var(--primaryText), 0.3);
+  background-color: rgba(var(--primaryTextRGB), 0.3);
 }
 header .header-dropdown .header-dropdown-file .header-dropdown-file-autosave-button {
   justify-content: space-between;
@@ -248,7 +252,7 @@ header .header-dropdown .header-dropdown-view .header-dropdown-view-theme-button
 header .header-dropdown .header-dropdown-view .header-dropdown-view-divider {
   height: 1px;
   width: 100%;
-  background-color: rgba(var(--primaryText), 0.3);
+  background-color: rgba(var(--primaryTextRGB), 0.3);
 }
 header .header-dropdown .header-dropdown-view .header-dropdown-view-sections {
   width: 100%;
@@ -282,7 +286,7 @@ header .header-dropdown .header-dropdown-view .header-dropdown-view-sections but
   flex-direction: row;
   gap: 10px;
 }
-header .header-dropdown .header-dropdown-view .header-dropdown-view-sections button .header-dropdown-view-button-left-group img {
+header .header-dropdown .header-dropdown-view .header-dropdown-view-sections button .header-dropdown-view-button-left-group .header-dropdown-file-autosave-button-icon {
   height: 22px;
   width: 22px;
   -o-object-fit: contain;
@@ -356,7 +360,7 @@ header .header-left-group .header-left-group-logo {
 header .header-left-group .header-left-group-divider {
   height: 19px;
   width: 1px;
-  background-color: rgba(var(--primaryText), 0.3);
+  background-color: rgba(var(--primaryTextRGB), 0.3);
 }
 header .header-left-group .header-buttons {
   display: flex;
@@ -409,7 +413,7 @@ header .header-left-group .header-dropdown-buttons .header-dropdown-button span 
 header .header-left-group .header-assembler-buttons {
   gap: 7px;
 }
-header .header-left-group .header-assembler-buttons .header-assembler-button img {
+header .header-left-group .header-assembler-buttons .header-assembler-button .assembler-button-icon {
   height: 22px;
   width: 22px;
   -o-object-fit: contain;
@@ -478,7 +482,7 @@ header .header-title {
   flex-direction: row;
   gap: 6px;
 }
-.editor .editor-pages .editor-page .editor-page-left-group img {
+.editor .editor-pages .editor-page .editor-page-left-group .editor-page-icon {
   height: 18px;
   width: 18px;
   -o-object-fit: contain;
@@ -500,7 +504,7 @@ header .header-title {
   transition: 300ms;
   cursor: pointer;
 }
-.editor .editor-pages .editor-page button img {
+.editor .editor-pages .editor-page button .editor-page-x-icon {
   height: 16px;
   width: 16px;
   -o-object-fit: contain;
@@ -528,7 +532,7 @@ header .header-title {
 .editor .editor-pages .editor-add-button:hover {
   background-color: var(--tertiaryBackground);
 }
-.editor .editor-pages .editor-add-button img {
+.editor .editor-pages .editor-add-button .editor-add-button-icon {
   height: 20px;
   width: 20px;
   -o-object-fit: contain;
@@ -1005,7 +1009,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  background-color: rgba(var(--mainBackground), 0.8);
+  background-color: rgba(var(--mainBackgroundRGB), 0.8);
   opacity: 0;
   position: absolute;
   top: 0;
@@ -1022,11 +1026,12 @@ header .header-title {
   flex-direction: row;
   gap: 12px;
 }
-.high-speed-block .high-speed-block-container img {
+.high-speed-block .high-speed-block-container .high-speed-block-icon {
   height: 32px;
   width: 32px;
   -o-object-fit: contain;
      object-fit: contain;
+  flex-shrink: 0;
 }
 .high-speed-block .high-speed-block-container p {
   color: var(--primaryText);
@@ -1078,7 +1083,7 @@ header .header-title {
 .display .display-buttons .assembler-button:hover {
   background-color: #405A85;
 }
-.display .display-buttons .assembler-button img {
+.display .display-buttons .assembler-button .assembler-button-icon {
   height: 32px;
   width: 32px;
   -o-object-fit: contain;
@@ -1154,20 +1159,15 @@ header .header-title {
   flex-direction: row;
   gap: 8px;
 }
-.display .display-keyboard .display-keyboard-left-group .display-keyboard-image-holder {
+.display .display-keyboard .display-keyboard-left-group .display-keyboard-icon-holder {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   position: relative;
 }
-.display .display-keyboard .display-keyboard-left-group .display-keyboard-image-holder img {
+.display .display-keyboard .display-keyboard-left-group .display-keyboard-icon-holder .display-keyboard-icon {
   transition: 300ms;
-}
-.display .display-keyboard .display-keyboard-left-group .display-keyboard-image-holder img:last-child {
-  opacity: 0;
-  position: absolute;
-  left: 0;
 }
 .display .display-keyboard p {
   color: var(--primaryText);

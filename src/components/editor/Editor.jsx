@@ -248,14 +248,14 @@ const Editor = () => {
                         onClick={() => switchPage(index)}
                     >
                         <div className="editor-page-left-group">
-                            <Images.PageIcon />
+                            <Images.PageIcon className="editor-page-icon" />
                             <p>{page}</p>
                         </div>
 
                         <button
                             style={index === 0 ? { opacity: "0" } : {}}
                             onClick={e => deletePage(e, index)}
-                        ><Images.XIcon /></button>
+                        ><Images.XIcon className="editor-page-x-icon" /></button>
                     </div>;
                 })}
 
@@ -263,7 +263,7 @@ const Editor = () => {
                     className="editor-add-button"
                     onClick={() => addPage("")}
                 >
-                    <Images.AddIcon />
+                    <Images.AddIcon className="editor-add-button-icon" />
                 </button>
             </div>
 

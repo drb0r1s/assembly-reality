@@ -27,7 +27,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isAssembleRunDisabled ? "assembler-button-disabled" : ""}`}
                     onClick={isAssembleRunDisabled ? () => {} : () => handleButton(isRunning ? "pause" : isMemoryEmpty ? "assembleRun" : "run")}
                 >
-                    {isRunning ? <Images.PauseIcon /> : isMemoryEmpty ? <Images.AssembleRunIcon /> : <Images.RunIcon />}
+                    {isRunning ? <Images.PauseIcon className="assembler-button-icon" /> : isMemoryEmpty ? <Images.AssembleRunIcon className="assembler-button-icon" /> : <Images.RunIcon className="assembler-button-icon" />}
                     <p>{isRunning ? "Pause" : isMemoryEmpty ? "Assemble & Run" : "Run"}</p>
                 </button>
 
@@ -35,7 +35,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className="assembler-button"
                     onClick={() => handleButton("reset")}
                 >
-                    <Images.ResetIcon />
+                    <Images.ResetIcon className="assembler-button-icon" />
                     <p>Reset</p>
                 </button>
             </> : <>
@@ -43,7 +43,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isAssembleDisabled ? "assembler-button-disabled" : ""}`}
                     onClick={isAssembleDisabled ? () => {} : () => handleButton("assemble")}
                 >
-                    <Images.AssembleIcon />
+                    <Images.AssembleIcon className="assembler-button-icon" />
                     <p>Assemble</p>
                 </button>
 
@@ -51,7 +51,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isRunDisabled ? "assembler-button-disabled" : ""}`}
                     onClick={isRunDisabled ? () => {} : () => handleButton(isRunning ? "pause" : "run")}
                 >
-                    {isRunning ? <Images.PauseIcon /> : <Images.RunIcon />}
+                    {isRunning ? <Images.PauseIcon className="assembler-button-icon" /> : <Images.RunIcon className="assembler-button-icon" />}
                     <p>{isRunning ? "Pause" : "Run"}</p>
                 </button>
 
@@ -59,7 +59,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isStepDisabled ? "assembler-button-disabled" : ""}`}
                     onClick={isStepDisabled ? () => {} : () => handleButton("step")}
                 >
-                    <Images.StepIcon />
+                    <Images.StepIcon className="assembler-button-icon" />
                     <p>Step</p>
                 </button>
 
@@ -67,7 +67,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     className={`assembler-button ${isMemoryEmpty ? "assembler-button-disabled" : ""}`}
                     onClick={isMemoryEmpty ? () => {} : () => handleButton("reset")}
                 >
-                    <Images.ResetIcon />
+                    <Images.ResetIcon className="assembler-button-icon" />
                     <p>Reset</p>
                 </button>
             </>}
