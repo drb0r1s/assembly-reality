@@ -26,12 +26,12 @@ export const dark = {
 
 export const light = {
     colors: {
-        "editor.background": "#FFFFFF",
+        "editor.background": "#F5F5F5",
         "editorLineNumber.foreground": "#9A9A9A",
         "editorLineNumber.activeForeground": "#1A1A1A",
         "editorCursor.foreground": "#1A1A1A",
         "editor.selectionBackground": "#C7D7F2",
-        "editor.lineHighlightBorder": "#FFFFFF"
+        "editor.lineHighlightBorder": "#F5F5F5"
     },
 
     rules: [

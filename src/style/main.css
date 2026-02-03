@@ -77,12 +77,12 @@
   --primaryTextRGB: 26, 26, 26;
   --secondaryText: #4A4A4A;
   --tertiaryText: #7A7A7A;
-  --mainBackground: white;
+  --mainBackground: #F5F5F5;
   --mainBackgroundRGB: 255, 255, 255;
   --primaryBackground: #F4F5F7;
   --secondaryBackground: #ECEEF1;
   --tertiaryBackground: #DADDE2;
-  --textDisplayBackground: #E6E9ED;
+  --textDisplayBackground: #B0B2B3;
   --blue: #6F8FC7;
   --darkBlue: #4E6FA8;
   --aColor: #8FC97A;
@@ -776,13 +776,13 @@ header .header-title {
 }
 .right-group .right-group-content .signature strong {
   color: var(--textDisplayBackground);
-  font-size: 24px;
+  font-size: 26px;
   font-family: SourceCodePro-Regular;
   font-weight: normal;
 }
 .right-group .right-group-content .signature p {
   color: var(--textDisplayBackground);
-  font-size: 14px;
+  font-size: 18px;
   font-family: SourceCodePro-Regular;
 }
 .right-group .right-group-content .io-devices {

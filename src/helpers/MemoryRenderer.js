@@ -35,7 +35,7 @@ export class MemoryRenderer {
             C: "#B48AE3",
             D: "#F58A8A",
             textDisplay: "#F4F5F7",
-            background: "#FFFFFF",
+            background: "#F5F5F5",
             divider: "#DADDE2" 
         } : {
             text: "#D4D4D4",
