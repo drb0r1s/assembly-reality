@@ -611,6 +611,7 @@ header .header-title {
   justify-content: center;
   flex-direction: column;
   justify-content: flex-start;
+  background-color: var(--mainBackground);
   border-top: 1px solid #2F3336;
   border-left: 1px solid #2F3336;
 }
@@ -736,6 +737,15 @@ header .header-title {
   width: 384px;
 }
 
+@media screen and (max-width: 1300px) {
+  .memory {
+    height: 150px;
+    z-index: 3;
+  }
+  .memory .memory-matrix-holder {
+    height: 123px;
+  }
+}
 .right-group {
   height: calc(100dvh - 38px);
   width: 430px;
@@ -907,6 +917,11 @@ header .header-title {
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-sp-register p {
   background-color: var(--spColor);
 }
+@media screen and (max-width: 1300px) {
+  .right-group .right-group-content .cpu-registers {
+    height: 440px;
+  }
+}
 .right-group .right-group-content .io-registers {
   height: 190px;
   width: 100%;
@@ -965,6 +980,14 @@ header .header-title {
   justify-content: center;
   font-family: Roboto-Medium;
   padding-left: none;
+}
+@media screen and (max-width: 1300px) {
+  .right-group .right-group-content .io-registers {
+    height: 340px;
+  }
+  .right-group .right-group-content .io-registers .io-registers-map {
+    height: calc(100% - 27px - 150px);
+  }
 }
 
 .draggable-header {

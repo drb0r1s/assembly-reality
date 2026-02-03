@@ -4,7 +4,7 @@ import MemoryMatrix from "./MemoryMatrix";
 import { GlobalContext } from "../../context/GlobalContext";
 import { Manager } from "../../helpers/Manager";
 
-const Memory = () => {
+const Memory = ({ memoryRef }) => {
     const { assembler } = useContext(GlobalContext);
 
     const initialRAM = {
@@ -35,7 +35,7 @@ const Memory = () => {
     }, []);
 
     return(
-        <div className="memory">
+        <div className="memory" ref={memoryRef}>
             <div className="memory-header">
                 <strong>Memory</strong>
             </div>

@@ -31,3 +31,13 @@
         }
     }
 }
+
+@media screen and (max-width: 1300px) {
+    .io-registers {
+        height: calc(190px + 150px);
+
+        .io-registers-map {
+            height: calc(100% - 27px - 150px); // 27px (DraggableHeader)
+        }
+    }
+}

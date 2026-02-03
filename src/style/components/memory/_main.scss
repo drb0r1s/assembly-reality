@@ -3,6 +3,7 @@
     width: 430px;
     @include center(column);
     justify-content: flex-start;
+    background-color: $mainBackground;
     border-top: 1px solid #2F3336;
     border-left: 1px solid #2F3336;
 
@@ -53,5 +54,16 @@
         position: relative;
         
         @import "./memory-matrix";
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .memory {
+        height: 150px;
+        z-index: 3;
+
+        .memory-matrix-holder {
+            height: calc(150px - 27px);
+        }
     }
 }

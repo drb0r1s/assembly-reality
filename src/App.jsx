@@ -5,12 +5,15 @@ import Memory from "./components/memory/Memory";
 import RightGroup from "./components/rightGroup/RightGroup";
 import ExpandedDisplay from "./components/ExpandedDisplay";
 import { GlobalContext } from "./context/GlobalContext";
+import { useResize } from "./hooks/useResize";
 import { useManagerValue } from "./hooks/useManagerValue";
 import { Autosave } from "./helpers/Autosave";
 import { Manager } from "./helpers/Manager";
 
 const App = () => {
     const { assembler, assemblerWorker } = useContext(GlobalContext);
+
+    const width = useResize();
     
     const isLightTheme = useManagerValue("isLightTheme");
     const view = useManagerValue("view");
@@ -47,7 +50,7 @@ const App = () => {
 
             <div className="workspace">
                 <Editor />
-                {view.memory && <Memory />}
+                {width >= 1300 && view.memory && <Memory />}
                 {(view.ioDevices || view.cpuRegisters || view.ioRegisters) && <RightGroup />}
             </div>
         </main>

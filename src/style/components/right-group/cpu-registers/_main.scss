@@ -26,3 +26,9 @@
         }
     }
 }
+
+@media screen and (max-width: 1300px) {
+    .cpu-registers {
+        height: calc(290px + 150px);
+    }
+}

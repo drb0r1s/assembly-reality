@@ -2,15 +2,20 @@ import { useEffect, useRef } from "react";
 import IODevices from "./IODevices";
 import CPURegisters from "./cpuRegisters/CPURegisters";
 import IORegisters from "./ioRegisters/IORegisters";
+import Memory from "../memory/Memory";
 import Signature from "./Signature";
+import { useResize } from "../../hooks/useResize";
 import { useManagerValue } from "../../hooks/useManagerValue";
 
 const RightGroup = () => {
     const rightGroupRef = useRef(null);
+
     const ioDevicesRef = useRef(null);
     const cpuRegistersRef = useRef(null);
     const ioRegistersRef = useRef(null);
-    
+    const memoryRef = useRef(null);
+
+    const width = useResize();
     const view = useManagerValue("view");
 
     useEffect(() => {
@@ -43,6 +48,10 @@ const RightGroup = () => {
                     ioDevicesRef={ioDevicesRef}
                     cpuRegistersRef={cpuRegistersRef}
                     ioRegistersRef={ioRegistersRef}
+                />}
+
+                {width < 1300 && <Memory
+                    memoryRef={memoryRef}
                 />}
             </div>
         </div>
