@@ -28,9 +28,9 @@ export const tokenizer = {
         [/\s\[([01]+)[bB]\](?=\s|,|$)/, "memoryNumber"], // Memory binary
         
         // Labels
-        [/^\s*[a-zA-Z0-9_]+(?=:)/, "definitionLabel"], // Definition label
-        [/\s([a-zA-Z0-9_]+)(?=\s|,|$)/, "referenceLabel"], // Reference label
-        [/\s\[([a-zA-Z0-9_]+)\](?=\s|,|$)/, "memoryReferenceLabel"], // Memory reference label
+        [/^\s*[a-zA-Z0-9_.]+(?=:)/, "definitionLabel"], // Definition label
+        [/\s([a-zA-Z0-9_.]+)(?=\s|,|$)/, "referenceLabel"], // Reference label
+        [/\s\[([a-zA-Z0-9_.]+)\](?=\s|,|$)/, "memoryReferenceLabel"], // Memory reference label
         
         // Strings
         [/\"([^"\\]|\\.)*\"/, "stringDouble"], // Double-quoted strings
