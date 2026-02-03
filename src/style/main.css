@@ -365,7 +365,7 @@ header .header-dropdown .header-dropdown-speed .header-dropdown-speed-buttons bu
   transition: 300ms;
 }
 header .header-dropdown .header-dropdown-speed .header-dropdown-speed-buttons button:hover {
-  border: 1px solid #F4F4F4;
+  border: 1px solid var(--primaryText);
 }
 header .active-dropdown {
   opacity: 1;
