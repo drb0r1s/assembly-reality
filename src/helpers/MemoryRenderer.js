@@ -1,5 +1,5 @@
 export class MemoryRenderer {
-    constructor(canvas, ctx, assembler, ram, cellProps, hoveredCell, theme, registerColoring) {
+    constructor(canvas, ctx, assembler, ram, cellProps, hoveredCell, isLightTheme, registerColoring) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.assembler = assembler;
@@ -8,7 +8,7 @@ export class MemoryRenderer {
 
         this.hoveredCell = hoveredCell;
 
-        this.theme = theme;
+        this.isLightTheme = isLightTheme;
         this.registerColoring = registerColoring;
 
         this.matrix = assembler.ram.matrix.getMatrix();
@@ -23,21 +23,7 @@ export class MemoryRenderer {
 
         this.textYOffset = Math.round(this.cellProps.height * 0.53); // 0.53 is a constant used to make cells exactly centered relative to rows.
 
-        this.colors = theme === "dark" ? {
-            text: "#D4D4D4",
-            sp: "#BB3071",
-            stack: "#F59CC5",
-            ip: "#2F608B",
-            instruction: "#79B4EB",
-            instructionHover: "#10284F",
-            A: "#3D691D",
-            B: "#C06A08",
-            C: "#60218E",
-            D: "#E81E1E",
-            textDisplay: "#0F0F0F",
-            background: "#000000",
-            divider: "#2F3336"
-        } : {
+        this.colors = isLightTheme ? {
             text: "#1A1A1A",
             sp: "#9B1F5C",
             stack: "#C05A8A",
@@ -51,6 +37,20 @@ export class MemoryRenderer {
             textDisplay: "#F4F5F7",
             background: "#FFFFFF",
             divider: "#DADDE2" 
+        } : {
+            text: "#D4D4D4",
+            sp: "#BB3071",
+            stack: "#F59CC5",
+            ip: "#2F608B",
+            instruction: "#79B4EB",
+            instructionHover: "#10284F",
+            A: "#3D691D",
+            B: "#C06A08",
+            C: "#60218E",
+            D: "#E81E1E",
+            textDisplay: "#0F0F0F",
+            background: "#000000",
+            divider: "#2F3336"
         };
 
         this.gradients = {

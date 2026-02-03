@@ -13,7 +13,7 @@ export const useRichEditor = () => {
     const highlightLineRef = useRef(() => {});
 
     const monaco = useMonaco();
-    const theme = useManagerValue("theme");
+    const isLightTheme = useManagerValue("isLightTheme");
 
     useEffect(() => {
         const unsubscribeHighlightLine = Manager.subscribe("highlightLine", line => {
@@ -51,12 +51,12 @@ export const useRichEditor = () => {
             colors: light.colors,
         });
 
-        monaco.editor.setTheme(`assembly-${theme}`);
+        monaco.editor.setTheme(`assembly-${isLightTheme ? "light" : "dark"}`);
 
         return () => {
             providerRef.current?.dispose();
         }
-    }, [monaco, theme]);
+    }, [monaco, isLightTheme]);
 
     function handleEditorDidMount(editor, monacoInstance) {
         editorRef.current = editor;

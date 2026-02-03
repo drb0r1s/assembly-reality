@@ -1,6 +1,6 @@
 export const Autosave = {
     items: {
-        THEME: "dark",
+        IS_LIGHT_THEME: false,
         IS_AUTOSAVE_ACTIVE: false,
         CODE: null,
         SPEED: 4

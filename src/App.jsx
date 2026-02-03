@@ -12,7 +12,7 @@ import { Manager } from "./helpers/Manager";
 const App = () => {
     const { assembler, assemblerWorker } = useContext(GlobalContext);
     
-    const theme = useManagerValue("theme");
+    const isLightTheme = useManagerValue("isLightTheme");
     const view = useManagerValue("view");
     const isDisplayExpanded = useManagerValue("isDisplayExpanded");
 
@@ -36,8 +36,8 @@ const App = () => {
     }, [assembler]);
 
     useEffect(() => {
-        document.documentElement.setAttribute("data-theme", theme);
-    }, [theme]);
+        document.documentElement.setAttribute("data-theme", isLightTheme ? "light" : "dark");
+    }, [isLightTheme]);
 
     return(
         <main>

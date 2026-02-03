@@ -5,7 +5,7 @@ import { Manager } from "../../helpers/Manager";
 import { Images } from "../../data/Images";
 
 const HeaderDropdownView = () => {
-    const theme = useManagerValue("theme");
+    const isLightTheme = useManagerValue("isLightTheme");
     const view = useManagerValue("view");
 
     const buttons = ["Memory", "I/O Devices", "CPU Registers", "I/O Registers"];
@@ -45,16 +45,16 @@ const HeaderDropdownView = () => {
             <button
                 className="header-dropdown-view-theme-button"
                 onClick={() => {
-                    Autosave.setItem("THEME", theme === "light" ? "dark" : "light");
-                    Manager.set("theme", theme === "light" ? "dark" : "light");
+                    Autosave.setItem("IS_LIGHT_THEME", isLightTheme ? "dark" : "light");
+                    Manager.set("isLightTheme", isLightTheme ? "dark" : "light");
                 }}
             >
                 <div className="header-dropdown-view-theme-button-left-group">
                     <Images.ThemeIcon />
-                    <p>Theme</p>
+                    <p>Light Theme</p>
                 </div>
 
-                <Switch isActive={theme === "light"} />
+                <Switch isActive={isLightTheme} />
             </button>
 
             <div className="header-dropdown-view-divider"></div>

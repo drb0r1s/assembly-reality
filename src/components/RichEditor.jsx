@@ -1,9 +1,11 @@
 import React, { useMemo } from "react";
 import Editor from "@monaco-editor/react";
 import { useRichEditor } from "../hooks/useRichEditor";
+import { useManagerValue } from "../hooks/useManagerValue";
 
 const RichEditor = React.memo(({ code, onChange }) => {
     const handleEditorDidMount = useRichEditor();
+    const isLightTheme = useManagerValue("isLightTheme");
 
     const richEditorStyle = useMemo(() => { return {
         height: "calc(100% - 40px)",
@@ -20,7 +22,7 @@ const RichEditor = React.memo(({ code, onChange }) => {
             <Editor
                 height="100%"
                 defaultLanguage="assembly"
-                theme="assembly-dark"
+                theme={`assembly-${isLightTheme ? "light" : "dark"}`}
                 value={code}
                 onChange={onChange}
                 onMount={handleEditorDidMount}
