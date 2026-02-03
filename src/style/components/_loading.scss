@@ -1,0 +1,54 @@
+.loading {
+    height: 100%;
+    width: 100%;
+    @include center;
+    overflow: hidden;
+    position: relative;
+
+    img {
+        height: 70px;
+        width: 70px;
+        object-fit: contain;
+        opacity: 1;
+        animation: lightning 2s linear infinite;
+    }
+
+    .loading-outer-circle {
+        height: 50px;
+        width: 50px;
+        @include center;
+        background-color: $primaryBackground;
+        border: 2px solid $secondaryBackground;
+        border-radius: 50%;
+
+        .loading-inner-circle {
+            height: 30px;
+            width: 30px;
+            background-color: $mainBackground;
+            border: 2px solid $secondaryBackground;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .loading-spinner {
+            height: 46px;
+            width: 46px;
+            border: 8px solid transparent;
+            border-top: 8px solid $blue;
+            border-radius: 50%;
+            position: absolute;
+            animation: rotation 3s infinite;
+        }
+    }
+}
+
+@keyframes lightning {
+    0% { opacity: 1; }
+    50% { opacity: .2; }
+    100% { opacity: 1; }
+}
+
+@keyframes rotation {
+    from { transform: rotate(0); }
+    to { transform: rotate(360deg); }
+}
