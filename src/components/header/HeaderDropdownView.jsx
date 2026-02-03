@@ -45,8 +45,8 @@ const HeaderDropdownView = () => {
             <button
                 className="header-dropdown-view-theme-button"
                 onClick={() => {
-                    Autosave.setItem("IS_LIGHT_THEME", isLightTheme ? "dark" : "light");
-                    Manager.set("isLightTheme", isLightTheme ? "dark" : "light");
+                    Autosave.setItem("IS_LIGHT_THEME", !isLightTheme);
+                    Manager.set("isLightTheme", !isLightTheme);
                 }}
             >
                 <div className="header-dropdown-view-theme-button-left-group">

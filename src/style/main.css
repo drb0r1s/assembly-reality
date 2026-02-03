@@ -406,7 +406,7 @@ header .header-left-group .header-dropdown-buttons .header-dropdown-button span 
   justify-content: center;
   flex-direction: row;
   width: 83px;
-  color: var(--primaryText);
+  color: #F4F4F4;
   font-size: 14px;
   font-family: SourceCodePro-Regular;
   background-color: #274677;
@@ -1280,10 +1280,81 @@ header .header-title {
   background-color: transparent !important;
 }
 
+.rich-editor {
+  color: transparent;
+}
+
 .rich-editor-highlighted-line {
   background-color: #10284F;
 }
 
 .rich-editor-highlighted-line-gutter {
   border-left: 3px solid #405A85;
+}
+
+.loading {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+}
+.loading img {
+  height: 70px;
+  width: 70px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  opacity: 1;
+  animation: lightning 2s linear infinite;
+}
+.loading .loading-outer-circle {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: var(--primaryBackground);
+  border: 2px solid var(--secondaryBackground);
+  border-radius: 50%;
+}
+.loading .loading-outer-circle .loading-inner-circle {
+  height: 30px;
+  width: 30px;
+  background-color: var(--mainBackground);
+  border: 2px solid var(--secondaryBackground);
+  border-radius: 50%;
+  z-index: 1;
+}
+.loading .loading-outer-circle .loading-spinner {
+  height: 46px;
+  width: 46px;
+  border: 8px solid transparent;
+  border-top: 8px solid #405A85;
+  border-radius: 50%;
+  position: absolute;
+  animation: rotation 3s infinite;
+}
+
+@keyframes lightning {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }/*# sourceMappingURL=main.css.map */
