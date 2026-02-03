@@ -68,7 +68,7 @@ export class Matrix {
         return ByteNumber.join([this.get(address + adjustments[0]), this.get(address + adjustments[1])]);
     }
 
-    reset() {
-        this.values.fill(0);
+    reset(start = 0, end = this.values.length - 1) {
+        this.values.fill(0, start, end + 1);
     }
 }

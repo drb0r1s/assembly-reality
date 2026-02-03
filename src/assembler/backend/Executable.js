@@ -282,7 +282,7 @@ export class Executable {
                         // CLEAR
                         case 3:
                             this.assembler.ioRegisters.update("VIDMODE", prevVidMode);
-                            this.assembler.graphics.clear();
+                            this.assembler.graphics.clear(prevVidMode);
 
                             self.postMessage({ action: "graphicsRedraw", data: "clear" });
 

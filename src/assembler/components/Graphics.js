@@ -123,8 +123,12 @@ export class Graphics {
     }
 
     // .clear is used if VIDMODE is 3, .reset should not be used for that.
-    clear() {
-        this.matrix.reset();
+    clear(vidMode) {
+        // Bitmap
+        if(vidMode > 1) this.matrix.reset();
+
+        // Text
+        else if(vidMode === 1) this.matrix.reset(0x0000, 0x7FFF);
     }
 
     reset() {
