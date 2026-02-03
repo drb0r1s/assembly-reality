@@ -51,8 +51,7 @@ export class Refresh {
     }
 
     keyboard() {
-        const mFlag = this.assembler.cpuRegisters.getSRFlag("M");
-        if(mFlag === 1) this.assembler.keyboard.processEvents();
+        this.assembler.keyboard.processEvents();
     }
 
     graphics() {
