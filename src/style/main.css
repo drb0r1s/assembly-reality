@@ -424,7 +424,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
      object-fit: contain;
 }
 header .header-title {
-  color: white;
+  color: var(--primaryText);
   font-size: 18px;
   font-family: SourceCodePro-Regular;
   font-weight: normal;

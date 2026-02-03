@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useContext, useMemo, useCallback } from "react";
 import AssemblerButtons from "./AssemblerButtons";
 import { GlobalContext } from "../context/GlobalContext";
+import { useManagerValue } from "../hooks/useManagerValue";
 import { Manager } from "../helpers/Manager";
 import { Images } from "../data/Images";
 
@@ -19,7 +20,11 @@ const Display = ({ style, isExpanded }) => {
 
     const frameBufferRef = useRef(null);
 
-    const keyboardStyle = useMemo(() => { return { color: keyboard.isActive ? "#405A85" : "#F4F4F4" } }, [keyboard.isActive]);
+    const isLightTheme = useManagerValue("isLightTheme");
+
+    const keyboardStyle = useMemo(() => { return {
+        color: keyboard.isActive ? "#405A85" : isLightTheme ? "#1A1A1A" : "#F4F4F4"
+    }}, [keyboard.isActive]);
 
     const handleKeydown = useCallback(e => {
         if(e.repeat) return;
@@ -356,12 +361,10 @@ const Display = ({ style, isExpanded }) => {
                 }}
             >
                 <div className="display-keyboard-left-group display-keyboard-group">
-                    <div className="display-keyboard-icon-holder display-keyboard-group">
-                        <Images.KeyboardIcon
-                            className="display-keyboard-group display-keyboard-icon"
-                            style={keyboardStyle}
-                        />
-                    </div>
+                    <Images.KeyboardIcon
+                        className="display-keyboard-group display-keyboard-icon"
+                        style={keyboardStyle}
+                    />
 
                     <p className="display-keyboard-group">Keyboard</p>
                 </div>
