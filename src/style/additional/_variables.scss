@@ -1,9 +1,79 @@
-$blue: #405A85;
-$aColor: #3D691D;
-$bColor: #C06A08;
-$cColor: #60218E;
-$dColor: #E81E1E;
-$ipColor: #2F608B;
-$ipLightColor: #79b4eb;
-$spColor: #BB3071;
-$spLightColor: #F59CC5;
+:root {
+    --primaryText: #F4F4F4;
+    --primaryTextRGB: 244, 244, 244;
+    --secondaryText: #D4D4D4;
+    --tertiaryText: #D8D8D8;
+
+    --mainBackground: black;
+    --mainBackgroundRGB: 0, 0, 0;
+    --primaryBackground: #0F0F0F;
+    --secondaryBackground: #0A0A0A;
+    --tertiaryBackground: #2B2A2A;
+    --textDisplayBackground: #2F3336;
+
+    --blue: #405A85;
+    --darkBlue: #274677;
+
+    --aColor: #3D691D;
+    --bColor: #C06A08;
+    --cColor: #60218E;
+    --dColor: #E81E1E;
+
+    --ipColor: #122A4A;
+    --ipLightColor: #3D75A6;
+    --ipHover: #071835;
+    --spColor: #BB3071;
+    --spLightColor: #C77399;
+}
+
+[data-theme="light"] {
+    --primaryText: #1A1A1A;
+    --primaryTextRGB: 26, 26, 26;
+    --secondaryText: #4A4A4A;
+    --tertiaryText: #7A7A7A;
+
+    --mainBackground: white;
+    --mainBackgroundRGB: 255, 255, 255;
+    --primaryBackground: #F4F5F7;
+    --secondaryBackground: #ECEEF1;
+    --tertiaryBackground: #DADDE2;
+    --textDisplayBackground: #E6E9ED;
+
+    --blue: #6F8FC7;
+    --darkBlue: #4E6FA8;
+
+    --aColor: #8FC97A;
+    --bColor: #F2B36A;
+    --cColor: #B48AE3;
+    --dColor: #F58A8A;
+
+    --ipColor: #7FAED6;
+    --ipLightColor: #B9DCF7;
+    --ipHover: #7F9FCF;
+    --spColor: #E07AA8;
+    --spLightColor: #F8C7DD;
+}
+
+$primaryText: var(--primaryText);
+$secondaryText: var(--secondaryText);
+$tertiaryText: var(--tertiaryText);
+
+$mainBackground: var(--mainBackground);
+$primaryBackground: var(--primaryBackground);
+$secondaryBackground: var(--secondaryBackground);
+$tertiaryBackground: var(--tertiaryBackground);
+$textDisplayBackground: var(--textDisplayBackground);
+
+$blue: var(--blue);
+$darkBlue: var(--darkBlue);
+
+$aColor: var(--aColor);
+$bColor: var(--bColor);
+$cColor: var(--cColor);
+$dColor: var(--dColor);
+
+$ipColor: var(--ipColor);
+$ipLightColor: var(--ipLightColor);
+$ipHover: var(--ipHover);
+$spColor: var(--spColor);
+$spLightColor: var(--spLightColor);

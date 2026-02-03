@@ -59,6 +59,17 @@
   --secondaryBackground: #0A0A0A;
   --tertiaryBackground: #2B2A2A;
   --textDisplayBackground: #2F3336;
+  --blue: #405A85;
+  --darkBlue: #274677;
+  --aColor: #3D691D;
+  --bColor: #C06A08;
+  --cColor: #60218E;
+  --dColor: #E81E1E;
+  --ipColor: #122A4A;
+  --ipLightColor: #3D75A6;
+  --ipHover: #071835;
+  --spColor: #BB3071;
+  --spLightColor: #C77399;
 }
 
 [data-theme=light] {
@@ -72,6 +83,17 @@
   --secondaryBackground: #ECEEF1;
   --tertiaryBackground: #DADDE2;
   --textDisplayBackground: #E6E9ED;
+  --blue: #6F8FC7;
+  --darkBlue: #4E6FA8;
+  --aColor: #8FC97A;
+  --bColor: #F2B36A;
+  --cColor: #B48AE3;
+  --dColor: #F58A8A;
+  --ipColor: #7FAED6;
+  --ipLightColor: #B9DCF7;
+  --ipHover: #7F9FCF;
+  --spColor: #E07AA8;
+  --spLightColor: #F8C7DD;
 }
 
 ::-webkit-scrollbar {
@@ -188,7 +210,7 @@ header .header-dropdown .header-dropdown-file button {
   transition: 300ms;
 }
 header .header-dropdown .header-dropdown-file button:hover {
-  background-color: #405A85;
+  background-color: var(--blue);
 }
 header .header-dropdown .header-dropdown-file button .header-dropdown-file-button-icon {
   height: 22px;
@@ -281,7 +303,7 @@ header .header-dropdown .header-dropdown-view .header-dropdown-view-sections but
   transition: 300ms;
 }
 header .header-dropdown .header-dropdown-view .header-dropdown-view-sections button:hover {
-  background-color: #405A85;
+  background-color: var(--blue);
 }
 header .header-dropdown .header-dropdown-view .header-dropdown-view-sections button .header-dropdown-view-button-left-group {
   display: flex;
@@ -389,7 +411,7 @@ header .header-left-group .header-buttons .header-dropdown-button {
 }
 header .header-left-group .header-buttons .assembler-button:hover,
 header .header-left-group .header-buttons .header-dropdown-button:hover {
-  background-color: #405A85;
+  background-color: var(--blue);
 }
 header .header-left-group .header-buttons .assembler-button p,
 header .header-left-group .header-buttons .header-dropdown-button p {
@@ -406,10 +428,10 @@ header .header-left-group .header-dropdown-buttons .header-dropdown-button span 
   justify-content: center;
   flex-direction: row;
   width: 83px;
-  color: #F4F4F4;
+  color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
-  background-color: #274677;
+  background-color: var(--darkBlue);
   border-radius: 5px;
   margin-left: 8px;
   padding: 3px;
@@ -623,11 +645,11 @@ header .header-title {
   transition: 300ms;
 }
 .memory .memory-header button:hover {
-  background-color: #405A85;
+  background-color: var(--blue);
   border: 1px solid transparent;
 }
 .memory .memory-header .memory-header-split-button-active {
-  background-color: #405A85;
+  background-color: var(--blue);
   border: 1px solid transparent;
 }
 .memory .memory-matrix-holder {
@@ -793,7 +815,7 @@ header .header-title {
   z-index: 1;
 }
 .right-group .right-group-content .io-devices .io-devices-expand-button:hover {
-  background-color: #405A85;
+  background-color: var(--blue);
   border: 1px solid #F4F4F4;
 }
 .right-group .right-group-content .cpu-registers {
@@ -880,10 +902,10 @@ header .header-title {
   transition: background-color 300ms ease;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-ip-register p {
-  background-color: #2F608B;
+  background-color: var(--ipColor);
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-sp-register p {
-  background-color: #BB3071;
+  background-color: var(--spColor);
 }
 .right-group .right-group-content .io-registers {
   height: 190px;
@@ -987,7 +1009,7 @@ header .header-title {
 .range .range-filled-line {
   height: 5px;
   width: 0;
-  background-color: #79b4eb;
+  background-color: var(--ipLightColor);
   border-radius: 10px;
   position: absolute;
   transition: 0;
@@ -995,8 +1017,8 @@ header .header-title {
 .range .range-circle {
   height: 20px;
   width: 20px;
-  background-color: #405A85;
-  border: 3px solid #0F0F0F;
+  background-color: var(--blue);
+  border: 3px solid var(--primaryBackground);
   border-radius: 50%;
   position: absolute;
   left: 0;
@@ -1004,7 +1026,7 @@ header .header-title {
   transition: background-color 300ms ease;
 }
 .range .range-circle:hover {
-  background-color: #2E4469;
+  background-color: var(--darkBlue);
 }
 
 .high-speed-block {
@@ -1086,7 +1108,7 @@ header .header-title {
   transition: 300ms;
 }
 .display .display-buttons .assembler-button:hover {
-  background-color: #405A85;
+  background-color: var(--blue);
 }
 .display .display-buttons .assembler-button .assembler-button-icon {
   height: 32px;
@@ -1155,7 +1177,7 @@ header .header-title {
   transition: 300ms;
 }
 .display .display-keyboard:hover {
-  border: 1px solid #405A85;
+  border: 1px solid var(--blue);
 }
 .display .display-keyboard .display-keyboard-left-group {
   display: flex;
@@ -1184,7 +1206,7 @@ header .header-title {
   transition: 300ms;
 }
 .display .display-keyboard-active {
-  border: 1px solid #405A85;
+  border: 1px solid var(--blue);
 }
 
 .expanded-display {
@@ -1264,7 +1286,7 @@ header .header-title {
   transition: 300ms;
 }
 .switch .switch-ball-active {
-  background-color: #405A85;
+  background-color: var(--blue);
   left: calc(100% - 21px - 2px);
 }
 
@@ -1285,11 +1307,11 @@ header .header-title {
 }
 
 .rich-editor-highlighted-line {
-  background-color: #10284F;
+  background-color: var(--ipHover);
 }
 
 .rich-editor-highlighted-line-gutter {
-  border-left: 3px solid #405A85;
+  border-left: 3px solid var(--blue);
 }
 
 .loading {
@@ -1333,7 +1355,7 @@ header .header-title {
   height: 46px;
   width: 46px;
   border: 8px solid transparent;
-  border-top: 8px solid #405A85;
+  border-top: 8px solid var(--blue);
   border-radius: 50%;
   position: absolute;
   animation: rotation 3s infinite;

@@ -56,10 +56,10 @@ header {
             span {
                 @include center;
                 width: 83px;
-                color: #F4F4F4; // This stays white on both themes.
+                color: $primaryText;
                 font-size: 14px;
                 font-family: SourceCodePro-Regular;
-                background-color: #274677;
+                background-color: $darkBlue;
                 border-radius: 5px;
                 margin-left: 8px;
                 padding: 3px;

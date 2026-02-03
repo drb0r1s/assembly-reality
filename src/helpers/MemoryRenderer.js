@@ -24,26 +24,26 @@ export class MemoryRenderer {
         this.textYOffset = Math.round(this.cellProps.height * 0.53); // 0.53 is a constant used to make cells exactly centered relative to rows.
 
         this.colors = isLightTheme ? {
-            text: "#1A1A1A",
-            sp: "#9B1F5C",
-            stack: "#C05A8A",
-            ip: "#1F4E73",
-            instruction: "#1E6FB8",
-            instructionHover: "#D9E7F5",
-            A: "#2F5A16",
-            B: "#9A5206",
-            C: "#4A176F",
-            D: "#B71818",
+            text: "#4D4D4D",
+            sp: "#E07AA8",
+            stack: "#F8C7DD",
+            ip: "#7FAED6",
+            instruction: "#B9DCF7",
+            instructionHover: "#7F9FCF",
+            A: "#8FC97A",
+            B: "#F2B36A",
+            C: "#B48AE3",
+            D: "#F58A8A",
             textDisplay: "#F4F5F7",
             background: "#FFFFFF",
             divider: "#DADDE2" 
         } : {
             text: "#D4D4D4",
             sp: "#BB3071",
-            stack: "#F59CC5",
-            ip: "#2F608B",
-            instruction: "#79B4EB",
-            instructionHover: "#10284F",
+            stack: "#C77399",
+            ip: "#122A4A",
+            instruction: "#3D75A6",
+            instructionHover: "#071835",
             A: "#3D691D",
             B: "#C06A08",
             C: "#60218E",
@@ -54,7 +54,7 @@ export class MemoryRenderer {
         };
 
         this.gradients = {
-            spIp: this.getGradient("#BB3071", "#2F608B")
+            spIp: this.getGradient(this.colors.sp, this.colors.ip)
         };
     }
 
@@ -76,12 +76,7 @@ export class MemoryRenderer {
             this.ctx.fillStyle = cellColor;
             this.ctx.fillRect(x, y, this.cellProps.width, this.cellProps.height);
 
-            if(
-                cellColor === this.colors.instruction ||
-                cellColor === this.colors.stack
-            ) this.ctx.fillStyle = this.colors.background;
-
-            else this.ctx.fillStyle = this.colors.text;
+            this.ctx.fillStyle = this.colors.text;
 
             this.ctx.fillText(
                 this.hexTable[this.matrix[i]],
