@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useMonaco } from "@monaco-editor/react";
 import { useManagerValue } from "./useManagerValue";
 import { tokenizer } from "../data/richEditor/tokenizer";
@@ -7,6 +7,8 @@ import { Keywords } from "../assembler/frontend/Keywords";
 import { Manager } from "../helpers/Manager";
 
 export const useRichEditor = () => {
+    const [isLoading, setIsLoading] = useState(true);
+
     const editorRef = useRef(null);
     const providerRef = useRef(null);
     const decorationIdsRef = useRef([]);
@@ -65,6 +67,8 @@ export const useRichEditor = () => {
         if(!monaco) return;
 
         if(!editorRef.current?.providerRegistered) {
+            setIsLoading(false);
+
             providerRef.current = monaco.languages.registerCompletionItemProvider("assembly", {
                 provideCompletionItems: model => {
                     const text = model.getValue();
@@ -146,5 +150,5 @@ export const useRichEditor = () => {
         );
     }
 
-    return handleEditorDidMount;
+    return { handleEditorDidMount, isLoading };
 }
