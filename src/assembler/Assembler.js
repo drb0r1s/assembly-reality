@@ -75,7 +75,7 @@ export class Assembler {
 
         catch(error) {
             if(error instanceof AssemblerError) return { error };
-            else console.error(error);
+            return { error: new AssemblerError("SyntaxError") };
         }
 
         return {
@@ -180,7 +180,7 @@ export class Assembler {
 
                 catch(error) {
                     if(error instanceof AssemblerError) resolve({ error });
-                    else reject(error);
+                    else reject({ error: new AssemblerError("UnknownExecutionError") });
                 }
 
                 instructionCounter++;
@@ -202,7 +202,7 @@ export class Assembler {
 
         catch(error) {
             if(error instanceof AssemblerError) return { error };
-            else console.error(error);
+            return { error: new AssemblerError("UnknownExecutionError") };
         }
 
         const address = this.ram.matrix.getAddress(row, column);

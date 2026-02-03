@@ -8,6 +8,8 @@ export class AssemblerError {
 
     getContent(attributes) {
         switch(this.type) {
+            case "SyntaxError": return "The code you're trying to execute has a syntax error!";
+            case "UnknownExecutionError": return "An unknown error has occurred during the execution!";
             case "UnknownInstruction": return `${attributes.name} is an unknown instruction!`;
             case "UnknownInstant": return `${attributes.name} is an unknown instant instruction!`;
             case "UnknownInstructionCode":

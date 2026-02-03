@@ -49,6 +49,9 @@ const Editor = () => {
             switch(action) {
                 case "assemble":
                     Manager.sequence(() => {
+                        // We can safely update this property only when assembling the code has finished!
+                        Manager.set("isMemoryEmpty", false);
+
                         Manager.trigger("ramUpdate", data?.ram);
                         Manager.trigger("linesUpdate", data?.lines);
                         Manager.trigger("cpuRegistersPing");
@@ -117,7 +120,6 @@ const Editor = () => {
 
         const unsubscribeAssemble = Manager.subscribe("assemble", () => {
             Manager.sequence(() => {
-                Manager.set("isMemoryEmpty", false);
                 Manager.set("isAssembled", true);
                 Manager.set("isExecuted", false);
             });
