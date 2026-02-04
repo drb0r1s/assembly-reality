@@ -4,8 +4,7 @@
     @include center(column);
     justify-content: flex-start;
     background-color: $mainBackground;
-    border-top: 1px solid #2F3336;
-    border-left: 1px solid #2F3336;
+    border-left: 1px solid $borderColor;
 
     .memory-header {
         height: 27px;
@@ -14,7 +13,7 @@
         flex-shrink: 0;
         justify-content: space-between;
         background-color: $primaryBackground;
-        border-bottom: 1px solid #2F3336;
+        border-bottom: 1px solid $borderColor;
         padding: 0 12px;
 
         strong {
@@ -60,6 +59,8 @@
 @media screen and (max-width: 1300px) {
     .memory {
         height: 150px;
+        position: absolute;
+        bottom: 0;
         z-index: 3;
 
         .memory-matrix-holder {

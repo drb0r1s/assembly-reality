@@ -1,6 +1,6 @@
-const DraggableHeader = ({ title, ref }) => {
+const DraggableHeader = ({ title, ref, isDisabled }) => {
     return(
-        <div className="draggable-header" ref={ref}>
+        <div className={`draggable-header ${isDisabled ? "draggable-header-disabled": ""}`} ref={ref}>
             <strong>{title}</strong>
         </div>
     );

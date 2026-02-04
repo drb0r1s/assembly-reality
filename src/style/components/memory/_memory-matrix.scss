@@ -8,7 +8,7 @@
         width: 100%;
         @include center;
         justify-content: flex-start;
-        border-bottom: 1px solid #2F3336;
+        border-bottom: 1px solid $borderColor;
 
         span {
             height: 20px;
@@ -17,7 +17,7 @@
             color: $tertiaryText;
             font-size: 13px;
             font-family: Roboto-Medium;
-            border-left: 1px solid #2F3336;
+            border-left: 1px solid $borderColor;
             padding: 5px;
             cursor: default;
 
@@ -27,7 +27,7 @@
             }
 
             &:last-child {
-                border-right: 1px solid #2F3336;
+                border-right: 1px solid $borderColor;
             }
         }
     }

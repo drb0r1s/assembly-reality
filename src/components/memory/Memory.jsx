@@ -1,10 +1,13 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import HighSpeedBlock from "../HighSpeedBlock";
 import MemoryMatrix from "./MemoryMatrix";
+import DraggableHeader from "../DraggableHeader";
 import { GlobalContext } from "../../context/GlobalContext";
+import { useResize } from "../../hooks/useResize";
+import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { Manager } from "../../helpers/Manager";
 
-const Memory = ({ memoryRef }) => {
+const Memory = ({ rightGroupRef, elements, allElementRefs }) => {
     const { assembler } = useContext(GlobalContext);
 
     const initialRAM = {
@@ -13,6 +16,18 @@ const Memory = ({ memoryRef }) => {
     };
     
     const [ram, setRAM] = useState(initialRAM);
+    const headerRef = useRef(null);
+
+    const width = useResize();
+
+    // Applied only for screen widths < 1300.
+    useLinkedResizing({
+        headerRef,
+        elementRefs: elements ? elements.refs : null,
+        targetIndex: elements ? elements.getOrder("memory") : null,
+        holderRef: rightGroupRef,
+        conditional: true
+    });
     
     useEffect(() => {
         const unsubscribeRAMUpdate = Manager.subscribe("ramUpdate", ram => {
@@ -35,10 +50,12 @@ const Memory = ({ memoryRef }) => {
     }, []);
 
     return(
-        <div className="memory" ref={memoryRef}>
-            <div className="memory-header">
-                <strong>Memory</strong>
-            </div>
+        <div className="memory" ref={elements ? allElementRefs[3] : null}>
+            <DraggableHeader
+                title="Memory"
+                ref={headerRef}
+                isDisabled={width >= 1300}
+            />
 
             <div className="memory-matrix-holder">
                 <HighSpeedBlock />

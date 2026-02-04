@@ -1,7 +1,7 @@
 .io-register {
     width: 100%;
     @include center;
-    border-bottom: 1px solid #2F3336;
+    border-bottom: 1px solid $borderColor;
 
     p {
         height: 28px;
@@ -11,7 +11,7 @@
         color: $primaryText;
         font-size: 14px;
         font-family: SourceCodePro-Regular;
-        border-right: 1px solid #2F3336;
+        border-right: 1px solid $borderColor;
         padding-left: 10px;
 
         &:last-child {

@@ -5,8 +5,8 @@
     flex-shrink: 0;
     justify-content: space-between;
     background-color: $primaryBackground;
-    border-top: 1px solid #2F3336;
-    border-bottom: 1px solid #2F3336;
+    border-top: 1px solid $borderColor;
+    border-bottom: 1px solid $borderColor;
     padding: 0 12px;
     cursor: ns-resize;
 
@@ -16,4 +16,8 @@
         font-family: Roboto-SemiBold;
         font-weight: normal;
     }
+}
+
+.draggable-header-disabled {
+    cursor: default;
 }

@@ -6,7 +6,7 @@ import { useLinkedResizing } from "../../../hooks/useLinkedResizing";
 import { useManagerValue } from "../../../hooks/useManagerValue";
 import { Manager } from "../../../helpers/Manager";
 
-const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
+const IORegisters = ({ rightGroupRef, elements, allElementRefs }) => {
     const { assembler } = useContext(GlobalContext);
     
     const [ioRegisters, setIORegisters] = useState(assembler.ioRegisters.construct());
@@ -16,9 +16,10 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
 
     useLinkedResizing({
         headerRef,
-        elementRef: ioRegistersRef,
+        elementRefs: elements.refs,
+        targetIndex: elements.getOrder("ioRegisters"),
         holderRef: rightGroupRef,
-        collisionRefs: { prev: view.cpuRegisters ? cpuRegistersRef : ioDevicesRef, doublePrev: view.cpuRegisters ? ioDevicesRef : { current: null } }
+        conditional: false
     });
 
     useEffect(() => {
@@ -48,7 +49,7 @@ const IORegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegisters
     }, []);
     
     return(
-        <div className="io-registers" ref={ioRegistersRef}>
+        <div className="io-registers" ref={allElementRefs[2]}>
             <DraggableHeader
                 title="Input / Output Registers"
                 ref={headerRef}

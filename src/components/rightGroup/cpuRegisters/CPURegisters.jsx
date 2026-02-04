@@ -6,7 +6,7 @@ import { GlobalContext } from "../../../context/GlobalContext";
 import { useLinkedResizing } from "../../../hooks/useLinkedResizing";
 import { Manager } from "../../../helpers/Manager";
 
-const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
+const CPURegisters = ({ rightGroupRef, elements, allElementRefs }) => {
     const { assembler } = useContext(GlobalContext);
     
     const [cpuRegisters, setCPURegisters] = useState(assembler.cpuRegisters.construct());
@@ -31,13 +31,14 @@ const CPURegisters = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegister
 
     useLinkedResizing({
         headerRef,
-        elementRef: cpuRegistersRef,
+        elementRefs: elements.refs,
+        targetIndex: elements.getOrder("cpuRegisters"),
         holderRef: rightGroupRef,
-        collisionRefs: { prev: ioDevicesRef, next: ioRegistersRef }
+        conditional: false
     });
     
     return(
-        <div className="cpu-registers" ref={cpuRegistersRef}>
+        <div className="cpu-registers" ref={allElementRefs[1]}>
             <DraggableHeader
                 title="CPU Registers"
                 ref={headerRef}

@@ -7,31 +7,31 @@ import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../helpers/Manager";
 import { Images } from "../../data/Images";
 
-const IODevices = ({ rightGroupRef, ioDevicesRef, cpuRegistersRef, ioRegistersRef }) => {
+const IODevices = ({ rightGroupRef, elements, allElementRefs }) => {
     const [lowerSection, setLowerSection] = useState({ ref: null }); // This state has to contain the elements inside the object, under the ref property, because of the way React is updating ref objects.
     
     const headerRef = useRef(null);
     const view = useManagerValue("view");
 
-    const ioDevicesHeight = useResizeObserver({ elementRef: ioDevicesRef });
+    const ioDevicesHeight = useResizeObserver({ elementRef: elements.refs[elements.getOrder("ioDevices")] });
     const lowerSectionHeight = useResizeObserver({ elementRef: lowerSection.ref }); // Here we need to take in the consideration a possibility that CPU Registers section can be disabled.
 
     const displayHeight = useMemo(() => ioDevicesHeight - lowerSectionHeight - 27, [ioDevicesHeight, lowerSectionHeight]);
 
     useLinkedResizing({
         headerRef,
-        elementRef: ioDevicesRef,
+        elementRefs: elements.refs,
+        targetIndex: elements.getOrder("ioDevices"),
         holderRef: rightGroupRef,
-        collisionRefs: { next: view.cpuRegisters ? cpuRegistersRef : ioRegistersRef, doubleNext: view.cpuRegisters ? ioRegistersRef : { current: null } }
+        conditional: false
     });
 
     useEffect(() => {
-        const ref = cpuRegistersRef?.current ? cpuRegistersRef : ioRegistersRef;
-        setLowerSection({ ref })
+        setLowerSection({ ref: elements.refs[elements.getOrder("ioDevices") + 1] });
     }, [view.cpuRegisters]);
 
     return(
-        <div className="io-devices" ref={ioDevicesRef}>
+        <div className="io-devices" ref={allElementRefs[0]}>
             <DraggableHeader
                 title="Input / Output Devices"
                 ref={headerRef}

@@ -3,7 +3,7 @@
     width: 100%;
     min-width: calc(100vw - 2 * 430px);
     @include center(column);
-    border-top: 1px solid #2F3336;
+    border-top: 1px solid $borderColor;
     position: relative;
 
     .editor-pages {
@@ -14,7 +14,7 @@
         justify-content: flex-start;
         flex-shrink: 0;
         background-color: $mainBackground;
-        border-bottom: 1px solid #2F3336;
+        border-bottom: 1px solid $borderColor;
         overflow-x: auto;
         overflow-y: hidden;
 

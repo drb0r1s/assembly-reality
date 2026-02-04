@@ -55,7 +55,7 @@
             height: 256px;
             width: 256px;
             background-color: black;
-            border: 1px solid #2F3336;
+            border: 1px solid $borderColor;
         }
 
         strong {
@@ -92,7 +92,7 @@
         @include center;
         justify-content: space-between;
         background-color: transparent;
-        border: 1px solid #2F3336;
+        border: 1px solid $borderColor;
         border-radius: 5px;
         outline: none;
         padding: 5px 12px;

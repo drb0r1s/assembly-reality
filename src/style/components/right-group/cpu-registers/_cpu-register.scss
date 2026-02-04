@@ -16,14 +16,14 @@
         font-size: 14px;
         font-family: SourceCodePro-Regular;
         background-color: $primaryBackground;
-        border-left: 2px solid #2F3336;
+        border-left: 2px solid $borderColor;
         padding: 0 4px;
         user-select: none;
     }
 
     .cpu-register-sr-flags {
         @include center;
-        border-left: 2px solid #2F3336;
+        border-left: 2px solid $borderColor;
 
         .cpu-register-sr-flag {
             @include center(column);

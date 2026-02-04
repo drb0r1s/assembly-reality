@@ -59,6 +59,7 @@
   --secondaryBackground: #0A0A0A;
   --tertiaryBackground: #2B2A2A;
   --textDisplayBackground: #2F3336;
+  --borderColor: #2F3336;
   --blue: #405A85;
   --darkBlue: #274677;
   --aColor: #3D691D;
@@ -83,6 +84,7 @@
   --secondaryBackground: #ECEEF1;
   --tertiaryBackground: #DADDE2;
   --textDisplayBackground: #B0B2B3;
+  --borderColor: #B4B7BC;
   --blue: #6F8FC7;
   --darkBlue: #4E6FA8;
   --aColor: #8FC97A;
@@ -460,7 +462,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border-top: 1px solid #2F3336;
+  border-top: 1px solid var(--borderColor);
   position: relative;
 }
 .editor .editor-pages {
@@ -474,7 +476,7 @@ header .header-title {
   justify-content: flex-start;
   flex-shrink: 0;
   background-color: var(--mainBackground);
-  border-bottom: 1px solid #2F3336;
+  border-bottom: 1px solid var(--borderColor);
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -612,8 +614,7 @@ header .header-title {
   flex-direction: column;
   justify-content: flex-start;
   background-color: var(--mainBackground);
-  border-top: 1px solid #2F3336;
-  border-left: 1px solid #2F3336;
+  border-left: 1px solid var(--borderColor);
 }
 .memory .memory-header {
   height: 27px;
@@ -625,7 +626,7 @@ header .header-title {
   flex-shrink: 0;
   justify-content: space-between;
   background-color: var(--primaryBackground);
-  border-bottom: 1px solid #2F3336;
+  border-bottom: 1px solid var(--borderColor);
   padding: 0 12px;
 }
 .memory .memory-header strong {
@@ -678,7 +679,7 @@ header .header-title {
   justify-content: center;
   flex-direction: row;
   justify-content: flex-start;
-  border-bottom: 1px solid #2F3336;
+  border-bottom: 1px solid var(--borderColor);
 }
 .memory .memory-matrix-holder .memory-matrix .memory-matrix-columns span {
   height: 20px;
@@ -690,7 +691,7 @@ header .header-title {
   color: var(--tertiaryText);
   font-size: 13px;
   font-family: Roboto-Medium;
-  border-left: 1px solid #2F3336;
+  border-left: 1px solid var(--borderColor);
   padding: 5px;
   cursor: default;
 }
@@ -699,7 +700,7 @@ header .header-title {
   border-left: none;
 }
 .memory .memory-matrix-holder .memory-matrix .memory-matrix-columns span:last-child {
-  border-right: 1px solid #2F3336;
+  border-right: 1px solid var(--borderColor);
 }
 .memory .memory-matrix-holder .memory-matrix .memory-matrix-content {
   height: calc(100dvh - 38px - 27px - 20px);
@@ -740,6 +741,8 @@ header .header-title {
 @media screen and (max-width: 1300px) {
   .memory {
     height: 150px;
+    position: absolute;
+    bottom: 0;
     z-index: 3;
   }
   .memory .memory-matrix-holder {
@@ -755,7 +758,7 @@ header .header-title {
   flex-direction: column;
   flex-shrink: 0;
   justify-content: flex-start;
-  border-left: 1px solid #2F3336;
+  border-left: 1px solid var(--borderColor);
 }
 .right-group .right-group-content {
   height: 100%;
@@ -815,7 +818,7 @@ header .header-title {
   justify-content: center;
   flex-direction: row;
   background-color: var(--primaryBackground);
-  border: 1px solid #2F3336;
+  border: 1px solid var(--borderColor);
   border-radius: 50%;
   position: absolute;
   top: 37px;
@@ -881,7 +884,7 @@ header .header-title {
   font-size: 14px;
   font-family: SourceCodePro-Regular;
   background-color: var(--primaryBackground);
-  border-left: 2px solid #2F3336;
+  border-left: 2px solid var(--borderColor);
   padding: 0 4px;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -892,7 +895,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  border-left: 2px solid #2F3336;
+  border-left: 2px solid var(--borderColor);
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags .cpu-register-sr-flag {
   display: flex;
@@ -952,7 +955,7 @@ header .header-title {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  border-bottom: 1px solid #2F3336;
+  border-bottom: 1px solid var(--borderColor);
 }
 .right-group .right-group-content .io-registers .io-registers-map .io-register p {
   height: 28px;
@@ -965,7 +968,7 @@ header .header-title {
   color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
-  border-right: 1px solid #2F3336;
+  border-right: 1px solid var(--borderColor);
   padding-left: 10px;
 }
 .right-group .right-group-content .io-registers .io-registers-map .io-register p:last-child {
@@ -1000,8 +1003,8 @@ header .header-title {
   flex-shrink: 0;
   justify-content: space-between;
   background-color: var(--primaryBackground);
-  border-top: 1px solid #2F3336;
-  border-bottom: 1px solid #2F3336;
+  border-top: 1px solid var(--borderColor);
+  border-bottom: 1px solid var(--borderColor);
   padding: 0 12px;
   cursor: ns-resize;
 }
@@ -1010,6 +1013,10 @@ header .header-title {
   font-size: 14px;
   font-family: Roboto-SemiBold;
   font-weight: normal;
+}
+
+.draggable-header-disabled {
+  cursor: default;
 }
 
 .range {
@@ -1154,7 +1161,7 @@ header .header-title {
   height: 256px;
   width: 256px;
   background-color: black;
-  border: 1px solid #2F3336;
+  border: 1px solid var(--borderColor);
 }
 .display .display-canvas-holder strong {
   color: #F4F4F4;
@@ -1192,7 +1199,7 @@ header .header-title {
   flex-direction: row;
   justify-content: space-between;
   background-color: transparent;
-  border: 1px solid #2F3336;
+  border: 1px solid var(--borderColor);
   border-radius: 5px;
   outline: none;
   padding: 5px 12px;

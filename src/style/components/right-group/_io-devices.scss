@@ -12,7 +12,7 @@
         width: 30px;
         @include center;
         background-color: $primaryBackground;
-        border: 1px solid #2F3336;
+        border: 1px solid $borderColor;
         border-radius: 50%;
         position: absolute;
         top: 37px;
