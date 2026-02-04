@@ -11,6 +11,8 @@
     --tertiaryBackground: #2B2A2A;
     --textDisplayBackground: #2F3336;
 
+    --borderColor: #2F3336;
+
     --blue: #405A85;
     --darkBlue: #274677;
 
@@ -39,6 +41,8 @@
     --tertiaryBackground: #DADDE2;
     --textDisplayBackground: #B0B2B3;
 
+    --borderColor: #B4B7BC;
+
     --blue: #6F8FC7;
     --darkBlue: #4E6FA8;
 
@@ -63,6 +67,8 @@ $primaryBackground: var(--primaryBackground);
 $secondaryBackground: var(--secondaryBackground);
 $tertiaryBackground: var(--tertiaryBackground);
 $textDisplayBackground: var(--textDisplayBackground);
+
+$borderColor: var(--borderColor);
 
 $blue: var(--blue);
 $darkBlue: var(--darkBlue);
