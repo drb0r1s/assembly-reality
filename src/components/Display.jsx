@@ -24,7 +24,7 @@ const Display = ({ style, isExpanded }) => {
 
     const keyboardStyle = useMemo(() => { return {
         color: keyboard.isActive ? "#405A85" : isLightTheme ? "#1A1A1A" : "#F4F4F4"
-    }}, [keyboard.isActive]);
+    }}, [keyboard.isActive, isLightTheme]);
 
     const handleKeydown = useCallback(e => {
         if(e.repeat) return;
