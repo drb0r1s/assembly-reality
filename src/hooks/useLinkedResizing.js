@@ -17,7 +17,9 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
         let elementTops = [];
         let lockElement = [];
 
-        const handleMouseDown = e => {
+        let activePointerId = null;
+
+        const handlePointerDown = e => {
             y.start = e.clientY;
 
             heights.start = elementRefs[targetIndex].current.offsetHeight;
@@ -29,18 +31,23 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
             lockElement = [];
 
             document.body.style.userSelect = "none";
+
+            activePointerId = e.pointerId;
+            headerRef.current.setPointerCapture(activePointerId);
             
-            window.addEventListener("mousemove", handleMouseMove);
-            window.addEventListener("mouseup", handleMouseUp);
+            window.addEventListener("pointermove", handlePointerMove);
+            window.addEventListener("pointerup", handlePointerUp);
+            window.addEventListener("pointercancel", handlePointerUp);
         }
 
-        const handleMouseMove = e => {
+        const handlePointerMove = e => {
             const deltaY = (e.clientY - y.start) * -1;
             const direction = e.clientY > y.last ? "down" : "up";
 
             y.last = e.clientY;
 
-            for(let i = 0; i <= targetIndex; i++) {
+            // [PREV, ELEMENT)
+            for(let i = 0; i < targetIndex; i++) {
                 if(lockElement.includes(i) && direction === "down") unlock(i);
 
                 else if(
@@ -58,7 +65,8 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
                 }
             }
 
-            for(let i = elementRefs.length - 1; i >= targetIndex; i--) {
+            // (ELEMENT, NEXT]
+            for(let i = elementRefs.length - 1; i > targetIndex; i--) {
                 if(lockElement.includes(i) && direction === "up") unlock(i);
 
                 else if(
@@ -76,6 +84,7 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
                 }
             }
 
+            // ELEMENT
             let newHeight = heights.start + deltaY;
 
             if(newHeight > heights.holder - targetIndex * headerHeight) newHeight = heights.holder - targetIndex * headerHeight;
@@ -95,14 +104,20 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
             }
         }
 
-        const handleMouseUp = () => {
+        const handlePointerUp = () => {
             document.body.style.userSelect = "";
 
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
+            if(activePointerId !== null) {
+                headerRef.current.releasePointerCapture(activePointerId);
+                activePointerId = null;
+            }
+
+            window.removeEventListener("pointermove", handlePointerMove);
+            window.removeEventListener("pointerup", handlePointerUp);
+            window.removeEventListener("pointercancel", handlePointerUp);
         }
         
-        headerRef.current.addEventListener("mousedown", handleMouseDown);
-        return () => { if(headerRef.current) headerRef.current.removeEventListener("mousedown", handleMouseDown) }
+        headerRef.current.addEventListener("pointerdown", handlePointerDown);
+        return () => { if(headerRef.current) headerRef.current.removeEventListener("pointerdown", handlePointerDown) }
     }, [view, headerRef, elementRefs]);
 }

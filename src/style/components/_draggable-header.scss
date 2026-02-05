@@ -9,6 +9,7 @@
     border-bottom: 1px solid $borderColor;
     padding: 0 12px;
     cursor: ns-resize;
+    touch-action: none;
     z-index: 1;
 
     strong {
