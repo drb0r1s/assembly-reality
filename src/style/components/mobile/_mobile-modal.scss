@@ -1,0 +1,10 @@
+.mobile-modal {
+    height: 100dvh;
+    width: 100vw;
+    background-color: $primaryBackground;
+    position: fixed;
+    top: 0;
+    left: 100vw;
+    transition: 300ms;
+    z-index: 6;
+}

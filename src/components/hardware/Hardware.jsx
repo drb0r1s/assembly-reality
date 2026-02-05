@@ -4,10 +4,11 @@ import CPURegisters from "./cpuRegisters/CPURegisters";
 import IORegisters from "./ioRegisters/IORegisters";
 import Memory from "../memory/Memory";
 import Signature from "./Signature";
+import MobileHeader from "../mobile/MobileHeader";
 import { useResize } from "../../hooks/useResize";
 import { useManagerValue } from "../../hooks/useManagerValue";
 
-const Hardware = () => {
+const Hardware = ({ onReturn }) => {
     const [elements, setElements] = useState({ refs: [], order: [], getOrder: () => {} });
 
     const hardwareRef = useRef(null);
@@ -61,6 +62,8 @@ const Hardware = () => {
     
     return(
         <div className="hardware" ref={hardwareRef}>
+            {width < 900 && <MobileHeader title="Hardware" onReturn={onReturn} />}
+            
             <div className="hardware-content">
                 <Signature />
                 
@@ -82,7 +85,7 @@ const Hardware = () => {
                     allElementRefs={allElementRefs}
                 />}
 
-                {width < 1300 && view.memory && <Memory
+                {(width >= 900 && width < 1300) && view.memory && <Memory
                     hardwareRef={hardwareRef}
                     elements={elements}
                     allElementRefs={allElementRefs}

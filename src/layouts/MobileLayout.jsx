@@ -1,19 +1,20 @@
-import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import Editor from "../components/editor/Editor";
-import Memory from "../components/memory/Memory";
-import Hardware from "../components/hardware/Hardware";
-import MobileNavigation from "../components/MobileNavigation";
+import MobileModal from "../components/mobile/MobileModal";
+import MobileNavigation from "../components/mobile/MobileNavigation";
 
 const MobileLayout = () => {
+    const [activeModal, setActiveModal] = useState("");
+    
     return(
         <main>
-            <Routes>
-                <Route path="/" element={<Editor />} />
-                <Route path="/memory" element={<Memory />} />
-                <Route path="/hardware" element={<Hardware />} />
-            </Routes>
+            {activeModal && <MobileModal
+                componentName={activeModal}
+                setActiveModal={setActiveModal}
+            />}
 
-            <MobileNavigation />
+            <Editor />
+            <MobileNavigation setActiveModal={setActiveModal} />
         </main>
     );
 }

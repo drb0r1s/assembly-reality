@@ -16,7 +16,7 @@
     }
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (min-width: 900px) and (max-width: 1300px) {
     .memory {
         height: 150px;
         position: absolute;

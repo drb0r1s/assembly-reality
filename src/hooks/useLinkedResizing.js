@@ -9,7 +9,7 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
     const view = useManagerValue("view");
     
     useEffect(() => {
-        if(width >= 1300 && conditional) return;
+        if((width < 900 || width >= 1300) && conditional) return;
 
         const y = { start: 0, last: 0 };
         const heights = { start: 0, holder: 0 };

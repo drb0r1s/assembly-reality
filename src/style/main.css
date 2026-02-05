@@ -717,7 +717,7 @@ header .header-title {
   }
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (min-width: 900px) and (max-width: 1300px) {
   .memory {
     height: 150px;
     position: absolute;
@@ -903,7 +903,7 @@ header .header-title {
 .hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-sp-register p {
   background-color: var(--spColor);
 }
-@media screen and (max-width: 1300px) {
+@media screen and (min-width: 900px) and (max-width: 1300px) {
   .hardware .hardware-content .cpu-registers {
     height: 445px;
   }
@@ -967,12 +967,21 @@ header .header-title {
   font-family: Roboto-Medium;
   padding-left: none;
 }
-@media screen and (max-width: 1300px) {
+@media screen and (min-width: 900px) and (max-width: 1300px) {
   .hardware .hardware-content .io-registers {
     height: 340px;
   }
 }
 
+@media screen and (max-width: 900px) {
+  .hardware {
+    height: 100dvh;
+    width: 100vw;
+  }
+  .hardware .hardware-content {
+    height: calc(100% - 38px);
+  }
+}
 .draggable-header {
   height: 27px;
   width: 100%;
@@ -1392,6 +1401,51 @@ header .header-title {
     transform: rotate(360deg);
   }
 }
+.mobile-header {
+  height: 38px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 18px;
+  background-color: var(--mainBackground);
+  border-bottom: 1px solid var(--borderColor);
+  padding-left: 12px;
+}
+.mobile-header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: transparent;
+  border: none;
+}
+.mobile-header button .mobile-header-button-icon {
+  height: 20px;
+  width: 20px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.mobile-header strong {
+  color: var(--primaryText);
+  font-size: 18px;
+  font-family: Roboto-Medium;
+  font-weight: normal;
+}
+
+.mobile-modal {
+  height: 100dvh;
+  width: 100vw;
+  background-color: var(--primaryBackground);
+  position: fixed;
+  top: 0;
+  left: 100vw;
+  transition: 300ms;
+  z-index: 6;
+}
+
 .mobile-navigation {
   height: 48px;
   width: 100%;
@@ -1404,7 +1458,7 @@ header .header-title {
   border-top: 1px solid var(--borderColor);
   position: absolute;
   bottom: 0;
-  padding: 0 15px;
+  padding: 0 20px;
   z-index: 5;
 }
 .mobile-navigation button {

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import DraggableHeader from "../DraggableHeader";
 import Display from "../Display";
+import { useResize } from "../../hooks/useResize";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useLinkedResizeObserver } from "../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../helpers/Manager";
@@ -8,6 +9,8 @@ import { Images } from "../../data/Images";
 
 const IODevices = ({ hardwareRef, elements, allElementRefs }) => {
     const headerRef = useRef(null);
+
+    const width = useResize();
 
     useLinkedResizing({
         headerRef,
@@ -26,12 +29,12 @@ const IODevices = ({ hardwareRef, elements, allElementRefs }) => {
                 ref={headerRef}
             />
 
-            <button
+            {width >= 900 && <button
                 className="io-devices-expand-button"
                 onClick={() => Manager.set("isDisplayExpanded", true)}
             >
                 <Images.ExpandIcon />
-            </button>
+            </button>}
             
             <Display
                 style={{ height: `${displayHeight}px` }}

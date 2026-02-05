@@ -1,0 +1,29 @@
+.mobile-header {
+    height: 38px;
+    width: 100vw;
+    @include center;
+    justify-content: flex-start;
+    gap: 18px;
+    background-color: $mainBackground;
+    border-bottom: 1px solid $borderColor;
+    padding-left: 12px;
+
+    button {
+        @include center;
+        background-color: transparent;
+        border: none;
+
+        .mobile-header-button-icon {
+            height: 20px;
+            width: 20px;
+            object-fit: contain;
+        }
+    }
+
+    strong {
+        color: $primaryText;
+        font-size: 18px;
+        font-family: Roboto-Medium;
+        font-weight: normal;
+    }
+}

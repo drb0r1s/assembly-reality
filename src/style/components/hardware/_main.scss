@@ -19,3 +19,14 @@
         @import "./io-registers/main";
     }
 }
+
+@media screen and (max-width: 900px) {
+    .hardware {
+        height: 100dvh;
+        width: 100vw;
+
+        .hardware-content {
+            height: calc(100% - 38px);
+        }
+    }
+}

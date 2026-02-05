@@ -27,6 +27,7 @@ import MenuIcon from "../images/menu-icon.svg?react";
 import EditorIcon from "../images/editor-icon.svg?react";
 import MemoryIcon from "../images/memory-icon.svg?react";
 import HardwareIcon from "../images/hardware-icon.svg?react";
+import ReturnIcon from "../images/return-icon.svg?react";
 
 export const Images = {
     // ARy
@@ -37,5 +38,5 @@ export const Images = {
     XIcon, VisibilityIcon, PageIcon, AddIcon, ExpandIcon, WindowIcon, ImportIcon, ExportIcon, SaveIcon, ThemeIcon,
 
     // MOBILE
-    MenuIcon, EditorIcon, MemoryIcon, HardwareIcon
+    MenuIcon, EditorIcon, MemoryIcon, HardwareIcon, ReturnIcon
 };

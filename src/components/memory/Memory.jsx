@@ -54,11 +54,11 @@ const Memory = ({ hardwareRef, elements, allElementRefs }) => {
 
     return(
         <div className="memory" ref={elements ? allElementRefs[3] : null}>
-            <DraggableHeader
+            {width >= 900 && <DraggableHeader
                 title="Memory"
                 ref={headerRef}
                 isDisabled={width >= 1300}
-            />
+            />}
 
             <div className="memory-matrix-holder">
                 <HighSpeedBlock />

@@ -31,7 +31,7 @@
     }
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (min-width: 900px) and (max-width: 1300px) {
     .cpu-registers {
         height: calc(295px + 150px);
     }

@@ -32,7 +32,7 @@
     }
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (min-width: 900px) and (max-width: 1300px) {
     .io-registers {
         height: calc(190px + 150px);
     }
