@@ -4,6 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -25,6 +26,7 @@ main {
     background-color: $mainBackground;
     @include center(column);
     justify-content: flex-start;
+    position: relative;
     overflow: hidden;
 
     .workspace {

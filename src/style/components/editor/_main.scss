@@ -3,6 +3,7 @@
     width: 100%;
     min-width: calc(100vw - 2 * 430px);
     @include center(column);
+    justify-content: flex-start;
     border-top: 1px solid $borderColor;
     position: relative;
 
@@ -103,4 +104,10 @@
     }
 
     @import "./editor-error";
+}
+
+@media screen and (max-width: 900px) {
+    .editor-pages {
+        @include no-scrollbar;
+    }
 }

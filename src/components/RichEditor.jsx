@@ -2,14 +2,17 @@ import React, { useMemo } from "react";
 import Editor from "@monaco-editor/react";
 import Loading from "./Loading";
 import { useRichEditor } from "../hooks/useRichEditor";
+import { useResize } from "../hooks/useResize";
 import { useManagerValue } from "../hooks/useManagerValue";
 
 const RichEditor = React.memo(({ code, onChange }) => {
     const { handleEditorDidMount, isLoading } = useRichEditor();
-    const isLightTheme = useManagerValue("isLightTheme");
+
+    const width = useResize();
+    const isLightTheme = useManagerValue("isLightTheme"); 
 
     const richEditorStyle = useMemo(() => { return {
-        height: "calc(100% - 40px)",
+        height: width >= 900 ? "calc(100% - 40px)" : "calc(100% - 40px - 48px)",
         width: "100%"
     }}, []);
 
