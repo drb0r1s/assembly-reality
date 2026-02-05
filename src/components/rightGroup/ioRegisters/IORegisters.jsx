@@ -3,7 +3,7 @@ import DraggableHeader from "../../DraggableHeader";
 import IORegister from "./IORegister";
 import { GlobalContext } from "../../../context/GlobalContext";
 import { useLinkedResizing } from "../../../hooks/useLinkedResizing";
-import { useManagerValue } from "../../../hooks/useManagerValue";
+import { useLinkedResizeObserver } from "../../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../../helpers/Manager";
 
 const IORegisters = ({ rightGroupRef, elements, allElementRefs }) => {
@@ -12,7 +12,6 @@ const IORegisters = ({ rightGroupRef, elements, allElementRefs }) => {
     const [ioRegisters, setIORegisters] = useState(assembler.ioRegisters.construct());
     
     const headerRef = useRef(null);
-    const view = useManagerValue("view");
 
     useLinkedResizing({
         headerRef,
@@ -21,6 +20,8 @@ const IORegisters = ({ rightGroupRef, elements, allElementRefs }) => {
         holderRef: rightGroupRef,
         conditional: false
     });
+
+    const displayHeight = useLinkedResizeObserver({ elements, elementName: "ioRegisters" });
 
     useEffect(() => {
         // TMRCOUNTER will be updated through the update system.
@@ -55,7 +56,10 @@ const IORegisters = ({ rightGroupRef, elements, allElementRefs }) => {
                 ref={headerRef}
             />
 
-            <div className="io-registers-map">
+            <div
+                className="io-registers-map"
+                style={{ height: `${displayHeight}px` }}
+            >
                 <div className="io-register io-registers-map-header">
                     <p>Address</p>
                     <p>Name</p>

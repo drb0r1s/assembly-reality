@@ -1,19 +1,23 @@
 .cpu-registers {
-    height: 290px;
+    height: 295px;
     width: 100%;
     @include center(column);
     justify-content: flex-start;
-    gap: 10px;
     background-color: $mainBackground;
     position: absolute;
     bottom: 0;
     z-index: 1;
 
     .cpu-registers-content {
+        height: 100%;
         width: 100%;
         @include center(column);
+        justify-content: flex-start;
         gap: 7px;
         position: relative;
+        padding: 10px 0;
+        overflow-x: hidden;
+        overflow-y: auto;
 
         .cpu-registers-row {
             width: 100%;
@@ -29,6 +33,6 @@
 
 @media screen and (max-width: 1300px) {
     .cpu-registers {
-        height: calc(290px + 150px);
+        height: calc(295px + 150px);
     }
 }

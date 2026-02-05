@@ -4,6 +4,7 @@ import HighSpeedBlock from "../../HighSpeedBlock";
 import CPURegister from "./CPURegister";
 import { GlobalContext } from "../../../context/GlobalContext";
 import { useLinkedResizing } from "../../../hooks/useLinkedResizing";
+import { useLinkedResizeObserver } from "../../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../../helpers/Manager";
 
 const CPURegisters = ({ rightGroupRef, elements, allElementRefs }) => {
@@ -15,6 +16,16 @@ const CPURegisters = ({ rightGroupRef, elements, allElementRefs }) => {
 
     const srFlags = useMemo(() => Object.entries(cpuRegisters.SR), [cpuRegisters.SR]);
     const getHex = useCallback(number => number.toString(16).toUpperCase().padStart(4, "0"), []);
+
+    useLinkedResizing({
+        headerRef,
+        elementRefs: elements.refs,
+        targetIndex: elements.getOrder("cpuRegisters"),
+        holderRef: rightGroupRef,
+        conditional: false
+    });
+
+    const displayHeight = useLinkedResizeObserver({ elements, elementName: "cpuRegisters" });
 
     useEffect(() => {
         const unsubscribeCPURegisterPing = Manager.subscribe("cpuRegistersPing", () => setCPURegisters(assembler.cpuRegisters.construct()));
@@ -28,14 +39,6 @@ const CPURegisters = ({ rightGroupRef, elements, allElementRefs }) => {
             unsubscribeCPURegistersCollectionUpdate();
         };
     }, []);
-
-    useLinkedResizing({
-        headerRef,
-        elementRefs: elements.refs,
-        targetIndex: elements.getOrder("cpuRegisters"),
-        holderRef: rightGroupRef,
-        conditional: false
-    });
     
     return(
         <div className="cpu-registers" ref={allElementRefs[1]}>
@@ -44,7 +47,10 @@ const CPURegisters = ({ rightGroupRef, elements, allElementRefs }) => {
                 ref={headerRef}
             />
 
-            <div className="cpu-registers-content">
+            <div
+                className="cpu-registers-content"
+                style={{ height: `${displayHeight}px` }}
+            >
                 <HighSpeedBlock />
                 
                 <div className="cpu-registers-row">

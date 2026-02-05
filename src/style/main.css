@@ -616,44 +616,6 @@ header .header-title {
   background-color: var(--mainBackground);
   border-left: 1px solid var(--borderColor);
 }
-.memory .memory-header {
-  height: 27px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  flex-shrink: 0;
-  justify-content: space-between;
-  background-color: var(--primaryBackground);
-  border-bottom: 1px solid var(--borderColor);
-  padding: 0 12px;
-}
-.memory .memory-header strong {
-  color: var(--primaryText);
-  font-size: 14px;
-  font-family: Roboto-SemiBold;
-  font-weight: normal;
-}
-.memory .memory-header button {
-  color: var(--primaryText);
-  font-size: 12px;
-  font-family: Roboto-Regular;
-  background-color: transparent;
-  border: 1px solid #F4F4F4;
-  border-radius: 5px;
-  padding: 3px 12px;
-  cursor: pointer;
-  transition: 300ms;
-}
-.memory .memory-header button:hover {
-  background-color: var(--blue);
-  border: 1px solid transparent;
-}
-.memory .memory-header .memory-header-split-button-active {
-  background-color: var(--blue);
-  border: 1px solid transparent;
-}
 .memory .memory-matrix-holder {
   height: calc(100dvh - 38px - 27px);
   width: 100%;
@@ -737,6 +699,11 @@ header .header-title {
   height: 5160px;
   width: 384px;
 }
+@media screen and (max-width: 1300px) {
+  .memory .memory-matrix-holder .memory-matrix .memory-matrix-content {
+    height: 100%;
+  }
+}
 
 @media screen and (max-width: 1300px) {
   .memory {
@@ -746,7 +713,7 @@ header .header-title {
     z-index: 3;
   }
   .memory .memory-matrix-holder {
-    height: 123px;
+    height: calc(100% - 27px);
   }
 }
 .right-group {
@@ -832,27 +799,31 @@ header .header-title {
   border: 1px solid #F4F4F4;
 }
 .right-group .right-group-content .cpu-registers {
-  height: 290px;
+  height: 295px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 10px;
   background-color: var(--mainBackground);
   position: absolute;
   bottom: 0;
   z-index: 1;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content {
+  height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  justify-content: flex-start;
   gap: 7px;
   position: relative;
+  padding: 10px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row {
   width: 100%;
@@ -922,7 +893,7 @@ header .header-title {
 }
 @media screen and (max-width: 1300px) {
   .right-group .right-group-content .cpu-registers {
-    height: 440px;
+    height: 445px;
   }
 }
 .right-group .right-group-content .io-registers {
@@ -939,7 +910,7 @@ header .header-title {
   z-index: 2;
 }
 .right-group .right-group-content .io-registers .io-registers-map {
-  height: calc(100% - 27px);
+  height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
@@ -988,9 +959,6 @@ header .header-title {
   .right-group .right-group-content .io-registers {
     height: 340px;
   }
-  .right-group .right-group-content .io-registers .io-registers-map {
-    height: calc(100% - 27px - 150px);
-  }
 }
 
 .draggable-header {
@@ -1007,6 +975,7 @@ header .header-title {
   border-bottom: 1px solid var(--borderColor);
   padding: 0 12px;
   cursor: ns-resize;
+  z-index: 1;
 }
 .draggable-header strong {
   color: var(--primaryText);

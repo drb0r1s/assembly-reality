@@ -26,7 +26,8 @@ const RightGroup = () => {
         if(ioDevicesRef.current) ioDevicesRef.current.style.height = "";
         if(cpuRegistersRef.current) cpuRegistersRef.current.style.height = "";
         if(ioRegistersRef.current) ioRegistersRef.current.style.height = "";
-    }, [view]);
+        if(memoryRef.current) memoryRef.current.style.height = "";
+    }, [view, width]);
 
     useEffect(() => {
         setElements(getElements());
@@ -81,7 +82,7 @@ const RightGroup = () => {
                     allElementRefs={allElementRefs}
                 />}
 
-                {width < 1300 && <Memory
+                {width < 1300 && view.memory && <Memory
                     rightGroupRef={rightGroupRef}
                     elements={elements}
                     allElementRefs={allElementRefs}

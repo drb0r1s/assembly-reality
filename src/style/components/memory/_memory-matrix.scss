@@ -59,3 +59,9 @@
         @import "./memory-canvas";
     }
 }
+
+@media screen and (max-width: 1300px) {
+    .memory-matrix .memory-matrix-content {
+        height: 100%;
+    }
+}

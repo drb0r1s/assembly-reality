@@ -4,7 +4,11 @@ export const useResizeObserver = ({ elementRef }) => {
     const [height, setHeight] = useState(0);
 
     useEffect(() => {
-        if(!elementRef?.current) return;
+        if(!elementRef?.current) {
+            setHeight(0);
+            return;
+        }
+
         setHeight(elementRef.current.offsetHeight);
 
         const observer = new ResizeObserver(entries => {

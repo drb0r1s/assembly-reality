@@ -5,6 +5,7 @@ import DraggableHeader from "../DraggableHeader";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useResize } from "../../hooks/useResize";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
+import { useLinkedResizeObserver } from "../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../helpers/Manager";
 
 const Memory = ({ rightGroupRef, elements, allElementRefs }) => {
@@ -28,6 +29,8 @@ const Memory = ({ rightGroupRef, elements, allElementRefs }) => {
         holderRef: rightGroupRef,
         conditional: true
     });
+
+    const displayHeight = useLinkedResizeObserver({ elements, elementName: "memory" });
     
     useEffect(() => {
         const unsubscribeRAMUpdate = Manager.subscribe("ramUpdate", ram => {
@@ -59,7 +62,7 @@ const Memory = ({ rightGroupRef, elements, allElementRefs }) => {
 
             <div className="memory-matrix-holder">
                 <HighSpeedBlock />
-                <MemoryMatrix ram={ram} />
+                <MemoryMatrix ram={ram} displayHeight={displayHeight} />
             </div>
         </div>
     );
