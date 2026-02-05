@@ -32,8 +32,8 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                 </button>
 
                 <button
-                    className="assembler-button"
-                    onClick={() => handleButton("reset")}
+                    className={`assembler-button ${isMemoryEmpty ? "assembler-button-disabled" : ""}`}
+                    onClick={isMemoryEmpty ? () => {} : () => handleButton("reset")}
                 >
                     <Images.ResetIcon className="assembler-button-icon" />
                     <p>Reset</p>
