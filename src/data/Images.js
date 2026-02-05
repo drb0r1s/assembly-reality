@@ -22,11 +22,20 @@ import ExportIcon from "../images/export-icon.svg?react";
 import SaveIcon from "../images/save-icon.svg?react";
 import ThemeIcon from "../images/theme-icon.svg?react";
 
+// MOBILE
+import MenuIcon from "../images/menu-icon.svg?react";
+import EditorIcon from "../images/editor-icon.svg?react";
+import MemoryIcon from "../images/memory-icon.svg?react";
+import HardwareIcon from "../images/hardware-icon.svg?react";
+
 export const Images = {
     // ARy
     ARy,
 
     // GENERAL
     ArrowDownIcon, AssembleIcon, RunIcon, AssembleRunIcon, PauseIcon, StepIcon, ResetIcon, KeyboardIcon, CheckIcon,
-    XIcon, VisibilityIcon, PageIcon, AddIcon, ExpandIcon, WindowIcon, ImportIcon, ExportIcon, SaveIcon, ThemeIcon
+    XIcon, VisibilityIcon, PageIcon, AddIcon, ExpandIcon, WindowIcon, ImportIcon, ExportIcon, SaveIcon, ThemeIcon,
+
+    // MOBILE
+    MenuIcon, EditorIcon, MemoryIcon, HardwareIcon
 };
