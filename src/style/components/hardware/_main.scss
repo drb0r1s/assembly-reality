@@ -1,4 +1,4 @@
-.right-group {
+.hardware {
     height: calc(100dvh - 38px); // 38px is height of header
     width: 430px;
     @include center(column);
@@ -6,7 +6,7 @@
     justify-content: flex-start;
     border-left: 1px solid $borderColor;
 
-    .right-group-content {
+    .hardware-content {
         height: 100%;
         width: 100%;
         @include center(column);

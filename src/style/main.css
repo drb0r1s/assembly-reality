@@ -716,7 +716,7 @@ header .header-title {
     height: calc(100% - 27px);
   }
 }
-.right-group {
+.hardware {
   height: calc(100dvh - 38px);
   width: 430px;
   display: flex;
@@ -727,7 +727,7 @@ header .header-title {
   justify-content: flex-start;
   border-left: 1px solid var(--borderColor);
 }
-.right-group .right-group-content {
+.hardware .hardware-content {
   height: 100%;
   width: 100%;
   display: flex;
@@ -737,7 +737,7 @@ header .header-title {
   justify-content: flex-start;
   position: relative;
 }
-.right-group .right-group-content .signature {
+.hardware .hardware-content .signature {
   height: 100%;
   width: 100%;
   display: flex;
@@ -746,7 +746,7 @@ header .header-title {
   flex-direction: column;
   gap: 7px;
 }
-.right-group .right-group-content .signature .signature-logo {
+.hardware .hardware-content .signature .signature-logo {
   height: 80px;
   width: 130px;
   color: var(--textDisplayBackground);
@@ -754,18 +754,18 @@ header .header-title {
      object-fit: contain;
   margin-bottom: 10px;
 }
-.right-group .right-group-content .signature strong {
+.hardware .hardware-content .signature strong {
   color: var(--textDisplayBackground);
   font-size: 26px;
   font-family: SourceCodePro-Regular;
   font-weight: normal;
 }
-.right-group .right-group-content .signature p {
+.hardware .hardware-content .signature p {
   color: var(--textDisplayBackground);
   font-size: 18px;
   font-family: SourceCodePro-Regular;
 }
-.right-group .right-group-content .io-devices {
+.hardware .hardware-content .io-devices {
   height: 100%;
   width: 100%;
   display: flex;
@@ -777,7 +777,7 @@ header .header-title {
   position: absolute;
   bottom: 0;
 }
-.right-group .right-group-content .io-devices .io-devices-expand-button {
+.hardware .hardware-content .io-devices .io-devices-expand-button {
   height: 30px;
   width: 30px;
   display: flex;
@@ -794,11 +794,11 @@ header .header-title {
   transition: 300ms;
   z-index: 1;
 }
-.right-group .right-group-content .io-devices .io-devices-expand-button:hover {
+.hardware .hardware-content .io-devices .io-devices-expand-button:hover {
   background-color: var(--blue);
   border: 1px solid #F4F4F4;
 }
-.right-group .right-group-content .cpu-registers {
+.hardware .hardware-content .cpu-registers {
   height: 295px;
   width: 100%;
   display: flex;
@@ -811,7 +811,7 @@ header .header-title {
   bottom: 0;
   z-index: 1;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content {
+.hardware .hardware-content .cpu-registers .cpu-registers-content {
   height: 100%;
   width: 100%;
   display: flex;
@@ -825,7 +825,7 @@ header .header-title {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row {
   width: 100%;
   display: flex;
   align-items: center;
@@ -835,14 +835,14 @@ header .header-title {
   gap: 18px;
   padding: 0 12px;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   cursor: default;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register strong {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register strong {
   width: 26px;
   color: var(--primaryText);
   font-size: 14px;
@@ -850,7 +850,7 @@ header .header-title {
   font-weight: normal;
   padding-right: 8px;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register p {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register p {
   color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
@@ -861,42 +861,42 @@ header .header-title {
      -moz-user-select: none;
           user-select: none;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
   border-left: 2px solid var(--borderColor);
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags .cpu-register-sr-flag {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags .cpu-register-sr-flag {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags .cpu-register-sr-flag p {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-register .cpu-register-sr-flags .cpu-register-sr-flag p {
   font-size: 11px;
   border-left: none;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-a-register p,
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-b-register p,
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-c-register p,
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-d-register p {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-a-register p,
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-b-register p,
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-c-register p,
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-d-register p {
   cursor: pointer;
   transition: background-color 300ms ease;
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-ip-register p {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-ip-register p {
   background-color: var(--ipColor);
 }
-.right-group .right-group-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-sp-register p {
+.hardware .hardware-content .cpu-registers .cpu-registers-content .cpu-registers-row .cpu-sp-register p {
   background-color: var(--spColor);
 }
 @media screen and (max-width: 1300px) {
-  .right-group .right-group-content .cpu-registers {
+  .hardware .hardware-content .cpu-registers {
     height: 445px;
   }
 }
-.right-group .right-group-content .io-registers {
+.hardware .hardware-content .io-registers {
   height: 190px;
   width: 100%;
   display: flex;
@@ -909,7 +909,7 @@ header .header-title {
   bottom: 0;
   z-index: 2;
 }
-.right-group .right-group-content .io-registers .io-registers-map {
+.hardware .hardware-content .io-registers .io-registers-map {
   height: 100%;
   width: 100%;
   display: flex;
@@ -920,7 +920,7 @@ header .header-title {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.right-group .right-group-content .io-registers .io-registers-map .io-register {
+.hardware .hardware-content .io-registers .io-registers-map .io-register {
   width: 100%;
   display: flex;
   align-items: center;
@@ -928,7 +928,7 @@ header .header-title {
   flex-direction: row;
   border-bottom: 1px solid var(--borderColor);
 }
-.right-group .right-group-content .io-registers .io-registers-map .io-register p {
+.hardware .hardware-content .io-registers .io-registers-map .io-register p {
   height: 28px;
   width: 100%;
   display: flex;
@@ -942,21 +942,21 @@ header .header-title {
   border-right: 1px solid var(--borderColor);
   padding-left: 10px;
 }
-.right-group .right-group-content .io-registers .io-registers-map .io-register p:last-child {
+.hardware .hardware-content .io-registers .io-registers-map .io-register p:last-child {
   border-right: none;
 }
-.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-header {
+.hardware .hardware-content .io-registers .io-registers-map .io-registers-map-header {
   background-color: var(--secondaryBackground);
   position: sticky;
   top: 0;
 }
-.right-group .right-group-content .io-registers .io-registers-map .io-registers-map-header p {
+.hardware .hardware-content .io-registers .io-registers-map .io-registers-map-header p {
   justify-content: center;
   font-family: Roboto-Medium;
   padding-left: none;
 }
 @media screen and (max-width: 1300px) {
-  .right-group .right-group-content .io-registers {
+  .hardware .hardware-content .io-registers {
     height: 340px;
   }
 }

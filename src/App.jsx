@@ -1,9 +1,6 @@
 import { useEffect, useContext } from "react";
-import Header from "./components/header/Header";
-import Editor from "./components/editor/Editor";
-import Memory from "./components/memory/Memory";
-import RightGroup from "./components/rightGroup/RightGroup";
-import ExpandedDisplay from "./components/ExpandedDisplay";
+import DesktopLayout from "./layouts/DesktopLayout";
+import MobileLayout from "./layouts/MobileLayout";
 import { GlobalContext } from "./context/GlobalContext";
 import { useResize } from "./hooks/useResize";
 import { useManagerValue } from "./hooks/useManagerValue";
@@ -14,10 +11,7 @@ const App = () => {
     const { assembler, assemblerWorker } = useContext(GlobalContext);
 
     const width = useResize();
-    
     const isLightTheme = useManagerValue("isLightTheme");
-    const view = useManagerValue("view");
-    const isDisplayExpanded = useManagerValue("isDisplayExpanded");
 
     useEffect(Autosave.initialize, []);
 
@@ -43,17 +37,9 @@ const App = () => {
     }, [isLightTheme]);
 
     return(
-        <main>
-            {isDisplayExpanded && <ExpandedDisplay />}
-
-            <Header />
-
-            <div className="workspace">
-                <Editor />
-                {width >= 1300 && view.memory && <Memory />}
-                {(view.ioDevices || view.cpuRegisters || view.ioRegisters) && <RightGroup />}
-            </div>
-        </main>
+        <>
+            {width >= 900 ? <DesktopLayout /> : <MobileLayout />}
+        </>
     );
 }
 

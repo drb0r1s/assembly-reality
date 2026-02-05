@@ -6,7 +6,7 @@ import { useLinkedResizing } from "../../../hooks/useLinkedResizing";
 import { useLinkedResizeObserver } from "../../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../../helpers/Manager";
 
-const IORegisters = ({ rightGroupRef, elements, allElementRefs }) => {
+const IORegisters = ({ hardwareRef, elements, allElementRefs }) => {
     const { assembler } = useContext(GlobalContext);
     
     const [ioRegisters, setIORegisters] = useState(assembler.ioRegisters.construct());
@@ -17,7 +17,7 @@ const IORegisters = ({ rightGroupRef, elements, allElementRefs }) => {
         headerRef,
         elementRefs: elements.refs,
         targetIndex: elements.getOrder("ioRegisters"),
-        holderRef: rightGroupRef,
+        holderRef: hardwareRef,
         conditional: false
     });
 

@@ -8,7 +8,7 @@ import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useLinkedResizeObserver } from "../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../helpers/Manager";
 
-const Memory = ({ rightGroupRef, elements, allElementRefs }) => {
+const Memory = ({ hardwareRef, elements, allElementRefs }) => {
     const { assembler } = useContext(GlobalContext);
 
     const initialRAM = {
@@ -26,7 +26,7 @@ const Memory = ({ rightGroupRef, elements, allElementRefs }) => {
         headerRef,
         elementRefs: elements ? elements.refs : null,
         targetIndex: elements ? elements.getOrder("memory") : null,
-        holderRef: rightGroupRef,
+        holderRef: hardwareRef,
         conditional: true
     });
 

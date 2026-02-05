@@ -7,7 +7,7 @@ import { useLinkedResizing } from "../../../hooks/useLinkedResizing";
 import { useLinkedResizeObserver } from "../../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../../helpers/Manager";
 
-const CPURegisters = ({ rightGroupRef, elements, allElementRefs }) => {
+const CPURegisters = ({ hardwareRef, elements, allElementRefs }) => {
     const { assembler } = useContext(GlobalContext);
     
     const [cpuRegisters, setCPURegisters] = useState(assembler.cpuRegisters.construct());
@@ -21,7 +21,7 @@ const CPURegisters = ({ rightGroupRef, elements, allElementRefs }) => {
         headerRef,
         elementRefs: elements.refs,
         targetIndex: elements.getOrder("cpuRegisters"),
-        holderRef: rightGroupRef,
+        holderRef: hardwareRef,
         conditional: false
     });
 

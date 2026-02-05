@@ -6,14 +6,14 @@ import { useLinkedResizeObserver } from "../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../helpers/Manager";
 import { Images } from "../../data/Images";
 
-const IODevices = ({ rightGroupRef, elements, allElementRefs }) => {
+const IODevices = ({ hardwareRef, elements, allElementRefs }) => {
     const headerRef = useRef(null);
 
     useLinkedResizing({
         headerRef,
         elementRefs: elements.refs,
         targetIndex: elements.getOrder("ioDevices"),
-        holderRef: rightGroupRef,
+        holderRef: hardwareRef,
         conditional: false
     });
 

@@ -7,10 +7,10 @@ import Signature from "./Signature";
 import { useResize } from "../../hooks/useResize";
 import { useManagerValue } from "../../hooks/useManagerValue";
 
-const RightGroup = () => {
+const Hardware = () => {
     const [elements, setElements] = useState({ refs: [], order: [], getOrder: () => {} });
 
-    const rightGroupRef = useRef(null);
+    const hardwareRef = useRef(null);
 
     const ioDevicesRef = useRef(null);
     const cpuRegistersRef = useRef(null);
@@ -60,30 +60,30 @@ const RightGroup = () => {
     }
     
     return(
-        <div className="right-group" ref={rightGroupRef}>
-            <div className="right-group-content">
+        <div className="hardware" ref={hardwareRef}>
+            <div className="hardware-content">
                 <Signature />
                 
                 {view.ioDevices && <IODevices
-                    rightGroupRef={rightGroupRef}
+                    hardwareRef={hardwareRef}
                     elements={elements}
                     allElementRefs={allElementRefs}
                 />}
 
                 {view.cpuRegisters && <CPURegisters
-                    rightGroupRef={rightGroupRef}
+                    hardwareRef={hardwareRef}
                     elements={elements}
                     allElementRefs={allElementRefs}
                 />}
                 
                 {view.ioRegisters && <IORegisters
-                    rightGroupRef={rightGroupRef}
+                    hardwareRef={hardwareRef}
                     elements={elements}
                     allElementRefs={allElementRefs}
                 />}
 
                 {width < 1300 && view.memory && <Memory
-                    rightGroupRef={rightGroupRef}
+                    hardwareRef={hardwareRef}
                     elements={elements}
                     allElementRefs={allElementRefs}
                 />}
@@ -92,4 +92,4 @@ const RightGroup = () => {
     );
 }
 
-export default RightGroup;
+export default Hardware;
