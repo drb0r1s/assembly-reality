@@ -24,6 +24,7 @@
     .hardware {
         height: 100dvh;
         width: 100vw;
+        border-left: none;
 
         .hardware-content {
             height: calc(100% - 38px);
