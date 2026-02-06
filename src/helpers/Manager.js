@@ -8,7 +8,7 @@ export const Manager = (() => {
         ["registerColoring", { A: false, B: false, C: false, D: false }],
         ["isAutosaveActive", Autosave.getItem("IS_AUTOSAVE_ACTIVE")],
         ["isDisplayExpanded", false],
-        ["isHighSpeed", false],
+        ["isHighSpeed", Autosave.conditionalGetItem("SPEED") >= 10000],
         ["isCodeEmpty", true],
         ["isMemoryEmpty", true],
         ["isAssembled", false],
