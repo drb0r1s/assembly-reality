@@ -1,0 +1,92 @@
+.mobile-menu {
+    height: 100dvh;
+    width: 100vw;
+    @include center(column);
+    justify-content: flex-start;
+    background-color: $mainBackground;
+
+    .mobile-menu-content {
+        width: 100%;
+        @include center(column);
+        justify-content: flex-start;
+        gap: 24px;
+        padding: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        @include no-scrollbar;
+
+        h1 {
+            color: $primaryText;
+            font-size: 26px;
+            font-family: SourceCodePro-Regular;
+            font-weight: normal;
+            padding-bottom: 6px;
+        }
+
+        .mobile-menu-content-section {
+            width: 100%;
+            @include center(column);
+            align-items: flex-start;
+            gap: 16px;
+
+            .mobile-menu-content-section-title {
+                color: $primaryText;
+                font-size: 18px;
+                font-family: Roboto-Medium;
+                font-weight: normal;
+            }
+
+            .assembler-buttons {
+                @include center(column);
+                align-items: flex-start;
+                gap: 12px;
+
+                .assembler-button {
+                    @include center;
+                    gap: 10px;
+                    background-color: transparent;
+                    border: none;
+
+                    p {
+                        color: $primaryText;
+                        font-size: 20px;
+                        font-family: Roboto-Regular;
+                    }
+                }
+            }
+
+            .mobile-menu-content-section-speed-dashboard-holder {
+                width: 100%;
+                @include center;
+
+                .speed-dashboard {
+                    width: 100%;
+                    max-width: 300px;
+                    gap: 18px;
+
+                    strong {
+                        font-size: 24px;
+                    }
+
+                    .speed-dashboard-buttons button {
+                        width: 125px;
+                        font-size: 18px;
+                    }
+                }
+            }
+
+            .file-dashboard {
+                width: 100%;
+                gap: 12px;
+
+                button p {
+                    font-size: 20px;
+                }
+            }
+
+            .light-theme-button .light-theme-button-left-group p {
+                font-size: 20px;
+            }
+        }
+    }
+}

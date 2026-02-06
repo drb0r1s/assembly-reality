@@ -5,6 +5,7 @@
     position: relative;
     padding: 10px 0;
     cursor: grab;
+    touch-action: none;
 
     .range-line {
         height: 5px;
@@ -35,6 +36,23 @@
 
         &:hover {
             background-color: $darkBlue;
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .range {
+        .range-line {
+            height: 10px;
+        }
+
+        .range-filled-line {
+            height: 10px;
+        }
+
+        .range-circle {
+            height: 30px;
+            width: 30px;
         }
     }
 }

@@ -1,11 +1,9 @@
-import Switch from "../Switch";
+import LightThemeButton from "../LightThemeButton";
 import { useManagerValue } from "../../hooks/useManagerValue";
-import { Autosave } from "../../helpers/Autosave";
 import { Manager } from "../../helpers/Manager";
 import { Images } from "../../data/Images";
 
 const HeaderDropdownView = () => {
-    const isLightTheme = useManagerValue("isLightTheme");
     const view = useManagerValue("view");
 
     const buttons = ["Memory", "I/O Devices", "CPU Registers", "I/O Registers"];
@@ -42,20 +40,7 @@ const HeaderDropdownView = () => {
     
     return(
         <div className="header-dropdown-view">
-            <button
-                className="header-dropdown-view-theme-button"
-                onClick={() => {
-                    Autosave.setItem("IS_LIGHT_THEME", !isLightTheme);
-                    Manager.set("isLightTheme", !isLightTheme);
-                }}
-            >
-                <div className="header-dropdown-view-theme-button-left-group">
-                    <Images.ThemeIcon />
-                    <p>Light Theme</p>
-                </div>
-
-                <Switch isActive={isLightTheme} />
-            </button>
+            <LightThemeButton />            
 
             <div className="header-dropdown-view-divider"></div>
 

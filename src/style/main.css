@@ -191,63 +191,6 @@ header .header-dropdown {
 }
 header .header-dropdown .header-dropdown-file {
   width: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 7px;
-  cursor: default;
-}
-header .header-dropdown .header-dropdown-file button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 10px;
-  background-color: transparent;
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  position: relative;
-  transition: 300ms;
-}
-header .header-dropdown .header-dropdown-file button:hover {
-  background-color: var(--blue);
-}
-header .header-dropdown .header-dropdown-file button .header-dropdown-file-button-icon {
-  height: 22px;
-  width: 22px;
-  -o-object-fit: contain;
-     object-fit: contain;
-}
-header .header-dropdown .header-dropdown-file button p {
-  color: var(--primaryText);
-  font-size: 14px;
-  font-family: Roboto-Regular;
-}
-header .header-dropdown .header-dropdown-file button input {
-  height: 100%;
-  width: 100%;
-  opacity: 0;
-  position: absolute;
-  z-index: 1;
-}
-header .header-dropdown .header-dropdown-file .header-dropdown-file-divider {
-  height: 1px;
-  width: 100%;
-  background-color: rgba(var(--primaryTextRGB), 0.3);
-}
-header .header-dropdown .header-dropdown-file .header-dropdown-file-autosave-button {
-  justify-content: space-between;
-}
-header .header-dropdown .header-dropdown-file .header-dropdown-file-autosave-button .header-dropdown-file-autosave-button-left-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 10px;
 }
 header .header-dropdown .header-dropdown-view {
   width: 200px;
@@ -256,28 +199,6 @@ header .header-dropdown .header-dropdown-view {
   justify-content: center;
   flex-direction: column;
   gap: 7px;
-}
-header .header-dropdown .header-dropdown-view .header-dropdown-view-theme-button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 10px;
-  background-color: transparent;
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  position: relative;
-  transition: 300ms;
-}
-header .header-dropdown .header-dropdown-view .header-dropdown-view-theme-button .header-dropdown-view-theme-button-left-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 10px;
 }
 header .header-dropdown .header-dropdown-view .header-dropdown-view-divider {
   height: 1px;
@@ -333,43 +254,6 @@ header .header-dropdown .header-dropdown-view .header-dropdown-view-sections but
 }
 header .header-dropdown .header-dropdown-speed {
   width: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 10px;
-  padding: 7px 0;
-  cursor: default;
-}
-header .header-dropdown .header-dropdown-speed strong {
-  color: var(--primaryText);
-  font-size: 18px;
-  font-family: Roboto-SemiBold;
-  font-weight: normal;
-}
-header .header-dropdown .header-dropdown-speed .header-dropdown-speed-buttons {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-header .header-dropdown .header-dropdown-speed .header-dropdown-speed-buttons button {
-  width: 75px;
-  color: var(--primaryText);
-  font-size: 14px;
-  font-family: Roboto-Regular;
-  background-color: var(--secondaryBackground);
-  border: 1px solid transparent;
-  border-radius: 10px;
-  padding: 10px 0;
-  cursor: pointer;
-  transition: 300ms;
-}
-header .header-dropdown .header-dropdown-speed .header-dropdown-speed-buttons button:hover {
-  border: 1px solid var(--primaryText);
 }
 header .active-dropdown {
   opacity: 1;
@@ -728,6 +612,15 @@ header .header-title {
     height: calc(100% - 27px);
   }
 }
+@media screen and (max-width: 900px) {
+  .memory {
+    height: 100dvh;
+    width: 100vw;
+  }
+  .memory .memory-matrix-holder {
+    height: calc(100% - 38px);
+  }
+}
 .hardware {
   height: calc(100dvh - 38px);
   width: 430px;
@@ -1020,6 +913,7 @@ header .header-title {
   position: relative;
   padding: 10px 0;
   cursor: grab;
+  touch-action: none;
 }
 .range .range-line {
   height: 5px;
@@ -1050,6 +944,18 @@ header .header-title {
   background-color: var(--darkBlue);
 }
 
+@media screen and (max-width: 900px) {
+  .range .range-line {
+    height: 10px;
+  }
+  .range .range-filled-line {
+    height: 10px;
+  }
+  .range .range-circle {
+    height: 30px;
+    width: 30px;
+  }
+}
 .high-speed-block {
   height: 100%;
   width: 100%;
@@ -1410,6 +1316,7 @@ header .header-title {
   flex-direction: row;
   justify-content: flex-start;
   gap: 18px;
+  flex-shrink: 0;
   background-color: var(--mainBackground);
   border-bottom: 1px solid var(--borderColor);
   padding-left: 12px;
@@ -1480,5 +1387,236 @@ header .header-title {
 .mobile-navigation button p {
   color: var(--primaryText);
   font-size: 12px;
+  font-family: Roboto-Regular;
+}
+
+.mobile-menu {
+  height: 100dvh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: var(--mainBackground);
+}
+.mobile-menu .mobile-menu-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 24px;
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.mobile-menu .mobile-menu-content::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+.mobile-menu .mobile-menu-content h1 {
+  color: var(--primaryText);
+  font-size: 26px;
+  font-family: SourceCodePro-Regular;
+  font-weight: normal;
+  padding-bottom: 6px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .mobile-menu-content-section-title {
+  color: var(--primaryText);
+  font-size: 18px;
+  font-family: Roboto-Medium;
+  font-weight: normal;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .assembler-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .assembler-buttons .assembler-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  background-color: transparent;
+  border: none;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .assembler-buttons .assembler-button p {
+  color: var(--primaryText);
+  font-size: 20px;
+  font-family: Roboto-Regular;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .mobile-menu-content-section-speed-dashboard-holder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .mobile-menu-content-section-speed-dashboard-holder .speed-dashboard {
+  width: 100%;
+  max-width: 300px;
+  gap: 18px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .mobile-menu-content-section-speed-dashboard-holder .speed-dashboard strong {
+  font-size: 24px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .mobile-menu-content-section-speed-dashboard-holder .speed-dashboard .speed-dashboard-buttons button {
+  width: 125px;
+  font-size: 18px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .file-dashboard {
+  width: 100%;
+  gap: 12px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .file-dashboard button p {
+  font-size: 20px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-content-section .light-theme-button .light-theme-button-left-group p {
+  font-size: 20px;
+}
+
+.file-dashboard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+  cursor: default;
+}
+.file-dashboard button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  position: relative;
+  transition: 300ms;
+}
+.file-dashboard button:hover {
+  background-color: var(--blue);
+}
+.file-dashboard button .file-dashboard-button-icon {
+  height: 22px;
+  width: 22px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.file-dashboard button p {
+  color: var(--primaryText);
+  font-size: 14px;
+  font-family: Roboto-Regular;
+}
+.file-dashboard button input {
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  position: absolute;
+  z-index: 1;
+}
+.file-dashboard .file-dashboard-divider {
+  height: 1px;
+  width: 100%;
+  background-color: rgba(var(--primaryTextRGB), 0.3);
+}
+.file-dashboard .file-dashboard-autosave-button {
+  justify-content: space-between;
+}
+.file-dashboard .file-dashboard-autosave-button .file-dashboard-autosave-button-left-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.speed-dashboard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  padding: 7px 0;
+  cursor: default;
+}
+.speed-dashboard strong {
+  color: var(--primaryText);
+  font-size: 18px;
+  font-family: Roboto-SemiBold;
+  font-weight: normal;
+}
+.speed-dashboard .speed-dashboard-buttons {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.speed-dashboard .speed-dashboard-buttons button {
+  width: 75px;
+  color: var(--primaryText);
+  font-size: 14px;
+  font-family: Roboto-Regular;
+  background-color: var(--secondaryBackground);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: 300ms;
+}
+.speed-dashboard .speed-dashboard-buttons button:hover {
+  border: 1px solid var(--primaryText);
+}
+
+.light-theme-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  position: relative;
+  transition: 300ms;
+}
+.light-theme-button .light-theme-button-left-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+}
+.light-theme-button .light-theme-button-left-group p {
+  color: var(--primaryText);
+  font-size: 14px;
   font-family: Roboto-Regular;
 }/*# sourceMappingURL=main.css.map */

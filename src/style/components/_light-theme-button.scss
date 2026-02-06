@@ -1,0 +1,23 @@
+.light-theme-button {
+    width: 100%;
+    @include center;
+    justify-content: space-between;
+    gap: 10px;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+    transition: 300ms;
+
+    .light-theme-button-left-group {
+        @include center;
+        gap: 10px;
+
+        p {
+            color: $primaryText;
+            font-size: 14px;
+            font-family: Roboto-Regular;
+        }
+    }
+}

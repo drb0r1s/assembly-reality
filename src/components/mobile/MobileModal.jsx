@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
+import MobileMenu from "./MobileMenu";
 import Memory from "../memory/Memory";
 import Hardware from "../hardware/Hardware";
 
 const MobileModal = ({ componentName, setActiveModal }) => {
     const mobileModalRef = useRef(null);
     
-    const Components = { Memory, Hardware };
+    const Components = { Menu: MobileMenu, Memory, Hardware };
     const Component = Components[componentName];
 
     useEffect(() => {

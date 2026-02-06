@@ -4,6 +4,7 @@
     @include center;
     justify-content: flex-start;
     gap: 18px;
+    flex-shrink: 0;
     background-color: $mainBackground;
     border-bottom: 1px solid $borderColor;
     padding-left: 12px;

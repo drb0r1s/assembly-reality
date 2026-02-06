@@ -1,0 +1,38 @@
+.speed-dashboard {
+    width: 100%;
+    @include center(column);
+    gap: 10px;
+    padding: 7px 0;
+    cursor: default;
+    
+    strong {
+        color: $primaryText;
+        font-size: 18px;
+        font-family: Roboto-SemiBold;
+        font-weight: normal;
+    }
+
+    .speed-dashboard-buttons {
+        width: 100%;
+        @include center;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        button {
+            width: 75px;
+            color: $primaryText;
+            font-size: 14px;
+            font-family: Roboto-Regular;
+            background-color: $secondaryBackground;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 10px 0;
+            cursor: pointer;
+            transition: 300ms;
+
+            &:hover {
+                border: 1px solid $primaryText;
+            }
+        }
+    }
+}

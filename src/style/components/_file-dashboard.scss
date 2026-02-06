@@ -1,0 +1,58 @@
+.file-dashboard {
+    width: 100%;
+    @include center(column);
+    gap: 7px;
+    cursor: default;
+
+    button {
+        width: 100%;
+        @include center;
+        justify-content: flex-start;
+        gap: 10px;
+        background-color: transparent;
+        border: none;
+        border-radius: 5px;
+        padding: 5px;
+        position: relative;
+        transition: 300ms;
+
+        &:hover {
+            background-color: $blue;
+        }
+
+        .file-dashboard-button-icon {
+            height: 22px;
+            width: 22px;
+            object-fit: contain;
+        }
+
+        p {
+            color: $primaryText;
+            font-size: 14px;
+            font-family: Roboto-Regular;
+        }
+
+        input {
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            position: absolute;
+            z-index: 1;
+        }
+    }
+
+    .file-dashboard-divider {
+        height: 1px;
+        width: 100%;
+        background-color: rgba(var(--primaryTextRGB), 0.3);
+    }
+
+    .file-dashboard-autosave-button {
+        justify-content: space-between;
+
+        .file-dashboard-autosave-button-left-group {
+            @include center;
+            gap: 10px;
+        }
+    }
+}

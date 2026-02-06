@@ -28,3 +28,14 @@
         }
     }
 }
+
+@media screen and (max-width: 900px) {
+    .memory {
+        height: 100dvh;
+        width: 100vw;
+
+        .memory-matrix-holder {
+            height: calc(100% - 38px);
+        }
+    }
+}

@@ -2,13 +2,14 @@ import { useState, useEffect, useRef, useContext } from "react";
 import HighSpeedBlock from "../HighSpeedBlock";
 import MemoryMatrix from "./MemoryMatrix";
 import DraggableHeader from "../DraggableHeader";
+import MobileHeader from "../mobile/MobileHeader";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useResize } from "../../hooks/useResize";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useLinkedResizeObserver } from "../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../helpers/Manager";
 
-const Memory = ({ hardwareRef, elements, allElementRefs }) => {
+const Memory = ({ hardwareRef, elements, allElementRefs, onReturn }) => {
     const { assembler } = useContext(GlobalContext);
 
     const initialRAM = {
@@ -59,6 +60,8 @@ const Memory = ({ hardwareRef, elements, allElementRefs }) => {
                 ref={headerRef}
                 isDisabled={width >= 1300}
             />}
+
+            {width < 900 && <MobileHeader title="Memory" onReturn={onReturn} />}
 
             <div className="memory-matrix-holder">
                 <HighSpeedBlock />

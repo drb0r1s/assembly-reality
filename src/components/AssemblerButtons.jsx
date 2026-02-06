@@ -21,7 +21,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
     }
     
     return(
-        <div className={`assembler-buttons ${className}`}>
+        <div className={`assembler-buttons ${className ? className : ""}`}>
             {isExpanded ? <>
                 <button
                     className={`assembler-button ${isAssembleRunDisabled ? "assembler-button-disabled" : ""}`}

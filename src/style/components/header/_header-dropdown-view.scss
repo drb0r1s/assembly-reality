@@ -3,24 +3,6 @@
     @include center(column);
     gap: 7px;
 
-    .header-dropdown-view-theme-button {
-        width: 100%;
-        @include center;
-        justify-content: space-between;
-        gap: 10px;
-        background-color: transparent;
-        border: none;
-        border-radius: 5px;
-        padding: 5px;
-        position: relative;
-        transition: 300ms;
-
-        .header-dropdown-view-theme-button-left-group {
-            @include center;
-            gap: 10px;
-        }
-    }
-
     .header-dropdown-view-divider {
         height: 1px;
         width: 100%;

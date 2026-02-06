@@ -39,10 +39,10 @@ const Range = ({ value, min, max, onDrag }) => {
         calculateValue(e, true);
         document.body.style.userSelect = "none";
         
-        window.addEventListener("mousemove", handleDrag);
+        window.addEventListener("pointermove", handleDrag);
         
-        window.addEventListener("mouseup", () => {
-            window.removeEventListener("mousemove", handleDrag);
+        window.addEventListener("pointerup", () => {
+            window.removeEventListener("pointermove", handleDrag);
             document.body.style.userSelect = "";
         }, { once: true });
     }
@@ -72,7 +72,7 @@ const Range = ({ value, min, max, onDrag }) => {
     return(
         <div
             className="range"
-            onMouseDown={calculateValue}
+            onPointerDown={calculateValue}
         >
             <div className="range-line" ref={rangeLineRef}></div>
             
@@ -86,7 +86,7 @@ const Range = ({ value, min, max, onDrag }) => {
                 className="range-circle"
                 style={{ left: `${range.position}px` }}
                 ref={rangeCircleRef}
-                onMouseDown={handleDrag}
+                onPointerDown={handleDrag}
             ></div>
         </div>
     );
