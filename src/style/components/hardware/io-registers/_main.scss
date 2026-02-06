@@ -37,3 +37,9 @@
         height: calc(190px + 150px);
     }
 }
+
+@media screen and (max-width: 900px) {
+    .io-registers .io-registers-map {
+        @include no-scrollbar;
+    }
+}

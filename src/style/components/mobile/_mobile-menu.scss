@@ -10,7 +10,7 @@
         @include center(column);
         justify-content: flex-start;
         gap: 24px;
-        padding: 20px;
+        padding: 20px 12px;
         overflow-y: auto;
         overflow-x: hidden;
         @include no-scrollbar;
@@ -31,7 +31,7 @@
 
             .mobile-menu-content-section-title {
                 color: $primaryText;
-                font-size: 16px;
+                font-size: 14px;
                 font-family: Roboto-Medium;
                 font-weight: normal;
             }
@@ -49,7 +49,7 @@
 
                     p {
                         color: $primaryText;
-                        font-size: 18px;
+                        font-size: 16px;
                         font-family: Roboto-Regular;
                     }
                 }
@@ -62,15 +62,15 @@
                 .speed-dashboard {
                     width: 100%;
                     max-width: 300px;
-                    gap: 18px;
+                    gap: 14px;
 
                     strong {
-                        font-size: 24px;
+                        font-size: 22px;
                     }
 
                     .speed-dashboard-buttons button {
                         width: 125px;
-                        font-size: 16px;
+                        font-size: 14px;
                     }
                 }
             }
@@ -80,12 +80,12 @@
                 gap: 12px;
 
                 button p {
-                    font-size: 18px;
+                    font-size: 16px;
                 }
             }
 
             .light-theme-button .light-theme-button-left-group p {
-                font-size: 18px;
+                font-size: 16px;
             }
         }
     }

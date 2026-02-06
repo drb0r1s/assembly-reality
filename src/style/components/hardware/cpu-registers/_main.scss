@@ -36,3 +36,9 @@
         height: calc(295px + 150px);
     }
 }
+
+@media screen and (max-width: 900px) {
+    .cpu-registers .cpu-registers-content {
+        @include no-scrollbar;
+    }
+}

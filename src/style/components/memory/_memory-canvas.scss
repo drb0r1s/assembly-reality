@@ -2,3 +2,9 @@
     height: calc(258 * 20px);
     width: calc(16 * 24px);
 }
+
+@media screen and (min-width: 412px) and (max-width: 900px) {
+    .memory-canvas {
+        border-right: 1px solid $borderColor;
+    }
+}

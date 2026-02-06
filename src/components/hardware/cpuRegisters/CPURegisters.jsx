@@ -3,6 +3,8 @@ import DraggableHeader from "../../DraggableHeader";
 import HighSpeedBlock from "../../HighSpeedBlock";
 import CPURegister from "./CPURegister";
 import { GlobalContext } from "../../../context/GlobalContext";
+import { useResize } from "../../../hooks/useResize";
+import { useManagerValue } from "../../../hooks/useManagerValue";
 import { useLinkedResizing } from "../../../hooks/useLinkedResizing";
 import { useLinkedResizeObserver } from "../../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../../helpers/Manager";
@@ -16,6 +18,9 @@ const CPURegisters = ({ hardwareRef, elements, allElementRefs }) => {
 
     const srFlags = useMemo(() => Object.entries(cpuRegisters.SR), [cpuRegisters.SR]);
     const getHex = useCallback(number => number.toString(16).toUpperCase().padStart(4, "0"), []);
+
+    const width = useResize();
+    const isHighSpeed = useManagerValue("isHighSpeed");
 
     useLinkedResizing({
         headerRef,
@@ -49,7 +54,10 @@ const CPURegisters = ({ hardwareRef, elements, allElementRefs }) => {
 
             <div
                 className="cpu-registers-content"
-                style={{ height: `${displayHeight}px` }}
+                style={(width <= 412) && !isHighSpeed ? {
+                    height: `${displayHeight}px`,
+                    overflowX: "auto"
+                } : { height: `${displayHeight}px` }}
             >
                 <HighSpeedBlock />
                 
