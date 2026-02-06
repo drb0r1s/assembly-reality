@@ -9,7 +9,7 @@ import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useLinkedResizeObserver } from "../../hooks/useLinkedResizeObserver";
 import { Manager } from "../../helpers/Manager";
 
-const Memory = ({ hardwareRef, elements, allElementRefs, onReturn }) => {
+const Memory = ({ hardwareRef, elements, allElementRefs, style, onReturn }) => {
     const { assembler } = useContext(GlobalContext);
 
     const initialRAM = {
@@ -54,7 +54,7 @@ const Memory = ({ hardwareRef, elements, allElementRefs, onReturn }) => {
     }, []);
 
     return(
-        <div className="memory" ref={elements ? allElementRefs[3] : null}>
+        <div className="memory" style={style} ref={elements ? allElementRefs[3] : null}>
             {width >= 900 && <DraggableHeader
                 title="Memory"
                 ref={headerRef}

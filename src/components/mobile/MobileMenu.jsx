@@ -4,9 +4,9 @@ import SpeedDashboard from "../SpeedDashboard";
 import FileDashboard from "../FileDashboard";
 import LightThemeButton from "../LightThemeButton";
 
-const MobileMenu = ({ onReturn }) => {
+const MobileMenu = ({ componentName, style, onReturn }) => {
     return(
-        <div className="mobile-menu">
+        <div className="mobile-menu" style={style}>
             {<MobileHeader title="Menu" onReturn={onReturn} />}
 
             <div className="mobile-menu-content">
@@ -17,13 +17,13 @@ const MobileMenu = ({ onReturn }) => {
                     <AssemblerButtons />
                 </div>
 
-                <div className="mobile-menu-content-section">
+                {componentName === "Menu" && <div className="mobile-menu-content-section">
                     <strong className="mobile-menu-content-section-title">Speed</strong>
                     
                     <div className="mobile-menu-content-section-speed-dashboard-holder">
                         <SpeedDashboard />
                     </div>
-                </div>
+                </div>}
 
                 <div className="mobile-menu-content-section">
                     <strong className="mobile-menu-content-section-title">File</strong>

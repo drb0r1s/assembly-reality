@@ -10,8 +10,8 @@ const MobileModal = ({ componentName, setActiveModal }) => {
     const Component = Components[componentName];
 
     useEffect(() => {
-        if(mobileModalRef.current) setTimeout(() => { mobileModalRef.current.style.left = "0" }, 10);
-    }, []);
+        if(mobileModalRef.current && componentName) setTimeout(() => { mobileModalRef.current.style.left = "0" }, 10);
+    }, [componentName]);
 
     function disableModal() {
         if(!mobileModalRef.current) {
@@ -25,7 +25,21 @@ const MobileModal = ({ componentName, setActiveModal }) => {
     
     return(
         <div className="mobile-modal" ref={mobileModalRef}>
-            <Component onReturn={disableModal} />
+            <MobileMenu
+                componentName={componentName}
+                style={componentName === "Menu" ? {} : { display: "none" }}
+                onReturn={disableModal}
+            />
+
+            <Memory
+                style={componentName === "Memory" ? {} : { display: "none" }}
+                onReturn={disableModal}
+            />
+
+            <Hardware
+                style={componentName === "Hardware" ? {} : { display: "none" }}
+                onReturn={disableModal}
+            />
         </div>
     );
 }

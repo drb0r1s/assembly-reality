@@ -76,10 +76,6 @@ const Display = ({ style, isExpanded }) => {
         const unsubscribeGraphicsReset = Manager.subscribe("graphicsReset", resetCanvas);
 
         initializeCanvas();
-
-        // This is the edge case. If we reset assembler on mobile, this component won't be rendered, thus the canvas won't be cleared.
-        // Because of that, we will just manually call resetCanvas().
-        if(width < 900 && isMemoryEmpty) resetCanvas();
         
         return () => {
             unsubscribeTextDisplayPing();

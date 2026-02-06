@@ -8,7 +8,7 @@ import MobileHeader from "../mobile/MobileHeader";
 import { useResize } from "../../hooks/useResize";
 import { useManagerValue } from "../../hooks/useManagerValue";
 
-const Hardware = ({ onReturn }) => {
+const Hardware = ({ style, onReturn }) => {
     const [elements, setElements] = useState({ refs: [], order: [], getOrder: () => {} });
 
     const hardwareRef = useRef(null);
@@ -61,7 +61,7 @@ const Hardware = ({ onReturn }) => {
     }
     
     return(
-        <div className="hardware" ref={hardwareRef}>
+        <div className="hardware" style={style} ref={hardwareRef}>
             {width < 900 && <MobileHeader title="Hardware" onReturn={onReturn} />}
             
             <div className="hardware-content">

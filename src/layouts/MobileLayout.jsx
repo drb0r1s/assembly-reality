@@ -8,10 +8,10 @@ const MobileLayout = () => {
     
     return(
         <main>
-            {activeModal && <MobileModal
+            <MobileModal
                 componentName={activeModal}
                 setActiveModal={setActiveModal}
-            />}
+            />
 
             <Editor />
             <MobileNavigation setActiveModal={setActiveModal} />
