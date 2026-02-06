@@ -3,10 +3,11 @@ import { useResize } from "./useResize";
 import { useManagerValue } from "./useManagerValue";
 
 export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderRef, conditional }) => {    
-    const headerHeight = 27;
-
     const width = useResize();
     const view = useManagerValue("view");
+    
+    const headerHeight = 27;
+    const mobileHeaderHeight = width < 900 ? 38 : 0;
     
     useEffect(() => {
         if((width < 900 || width >= 1300) && conditional) return;
@@ -50,6 +51,7 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
             for(let i = 0; i < targetIndex; i++) {
                 if(lockElement.includes(i) && direction === "down") unlock(i);
 
+                // SCROLLING UP
                 else if(
                     lockElement.includes(i) ||
                     (elementTops[i + 1] < elementTops[i] + headerHeight)
@@ -58,7 +60,7 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
                     if(i !== targetIndex) lockElement.push(i);
 
                     const multiply = i;
-                    if(newHeight > heights.holder - multiply * headerHeight) newHeight = heights.holder - multiply * headerHeight;
+                    if(newHeight > (heights.holder - mobileHeaderHeight) - multiply * headerHeight) newHeight = (heights.holder - mobileHeaderHeight) - multiply * headerHeight;
                     
                     elementRefs[i].current.style.height = `${newHeight}px`;
                     elementTops[i] = elementRefs[i].current.offsetTop;
@@ -69,6 +71,7 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
             for(let i = elementRefs.length - 1; i > targetIndex; i--) {
                 if(lockElement.includes(i) && direction === "up") unlock(i);
 
+                // SCROLLING DOWN
                 else if(
                     lockElement.includes(i) ||
                     (elementTops[i - 1] + headerHeight > elementTops[i])
@@ -87,7 +90,7 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
             // ELEMENT
             let newHeight = heights.start + deltaY;
 
-            if(newHeight > heights.holder - targetIndex * headerHeight) newHeight = heights.holder - targetIndex * headerHeight;
+            if(newHeight > (heights.holder - mobileHeaderHeight) - targetIndex * headerHeight) newHeight = (heights.holder - mobileHeaderHeight) - targetIndex * headerHeight;
             if(newHeight < (elementRefs.length - targetIndex) * headerHeight) newHeight = (elementRefs.length - targetIndex) * headerHeight;
 
             elementRefs[targetIndex].current.style.height = `${newHeight}px`;
