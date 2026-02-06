@@ -7,6 +7,7 @@ const HeaderDropdownView = () => {
     const view = useManagerValue("view");
 
     const buttons = ["Memory", "I/O Devices", "CPU Registers", "I/O Registers"];
+    const ButtonIcons = [Images.MemoryIcon, Images.IODevicesIcon, Images.CPURegistersIcon, Images.IORegistersIcon];
 
     function getView(button) {
         switch(button) {
@@ -46,12 +47,14 @@ const HeaderDropdownView = () => {
 
             <div className="header-dropdown-view-sections">
                 {buttons.map((button, index) => {
+                    const ButtonIcon = ButtonIcons[index];
+
                     return <button
                         key={index}
                         onClick={() => updateView(button)}
                     >
                         <div className="header-dropdown-view-button-left-group">
-                            <Images.WindowIcon />
+                            <ButtonIcon />
                             <p>{button}</p>
                         </div>
 

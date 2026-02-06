@@ -952,7 +952,8 @@ header .header-title {
   justify-content: center;
   flex-direction: row;
   flex-shrink: 0;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 8px;
   background-color: var(--primaryBackground);
   border-top: 1px solid var(--borderColor);
   border-bottom: 1px solid var(--borderColor);
@@ -960,6 +961,12 @@ header .header-title {
   cursor: ns-resize;
   touch-action: none;
   z-index: 1;
+}
+.draggable-header .draggable-header-icon {
+  height: 20px;
+  width: 20px;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .draggable-header strong {
   color: var(--primaryText);

@@ -3,7 +3,8 @@
     width: 100%;
     @include center;
     flex-shrink: 0;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 8px;
     background-color: $primaryBackground;
     border-top: 1px solid $borderColor;
     border-bottom: 1px solid $borderColor;
@@ -11,6 +12,12 @@
     cursor: ns-resize;
     touch-action: none;
     z-index: 1;
+
+    .draggable-header-icon {
+        height: 20px;
+        width: 20px;
+        object-fit: contain;
+    }
 
     strong {
         color: $primaryText;

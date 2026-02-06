@@ -49,6 +49,7 @@ const CPURegisters = ({ hardwareRef, elements, allElementRefs }) => {
         <div className="cpu-registers" ref={allElementRefs[1]}>
             <DraggableHeader
                 title="CPU Registers"
+                iconName="CPURegistersIcon"
                 ref={headerRef}
             />
 

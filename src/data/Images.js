@@ -21,11 +21,14 @@ import ImportIcon from "../images/import-icon.svg?react";
 import ExportIcon from "../images/export-icon.svg?react";
 import SaveIcon from "../images/save-icon.svg?react";
 import ThemeIcon from "../images/theme-icon.svg?react";
+import MemoryIcon from "../images/memory-icon.svg?react";
+import IODevicesIcon from "../images/io-devices-icon.svg?react";
+import CPURegistersIcon from "../images/cpu-registers-icon.svg?react";
+import IORegistersIcon from "../images/io-registers-icon.svg?react";
 
 // MOBILE
 import MenuIcon from "../images/menu-icon.svg?react";
 import EditorIcon from "../images/editor-icon.svg?react";
-import MemoryIcon from "../images/memory-icon.svg?react";
 import HardwareIcon from "../images/hardware-icon.svg?react";
 import ReturnIcon from "../images/return-icon.svg?react";
 
@@ -36,7 +39,8 @@ export const Images = {
     // GENERAL
     ArrowDownIcon, AssembleIcon, RunIcon, AssembleRunIcon, PauseIcon, StepIcon, ResetIcon, KeyboardIcon, CheckIcon,
     XIcon, VisibilityIcon, PageIcon, AddIcon, ExpandIcon, WindowIcon, ImportIcon, ExportIcon, SaveIcon, ThemeIcon,
+    MemoryIcon, IODevicesIcon, CPURegistersIcon, IORegistersIcon,
 
     // MOBILE
-    MenuIcon, EditorIcon, MemoryIcon, HardwareIcon, ReturnIcon
+    MenuIcon, EditorIcon, HardwareIcon, ReturnIcon
 };

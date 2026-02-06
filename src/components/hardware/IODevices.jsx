@@ -26,6 +26,7 @@ const IODevices = ({ hardwareRef, elements, allElementRefs }) => {
         <div className="io-devices" ref={allElementRefs[0]}>
             <DraggableHeader
                 title="Input / Output Devices"
+                iconName="IODevicesIcon"
                 ref={headerRef}
             />
 

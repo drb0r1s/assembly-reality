@@ -53,6 +53,7 @@ const IORegisters = ({ hardwareRef, elements, allElementRefs }) => {
         <div className="io-registers" ref={allElementRefs[2]}>
             <DraggableHeader
                 title="Input / Output Registers"
+                iconName="IORegistersIcon"
                 ref={headerRef}
             />
 

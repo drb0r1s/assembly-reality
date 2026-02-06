@@ -57,6 +57,7 @@ const Memory = ({ hardwareRef, elements, allElementRefs, style, onReturn }) => {
         <div className="memory" style={style} ref={elements ? allElementRefs[3] : null}>
             {width >= 900 && <DraggableHeader
                 title="Memory"
+                iconName="MemoryIcon"
                 ref={headerRef}
                 isDisabled={width >= 1300}
             />}
