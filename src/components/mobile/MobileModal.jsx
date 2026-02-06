@@ -5,9 +5,6 @@ import Hardware from "../hardware/Hardware";
 
 const MobileModal = ({ componentName, setActiveModal }) => {
     const mobileModalRef = useRef(null);
-    
-    const Components = { Menu: MobileMenu, Memory, Hardware };
-    const Component = Components[componentName];
 
     useEffect(() => {
         if(mobileModalRef.current && componentName) setTimeout(() => { mobileModalRef.current.style.left = "0" }, 10);
