@@ -136,6 +136,12 @@ button {
   outline: none;
 }
 
+p, span, strong, button, h1 {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
 svg {
   color: var(--primaryText);
 }

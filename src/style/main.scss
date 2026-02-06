@@ -16,6 +16,10 @@ button {
     outline: none;
 }
 
+p, span, strong, button, h1 {
+    user-select: none;
+}
+
 svg {
     color: $primaryText;
 }
