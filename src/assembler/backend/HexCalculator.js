@@ -5,8 +5,8 @@ export class HexCalculator {
         this.cpuRegisters = cpuRegisters;
     }
 
-    ADD(first, second, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+    ADD(first, second, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
         const result = (first + second) & max;
 
         const SR = this.cpuRegisters.constructSR();
@@ -19,8 +19,8 @@ export class HexCalculator {
         return result;
     }
 
-    SUB(first, second, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+    SUB(first, second, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
         const result = (first - second) & max;
 
         const SR = this.cpuRegisters.constructSR();
@@ -34,16 +34,16 @@ export class HexCalculator {
     }
 
     // Even though the following two functions don't need "second" as a parameter, for synchronization, it has to stay as a placeholder.
-    INC(first, _, options) {
-        return this.ADD(first, 1, options);
+    INC(first, _, isHalf) {
+        return this.ADD(first, 1, isHalf);
     }
 
-    DEC(first, _, options) {
-        return this.SUB(first, 1, options);
+    DEC(first, _, isHalf) {
+        return this.SUB(first, 1, isHalf);
     }
 
-    MUL(first, second, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+    MUL(first, second, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
         const result = (first * second) & max;
 
         const SR = this.cpuRegisters.constructSR();
@@ -56,10 +56,10 @@ export class HexCalculator {
         return result;
     }
 
-    DIV(first, second, options) {
+    DIV(first, second, isHalf) {
         if(first === 0) throw new AssemblerError("DivisionByZero");
 
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+        const max = isHalf ? 0xFF : 0xFFFF;
         const result = Math.floor(second / first) & max;
 
         const SR = this.cpuRegisters.constructSR();
@@ -72,8 +72,8 @@ export class HexCalculator {
         return result;
     }
 
-    AND(first, second, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+    AND(first, second, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
         const result = (first & second) & max;
 
         const SR = this.cpuRegisters.constructSR();
@@ -86,8 +86,8 @@ export class HexCalculator {
         return result;
     }
 
-    OR(first, second, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+    OR(first, second, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
         const result = (first | second) & max;
 
         const SR = this.cpuRegisters.constructSR();
@@ -100,8 +100,8 @@ export class HexCalculator {
         return result;
     }
 
-    XOR(first, second, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+    XOR(first, second, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
         const result = (first ^ second) & max;
 
         const SR = this.cpuRegisters.constructSR();
@@ -114,8 +114,8 @@ export class HexCalculator {
         return result;
     }
 
-    NOT(first, _, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+    NOT(first, _, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
         const result = (~first) & max;
 
         const SR = this.cpuRegisters.constructSR();
@@ -128,9 +128,9 @@ export class HexCalculator {
         return result;
     }
 
-    SHL(first, second, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
-        const msb = options?.isHalf ? 0x80 : 0x8000;
+    SHL(first, second, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
+        const msb = isHalf ? 0x80 : 0x8000;
 
         const result = (first << second) & max;
 
@@ -144,8 +144,8 @@ export class HexCalculator {
         return result;
     }
 
-    SHR(first, second, options) {
-        const max = options?.isHalf ? 0xFF : 0xFFFF;
+    SHR(first, second, isHalf) {
+        const max = isHalf ? 0xFF : 0xFFFF;
         const lsb = first & 1;
 
         const result = (first >>> second) & max;

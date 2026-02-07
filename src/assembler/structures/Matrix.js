@@ -35,9 +35,9 @@ export class Matrix {
         return location;
     }
 
-    update(address, value, options) {
+    update(address, value, isHalf, isStack) {
         // 8-bit
-        if(options?.isHalf) {
+        if(isHalf) {
             const [row, column] = this.getLocation(address);
             this.setCell(row, column, value);
         }
@@ -49,7 +49,7 @@ export class Matrix {
     
             // This constant is used to shape the full 16-bit address.
             // Stack is writing addresses in memory from right to the left, while normal writing is from left to the right.
-            const adjustments = options?.isStack ? [-1, 0] : [0, 1];
+            const adjustments = isStack ? [-1, 0] : [0, 1];
     
             const [firstRow, firstColumn] = this.getLocation(address + adjustments[0]);
             this.setCell(firstRow, firstColumn, firstCell);
@@ -59,12 +59,12 @@ export class Matrix {
         }
     }
 
-    point(address, options) {
-        if(options?.isHalf) return ByteNumber.join([0, this.get(address)]);
+    point(address, isHalf, isStack) {
+        if(isHalf) return ByteNumber.join([0, this.get(address)]);
         
         // This constant is used to adjust the direction of pointing in memory.
         // In stack, we are pointing from right to left, instead of pointing from left to right.
-        const adjustments = options?.isStack ? [-1, 0] : [0, 1];
+        const adjustments = isStack ? [-1, 0] : [0, 1];
         return ByteNumber.join([this.get(address + adjustments[0]), this.get(address + adjustments[1])]);
     }
 

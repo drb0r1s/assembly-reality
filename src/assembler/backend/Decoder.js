@@ -40,14 +40,14 @@ export class Decoder {
                         ...decoded[prop],
                         register: this.cpuRegisters.get(decoded[prop].value),
                         registerValue,
-                        memoryPoint: this.ram.matrix.point(registerValue, { isHalf })
+                        memoryPoint: this.ram.matrix.point(registerValue, isHalf)
                     };
 
                     break;
                 case "memory.number.*":
                     decoded[prop] = {
                         ...decoded[prop],
-                        memoryPoint: this.ram.matrix.point(decoded[prop].value, { isHalf })
+                        memoryPoint: this.ram.matrix.point(decoded[prop].value, isHalf)
                     };
 
                     break;
@@ -82,11 +82,11 @@ export class Decoder {
         }
     }
 
-    run(executable, runnables) {
+    run(executable, runnables, first, second, isHalf, instruction) {
         const runnable = runnables[executable.type];
 
         if(!runnable) throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
-        runnable();
+        runnable(first, second, isHalf, instruction);
     }
 }
 

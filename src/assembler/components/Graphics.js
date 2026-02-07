@@ -32,7 +32,7 @@ export class Graphics {
     getReserved(key) {
         switch(key) {
             case "background":
-                const backgroundColorIndex = this.matrix.point(0xA301, { isHalf: true });
+                const backgroundColorIndex = this.matrix.point(0xA301, true);
                 return this.getRGBFromVRAM(backgroundColorIndex);
             case "scroll":
                 return [
@@ -75,7 +75,7 @@ export class Graphics {
         const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
         const vidAddr = this.assembler.ioRegisters.getValue("VIDADDR");
 
-        this.assembler.graphics.matrix.update(vidAddr, value, { isHalf: vidMode > 1 });
+        this.assembler.graphics.matrix.update(vidAddr, value, vidMode > 1);
 
         // If we're in bitmap mode, then yes, drawing is certain.
         if(vidMode > 1) this.drawBit(value);
@@ -97,7 +97,7 @@ export class Graphics {
         // [0xA306, 0xA325] is reserved for sprites.
         // The format (address, address + 2) represents (styleAddress, positionAddress).
         for(let address = 0xA306; address <= 0xA325; address += 4) {
-            const ascii = this.matrix.point(address, { isHalf: true });
+            const ascii = this.matrix.point(address, true);
             if(ascii === 0) continue;
             
             callback(address, address + 2);

@@ -2,37 +2,131 @@ import { Decoder } from "./Decoder";
 import { HexCalculator } from "./HexCalculator";
 import { Stack } from "../structures/Stack";
 
+const registerAInstructions = new Set(["MUL", "MULB", "DIV", "DIVB"]);
+const exceptions = new Set(["SUB", "JB", "JNB"]);
+
 export class Executable {
     constructor(assembler) {
         this.assembler = assembler;
         this.decoder = new Decoder(assembler.cpuRegisters, assembler.ram);
         this.hexCalculator = new HexCalculator(assembler.cpuRegisters);
         this.stack = new Stack(assembler.cpuRegisters, assembler.ram);
+
+        this.runnables = {
+            move: this.buildMoveRunnables(),
+            bitwise: this.buildBitwiseRunnables(),
+            compare: this.buildCompareRunnables(),
+            jump: this.buildJumpRunnables(),
+            push: this.buildPushRunnables(),
+            pop: this.buildPopRunnables(),
+            call: this.buildCallRunnables(),
+            in: this.buildInRunnables(),
+            out: this.buildOutRunnables()
+        };
     }
 
     halt() {
         this.assembler.deactivate();
     }
 
+    buildMoveRunnables() {
+        return {
+            "register register": (first, second, _) => this.assembler.cpuRegisters.update(first.register, second.registerValue),
+            "half.register half.register": (first, second, _) => this.assembler.cpuRegisters.update(first.register, second.registerValue),
+            "register memory.register": (first, second, _) => this.assembler.cpuRegisters.update(first.register, second.memoryPoint),
+            "half.register memory.register": (first, second, _) => this.assembler.cpuRegisters.update(first.register, second.memoryPoint),
+            "register memory.number.*": (first, second, _) => this.assembler.cpuRegisters.update(first.register, second.memoryPoint),
+            "half.register memory.number.*": (first, second, _) => this.assembler.cpuRegisters.update(first.register, second.memoryPoint),
+            "memory.register register": (first, second, _) => this.assembler.ram.matrix.update(first.registerValue, second.registerValue),
+            "memory.register half.register": (first, second, isHalf) => this.assembler.ram.matrix.update(first.registerValue, second.registerValue, isHalf),
+            "memory.number.* register": (first, second, _) => this.assembler.ram.matrix.update(first.value, second.registerValue),
+            "memory.number.* half.register": (first, second, isHalf) => this.assembler.ram.matrix.update(first.value, second.registerValue, isHalf),
+            "register number.*": (first, second, _) => this.assembler.cpuRegisters.update(first.register, second.value),
+            "half.register number.*": (first, second, _) => this.assembler.cpuRegisters.update(first.register, second.value),
+            "memory.register number.*": (first, second, isHalf) => this.assembler.ram.matrix.update(first.registerValue, second.value, isHalf),
+            "memory.number.* number.*": (first, second, isHalf) => this.assembler.ram.matrix.update(first.value, second.value, isHalf)
+        };
+    }
+
     move(executable, args) {
         const { first, second } = this.decoder.decode(executable, args);
-
         const [isHalf] = isInstructionHalf(executable.instruction);
-        const registerType = isHalf ? "half.register" : "register";
 
         // In case of updating the stack pointer register, we need to adjust the memory.stackStart address.
         if(first?.register === "SP") this.updateStackStart(executable, second);
         
-        this.decoder.run(executable, {
-            [`${registerType} ${registerType}`]: () => this.assembler.cpuRegisters.update(first.register, second.registerValue),
-            [`${registerType} memory.register`]: () => this.assembler.cpuRegisters.update(first.register, second.memoryPoint),
-            [`${registerType} memory.number.*`]: () => this.assembler.cpuRegisters.update(first.register, second.memoryPoint),
-            [`memory.register ${registerType}`]: () => this.assembler.ram.matrix.update(first.registerValue, second.registerValue, { isHalf }),
-            [`memory.number.* ${registerType}`]: () => this.assembler.ram.matrix.update(first.value, second.registerValue, { isHalf }),
-            [`${registerType} number.*`]: () => this.assembler.cpuRegisters.update(first.register, second.value),
-            "memory.register number.*": () => this.assembler.ram.matrix.update(first.registerValue, second.value, { isHalf }),
-            "memory.number.* number.*": () => this.assembler.ram.matrix.update(first.value, second.value, { isHalf })
-        });
+        this.decoder.run(executable, this.runnables.move, first, second, isHalf);
+    }
+
+    buildBitwiseRunnables() {
+        return {
+            // ONE OPERAND
+            "register": (first, second, _, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.registerValue);
+                this.assembler.cpuRegisters.update(second.register, operation);
+            },
+
+            "half.register": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.registerValue, isHalf);
+                this.assembler.cpuRegisters.update(second.register, operation);
+            },
+
+            "memory.register": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.memoryPoint, second.registerValue, isHalf);
+                this.assembler.cpuRegisters.update(second.register, operation);
+            },
+
+            "memory.number.*": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.memoryPoint, second.registerValue, isHalf);
+                this.assembler.cpuRegisters.update(second.register, operation);
+            },
+
+            "number.*": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.value, second.registerValue, isHalf);
+                this.assembler.cpuRegisters.update(second.register, operation);
+            },
+            
+            // TWO OPERANDS
+            "register register": (first, second, _, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.registerValue);
+                this.assembler.cpuRegisters.update(first.register, operation);
+            },
+
+            "half.register half.register": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.registerValue, isHalf);
+                this.assembler.cpuRegisters.update(first.register, operation);
+            },
+
+            "register memory.register": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.memoryPoint, isHalf);
+                this.assembler.cpuRegisters.update(first.register, operation);
+            },
+
+            "half.register memory.register": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.memoryPoint, isHalf);
+                this.assembler.cpuRegisters.update(first.register, operation);
+            },
+        
+            "register memory.number.*": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.memoryPoint, isHalf);
+                this.assembler.cpuRegisters.update(first.register, operation);
+            },
+
+            "half.register memory.number.*": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.memoryPoint, isHalf);
+                this.assembler.cpuRegisters.update(first.register, operation);
+            },
+
+            "register number.*": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.value, isHalf);
+                this.assembler.cpuRegisters.update(first.register, operation);
+            },
+
+            "half.register number.*": (first, second, isHalf, instruction) => {
+                const operation = this.hexCalculator[instruction](first.registerValue, second.value, isHalf);
+                this.assembler.cpuRegisters.update(first.register, operation);
+            },
+        };
     }
 
     bitwise(executable, args) {
@@ -43,65 +137,38 @@ export class Executable {
 
         // The only purpose of usedRegister is to detect the use of instruction which are implemented only on register A, and to return register ("A" or "AL") and its value in that case.
         const usedRegister = this.getUsedRegister(executable.instruction, isHalf, first.register);
-        const registerType = isHalf ? "half.register" : "register";
 
-        this.decoder.run(executable, {
-            // ONE OPERAND
-            [registerType]: () => {
-                const operation = this.hexCalculator[instruction](first.registerValue, usedRegister.registerValue, { isHalf });
-                this.assembler.cpuRegisters.update(usedRegister.register, operation);
-            },
+        this.decoder.run(executable, this.runnables.bitwise, first, (executable.operands === 2 ? second : usedRegister), isHalf, instruction);
+    }
 
-            "memory.register": () => {
-                const operation = this.hexCalculator[instruction](first.memoryPoint, usedRegister.registerValue, { isHalf });
-                this.assembler.cpuRegisters.update(usedRegister.register, operation);
-            },
-
-            "memory.number.*": () => {
-                const operation = this.hexCalculator[instruction](first.memoryPoint, usedRegister.registerValue, { isHalf });
-                this.assembler.cpuRegisters.update(usedRegister.register, operation);
-            },
-
-            "number.*": () => {
-                const operation = this.hexCalculator[instruction](first.value, usedRegister.registerValue, { isHalf });
-                this.assembler.cpuRegisters.update(usedRegister.register, operation);
-            },
-            
-            // TWO OPERANDS
-            [`${registerType} ${registerType}`]: () => {
-                const operation = this.hexCalculator[instruction](first.registerValue, second.registerValue, { isHalf });
-                this.assembler.cpuRegisters.update(first.register, operation);
-            },
-        
-            [`${registerType} memory.register`]: () => {
-                const operation = this.hexCalculator[instruction](first.registerValue, second.memoryPoint, { isHalf });
-                this.assembler.cpuRegisters.update(first.register, operation);
-            },
-        
-            [`${registerType} memory.number.*`]: () => {
-                const operation = this.hexCalculator[instruction](first.registerValue, second.memoryPoint, { isHalf });
-                this.assembler.cpuRegisters.update(first.register, operation);
-            },
-        
-            [`${registerType} number.*`]: () => {
-                const operation = this.hexCalculator[instruction](first.registerValue, second.value, { isHalf });
-                this.assembler.cpuRegisters.update(first.register, operation);
-            }
-        });
+    buildCompareRunnables() {
+        return {
+            "register register": (first, second) => this.hexCalculator.CMP(first.registerValue, second.registerValue),
+            "half.register half.register": (first, second) => this.hexCalculator.CMP(first.registerValue, second.registerValue),
+            "register memory.register": (first, second) => this.hexCalculator.CMP(first.registerValue, second.memoryPoint),
+            "half.register memory.register": (first, second) => this.hexCalculator.CMP(first.registerValue, second.memoryPoint),
+            "register memory.number.*": (first, second) => this.hexCalculator.CMP(first.registerValue, second.memoryPoint),
+            "half.register memory.number.*": (first, second) => this.hexCalculator.CMP(first.registerValue, second.memoryPoint),
+            "register number.*": (first, second) => this.hexCalculator.CMP(first.registerValue, second.value),
+            "half.register number.*": (first, second) => this.hexCalculator.CMP(first.registerValue, second.value)
+        };
     }
 
     compare(executable, args) {
         const { first, second } = this.decoder.decode(executable, args);
-    
-        const [isHalf] = isInstructionHalf(executable.instruction);
-        const registerType = isHalf ? "half.register" : "register";
+        this.decoder.run(executable, this.runnables.compare, first, second);
+    }
 
-        this.decoder.run(executable, {
-            [`${registerType} ${registerType}`]: () => this.hexCalculator.CMP(first.registerValue, second.registerValue),
-            [`${registerType} memory.register`]: () => this.hexCalculator.CMP(first.registerValue, second.memoryPoint),
-            [`${registerType} memory.number.*`]: () => this.hexCalculator.CMP(first.registerValue, second.memoryPoint),
-            [`${registerType} number.*`]: () => this.hexCalculator.CMP(first.registerValue, second.value)
-        });
+    buildJumpRunnables() {
+        return {
+            "memory.register": first => {
+                this.assembler.cpuRegisters.update("IP", first.memoryPoint);
+            },
+
+            "number.*": first => {
+                this.assembler.cpuRegisters.update("IP", first.value);
+            }
+        };
     }
 
     jump(executable, args) {
@@ -129,45 +196,39 @@ export class Executable {
                 break;
         }
 
-        this.decoder.run(executable, {
-            "memory.register": () => {
-                this.assembler.cpuRegisters.update("IP", first.memoryPoint);
-            },
+        this.decoder.run(executable, this.runnables.jump, first);
+    }
 
-            "number.*": () => {
-                this.assembler.cpuRegisters.update("IP", first.value);
-            }
-        });
+    buildPushRunnables() {
+        return {
+            "register": (first, _) => this.stack.push(first.registerValue),
+            "half.register": (first, isHalf) => this.stack.push(first.registerValue, isHalf),
+            "number.*": (first, isHalf) => this.stack.push(first.value, isHalf)
+        };
     }
 
     push(executable, args) {
         const { first } = this.decoder.decode(executable, args);
-
         const [isHalf] = isInstructionHalf(executable.instruction);
-        const registerType = isHalf ? "half.register" : "register";
 
-        this.decoder.run(executable, {
-            [registerType]: () => this.stack.push(first.registerValue, { isHalf }),
-            "number.*": () => this.stack.push(first.value, { isHalf })
-        });
+        this.decoder.run(executable, this.runnables.push, first, isHalf);
+    }
+
+    buildPopRunnables() {
+        return {
+            "register": first => this.stack.pop(first.register),
+            "half.register": first => this.stack.pop(first.register, true),
+        };
     }
 
     pop(executable, args) {
         const { first } = this.decoder.decode(executable, args);
-
-        const [isHalf] = isInstructionHalf(executable.instruction);
-        const registerType = isHalf ? "half.register" : "register";
-
-        this.decoder.run(executable, {
-            [registerType]: () => this.stack.pop(first.register, { isHalf })
-        });
+        this.decoder.run(executable, this.runnables.pop, first);
     }
 
-    call(executable, args) {
-        const { first } = this.decoder.decode(executable, args);
-
-        this.decoder.run(executable, {
-            "memory.register": () => {
+    buildCallRunnables() {
+        return {
+            "memory.register": first => {
                 // IMPORTANT: Here we set the current (return) address as the next address that should be executed, after the RET instruction.
                 // If we didn't specify that we want to return to the next address, we would ran into an infinite loop, as function would keep calling itself.
                 const currentAddress = this.assembler.cpuRegisters.getValue("IP") + 3;
@@ -177,7 +238,7 @@ export class Executable {
                 this.stack.push(currentAddress); // PUSH return address to the stack.
             },
 
-            "number.*": () => {
+            "number.*": first => {
                 // IMPORTANT: Here we set the current (return) address as the next address that should be executed, after the RET instruction.
                 // If we didn't specify that we want to return to the next address, we would ran into an infinite loop, as function would keep calling itself.
                 const currentAddress = this.assembler.cpuRegisters.getValue("IP") + 3;
@@ -186,15 +247,52 @@ export class Executable {
 
                 this.stack.push(currentAddress); // PUSH return address to the stack.
             }
-        });
+        };
+    }
+
+    call(executable, args) {
+        const { first } = this.decoder.decode(executable, args);
+        this.decoder.run(executable, this.runnables.call, first);
     }
 
     ret() {
         // POP the return address from the stack.
         this.assembler.cpuRegisters.update("SP", this.assembler.cpuRegisters.getValue("SP") + 2);
         
-        const popped = this.assembler.ram.matrix.point(this.assembler.cpuRegisters.getValue("SP"), { isStack: true });
+        const popped = this.assembler.ram.matrix.point(this.assembler.cpuRegisters.getValue("SP"), false, true);
         this.assembler.cpuRegisters.update("IP", popped);
+    }
+
+    buildInRunnables() {
+        return {
+            "register": (first, ioInteractions) => {
+                const ioRegisterValue = this.assembler.ioRegisters.getValueByIndex(first.registerValue);
+                this.assembler.cpuRegisters.update("A", ioRegisterValue);
+
+                ioInteractions(first.registerValue);
+            },
+
+            "memory.register": (first, ioInteractions) => {
+                const ioRegisterValue = this.assembler.ioRegisters.getValueByIndex(first.memoryPoint);
+                this.assembler.cpuRegisters.update("A", ioRegisterValue);
+
+                ioInteractions(first.memoryPoint);
+            },
+
+            "memory.number.*": (first, ioInteractions) => {
+                const ioRegisterValue = this.assembler.ioRegisters.getValueByIndex(first.memoryPoint);
+                this.assembler.cpuRegisters.update("A", ioRegisterValue);
+
+                ioInteractions(first.memoryPoint);
+            },
+
+            "number.*": (first, ioInteractions) => {
+                const ioRegisterValue = this.assembler.ioRegisters.getValueByIndex(first.value);
+                this.assembler.cpuRegisters.update("A", ioRegisterValue);
+
+                ioInteractions(first.value);
+            }
+        };
     }
 
     in(executable, args) {
@@ -216,35 +314,39 @@ export class Executable {
             }
         }
 
-        this.decoder.run(executable, {
-            "register": () => {
-                const ioRegisterValue = this.assembler.ioRegisters.getValueByIndex(first.registerValue);
-                this.assembler.cpuRegisters.update("A", ioRegisterValue);
+        this.decoder.run(executable, this.runnables.in, first, ioInteractions);
+    }
+
+    buildOutRunnables() {
+        return {
+            "register": (first, registerAValue, ioInteractions) => {
+                const ioRegister = this.assembler.ioRegisters.get(first.registerValue);
+                this.assembler.ioRegisters.update(ioRegister, registerAValue);
 
                 ioInteractions(first.registerValue);
             },
 
-            "memory.register": () => {
-                const ioRegisterValue = this.assembler.ioRegisters.getValueByIndex(first.memoryPoint);
-                this.assembler.cpuRegisters.update("A", ioRegisterValue);
+            "memory.register": (first, registerAValue, ioInteractions) => {
+                const ioRegister = this.assembler.ioRegisters.get(first.memoryPoint);
+                this.assembler.ioRegisters.update(ioRegister, registerAValue);
 
                 ioInteractions(first.memoryPoint);
             },
 
-            "memory.number.*": () => {
-                const ioRegisterValue = this.assembler.ioRegisters.getValueByIndex(first.memoryPoint);
-                this.assembler.cpuRegisters.update("A", ioRegisterValue);
+            "memory.number.*": (first, registerAValue, ioInteractions) => {
+                const ioRegister = this.assembler.ioRegisters.get(first.memoryPoint);
+                this.assembler.ioRegisters.update(ioRegister, registerAValue);
 
                 ioInteractions(first.memoryPoint);
             },
 
-            "number.*": () => {
-                const ioRegisterValue = this.assembler.ioRegisters.getValueByIndex(first.value);
-                this.assembler.cpuRegisters.update("A", ioRegisterValue);
+            "number.*": (first, registerAValue, ioInteractions) => {
+                const ioRegister = this.assembler.ioRegisters.get(first.value);
+                this.assembler.ioRegisters.update(ioRegister, registerAValue);
 
                 ioInteractions(first.value);
             }
-        });
+        };
     }
 
     out(executable, args) {
@@ -314,35 +416,7 @@ export class Executable {
             }
         }
 
-        this.decoder.run(executable, {
-            "register": () => {
-                const ioRegister = this.assembler.ioRegisters.get(first.registerValue);
-                this.assembler.ioRegisters.update(ioRegister, registerAValue);
-
-                ioInteractions(first.registerValue);
-            },
-
-            "memory.register": () => {
-                const ioRegister = this.assembler.ioRegisters.get(first.memoryPoint);
-                this.assembler.ioRegisters.update(ioRegister, registerAValue);
-
-                ioInteractions(first.memoryPoint);
-            },
-
-            "memory.number.*": () => {
-                const ioRegister = this.assembler.ioRegisters.get(first.memoryPoint);
-                this.assembler.ioRegisters.update(ioRegister, registerAValue);
-
-                ioInteractions(first.memoryPoint);
-            },
-
-            "number.*": () => {
-                const ioRegister = this.assembler.ioRegisters.get(first.value);
-                this.assembler.ioRegisters.update(ioRegister, registerAValue);
-
-                ioInteractions(first.value);
-            }
-        });
+        this.decoder.run(executable, this.runnables.out, first, registerAValue, ioInteractions);
     }
 
     interrupt(executable) {
@@ -386,10 +460,8 @@ export class Executable {
 
     getUsedRegister(instruction, isHalf, register) {
         const usedRegister = { register: null, registerValue: null };
-        
-        const registerAInstructions = ["MUL", "MULB", "DIV", "DIVB"];
 
-        if(registerAInstructions.indexOf(instruction) > -1) {
+        if(registerAInstructions.has(instruction)) {
             if(isHalf) usedRegister.register = "AL";
             else usedRegister.register = "A";
         }
@@ -403,8 +475,7 @@ export class Executable {
 }
 
 function isInstructionHalf(instruction) {
-    const exceptions = ["SUB", "JB", "JNB"];
-    if(exceptions.indexOf(instruction) > -1) return [false, instruction];
+    if(exceptions.has(instruction)) return [false, instruction];
 
     const last = instruction.slice(-1);
     if(last === "B") return [true, instruction.slice(0, -1)];

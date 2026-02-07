@@ -156,7 +156,7 @@ export class Assembler {
 
         this.refresh.startInterval();
 
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             let instructionCounter = 0;
 
             this.executionInterval.start(() => {     
@@ -180,7 +180,13 @@ export class Assembler {
 
                 catch(error) {
                     if(error instanceof AssemblerError) resolve({ error });
-                    else reject({ error: new AssemblerError("UnknownExecutionError") });
+
+                    else {
+                        this.stop();
+                        resolve({ error: new AssemblerError("UnknownExecutionError") });
+
+                        return;
+                    }
                 }
 
                 instructionCounter++;

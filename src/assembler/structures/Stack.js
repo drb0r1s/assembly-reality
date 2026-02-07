@@ -6,24 +6,21 @@ export class Stack {
         this.ram = ram;
     }
 
-    push(value, options) {
-        const isHalf = options?.isHalf ? options.isHalf : false;
-        
-        this.ram.matrix.update(this.cpuRegisters.getValue("SP"), value, { isHalf, isStack: true });
+    push(value, isHalf = false) {
+        this.ram.matrix.update(this.cpuRegisters.getValue("SP"), value, isHalf, true);
 
         const numberOfCells = isHalf ? 1 : 2;
         this.cpuRegisters.update("SP", this.cpuRegisters.getValue("SP") - numberOfCells);
     }
 
-    pop(popRegister, options) {
-        const isHalf = options?.isHalf ? options.isHalf : false;
+    pop(popRegister, isHalf = false) {
         const numberOfCells = isHalf ? 1 : 2;
         
         if(this.cpuRegisters.getValue("SP") + numberOfCells > this.ram.stackStart) throw new AssemblerError("StackUnderflow");
         
         this.cpuRegisters.update("SP", this.cpuRegisters.getValue("SP") + numberOfCells);
         
-        const popped = this.ram.matrix.point(this.cpuRegisters.getValue("SP"), { isHalf, isStack: true });
+        const popped = this.ram.matrix.point(this.cpuRegisters.getValue("SP"), isHalf, true);
         if(popRegister) this.cpuRegisters.update(popRegister, popped);
 
         return popped;
