@@ -42,14 +42,12 @@ export class Instants {
         let result = null;
 
         // number.decimal, number.binary, number.octal, number.hex
-        if(operand.valueType.startsWith("number.")) result = processNumber(instant, operand);
+        if(operand.valueType[0] === "n") result = processNumber(instant, operand);
 
         else if(operand.valueType === "string.double") {
-            const characters = operand.value.split("");
-
             result = [];
             // Since we know that string characters are always less than 0xFF, we can simply add one additional 8-bit value of 0, to fill out 2 8-bit cells, which is required for this instant.
-            characters.map(character => { result.push(0, character.charCodeAt(0)) });
+            for(let i = 0; i < operand.value.length; i++) result.push(0, operand.value.charCodeAt(i));
         }
 
         else throw new AssemblerError("InvalidOperandInInstant",  { operand: operand.value, instant: instant.name });
@@ -63,22 +61,20 @@ export class Instants {
         let result = null;
 
         // number.decimal, number.binary, number.octal, number.hex
-        if(operand.valueType.startsWith("number.")) result = processNumber(instant, operand);
+        if(operand.valueType[0] === "n") result = processNumber(instant, operand);
 
         // Here we introduce the possibility of using special character \ in order to signal that the next 8-bit value is going to be written in the memory exactly as it is written in a string (not as an ASCII value), this is known as Exact Mode.
         // DB "\xAB" => "AB" is written in the memory.
         // DB "AB" => ASCII(A), ASCII(B) is written in the memory.
         // IMPORTANT: This functionality is DB-exclusive, DW doesn't support this.
-        else if(operand.valueType === "string.double") {
-            const characters = operand.value.split("");
-            
+        else if(operand.valueType === "string.double") {            
             let exactMode = false;
             let exactModeValue = "";
 
             result = [];
 
-            for(let i = 0; i < characters.length; i++) {
-                const character = characters[i];
+            for(let i = 0; i < operand.value.length; i++) {
+                const character = operand.value[i];
 
                 if(character === "\\") {
                     // Edge case: DB "\xA\x03...", "\xA" is written as "0A" in memory.
@@ -129,7 +125,7 @@ export class Instants {
 function processNumber(instant, operand) {
     const maxValue = maxValues[instant.name];
 
-    const type = operand.valueType.split(".")[1];
+    const type = operand.valueType.slice(7);
 
     const base = bases[type];
     const baseName = baseNames[type];

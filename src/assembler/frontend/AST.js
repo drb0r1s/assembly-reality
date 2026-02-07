@@ -49,7 +49,7 @@ class SeparatorNode {
 }
 
 export const AST = {
-    instantKeywords: ["DW", "DB", "ORG"],
+    instantKeywords: new Set(["DW", "DB", "ORG"]),
 
     build: tokens => {
         const programNode = new ProgramNode();
@@ -103,7 +103,7 @@ export const AST = {
         if(firstToken.type === "keyword") {
             let node;
 
-            if(AST.instantKeywords.indexOf(firstToken.value) > -1) node = new InstantNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
+            if(AST.instantKeywords.has(firstToken.value)) node = new InstantNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
             else node = new InstructionNode(firstToken.value, firstToken.line, firstToken.isHalf, []);
             
             for(let i = 1; i < filteredTokens.length; i++) {

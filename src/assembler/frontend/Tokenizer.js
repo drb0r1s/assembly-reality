@@ -2,6 +2,8 @@ import { AssemblerError } from "../AssemblerError";
 import { Keywords } from "./Keywords";
 import { Registers } from "./Registers";
 
+const exceptions = new Set(["SUB", "JB", "JNB"]);
+
 export const Tokenizer = {
     // Patterns are ordered from the highest to the lowest priority.
     patterns: {
@@ -58,7 +60,7 @@ export const Tokenizer = {
             if(lines[i].length === 0) continue;
             
             const lineTokens = []; // This variable will store all matched tokens from the specific line.
-            const taken = Array(lines[i].length).fill(false);
+            const taken = new Uint8Array(lines[i].length);
 
             for(let j = 0; j < Tokenizer.priorities.length; j++) {
                 const type = Tokenizer.priorities[j];
@@ -74,7 +76,17 @@ export const Tokenizer = {
                     const start = match.index;
                     const end = match.index + match[0].length;
 
-                    if(taken.slice(start, end).some(Boolean)) continue;
+                    let overlap = false;
+
+                    for(let k = start; k < end; k++) {
+                        if(taken[k]) {
+                            overlap = true;
+                            break;
+                        }
+                    }
+
+                    if(overlap) continue;
+
                     for(let k = start; k < end; k++) taken[k] = true;
 
                     const token = {
@@ -108,8 +120,7 @@ export const Tokenizer = {
     },
 
     isKeywordHalf: keyword => {
-        const exceptions = ["SUB", "JB", "JNB"];
-        if(exceptions.indexOf(keyword) > -1) return false;
+        if(exceptions.has(keyword)) return false;
 
         const last = keyword.slice(-1);
         if(last === "B") return true;

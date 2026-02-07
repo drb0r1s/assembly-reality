@@ -11,10 +11,7 @@ export class Labels {
         const row = ram.free.i;
         const column = ram.free.j;
 
-        this.collection = {
-            ...this.collection,
-            [label.name]: ram.matrix.getAddress(row, column).toString(16)
-        };
+        this.collection[label.name] = ram.matrix.getAddress(row, column).toString(16);
     }
 
     // Every label node (types: label.reference, memory.label.reference) should be renamed to number.* and memory.number.*.
@@ -22,16 +19,16 @@ export class Labels {
         const targetTypes = ["label.reference", "memory.label.reference"];
         
         for(const statement of ast.statements) {
-            if(["Instruction", "Instant"].indexOf(statement.type) === -1) continue;
+            if(statement.type !== "Instruction" && statement.type !== "Instant") continue;
 
             for(const operand of statement.operands) {
-                if(targetTypes.indexOf(operand.valueType) > -1) {
+                if(operand.valueType === "label.reference" || operand.valueType === "memory.label.reference") {
                     const address = this.collection[operand.value];
                     if(address === undefined) throw new AssemblerError("UnknownLabel", { label: operand.value }, statement.line);
 
                     operand.value = address;
                     
-                    const isMemory = operand.valueType.startsWith("memory");
+                    const isMemory = operand.valueType[0] === "m";
                     operand.valueType = isMemory ? "memory.number.hex" : "number.hex";
                 }
             }
