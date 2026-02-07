@@ -13,17 +13,21 @@ export class Interrupts {
         if(mFlag === 0 || !checkIRQMASK()) return;
 
         // 1. The bit in the IRQSTATUS register corresponding to the requesting device is set to 1.
+        let bit;
+        
         switch(type) {
             case "keyboard":
-                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b001, true);
+                bit = 0b001;
                 break;
             case "timer":
-                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b010, true);
+                bit = 0b010;
                 break;
             case "graphics":
-                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b100, true);
+                bit = 0b100;
                 break;
         }
+
+        this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | bit, true);
 
         this.process();
 
