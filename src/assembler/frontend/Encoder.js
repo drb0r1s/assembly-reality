@@ -2,14 +2,23 @@ import { AssemblerError } from "../AssemblerError";
 import { CPURegisters } from "../components/CPURegisters";
 import { ByteNumber } from "../helpers/ByteNumber";
 
+const cpuRegisters = new CPURegisters();
+
 export const Encoder = {
     oneOperand: (instruction, combinations) => {
         if(instruction.operands.length !== 1) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 1 }, instruction.line);
 
         const instructionCell = getInstructionCell(instruction, instruction.operands, combinations);
         
+        // isHalf is used for 8-bit instructions
+        const data = {
+            maxValue: instruction.isHalf ? 255 : 65535,
+            maxMemoryValue: 4127,
+            bits: instruction.isHalf ? 8 : 16
+        };
+
         const dest = instruction.operands[0];
-        const destCell = parseType(instruction, dest);
+        const destCell = parseType(instruction, dest, data);
 
         return [instructionCell, ...destCell];
     },
@@ -22,26 +31,24 @@ export const Encoder = {
 
         if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name }, instruction.line);
 
+        // isHalf is used for 8-bit instructions
+        const data = {
+            maxValue: instruction.isHalf ? 255 : 65535,
+            maxMemoryValue: 4127,
+            bits: instruction.isHalf ? 8 : 16
+        };
+
         const dest = operands[0];
         const src = operands[1];
 
-        const destCell = parseType(instruction, dest);
-        const srcCell = parseType(instruction, src);
+        const destCell = parseType(instruction, dest, data);
+        const srcCell = parseType(instruction, src, data);
 
         return [instructionCell, ...destCell, ...srcCell];
     }
 };
 
-function parseType(instruction, operand) {
-    // isHalf is used for 8-bit instructions
-    const data = {
-        maxValue: instruction.isHalf ? 255 : 65535,
-        maxMemoryValue: 4127,
-        bits: instruction.isHalf ? 8 : 16
-    };
-
-    const cpuRegisters = new CPURegisters();
-    
+function parseType(instruction, operand, data) {
     switch(operand.valueType) {
         case "register": return [cpuRegisters.getIndex(operand.value)];
         case "half.register": return [cpuRegisters.getIndex(operand.value)];
@@ -121,20 +128,20 @@ function getInstructionCell(instruction, operands, combinations) {
             return instructionCell;
         }
     }
+}
 
-    // number.hex => number.*
-    function generalizeType(valueType) {
-        const generalization = [
-            "number.decimal", "number.binary", "number.octal", "number.hex",
-            "memory.number.decimal", "memory.number.binary", "memory.number.octal", "memory.number.hex",
-            "label.reference", "memory.label.reference"
-        ];
+// number.hex => number.*
+function generalizeType(valueType) {
+    const generalization = new Set([
+        "number.decimal", "number.binary", "number.octal", "number.hex",
+        "memory.number.decimal", "memory.number.binary", "memory.number.octal", "memory.number.hex",
+        "label.reference", "memory.label.reference"
+    ]);
 
-        if(generalization.indexOf(valueType) === -1) return valueType;
+    if(!generalization.has(valueType)) return valueType;
             
-        const parts = valueType.split(".");
+    const parts = valueType.split(".");
 
-        if(parts[0] === "memory") return "memory.number.*";
-        return "number.*";
-    }
+    if(parts[0] === "memory") return "memory.number.*";
+    return "number.*";
 }
