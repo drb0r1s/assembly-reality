@@ -100,7 +100,7 @@ export class Assembler {
         }
 
         if(statement.type === "Instruction") {
-            const lengthOfInstruction = Instructions[statement.name](statement, { getLength: true });
+            const lengthOfInstruction = Instructions[statement.name](statement, true);
             
             this.cpuRegisters.collect(statement.operands, this.ram, lengthOfInstruction); // Looking for A, B, C, D registers.
             this.lines.collect(statement.line, this.ram);

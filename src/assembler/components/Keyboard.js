@@ -40,8 +40,8 @@ export class Keyboard {
         if(type === "down") newKbdStatus |= 0b001;
         else newKbdStatus |= 0b010;
 
-        this.ioRegisters.update("KBDSTATUS", newKbdStatus, { force: true });
-        this.ioRegisters.update("KBDDATA", character, { force: true });
+        this.ioRegisters.update("KBDSTATUS", newKbdStatus, true);
+        this.ioRegisters.update("KBDDATA", character, true);
     }
 
     reset() {

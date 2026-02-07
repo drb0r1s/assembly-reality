@@ -15,13 +15,13 @@ export class Interrupts {
         // 1. The bit in the IRQSTATUS register corresponding to the requesting device is set to 1.
         switch(type) {
             case "keyboard":
-                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b001, { force: true });
+                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b001, true);
                 break;
             case "timer":
-                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b010, { force: true });
+                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b010, true);
                 break;
             case "graphics":
-                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b100, { force: true });
+                this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") | 0b100, true);
                 break;
         }
 
@@ -60,9 +60,9 @@ export class Interrupts {
         
         if(tmrCounter === 0) {
             this.trigger("timer");
-            this.assembler.ioRegisters.update("TMRCOUNTER", this.assembler.ioRegisters.getValue("TMRPRELOAD"), { force: true });
+            this.assembler.ioRegisters.update("TMRCOUNTER", this.assembler.ioRegisters.getValue("TMRPRELOAD"), true);
         }
 
-        else this.assembler.ioRegisters.update("TMRCOUNTER", tmrCounter - 1, { force: true });
+        else this.assembler.ioRegisters.update("TMRCOUNTER", tmrCounter - 1, true);
     }
 }

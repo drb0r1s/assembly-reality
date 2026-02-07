@@ -302,14 +302,14 @@ export class Executable {
             switch(register) {
                 // KBDDATA
                 case 6:
-                    this.assembler.ioRegisters.update("KBDSTATUS", 0, { force: true });
+                    this.assembler.ioRegisters.update("KBDSTATUS", 0, true);
                     break;
                 // RNDGEN
                 case 10:
                     const randomNumber = Math.floor(Math.random() * 0x10000); // Getting a random number from [0x0000, 0xFFFF].
 
                     this.assembler.cpuRegisters.update("A", randomNumber);
-                    this.assembler.ioRegisters.update("RNDGEN", randomNumber, { force: true });
+                    this.assembler.ioRegisters.update("RNDGEN", randomNumber, true);
                     break;
             }
         }
@@ -361,11 +361,11 @@ export class Executable {
             switch(register) {
                 // IRQEOI
                 case 2:
-                    this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") & ~this.assembler.ioRegisters.getValue("IRQEOI"), { force: true });
+                    this.assembler.ioRegisters.update("IRQSTATUS", this.assembler.ioRegisters.getValue("IRQSTATUS") & ~this.assembler.ioRegisters.getValue("IRQEOI"), true);
                     break;
                 // TMRPRELOAD
                 case 3:
-                    this.assembler.ioRegisters.update("TMRCOUNTER", this.assembler.ioRegisters.getValue("TMRPRELOAD"), { force: true });
+                    this.assembler.ioRegisters.update("TMRCOUNTER", this.assembler.ioRegisters.getValue("TMRPRELOAD"), true);
                     break;
                 // VIDMODE
                 case 7:
