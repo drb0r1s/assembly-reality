@@ -84,9 +84,7 @@ const MemoryCanvas = ({ ram }) => {
 
         if(cell !== hoveredCellRef.current) {
             hoveredCellRef.current = cell;
-
             rendererRef.current?.hoverCell(cell);
-            rendererRef.current?.render();
         }
     }
 
@@ -94,9 +92,7 @@ const MemoryCanvas = ({ ram }) => {
         if(isMemoryEmpty) return;
 
         hoveredCellRef.current = -1;
-
         rendererRef.current?.unhoverCell();
-        rendererRef.current?.render();
     }
     
     return(

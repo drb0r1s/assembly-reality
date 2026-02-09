@@ -64,45 +64,30 @@ export class MemoryRenderer {
         const IP = this.assembler.cpuRegisters.getValue("IP");
         const SP = this.assembler.cpuRegisters.getValue("SP");
 
-        for(let i = 0; i < this.matrix.length; i++) {
-            const row = Math.floor(i / this.cellProps.columns);
-            const column = i % this.cellProps.columns;
-
-            const x = column * this.cellProps.width;
-            const y = row * this.cellProps.height;
-
-            const cellColor = this.getCellColor(i, IP, SP);
-
-            this.ctx.fillStyle = cellColor;
-            this.ctx.fillRect(x, y, this.cellProps.width, this.cellProps.height);
-
-            this.ctx.fillStyle = this.colors.text;
-
-            this.ctx.fillText(
-                this.hexTable[this.matrix[i]],
-                x + this.cellProps.width / 2,
-                y + this.textYOffset
-            );
-        }
+        for(let i = 0; i < this.matrix.length; i++) this.renderCell(i, IP, SP);
 
         this.renderBorders();
     }
 
-    renderBorders() {
-        this.ctx.strokeStyle = this.colors.divider;
-        this.ctx.lineWidth = 1;
+    renderCell(cell, IP, SP) {
+        const row = Math.floor(cell / this.cellProps.columns);
+        const column = cell % this.cellProps.columns;
 
-        this.ctx.beginPath();
+        const x = column * this.cellProps.width;
+        const y = row * this.cellProps.height;
 
-        for(let column = 0; column < this.cellProps.columns; column++) {
-            const x = column * this.cellProps.width;
+        const cellColor = this.getCellColor(cell, IP, SP);
 
-            // 0.5 is a dpi constant (1 / 2).
-            this.ctx.moveTo(x + 0.5, 0);
-            this.ctx.lineTo(x + 0.5, this.ctx.canvas.height);
-        }
+        this.ctx.fillStyle = cellColor;
+        this.ctx.fillRect(x, y, this.cellProps.width, this.cellProps.height);
 
-        this.ctx.stroke();
+        this.ctx.fillStyle = this.colors.text;
+
+        this.ctx.fillText(
+            this.hexTable[this.matrix[cell]],
+            x + this.cellProps.width / 2,
+            y + this.textYOffset
+        );
     }
 
     getCellColor(cell, IP, SP) {
@@ -148,18 +133,46 @@ export class MemoryRenderer {
 
     hoverCell(cell) {
         const IP = this.assembler.cpuRegisters.getValue("IP");
+        const SP = this.assembler.cpuRegisters.getValue("SP");
+
         const isInteractive = cell === IP || this.ram.instructions.includes(cell);
 
         if(isInteractive) {
             this.canvas.style.cursor = "pointer";
             this.hoveredCell = cell;
+
+            this.renderCell(cell, IP, SP);
         }
 
-        else this.unhoverCell();
+        else if(this.hoveredCell !== 1) this.unhoverCell();
     }
 
     unhoverCell() {
+        const IP = this.assembler.cpuRegisters.getValue("IP");
+        const SP = this.assembler.cpuRegisters.getValue("SP");
+
         this.canvas.style.cursor = "default";
+        
+        const oldHoveredCell = this.hoveredCell;
         this.hoveredCell = -1;
+
+        this.renderCell(oldHoveredCell, IP, SP);
+    }
+
+    renderBorders() {
+        this.ctx.strokeStyle = this.colors.divider;
+        this.ctx.lineWidth = 1;
+
+        this.ctx.beginPath();
+
+        for(let column = 0; column < this.cellProps.columns; column++) {
+            const x = column * this.cellProps.width;
+
+            // 0.5 is a dpi constant (1 / 2).
+            this.ctx.moveTo(x + 0.5, 0);
+            this.ctx.lineTo(x + 0.5, this.ctx.canvas.height);
+        }
+
+        this.ctx.stroke();
     }
 }
