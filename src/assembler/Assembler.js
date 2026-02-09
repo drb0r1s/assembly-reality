@@ -171,8 +171,7 @@ export class Assembler {
                     return;
                 }
 
-                const [row, column] = this.ram.matrix.getLocation(this.cpuRegisters.getValue("IP"));
-                const cell = this.ram.matrix.getCell(row, column);
+                const cell = this.ram.matrix.get(this.cpuRegisters.getValue("IP"));
 
                 try {
                     if(this.isActive()) this.executeInstruction(cell, instructionCounter);
@@ -199,11 +198,10 @@ export class Assembler {
     executeOne() {
         if(!this.isActive()) return -1; // -1 = No line to be highlighted.
 
-        const [row, column] = this.ram.matrix.getLocation(this.cpuRegisters.getValue("IP"));
-        const cell = this.ram.matrix.getCell(row, column);
+        const IP = this.ram.matrix.get(this.cpuRegisters.getValue("IP"));
 
         try {
-            this.executeInstruction(cell);
+            this.executeInstruction(IP);
         }
 
         catch(error) {
@@ -211,8 +209,7 @@ export class Assembler {
             return { error: new AssemblerError("UnknownExecutionError") };
         }
 
-        const address = this.ram.matrix.getAddress(row, column);
-        return this.lines.collection[address];
+        return this.lines.collection[IP];
     }
 
     executeInstruction(cell, instructionCounter = null) {
@@ -254,7 +251,7 @@ export class Assembler {
 
         if(instructionIndex === this.ram.instructions.length - 1) {
             this.deactivate();
-            this.cpuRegisters.update("IP", this.ram.matrix.getAddress(this.ram.free.i, this.ram.free.j));
+            this.cpuRegisters.update("IP", this.ram.free);
         }
         
         else this.cpuRegisters.update("IP", this.ram.instructions[instructionIndex + 1]);
@@ -280,20 +277,14 @@ export class Assembler {
     collectArgs(length) {
         const args = [];
         
-        let [row, column] = this.ram.matrix.getLocation(this.cpuRegisters.getValue("IP"));
+        // We'll skip the first address cell, because it is the instruction code, which is already known.
+        let address = this.cpuRegisters.getValue("IP") + 1;
         
-        for(let i = 0; i < length; i++) {
-            args.push(this.ram.matrix.getCell(row, column));
-
-            column++;
-
-            if(column > 15) {
-                column = 0;
-                row++;
-            }
+        for(let i = 1; i < length; i++) {
+            args.push(this.ram.matrix.get(address));
+            address++;
         }
 
-        args.shift(); // We want to remove the first argument, because it is the instruction code, which is already known.
         return args;
     }
 

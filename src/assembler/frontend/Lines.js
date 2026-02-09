@@ -4,10 +4,7 @@ export class Lines {
     }
 
     collect(line, ram) {
-        const row = ram.free.i;
-        const column = ram.free.j;
-
-        this.collection[ram.matrix.getAddress(row, column)] = line;
+        this.collection[ram.free] = line;
     }
 
     reset() {

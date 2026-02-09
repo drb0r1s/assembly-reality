@@ -4,64 +4,47 @@ import { Matrix } from "../structures/Matrix";
 export class RAM {
     constructor(ramBuffer) {
         this.matrix = new Matrix(ramBuffer, 16),
-        this.free = { i: 0, j: 0 } // Pointers to the last free-memory coordinates.
+        this.free = 0; // Pointer to the last free-memory address.
         this.instructions = []; // An array of instruction addresses in memory.
         this.stackStart = 0; // The address of the start of the stack.
     }
 
     write(cells) {
-        let { i, j } = this.free;
+        const memory = this.matrix.getMatrix();
 
-        const rows = 258;
-        const columns = 16;
+        const start = this.free;
+        const end = start + cells.length;
 
-        for(let k = 0; k < cells.length; k++) {
-            const row = Math.floor((j + k) / columns) + i;
-            const column = (j + k) % columns;
+        if(end > memory.length) throw new AssemblerError("OutOfMemory");
 
-            if(row >= rows) throw new AssemblerError("OutOfMemory");
+        for(let i = 0; i < cells.length; i++) memory[start + i] = cells[i];
 
-            this.matrix.setCell(row, column, cells[k]);
-        }
-
-        const finalPosition = j + cells.length;
-
-        i += Math.floor(finalPosition / columns);
-        j = finalPosition % columns;
-
-        if(i > rows) throw new AssemblerError("OutOfMemory");
-
-        this.free = { i, j };
+        this.free = end;
     }
 
-
     advance(amount) {
-        let { i, j } = this.free;
+        const memory = this.matrix.getMatrix();
+        const end = this.free + amount;
 
-        j += amount;
+        if(end > memory.length) throw new AssemblerError("OutOfMemory");
 
-        i += Math.floor(j / 16);
-        j = j % 16;
-
-        if(i >= this.matrix.getMatrix().length / 16) throw new AssemblerError("OutOfMemory");
-
-        this.free = { i, j };
+        this.free = end;
     }
 
     adjustFree(address) {
-        const [row, column] = this.matrix.getLocation(address);
+        const memory = this.matrix.getMatrix();
+        if(address < 0 || address > memory.length) throw new AssemblerError("OutOfMemory");
 
-        this.free.i = row;
-        this.free.j = column;
+        this.free = address;
     }
 
     addInstruction() {
-        this.instructions.push(this.matrix.getAddress(this.free.i, this.free.j));
+        this.instructions.push(this.free);
     }
 
     reset() {
         this.matrix.reset();
-        this.free = { i: 0, j: 0 };
+        this.free = 0;
         this.instructions = [];
         this.stackStart = 0;
     }

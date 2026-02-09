@@ -122,22 +122,17 @@ export class CPURegisters {
     }
 
     collect(operands, ram, lengthOfInstruction) {
-        const row = ram.free.i;
-        const column = ram.free.j;
-
-        const address = ram.matrix.getAddress(row, column);
-        
         // For performance purposes, we'll use the rule that there are either 1 or 3 operands.
         if(operands.length === 1) {
-            if(isRegister(operands[0])) this.collection[address + 1] = operands[0].value;
+            if(isRegister(operands[0])) this.collection[ram.free + 1] = operands[0].value;
         }
 
         else if(operands.length === 3) {
             const first = operands[0];
-            if(isRegister(first)) this.collection[address + 1] = first.value;
+            if(isRegister(first)) this.collection[ram.free + 1] = first.value;
 
             const second = operands[2];
-            if(isRegister(second)) this.collection[address + lengthOfInstruction - 1] = second.value;
+            if(isRegister(second)) this.collection[ram.free + lengthOfInstruction - 1] = second.value;
         }
     }
 

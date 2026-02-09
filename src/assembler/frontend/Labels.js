@@ -7,11 +7,7 @@ export class Labels {
 
     collect(label, ram) {
         if(this.collection[label.name]) throw new AssemblerError("DuplicatedLabel", { label: label.name }, label.line);
-
-        const row = ram.free.i;
-        const column = ram.free.j;
-
-        this.collection[label.name] = ram.matrix.getAddress(row, column).toString(16);
+        this.collection[label.name] = ram.free.toString(16);
     }
 
     // Every label node (types: label.reference, memory.label.reference) should be renamed to number.* and memory.number.*.
