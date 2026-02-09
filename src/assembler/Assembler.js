@@ -15,6 +15,8 @@ import { Refresh } from "./structures/Refresh";
 import { ExecutionInterval } from "./structures/ExecutionInterval";
 import { Interrupts } from "./helpers/Interrupts";
 
+const jumpInstructions = new Set(["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET", "IRET"]);
+
 export class Assembler {
     constructor(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer) {
         this.speed = 4; // Default speed (4Hz).
@@ -171,7 +173,8 @@ export class Assembler {
                     return;
                 }
 
-                const cell = this.ram.matrix.get(this.cpuRegisters.getValue("IP"));
+                const IP = this.cpuRegisters.getValue("IP");
+                const cell = this.ram.matrix.get(IP);
 
                 try {
                     if(this.isActive()) this.executeInstruction(cell, instructionCounter);
@@ -240,14 +243,14 @@ export class Assembler {
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the ram.instructions array.
     // However, if executed instruction was a halt, jump, function call, function return, or interrupt return, we shouldn't move the instruction pointer.
     nextInstruction(executable, oldAddress) {
-        const jumpInstructions = ["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET", "IRET"];
-
+        const IP = this.cpuRegisters.getValue("IP");
+        
         if(
             executable.instruction === "HLT" ||
-            (jumpInstructions.indexOf(executable.instruction) > -1 && this.cpuRegisters.getValue("IP") !== oldAddress)
+            (jumpInstructions.has(executable.instruction) && IP !== oldAddress)
         ) return;
 
-        const instructionIndex = this.ram.instructions.indexOf(this.cpuRegisters.getValue("IP"));
+        const instructionIndex = this.ram.instructions.indexOf(IP);
 
         if(instructionIndex === this.ram.instructions.length - 1) {
             this.deactivate();
