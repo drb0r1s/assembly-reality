@@ -10,37 +10,17 @@ export class Matrix {
         return this.values;
     }
 
-    getCell(row, column) {
-        return this.values[row * this.rowSize + column];
-    }
-
-    setCell(row, column, value) {
-        this.values[row * this.rowSize + column] = value;
-    }
-
     get(address) {
-        const [row, column] = this.getLocation(address);
-        return this.getCell(row, column);
+        return this.values[address];
     }
 
-    getLocation(address) {
-        const row = Math.floor(address / this.rowSize);
-        const column = address % this.rowSize;
-
-        return [row, column];
-    }
-
-    getAddress(row, column) {
-        const location = row * this.rowSize + column;
-        return location;
+    set(address, value) {
+        this.values[address] = value;
     }
 
     update(address, value, isHalf, isStack) {
         // 8-bit
-        if(isHalf) {
-            const [row, column] = this.getLocation(address);
-            this.setCell(row, column, value);
-        }
+        if(isHalf) this.set(address, value);
     
         // 16-bit
         else {
@@ -51,11 +31,8 @@ export class Matrix {
             // Stack is writing addresses in memory from right to the left, while normal writing is from left to the right.
             const adjustments = isStack ? [-1, 0] : [0, 1];
     
-            const [firstRow, firstColumn] = this.getLocation(address + adjustments[0]);
-            this.setCell(firstRow, firstColumn, firstCell);
-    
-            const [secondRow, secondColumn] = this.getLocation(address + adjustments[1]);
-            this.setCell(secondRow, secondColumn, secondCell);
+            this.set(address + adjustments[0], firstCell);
+            this.set(address + adjustments[1], secondCell);
         }
     }
 
