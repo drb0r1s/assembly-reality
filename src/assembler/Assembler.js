@@ -159,8 +159,6 @@ export class Assembler {
         this.refresh.startInterval();
 
         return new Promise(resolve => {
-            let instructionCounter = 0;
-
             this.executionInterval.start(() => {     
                 const mFlag = this.cpuRegisters.getSRFlag("M");
                 
@@ -177,7 +175,7 @@ export class Assembler {
                 const cell = this.ram.matrix.get(IP);
 
                 try {
-                    if(this.isActive()) this.executeInstruction(cell, instructionCounter);
+                    if(this.isActive()) this.executeInstruction(cell);
                 }
 
                 catch(error) {
@@ -191,20 +189,19 @@ export class Assembler {
                     }
                 }
 
-                instructionCounter++;
-
                 this.interrupts.checkTimer();
-            });
+            }, () => this.refresh.triggerSlow());
         });
     }
 
     executeOne() {
         if(!this.isActive()) return -1; // -1 = No line to be highlighted.
 
-        const IP = this.ram.matrix.get(this.cpuRegisters.getValue("IP"));
+        const IP = this.cpuRegisters.getValue("IP");
+        const cell = this.ram.matrix.get(IP);
 
         try {
-            this.executeInstruction(IP);
+            this.executeInstruction(cell, true);
         }
 
         catch(error) {
@@ -215,7 +212,7 @@ export class Assembler {
         return this.lines.collection[IP];
     }
 
-    executeInstruction(cell, instructionCounter = null) {
+    executeInstruction(cell, isStep = false) {
         const executable = this.executor.codes[cell];
         if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
 
@@ -226,18 +223,7 @@ export class Assembler {
 
         this.nextInstruction(executable, oldAddress);
 
-        const updatesPerSecond = this.speed >= 10000 ? 2 : 4;
-
-        // If instructionCounter is defined, that means that we're in a "running" mode.
-        if(instructionCounter !== null) {
-            let updatePerInstructions = Math.floor(this.speed / updatesPerSecond);
-            if(updatePerInstructions < 1) updatePerInstructions = 1;
-
-            if(instructionCounter % updatePerInstructions === 0) this.refresh.triggerSlow();
-        }
-
-        // Otherwise, we're just executing one instruction ("step" mode).
-        else this.refresh.slow({ force: true, step: true });
+        if(isStep) this.refresh.slow({ force: true, step: true });
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the ram.instructions array.

@@ -5,55 +5,39 @@ export class ExecutionInterval {
         this.interval = { type: "", id: null };
     }
 
-    start(callback) {
+    start(callback, onRefresh) {
         this.stop();
 
         const speed = this.getSpeed();
+        const refreshInterval = this.getRefreshInterval(speed);
 
-        // Unreachable speeds (> 1kHz) require < 1ms per instruction, which is not possible in browser.
-        // As a solution to that, we're going to execute multiple instructions at once, to simulate that < 1ms speed.
-        if(speed > 1000) {
-            let prevNow = performance.now();
-            let leftover = 0;
-            
-            let rafId = null;
+        let prevNow = performance.now();
+        let instructionAccumulator = 0;
+        let lastRefresh = prevNow;
 
-            const tick = now => {
-                const passedTime = now - prevNow;
-                prevNow = now;
+        const tick = now => {
+            const difference = now - prevNow;
+            prevNow = now;
 
-                // This constant uses the formula to calculate instructions per clock cycle, with respect to leftovers.
-                const numberOfInstructions = (passedTime * speed) / 1000 + leftover;
-                let instructionsToExecute = Math.floor(numberOfInstructions);
+            instructionAccumulator += (difference * speed) / 1000;
 
-                leftover = numberOfInstructions - instructionsToExecute;
+            let instructionsToExecute = Math.floor(instructionAccumulator);
+            instructionAccumulator -= instructionsToExecute;
 
-                // In general, relation between speed and clock cycles is calculated to be approx. speed / 100 = clock cycle.
-                // Because of that, we will rely on this constant to speed up the execution if instructionsToExecute is too high.
-                const speedToClockCycleRatio = speed / 100;
-
-                // There is a possibility that calculated real instructions per clock cycle (instructionsToExecute) are not fast enough for our simulation.
-                // Because of that, as mentioned above, we use speedToClockCycleRatio.
-                const executedInstructions = Math.min(speedToClockCycleRatio, instructionsToExecute);
-                for(let i = 0; i < executedInstructions; i++) callback();
-
-                rafId = requestAnimationFrame(tick);
-
-                this.interval = { type: "raf", id: rafId };
+            while(instructionsToExecute > 0) {
+                callback();
+                instructionsToExecute--;
             }
 
-            rafId = requestAnimationFrame(tick);
+            if(now - lastRefresh >= refreshInterval) {
+                onRefresh();
+                lastRefresh = now;
+            }
+
+            this.interval.id = requestAnimationFrame(tick);
         }
 
-        else {
-            // The first iteration.
-            callback();
-
-            const delay = 1000 / speed; // ms per instruction
-            const intervalId = setInterval(callback, delay);
-
-            this.interval = { type: "interval", id: intervalId };
-        }
+        this.interval = { type: "raf", id: requestAnimationFrame(tick) };
     }
 
     stop() {
@@ -63,6 +47,16 @@ export class ExecutionInterval {
         else cancelAnimationFrame(this.interval.id);
 
         this.interval = { type: "", id: null };
+    }
+
+    getRefreshInterval(speed) {
+        if(speed <= 10) return 40;
+        if(speed <= 50) return 200;
+        if(speed <= 1000) return 250;
+        if(speed <= 2500) return 350;
+        if(speed <= 5000) return 450;
+        if(speed <= 7500) return 550;
+        return 650;
     }
 
     reset() {
