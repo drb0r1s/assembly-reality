@@ -7,6 +7,8 @@ const allRegisters = [
     "AH", "AL", "BH", "BL", "CH", "CL", "DH", "DL"
 ];
 
+const targetRegisters = new Set(["A", "B", "C", "D"]);
+
 export class CPURegisters {
     constructor(cpuRegistersBuffer) {
         this.registers = new Uint16Array(cpuRegistersBuffer);
@@ -54,14 +56,14 @@ export class CPURegisters {
         // 8-bit
         if(register.endsWith("H") || register.endsWith("L")) {
             const fullRegister = register[0];
-            const fullRegisterValue = Atomics.load(this.registers, this.getIndex(fullRegister));
+            const fullRegisterValue = this.registers[this.getIndex(fullRegister)];
 
             if(register.endsWith("H")) return (fullRegisterValue >>> 8) & 0xFF;
             return fullRegisterValue & 0xFF;
         }
 
         // 16-bit
-        return Atomics.load(this.registers, this.getIndex(register));
+        return this.registers[this.getIndex(register)];
     }
 
     getValueByIndex(index) {
@@ -87,23 +89,25 @@ export class CPURegisters {
         // 8-bit
         if(register.endsWith("H") || register.endsWith("L")) {
             const fullRegister = register[0];
-            const fullRegisterValue = Atomics.load(this.registers, this.getIndex(fullRegister));
+            const fullRegisterIndex = this.getIndex(fullRegister);
+
+            const fullRegisterValue = this.registers[fullRegisterIndex];
         
             const [_, second] = ByteNumber.divide(value);
 
             if(register.endsWith("H")) {
                 const newValue = (second << 8) | (fullRegisterValue & 0xFF);
-                Atomics.store(this.registers, this.getIndex(fullRegister), newValue);
+                this.registers[fullRegisterIndex] = newValue;
             }
 
             else {
                 const newValue = (fullRegisterValue & 0xFF00) | (second & 0xFF);
-                Atomics.store(this.registers, this.getIndex(fullRegister), newValue);
+                this.registers[fullRegisterIndex] = newValue;
             }
         }
 
         // 16-bit
-        else Atomics.store(this.registers, this.getIndex(register), value);
+        else this.registers[this.getIndex(register)] = value;
     }
 
     updateSR(newSR) {
@@ -118,7 +122,7 @@ export class CPURegisters {
         };
 
         const newSRBinary = (updatedSR.M << 4) | (updatedSR.C << 3) | (updatedSR.Z << 2) | (updatedSR.F << 1) | (updatedSR.H << 0);
-        Atomics.store(this.registers, this.getIndex("SR"), newSRBinary);
+        this.registers[this.getIndex("SR")] = newSRBinary;
     }
 
     collect(operands, ram, lengthOfInstruction) {
@@ -137,20 +141,15 @@ export class CPURegisters {
     }
 
     reset() {
-        for(let i = 0; i < this.registers.length; i++) {
-            Atomics.store(this.registers, i, 0);
-        }
-
+        this.registers.fill(0);
         this.collection = {};
     }
 };
 
 function isRegister(operand) {
-    const targetRegisters = ["A", "B", "C", "D"];
-
     if(
         operand.valueType === "register" &&
-        targetRegisters.indexOf(operand.value) > -1
+        targetRegisters.has(operand.value)
     ) return true;
 
     return false;

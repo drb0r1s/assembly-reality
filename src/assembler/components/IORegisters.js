@@ -58,13 +58,13 @@ export class IORegisters {
     }
 
     getValueByIndex(index) {
-        return Atomics.load(this.registers, index);
+        return this.registers[index];
     }
 
     // force is used to give a permission to the method to edit read-only registers.
     update(register, value, force = false) {
         if(readOnly[register] && !force) throw new AssemblerError("ReadOnlyRegisterUpdate", { register });
-        Atomics.store(this.registers, this.getIndex(register), value);
+        this.registers[this.getIndex(register)] = value;
     }
 
     reset() {
