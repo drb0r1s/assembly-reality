@@ -2,7 +2,7 @@ export class ExecutionInterval {
     constructor(getSpeed) {
         // .getSpeed is a function, in order to achieve synchronized value with assembler.speed.
         this.getSpeed = getSpeed;
-        this.interval = { type: "", id: null };
+        this.intervalId = null;
     }
 
     start(callback, onRefresh) {
@@ -34,19 +34,17 @@ export class ExecutionInterval {
                 lastRefresh = now;
             }
 
-            this.interval.id = requestAnimationFrame(tick);
+            this.intervalId = requestAnimationFrame(tick);
         }
 
-        this.interval = { type: "raf", id: requestAnimationFrame(tick) };
+        this.intervalId = requestAnimationFrame(tick);
     }
 
     stop() {
-        if(this.interval.id === null) return;
-
-        if(this.interval.type === "interval") clearInterval(this.interval.id);
-        else cancelAnimationFrame(this.interval.id);
-
-        this.interval = { type: "", id: null };
+        if(this.intervalId === null) return;
+        
+        cancelAnimationFrame(this.intervalId);
+        this.intervalId = null;
     }
 
     getRefreshInterval(speed) {

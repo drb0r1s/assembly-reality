@@ -30,12 +30,10 @@ export class Refresh {
     }
 
     slow(options) {
-        if(this.assembler.speed >= 10000) return;
-
         if(this.slowFlag || options?.force) {
             this.slowFlag = false;
             
-            self.postMessage({ action: "instructionExecuted", data: this.assembler.getAssemblerState() });
+            if(this.assembler.speed < 10000) self.postMessage({ action: "instructionExecuted", data: this.assembler.getAssemblerState() });
             self.postMessage({ action: "ioRegistersSlowPing" });
 
             if(options?.step) this.graphics();
