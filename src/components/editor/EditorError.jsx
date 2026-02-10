@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useResize } from "../../hooks/useResize";
 import { Images } from "../../data/Images";
 
-const EditorError = ({ error, setError }) => {
+const EditorError = ({ error, setError, disableError, setDisableError }) => {
     const editorErrorRef = useRef(null);
     const width = useResize();
 
@@ -12,6 +12,13 @@ const EditorError = ({ error, setError }) => {
             editorErrorRef.current.style.bottom = (width < 900 ? "48px" : "0"); // 48px = MobileNavigation height
         }, 100);
     }, []);
+
+    useEffect(() => {
+        if(!disableError) return;
+
+        setDisableError(false);
+        disableEditorError();
+    }, [disableError]);
 
     function disableEditorError() {
         editorErrorRef.current.style.opacity = "";

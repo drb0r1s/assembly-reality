@@ -13,6 +13,7 @@ const Editor = () => {
     const [pages, setPages] = useState({ list: ["New page"], active: 0, counter: 0 });
     const [codes, setCodes] = useState([""]);
     const [error, setError] = useState({ type: "", content: "" });
+    const [disableError, setDisableError] = useState(false);
 
     const pagesRef = useRef(pages);
     const codesRef = useRef(codes);
@@ -151,6 +152,19 @@ const Editor = () => {
             assemblerWorker.postMessage({ action: "step" });
         });
 
+        const unsubscribeReset = Manager.subscribe("reset", () => {
+            setDisableError(true);
+
+            Manager.sequence(() => {
+                Manager.set("isMemoryEmpty", true);
+                Manager.set("isAssembled", false);
+                Manager.set("isRunning", false);
+                Manager.set("isExecuted", false);
+            });
+            
+            assemblerWorker.postMessage({ action: "reset" });
+        });
+
         const unsubscribeCodeTransfer = Manager.subscribe("codeTransfer", data => {
             if(getActiveCode().length === 0) setCodes(prevCodes => {
                 const newCodes = [];
@@ -177,6 +191,7 @@ const Editor = () => {
             unsubscribeAssembleRun();
             unsubscribePause();
             unsubscribeStep();
+            unsubscribeReset();
             unsubscribeCodeTransfer();
             unsubscribeCodeRequest();
         };
@@ -275,7 +290,12 @@ const Editor = () => {
                 setCodes(newCodes);
             }} />
 
-            {error.type && <EditorError error={error} setError={setError} />}
+            {error.type && <EditorError
+                error={error}
+                setError={setError}
+                disableError={disableError}
+                setDisableError={setDisableError}
+            />}
         </div>
     );
 }
