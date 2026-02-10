@@ -13,7 +13,6 @@ const Editor = () => {
     const [pages, setPages] = useState({ list: ["New page"], active: 0, counter: 0 });
     const [codes, setCodes] = useState([""]);
     const [error, setError] = useState({ type: "", content: "" });
-    const [disableError, setDisableError] = useState(false);
 
     const pagesRef = useRef(pages);
     const codesRef = useRef(codes);
@@ -153,8 +152,6 @@ const Editor = () => {
         });
 
         const unsubscribeReset = Manager.subscribe("reset", () => {
-            setDisableError(true);
-
             Manager.sequence(() => {
                 Manager.set("isMemoryEmpty", true);
                 Manager.set("isAssembled", false);
@@ -290,12 +287,7 @@ const Editor = () => {
                 setCodes(newCodes);
             }} />
 
-            {error.type && <EditorError
-                error={error}
-                setError={setError}
-                disableError={disableError}
-                setDisableError={setDisableError}
-            />}
+            {error.type && <EditorError error={error} setError={setError} />}
         </div>
     );
 }
