@@ -21,22 +21,21 @@ export class Refresh {
         this.do();
     }
 
-    do() {
-        this.slow();
+    // Force is used in "step" mode.
+    do(force = false) {
+        this.slow(force);
         this.ioRegisters();
         this.keyboard();
         this.graphics();
         this.textDisplay();
     }
 
-    slow(options) {
-        if(this.slowFlag || options?.force) {
+    slow(force = false) {
+        if(this.slowFlag || force) {
             this.slowFlag = false;
             
             if(this.assembler.speed < 10000) self.postMessage({ action: "instructionExecuted", data: this.assembler.getAssemblerState() });
             self.postMessage({ action: "ioRegistersSlowPing" });
-
-            if(options?.step) this.graphics();
         }
     }
 

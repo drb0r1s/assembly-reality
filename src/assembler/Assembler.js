@@ -223,7 +223,7 @@ export class Assembler {
 
         this.nextInstruction(executable, oldAddress);
 
-        if(isStep) this.refresh.slow({ force: true, step: true });
+        if(isStep) this.refresh.do(true);
     }
 
     // After the instruction is executed, we need to move the instruction pointer to the next instruction in the ram.instructions array.
