@@ -2,7 +2,7 @@
     "headers": [
         {
             "source": "/(.*)",
-            
+
             "headers": [
                 {
                     "key": "Cross-Origin-Opener-Policy",
@@ -15,5 +15,7 @@
                 }
             ]
         }
-    ]
+    ],
+
+    "outputDirectory": "dist"
 }
