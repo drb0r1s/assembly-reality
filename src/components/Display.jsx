@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useContext, useMemo, useCallback } from "react";
 import AssemblerButtons from "./AssemblerButtons";
 import { GlobalContext } from "../context/GlobalContext";
-import { useResize } from "../hooks/useResize";
 import { useManagerValue } from "../hooks/useManagerValue";
 import { Manager } from "../helpers/Manager";
 import { Images } from "../data/Images";
@@ -21,10 +20,7 @@ const Display = ({ style, isExpanded }) => {
 
     const frameBufferRef = useRef(null);
 
-    const width = useResize();
-
     const isLightTheme = useManagerValue("isLightTheme");
-    const isMemoryEmpty = useManagerValue("isMemoryEmpty");
 
     const keyboardStyle = useMemo(() => { return {
         color: keyboard.isActive ? "#405A85" : isLightTheme ? "#1A1A1A" : "#F4F4F4"
