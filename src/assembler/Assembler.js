@@ -179,14 +179,12 @@ export class Assembler {
                 }
 
                 catch(error) {
+                    this.stop();
+
                     if(error instanceof AssemblerError) resolve({ error });
+                    else resolve({ error: new AssemblerError("UnknownExecutionError") });
 
-                    else {
-                        this.stop();
-                        resolve({ error: new AssemblerError("UnknownExecutionError") });
-
-                        return;
-                    }
+                    return;
                 }
 
                 this.interrupts.checkTimer();

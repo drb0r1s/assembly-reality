@@ -63,9 +63,6 @@ self.onmessage = async e => {
             self.postMessage({ action, data: null });
 
             break;
-        case "ioRegistersKeyboard":
-            assembler.interrupts.trigger("keyboard");
-            break;
         case "keyboardEvent":
             assembler.keyboard.addEvent(data); // data: { type, key }
             break;

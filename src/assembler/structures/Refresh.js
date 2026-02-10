@@ -1,3 +1,5 @@
+import { AssemblerError } from "../AssemblerError";
+
 export class Refresh {
     constructor(assembler) {
         this.assembler = assembler;
@@ -23,11 +25,20 @@ export class Refresh {
 
     // Force is used in "step" mode.
     do(force = false) {
-        this.slow(force);
-        this.ioRegisters();
-        this.keyboard();
-        this.graphics();
-        this.textDisplay();
+        try {
+            this.slow(force);
+            this.ioRegisters();
+            this.keyboard();
+            this.graphics();
+            this.textDisplay();
+        }
+
+        catch(error) {
+            this.assembler.stop();
+
+            if(error instanceof AssemblerError) self.postMessage({ action: "refreshError", error });
+            else self.postMessage({ action: "refreshError", error: new AssemblerError("UnknownRefreshError") });
+        }
     }
 
     slow(force = false) {

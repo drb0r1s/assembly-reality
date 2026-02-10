@@ -40,7 +40,7 @@ export class Interrupts {
         }
     }
 
-    async process() {
+    process() {
         // 2. If interrupts are enabled globally (M = 1) and interrupts for the requesting device are also enabled in the IRQMASK register:
 
         // (a) If the processor is at halt (H = 1), the halt flag is cleared (H = 0) and the processor becomes active.

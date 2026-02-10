@@ -10,6 +10,7 @@ export class AssemblerError {
         switch(this.type) {
             case "SyntaxError": return "The code you're trying to assemble has a syntax error!";
             case "UnknownExecutionError": return "An unknown error has occurred during the execution!";
+            case "UnknownRefreshError": return "An unknown error has occurred during the I/O refresh!";
             case "UnknownInstruction": return `${attributes.name} is an unknown instruction!`;
             case "UnknownInstant": return `${attributes.name} is an unknown instant instruction!`;
             case "UnknownInstructionCode":
