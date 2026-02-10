@@ -379,6 +379,7 @@ export class Executable {
                         // TEXT (1) or BITMAP (2)
                         case 1:
                         case 2:
+                            if(prevVidMode > 0 && prevVidMode === registerValue) return;
                             self.postMessage({ action: "graphicsEnabled", data: registerValue });
                             break;
                         // CLEAR

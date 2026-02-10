@@ -105,7 +105,7 @@ export class MemoryRenderer {
 
         if(cell > SP && cell <= this.ram.stackStart) return this.colors.stack;
 
-        if(this.ram.instructions.includes(cell)) {
+        if(this.ram.instructions.has(cell)) {
             if(cell === this.hoveredCell) return this.colors.instructionHover;
             return this.colors.instruction;
         }
@@ -135,7 +135,7 @@ export class MemoryRenderer {
         const IP = this.assembler.cpuRegisters.getValue("IP");
         const SP = this.assembler.cpuRegisters.getValue("SP");
 
-        const isInteractive = cell === IP || this.ram.instructions.includes(cell);
+        const isInteractive = cell === IP || this.ram.instructions.has(cell);
 
         if(isInteractive) {
             this.canvas.style.cursor = "pointer";

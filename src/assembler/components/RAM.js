@@ -5,7 +5,7 @@ export class RAM {
     constructor(ramBuffer) {
         this.matrix = new Matrix(ramBuffer, 16),
         this.free = 0; // Pointer to the last free-memory address.
-        this.instructions = []; // An array of instruction addresses in memory.
+        this.instructions = new Set();
         this.stackStart = 0; // The address of the start of the stack.
     }
 
@@ -39,13 +39,13 @@ export class RAM {
     }
 
     addInstruction() {
-        this.instructions.push(this.free);
+        this.instructions.add(this.free);
     }
 
     reset() {
         this.matrix.reset();
         this.free = 0;
-        this.instructions = [];
+        this.instructions = new Set();
         this.stackStart = 0;
     }
 };

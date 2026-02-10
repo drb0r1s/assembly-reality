@@ -71,8 +71,6 @@ export class Assembler {
 
             // Pass 2
             for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
-        
-            this.cpuRegisters.update("IP", this.ram.instructions[0]);
         }
 
         catch(error) {
@@ -224,8 +222,7 @@ export class Assembler {
         if(isStep) this.refresh.do(true);
     }
 
-    // After the instruction is executed, we need to move the instruction pointer to the next instruction in the ram.instructions array.
-    // However, if executed instruction was a halt, jump, function call, function return, or interrupt return, we shouldn't move the instruction pointer.
+    // If executed instruction was a halt, jump, function call, function return, or interrupt return, we shouldn't move the instruction pointer.
     nextInstruction(executable, oldAddress) {
         const IP = this.cpuRegisters.getValue("IP");
         
@@ -234,14 +231,10 @@ export class Assembler {
             (jumpInstructions.has(executable.instruction) && IP !== oldAddress)
         ) return;
 
-        const instructionIndex = this.ram.instructions.indexOf(IP);
-
-        if(instructionIndex === this.ram.instructions.length - 1) {
-            this.deactivate();
-            this.cpuRegisters.update("IP", this.ram.free);
-        }
+        const nextIP = IP + executable.length;
         
-        else this.cpuRegisters.update("IP", this.ram.instructions[instructionIndex + 1]);
+        if(nextIP >= this.ram.free) this.deactivate();
+        this.cpuRegisters.update("IP", nextIP);
     }
 
     pause() {
