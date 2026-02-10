@@ -13,7 +13,7 @@ const Memory = ({ hardwareRef, elements, allElementRefs, style, onReturn }) => {
     const { assembler } = useContext(GlobalContext);
 
     const initialRAM = {
-        instructions: [],
+        instructions: new Set(),
         stackStart: 0
     };
     
