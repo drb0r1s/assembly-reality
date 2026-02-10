@@ -87,7 +87,7 @@ export class Instants {
                     continue;
                 }
 
-                if(["x", "X"].indexOf(character) > -1 && exactMode) continue;
+                if((character === "x" || character === "X") && exactMode) continue;
 
                 if(exactMode) {
                     exactModeValue += character;

@@ -1,6 +1,8 @@
 import { AssemblerError } from "../AssemblerError";
 import { ByteNumber } from "../helpers/ByteNumber";
 
+const exceptions = new Set(["SUB", "JB", "JNB"]);
+
 export class Decoder {
     constructor(cpuRegisters, ram) {
         this.cpuRegisters = cpuRegisters;
@@ -99,8 +101,7 @@ function argumentsCheck(executable, args) {
 }
 
 function isInstructionHalf(instruction) {
-    const exceptions = ["SUB", "JB", "JNB"];
-    if(exceptions.indexOf(instruction) > -1) return false;
+    if(exceptions.has(instruction)) return false;
 
     const last = instruction.slice(-1);
     if(last === "B") return true;
