@@ -74,7 +74,7 @@ const Display = ({ style, isExpanded }) => {
             displayRenderer.resetCanvas();
         });
 
-        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", () => displayRenderer.redrawCanvas());
+        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", data => displayRenderer.redrawCanvas(data));
 
         const unsubscribeGraphicsReset = Manager.subscribe("graphicsReset", () => {
             canvasStrongRef.current.style.opacity = "";

@@ -168,7 +168,7 @@ export class DisplayRenderer {
         // Bitmap
         if(vidMode > 1) {
             // data is "clear" only if "graphicsRedraw" is triggered when VIDMODE is set to 3 (CLEAN).
-            if(data === "clear") this.drawBackground({ isBitmap: true });
+            if(data === "clear") this.drawBackground();
 
             // data is properly defined, meaning "graphicsRedraw" is triggered by the updating system.
             else {
@@ -231,9 +231,9 @@ export class DisplayRenderer {
     }
 
     drawBackground(options) {
-        const isBitmap = options?.isBitmap ? options.isBitmap : false;
+        const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
 
-        const backgroundColor = isBitmap ? { r: 0, g: 0, b: 0 } : this.assembler.graphics.getReserved("background");
+        const backgroundColor = vidMode > 1 ? { r: 0, g: 0, b: 0 } : this.assembler.graphics.getReserved("background");
         const { r, g, b } = backgroundColor;
 
         const imageData = this.sharedCanvas.current.imageData;
