@@ -3,6 +3,7 @@ import AssemblerButtons from "./AssemblerButtons";
 import { GlobalContext } from "../context/GlobalContext";
 import { useManagerValue } from "../hooks/useManagerValue";
 import { Manager } from "../helpers/Manager";
+import { DisplayRenderer } from "../helpers/DisplayRenderer";
 import { Images } from "../data/Images";
 
 const Display = ({ style, isExpanded }) => {
@@ -15,10 +16,9 @@ const Display = ({ style, isExpanded }) => {
     const [isCanvasStrongDisabled, setIsCanvasStrongDisabled] = useState(false);
     
     const canvasRef = useRef(null);
-    const ctxRef = useRef(null);
     const canvasStrongRef = useRef(null);
 
-    const frameBufferRef = useRef(null);
+    const displayRendererRef = useRef(null);    
 
     const isLightTheme = useManagerValue("isLightTheme");
 
@@ -51,6 +51,12 @@ const Display = ({ style, isExpanded }) => {
     }, []);
 
     useEffect(() => {
+        // Initializing DisplayRenderer.
+        const displayRenderer = new DisplayRenderer(canvasRef.current, sharedCanvas, assembler);
+
+        displayRenderer.initializeWebGL();
+        displayRendererRef.current = displayRenderer;
+
         // "Assembly Reality" title updating.
         const vidMode = assembler.ioRegisters.getValue("VIDMODE");
         setIsCanvasStrongDisabled(vidMode !== 0);
@@ -60,18 +66,20 @@ const Display = ({ style, isExpanded }) => {
 
         const unsubscribeGraphicsEnabled = Manager.subscribe("graphicsEnabled", data => {
             canvasStrongRef.current.style.opacity = "0";
-            if(data === 2) drawMemory();
+            if(data === 2) displayRenderer.drawMemory();
         });
 
         const unsubscribeGraphicsDisabled = Manager.subscribe("graphicsDisabled", () => {
             canvasStrongRef.current.style.opacity = "";
-            resetCanvas();
+            displayRenderer.resetCanvas();
         });
 
-        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", redrawCanvas);
-        const unsubscribeGraphicsReset = Manager.subscribe("graphicsReset", resetCanvas);
+        const unsubscribeGraphicsRedraw = Manager.subscribe("graphicsRedraw", () => displayRenderer.redrawCanvas());
 
-        initializeCanvas();
+        const unsubscribeGraphicsReset = Manager.subscribe("graphicsReset", () => {
+            canvasStrongRef.current.style.opacity = "";
+            displayRenderer.resetCanvas();
+        });
         
         return () => {
             unsubscribeTextDisplayPing();
@@ -81,6 +89,8 @@ const Display = ({ style, isExpanded }) => {
             unsubscribeGraphicsDisabled();
             unsubscribeGraphicsRedraw();
             unsubscribeGraphicsReset();
+
+            displayRenderer.cleanup();
         };
     }, []);
     
@@ -101,231 +111,6 @@ const Display = ({ style, isExpanded }) => {
     useEffect(() => {
         if(isCanvasStrongDisabled) canvasStrongRef.current.style.opacity = "0";
     }, [isCanvasStrongDisabled]);
-
-    function initializeCanvas() {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-
-        canvas.height = 256;
-        canvas.width = 256;
-
-        ctx.imageSmoothingEnabled = true;
-
-        ctxRef.current = ctx;
-
-        // If shared imageData wasn't initialized yet, do it once.
-        if(!sharedCanvas.current.imageData) {
-            const imageData = ctx.createImageData(256, 256);
-            sharedCanvas.current.imageData = imageData;
-        }
-
-        // Otherwise, draw everything that was on the other canvas.
-        else ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
-
-        const frameBuffer = new Uint32Array(sharedCanvas.current.imageData.data.buffer);
-        frameBufferRef.current = frameBuffer;
-    }
-
-    function redrawCanvas(data) {
-        const vidMode = assembler.ioRegisters.getValue("VIDMODE");
-
-        // Bitmap
-        if(vidMode > 1) {
-            // data is "clear" only if "graphicsRedraw" is triggered when VIDMODE is set to 3 (CLEAN).
-            if(data === "clear") drawBackground({ isBitmap: true });
-
-            // data is properly defined, meaning "graphicsRedraw" is triggered by the updating system.
-            else {
-                for(let i = 0; i < data.length; i++) drawPixel(data[i]);
-                ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
-            }
-        }
-
-        // Text
-        else {
-            const [scrollX, scrollY] = assembler.graphics.getReserved("scroll");
-            const text = assembler.graphics.getText();
-            
-            const vram = assembler.graphics.matrix.getMatrix();
-
-            // BACKGROUND
-            drawBackground();
-
-            // CHARACTERS
-            assembler.graphics.forEachCharacter(address => {
-                const ascii = vram[address];
-
-                const colorIndex = vram[address + 1];
-                const color = assembler.graphics.getRGBFromVRAM(colorIndex);
-
-                const [x, y] = assembler.graphics.addressToPosition(address);
-                drawCharacter([x, y, ascii, color], scrollX, scrollY, text);
-            });
-
-            // SPRITES
-            assembler.graphics.forEachSprite((styleAddress, positionAddress) => {
-                const ascii = vram[styleAddress];
-
-                const colorIndex = vram[styleAddress + 1];
-                const color = assembler.graphics.getRGBFromVRAM(colorIndex);
-
-                const x = vram[positionAddress];
-                const y = vram[positionAddress + 1];
-
-                drawSprite([x, y, ascii, color], text);
-            });
-                
-            ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
-        }
-    }
-
-    function drawMemory() {
-        const vram = assembler.graphics.matrix.getMatrix();
-
-        for(let address = 0; address < vram.length; address++) {
-            const [x, y] = assembler.graphics.addressToPosition(address);
-
-            const colorIndex = assembler.graphics.matrix.point(address);
-            const color = assembler.graphics.getRGB(colorIndex & 0xFF);
-            
-            drawPixel([x, y, color]);
-        }
-
-        ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
-    }
-
-    function drawBackground(options) {
-        const isBitmap = options?.isBitmap ? options.isBitmap : false;
-
-        const backgroundColor = isBitmap ? { r: 0, g: 0, b: 0 } : assembler.graphics.getReserved("background");
-        const { r, g, b } = backgroundColor;
-
-        const imageData = sharedCanvas.current.imageData;
-
-        for(let i = 0; i < imageData.data.length; i += 4) {
-            imageData.data[i] = r;
-            imageData.data[i + 1] = g;
-            imageData.data[i + 2] = b;
-            imageData.data[i + 3] = 255;
-        }
-
-        ctxRef.current.putImageData(imageData, 0, 0);
-    }
-
-    function drawPixel(data) {
-        const [x, y, color] = data;
-        const { r, g, b } = color;
-
-        const imageData = sharedCanvas.current.imageData;
-        const screenSize = 256;
-
-        const px = (y * screenSize + x) * 4;
-
-        imageData.data[px] = r;
-        imageData.data[px + 1] = g;
-        imageData.data[px + 2] = b;
-        imageData.data[px + 3] = 255;
-    }
-
-    function drawCharacter(data, scrollX, scrollY, text) {
-        const [x, y, ascii, color] = data;
-
-        const imageData = sharedCanvas.current.imageData;
-
-        const character = {
-            height: 16,
-            width: 8,
-            bits: ascii * 32, // 32 bits are reserved for each ASCII character.
-            top: y,
-            left: x,
-            bottom: y * 16,
-            right: x * 8
-        };
-        
-        const screenSize = 256;
-
-        const screen = {
-            x: character.right - scrollX,
-            y: character.bottom - scrollY
-        };
-
-        // We need to check if character is totally off the screen.
-        if(
-            screen.x <= -character.width * 2 ||
-            screen.x >= screenSize ||
-            screen.y <= -character.height ||
-            screen.y >= screenSize
-        ) return;
-
-        for(let i = 0; i < character.height; i++) {
-            const y = screen.y + i;
-            if(y < 0 || y >= screenSize) continue; // This line of pixels is off the screen on y.
-            
-            const firstHalf = text[character.bits + i * 2];
-            const secondHalf = text[character.bits + i * 2 + 1];
-                
-            const lineBits = (firstHalf << 8) | secondHalf;
-
-            for(let j = 0; j < character.width * 2; j++) {
-                const x = screen.x + j;
-                if(x < 0 || x >= screenSize) continue; // This pixel is off the screen on x.
-                
-                const lineBit = (lineBits >> (15 - j)) & 1;
-                if(lineBit === 0) continue; // This means that specific pixel is "transparent". 
-
-                const px = (y * screenSize + x) * 4;
-
-                imageData.data[px] = color.r;
-                imageData.data[px + 1] = color.g;
-                imageData.data[px + 2] = color.b;
-                imageData.data[px + 3] = 255;
-            }
-        }
-    }
-
-    function drawSprite(data, text) {
-        const [x, y, ascii, color] = data;
-
-        const imageData = sharedCanvas.current.imageData;
-
-        const character = {
-            height: 16,
-            width: 8,
-            bits: ascii * 32, // 32 bits are reserved for each ASCII character.
-            top: y,
-            left: x,
-            bottom: y * 16,
-            right: x * 8
-        };
-        
-        const screenSize = 256;
-
-        for(let i = 0; i < character.height; i++) {
-            const firstHalf = text[character.bits + i * 2];
-            const secondHalf = text[character.bits + i * 2 + 1];
-                
-            const lineBits = (firstHalf << 8) | secondHalf;
-
-            for(let j = 0; j < character.width * 2; j++) {
-                const lineBit = (lineBits >> (15 - j)) & 1;
-                if(lineBit === 0) continue; // This means that specific pixel is "transparent".
-
-                const px = ((y + i) * screenSize + (x + j)) * 4;
-
-                imageData.data[px] = color.r;
-                imageData.data[px + 1] = color.g;
-                imageData.data[px + 2] = color.b;
-                imageData.data[px + 3] = 255;
-            }
-        }
-    }
-
-    function resetCanvas() {
-        canvasStrongRef.current.style.opacity = "";
-
-        frameBufferRef.current.fill(0xFF000000);
-        ctxRef.current.putImageData(sharedCanvas.current.imageData, 0, 0);
-    }
     
     return(
         <div
