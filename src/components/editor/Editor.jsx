@@ -42,6 +42,8 @@ const Editor = () => {
             const { action, data, error } = e.data;
 
             if(error) {
+                if(action === "assemble") Manager.set("isAssembleError", true);
+
                 setError(error);
                 if(e.data?.line) Manager.trigger("highlightLine", e.data.line); // This happens only if runtime error was triggered by the "step" mode.
 
@@ -53,6 +55,7 @@ const Editor = () => {
                     Manager.sequence(() => {
                         // We can safely update this property only when assembling the code has finished!
                         Manager.set("isMemoryEmpty", false);
+                        Manager.set("isAssembleError", false);
 
                         Manager.trigger("ramUpdate", data?.ram);
                         Manager.trigger("linesUpdate", data?.lines);
@@ -87,6 +90,8 @@ const Editor = () => {
                     break;
                 case "reset":
                     Manager.sequence(() => {
+                        Manager.set("isAssembleError", false);
+
                         Manager.trigger("ramReset");
                         Manager.trigger("cpuRegistersPing");
                         Manager.trigger("cpuRegistersCollectionUpdate", { collection: {} });

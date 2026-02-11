@@ -12,6 +12,7 @@ export const Manager = (() => {
         ["isCodeEmpty", true],
         ["isMemoryEmpty", true],
         ["isAssembled", false],
+        ["isAssembleError", false],
         ["isRunning", false],
         ["isExecuted", false]
     ]);
