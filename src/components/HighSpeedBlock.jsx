@@ -31,7 +31,7 @@ const HighSpeedBlock = () => {
         <div className="high-speed-block" ref={highSpeedBlockRef}>
             <div className="high-speed-block-container">
                 <Images.VisibilityIcon className="high-speed-block-icon" />
-                <p>This window is disabled due to high execution speed (over 10kHz).</p>
+                <p>This window is disabled due to high execution speed (over 10 kHz).</p>
             </div>
         </div>
     );
