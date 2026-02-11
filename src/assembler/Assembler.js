@@ -177,7 +177,7 @@ export class Assembler {
                 }
 
                 catch(error) {
-                    this.stop();
+                    this.stop(true);
 
                     if(error instanceof AssemblerError) resolve({ error });
                     else resolve({ error: new AssemblerError("UnknownExecutionError", [], null, this.cpuRegisters) });
@@ -201,8 +201,11 @@ export class Assembler {
         }
 
         catch(error) {
-            if(error instanceof AssemblerError) return { error };
-            return { error: new AssemblerError("UnknownExecutionError", [], null, this.cpuRegisters) };
+            this.stop(true);
+            this.refresh.do(true);
+
+            if(error instanceof AssemblerError) return { error, line: this.lines.collection[IP] };
+            return { error: new AssemblerError("UnknownExecutionError", [], null, this.cpuRegisters), line: this.lines.collection[IP] };
         }
 
         return this.lines.collection[IP];
@@ -244,9 +247,11 @@ export class Assembler {
         return this.getAssemblerState();
     }
 
-    stop() {
+    stop(isRuntimeError = false) {
         this.executionInterval.stop();
         this.refresh.stopInterval();
+
+        if(isRuntimeError) self.postMessage({ action: "runtimeErrorStop" });
     }
 
     isTimerActive() {

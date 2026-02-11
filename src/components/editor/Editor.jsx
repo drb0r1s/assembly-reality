@@ -43,6 +43,8 @@ const Editor = () => {
 
             if(error) {
                 setError(error);
+                if(e.data?.line) Manager.trigger("highlightLine", e.data.line); // This happens only if runtime error was triggered by the "step" mode.
+
                 return;
             }
 
@@ -62,6 +64,8 @@ const Editor = () => {
                     break;
                 // We receive the message with the action "run" only when the execution has ended.
                 case "run":
+                // In case a runtime error happens, it is important to update the UI.
+                case "runtimeErrorStop":
                     Manager.sequence(() => {
                         Manager.set("isRunning", false);
                         Manager.set("isExecuted", true);

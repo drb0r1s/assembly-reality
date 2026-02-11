@@ -54,7 +54,7 @@ self.onmessage = async e => {
         case "step":
             result = assembler.executeOne();
 
-            if(result?.error) self.postMessage({ action, error: result.error });
+            if(result?.error) self.postMessage({ action, error: result.error, line: result?.line ? result.line : null });
             else self.postMessage({ action, data: result });
                         
             break;
