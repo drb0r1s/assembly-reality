@@ -139,9 +139,12 @@ export class MemoryRenderer {
 
         if(isInteractive) {
             this.canvas.style.cursor = "pointer";
+            
+            const oldHoveredCell = this.hoveredCell;
             this.hoveredCell = cell;
 
             this.renderCell(cell, IP, SP);
+            if(oldHoveredCell !== -1) this.renderCell(oldHoveredCell, IP, SP); // Resetting the previously hovered cell.
         }
 
         else if(this.hoveredCell !== 1) this.unhoverCell();
