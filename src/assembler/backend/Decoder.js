@@ -10,7 +10,7 @@ export class Decoder {
     }
 
     decode(executable, args) {
-        argumentsCheck(executable, args);
+        this.argumentsCheck(executable, args);
 
         const isHalf = isInstructionHalf(executable.instruction);
         
@@ -87,17 +87,17 @@ export class Decoder {
     run(executable, runnables, first, second, isHalf, instruction) {
         const runnable = runnables[executable.type];
 
-        if(!runnable) throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction });
+        if(!runnable) throw new AssemblerError("UnknownExecutableType", { type: executable.type, instruction: executable.instruction }, null, this.cpuRegisters);
         runnable(first, second, isHalf, instruction);
     }
-}
 
-function argumentsCheck(executable, args) {
-    if(args.length !== executable.length - 1) throw new AssemblerError("InvalidNumberOfArguments", {
-        instruction: executable.instruction,
-        required: executable.length - 1,
-        received: args.length
-    });
+    argumentsCheck(executable, args) {
+        if(args.length !== executable.length - 1) throw new AssemblerError("InvalidNumberOfArguments", {
+            instruction: executable.instruction,
+            required: executable.length - 1,
+            received: args.length
+        }, null, this.cpuRegisters);
+    }
 }
 
 function isInstructionHalf(instruction) {

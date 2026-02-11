@@ -23,7 +23,7 @@ export class Stack {
         const numberOfCells = isHalf ? 1 : 2;
         SP += numberOfCells;
         
-        if(SP > this.ram.stackStart) throw new AssemblerError("StackUnderflow");
+        if(SP > this.ram.stackStart) throw new AssemblerError("StackUnderflow", [], null, this.cpuRegisters);
         
         this.cpuRegisters.update("SP", SP);
         

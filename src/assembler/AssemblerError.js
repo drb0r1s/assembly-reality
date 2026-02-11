@@ -1,8 +1,9 @@
 export class AssemblerError {
-    constructor(type, attributes, line) {
+    constructor(type, attributes, line, cpuRegisters) {
         this.type = type;
         this.line = line ? line : null;
         this.isRuntime = false;
+        this.cpuRegisters = cpuRegisters;
         this.content = this.getContent(attributes);
     }
 
@@ -14,10 +15,10 @@ export class AssemblerError {
             case "UnknownInstruction": return `${attributes.name} is an unknown instruction!`;
             case "UnknownInstant": return `${attributes.name} is an unknown instant instruction!`;
             case "UnknownInstructionCode":
-                this.isRuntime = true;
+                this.runtime();
                 return `${attributes.code.toString(16).toUpperCase().padStart(2, "0")} doesn't represent any instruction!`;
             case "UnknownExecutableType":
-                this.isRuntime = true;
+                this.runtime();
                 return `"${attributes.type}" is not valid for executable ${attributes.instruction}!`;
             case "UnknownLabel": return `"${attributes.label}" label is not defined.`;
             case "DuplicatedLabel": return `"${attributes.label}" label was defined more than once.`;
@@ -26,7 +27,7 @@ export class AssemblerError {
             case "InvalidOperandInInstant": return `Operand ${attributes.operand} is invalid for the ${attributes.instant} instant!`;
             case "InvalidNumberOfOperands": return `Instruction ${attributes.name} requires ${attributes.operands} operand${attributes.operands !== 1 ? "s" : ""}!`;
             case "InvalidNumberOfArguments":
-                this.isRuntime = true;
+                this.runtime();
                 return `Instruction ${attributes.instruction} requires ${attributes.required} argument${attributes.required !== 1 ? "s" : ""}, but received ${attributes.received}!`;
             case "MissingSeparator": return `The separator is missing for the ${attributes.name} instruction!`;
             case "DecimalLimit16": return "16-bit operand must have a value between 0 and 65535!";
@@ -42,19 +43,24 @@ export class AssemblerError {
             case "HexLimit8": return "8-bit operand must have a value between 0x00 and 0xFF!";
             case "HexMemoryLimit": return "Hex memory pointer operand must have a value between 0x0000 and 0x101F!";
             case "StackPointerLimit":
-                this.isRuntime = true;
+                this.runtime();
                 return "Stack pointer must have a value between 0x0000 and 0x101F!";
             case "StackUnderflow":
-                this.isRuntime = true;
-                return "The stack is empty!";
+                this.runtime();
+                return "Cannot pop from an empty stack!";
             case "ReadOnlyRegisterUpdate":
-                this.isRuntime = true;
+                this.runtime();
                 return `${attributes.register} is a read-only register, it cannot be updated!`;
             case "OutOfMemory": return "Memory limit exceeded!";
             case "DivisionByZero":
-                this.isRuntime = true;
+                this.runtime();
                 return "DIV instruction cannot be performed with operand 0!";
             case "StringAsACharacter": return "Single characters must be defined using 'single quotes', \"double quotes\" are reserved for strings.";
         }
+    }
+
+    runtime() {
+        this.isRuntime = true;
+        if(this.cpuRegisters) this.cpuRegisters.updateSR({ F: true });
     }
 };

@@ -84,7 +84,7 @@ export class CPURegisters {
     }
 
     update(register, value) {
-        if(register === "SP" && value > 0x101F) throw new AssemblerError("StackPointerLimit");
+        if(register === "SP" && value > 0x101F) throw new AssemblerError("StackPointerLimit", [], null, this);
 
         // 8-bit
         if(register.endsWith("H") || register.endsWith("L")) {

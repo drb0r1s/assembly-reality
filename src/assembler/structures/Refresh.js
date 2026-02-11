@@ -37,7 +37,7 @@ export class Refresh {
             this.assembler.stop();
 
             if(error instanceof AssemblerError) self.postMessage({ action: "refreshError", error });
-            else self.postMessage({ action: "refreshError", error: new AssemblerError("UnknownRefreshError") });
+            else self.postMessage({ action: "refreshError", error: new AssemblerError("UnknownRefreshError", [], null, this.assembler.cpuRegisters) });
         }
     }
 

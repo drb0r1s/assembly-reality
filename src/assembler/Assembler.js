@@ -21,7 +21,7 @@ export class Assembler {
     constructor(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer) {
         this.speed = 4; // Default speed (4Hz).
         this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
-        this.ioRegisters = new IORegisters(ioRegistersBuffer);
+        this.ioRegisters = new IORegisters(ioRegistersBuffer, this.cpuRegisters);
         this.ram = new RAM(ramBuffer);
         this.graphics = new Graphics(this, graphicsBuffer);
         this.labels = new Labels();
@@ -75,7 +75,7 @@ export class Assembler {
 
         catch(error) {
             if(error instanceof AssemblerError) return { error };
-            return { error: new AssemblerError("SyntaxError") };
+            return { error: new AssemblerError("SyntaxError", [], null, this.cpuRegisters) };
         }
 
         return {
@@ -180,7 +180,7 @@ export class Assembler {
                     this.stop();
 
                     if(error instanceof AssemblerError) resolve({ error });
-                    else resolve({ error: new AssemblerError("UnknownExecutionError") });
+                    else resolve({ error: new AssemblerError("UnknownExecutionError", [], null, this.cpuRegisters) });
 
                     return;
                 }
@@ -202,7 +202,7 @@ export class Assembler {
 
         catch(error) {
             if(error instanceof AssemblerError) return { error };
-            return { error: new AssemblerError("UnknownExecutionError") };
+            return { error: new AssemblerError("UnknownExecutionError", [], null, this.cpuRegisters) };
         }
 
         return this.lines.collection[IP];
@@ -210,7 +210,7 @@ export class Assembler {
 
     executeInstruction(cell, isStep = false) {
         const executable = this.executor.codes[cell];
-        if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell });
+        if(!executable) throw new AssemblerError("UnknownInstructionCode", { code: cell }, null, this.cpuRegisters);
 
         const args = this.collectArgs(executable.length);
         const oldAddress = this.cpuRegisters.getValue("IP");

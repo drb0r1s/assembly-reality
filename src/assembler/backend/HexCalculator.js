@@ -57,7 +57,7 @@ export class HexCalculator {
     }
 
     DIV(first, second, isHalf) {
-        if(first === 0) throw new AssemblerError("DivisionByZero");
+        if(first === 0) throw new AssemblerError("DivisionByZero", [], null, this.cpuRegisters);
 
         const max = isHalf ? 0xFF : 0xFFFF;
         const result = Math.floor(second / first) & max;

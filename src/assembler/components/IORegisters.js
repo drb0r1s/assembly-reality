@@ -27,11 +27,13 @@ const readOnly = {
 };
 
 export class IORegisters {
-    constructor(ioRegistersBuffer) {
+    constructor(ioRegistersBuffer, cpuRegisters) {
         this.registers = new Uint16Array(ioRegistersBuffer);
         this.registerIndexes = {};
 
         allRegisters.forEach((register, index) => { this.registerIndexes[register] = index });
+
+        this.cpuRegisters = cpuRegisters;
     }
 
     construct() {
@@ -63,7 +65,7 @@ export class IORegisters {
 
     // force is used to give a permission to the method to edit read-only registers.
     update(register, value, force = false) {
-        if(readOnly[register] && !force) throw new AssemblerError("ReadOnlyRegisterUpdate", { register });
+        if(readOnly[register] && !force) throw new AssemblerError("ReadOnlyRegisterUpdate", { register }, null, this.cpuRegisters);
         this.registers[this.getIndex(register)] = value;
     }
 
