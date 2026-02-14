@@ -379,16 +379,14 @@ export class Executable {
                         // TEXT (1) or BITMAP (2)
                         case 1:
                         case 2:
-                            if(prevVidMode > 0) return;
+                            if(this.assembler.graphics.mode === registerValue) return;
+
+                            this.assembler.graphics.setMode(registerValue);
                             self.postMessage({ action: "graphicsEnabled", data: registerValue });
                             break;
                         // CLEAR
                         case 3:
-                            this.assembler.ioRegisters.update("VIDMODE", prevVidMode);
-                            this.assembler.graphics.clear(prevVidMode);
-
-                            self.postMessage({ action: "graphicsRedraw", data: "clear" });
-
+                            this.assembler.graphics.clear();
                             break;
                         // RESET
                         case 4:
@@ -409,9 +407,7 @@ export class Executable {
                     break;
                 // VIDDATA
                 case 9:
-                    const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
-                    if(vidMode > 1) this.assembler.ioRegisters.update("VIDDATA", registerValue & 0xFF); // In case we're in bitmap mode, we need to ignore upper 8 bits.
-
+                    if(this.assembler.ioRegisters.getValue("VIDMODE") === 2) this.assembler.ioRegisters.update("VIDDATA", registerValue & 0xFF); // In case we're in bitmap mode, we need to ignore upper 8 bits.
                     this.assembler.graphics.update(registerValue);
                     break;
             }

@@ -163,22 +163,11 @@ export class DisplayRenderer {
     }
 
     redrawCanvas(data) {
-        const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
-
-        // Bitmap
-        if(vidMode > 1) {
-            // data is "clear" only if "graphicsRedraw" is triggered when VIDMODE is set to 3 (CLEAN).
-            if(data === "clear") this.drawBackground();
-
-            // data is properly defined, meaning "graphicsRedraw" is triggered by the updating system.
-            else {
-                for(let i = 0; i < data.length; i++) this.drawPixel(data[i]);
-                this.updateTexture();
-            }
-        }
+        // data is "clear" only if "graphicsRedraw" is triggered when VIDMODE is set to 3 (CLEAR).
+        if(data === "clear") this.drawBackground();
 
         // Text
-        else {
+        else if(data === "text") {
             const [scrollX, scrollY] = this.assembler.graphics.getReserved("scroll");
             const text = this.assembler.graphics.getText();
             
@@ -213,6 +202,12 @@ export class DisplayRenderer {
                 
             this.updateTexture();
         }
+
+        // Bitmap
+        else {
+            for(let i = 0; i < data.length; i++) this.drawPixel(data[i]);
+            this.updateTexture();
+        }
     }
 
     drawMemory() {
@@ -230,10 +225,10 @@ export class DisplayRenderer {
         this.updateTexture();
     }
 
-    drawBackground(options) {
+    drawBackground() {
         const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
 
-        const backgroundColor = vidMode > 1 ? { r: 0, g: 0, b: 0 } : this.assembler.graphics.getReserved("background");
+        const backgroundColor = vidMode === 2 ? { r: 0, g: 0, b: 0 } : this.assembler.graphics.getReserved("background");
         const { r, g, b } = backgroundColor;
 
         const imageData = this.sharedCanvas.current.imageData;

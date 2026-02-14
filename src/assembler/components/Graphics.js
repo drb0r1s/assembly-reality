@@ -3,6 +3,8 @@ import { TextModeData } from "../data/TextModeData";
 
 export class Graphics {
     constructor(assembler, graphicsBuffer) {
+        this.mode = 0;
+
         this.assembler = assembler;
         this.matrix = new Matrix(graphicsBuffer, 256);
 
@@ -27,6 +29,10 @@ export class Graphics {
 
         this.storedBits = []; // An array of bits waiting to be updated in bitmap mode for speeds < 10kHz.
         this.intervalId = null;
+    }
+
+    setMode(mode) {
+        this.mode = mode;
     }
 
     getReserved(key) {
@@ -72,13 +78,12 @@ export class Graphics {
     }
 
     update(value) {
-        const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
         const vidAddr = this.assembler.ioRegisters.getValue("VIDADDR");
 
-        this.assembler.graphics.matrix.update(vidAddr, value, vidMode > 1);
+        this.matrix.update(vidAddr, value, this.mode === 2);
 
         // If we're in bitmap mode, then yes, drawing is certain.
-        if(vidMode > 1) this.drawBit(value);
+        if(this.mode === 2) this.drawBit(value);
     }
 
     drawBit(value) {
@@ -118,20 +123,22 @@ export class Graphics {
     }
 
     executeVsync() {
-        self.postMessage({ action: "graphicsRedraw" });
+        self.postMessage({ action: "graphicsRedraw", data: "text" });
         this.assembler.interrupts.trigger("graphics");
     }
 
     // .clear is used if VIDMODE is 3, .reset should not be used for that.
-    clear(vidMode) {
+    clear() {
         // Bitmap
-        if(vidMode > 1) this.matrix.reset();
+        if(this.mode === 2) this.matrix.reset();
 
         // Text
-        else if(vidMode === 1) this.matrix.reset(0x0000, 0x7FFF);
+        else if(this.mode === 1) this.matrix.reset(0x0000, 0x7FFF);
     }
 
     reset() {
+        this.mode = 0;
+
         this.matrix.reset();
 
         this.matrix.values.set(TextModeData.TEXT, TextModeData.TEXT_START);

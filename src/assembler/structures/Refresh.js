@@ -63,10 +63,16 @@ export class Refresh {
     }
 
     graphics() {
+        // Clear
+        if(this.assembler.ioRegisters.getValue("VIDMODE") === 3) {
+            this.assembler.ioRegisters.update("VIDMODE", this.assembler.graphics.mode); // Returning the value of old vidMode (before setting it to 3).
+            self.postMessage({ action: "graphicsRedraw", data: "clear" });
+        }
+
         const vidMode = this.assembler.ioRegisters.getValue("VIDMODE");
 
         // Bitmap
-        if(vidMode > 1) {
+        if(vidMode === 2) {
             const storedBits = this.assembler.graphics.getStoredBits();
             if(storedBits.length === 0) return;
 
@@ -75,7 +81,7 @@ export class Refresh {
         }
         
         // Text
-        if(vidMode === 1) this.assembler.graphics.executeVsync();
+        else if(vidMode === 1) this.assembler.graphics.executeVsync();
     }
 
     textDisplay() {
