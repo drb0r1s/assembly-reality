@@ -351,9 +351,7 @@ export class Executable {
 
     out(executable, args) {
         const { first } = this.decoder.decode(executable, args);
-        
         const registerAValue = this.assembler.cpuRegisters.getValue("A");
-        const prevVidMode = this.assembler.ioRegisters.getValue("VIDMODE"); // Needed for modes switching.
 
         const ioInteractions = register => {
             const registerValue = this.assembler.ioRegisters.getValueByIndex(register);
