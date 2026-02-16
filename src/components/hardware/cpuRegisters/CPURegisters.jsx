@@ -74,7 +74,7 @@ const CPURegisters = ({ hardwareRef, elements, allElementRefs }) => {
                     <CPURegister name="SP" value={getHex(cpuRegisters.SP)} />
 
                     <div className="cpu-register">
-                        <strong>SR</strong>
+                        <strong title="Status Register">SR</strong>
 
                         <div className="cpu-register-sr-flags">
                             {srFlags.map(([key, value]) => {

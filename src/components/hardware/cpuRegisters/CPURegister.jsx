@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useCallback } from "react"
 import { useManagerValue } from "../../../hooks/useManagerValue";
 import { Manager } from "../../../helpers/Manager";
 
@@ -17,10 +17,17 @@ const CPURegister = React.memo(({ name, value }) => {
         C: "#60218E",
         D: "#E81E1E"
     }}, [isLightTheme]);
+
+    const getTitle = useCallback(() => {
+        if(name.length === 1) return `General Purpose Register ${name}`;
+
+        if(name === "IP") return "Instruction Pointer";
+        if(name === "SP") return "Stack Pointer";
+    }, []);
     
     return(
         <div className={`cpu-register cpu-${name.toLowerCase()}-register`}>
-            <strong>{name}</strong>
+            <strong title={getTitle()}>{name}</strong>
 
             <p
                 style={registerColoring[name] ? { backgroundColor: colors[name] } : {}}
