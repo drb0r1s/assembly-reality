@@ -4,6 +4,8 @@ import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig({
+    base: '/pluginfile.php/758654/mod_resource/content/4/',
+    
     plugins: [react(), svgr()],
 
     server: {
