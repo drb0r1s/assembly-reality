@@ -33,14 +33,14 @@ const CPURegisters = ({ hardwareRef, elements, allElementRefs }) => {
     const displayHeight = useLinkedResizeObserver({ elements, elementName: "cpuRegisters" });
 
     useEffect(() => {
-        const unsubscribeCPURegisterPing = Manager.subscribe("cpuRegistersPing", () => setCPURegisters(assembler.cpuRegisters.construct()));
+        const unsubscribeCPURegistersPing = Manager.subscribe("cpuRegistersPing", () => setCPURegisters(assembler.cpuRegisters.construct()));
         
         const unsubscribeCPURegistersCollectionUpdate = Manager.subscribe("cpuRegistersCollectionUpdate", data => {
             if(data?.collection) assembler.cpuRegisters.collection = data.collection;
         });
 
         return () => {
-            unsubscribeCPURegisterPing();
+            unsubscribeCPURegistersPing();
             unsubscribeCPURegistersCollectionUpdate();
         };
     }, []);
