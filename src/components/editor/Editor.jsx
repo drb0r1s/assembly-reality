@@ -98,7 +98,16 @@ const Editor = () => {
                     else Manager.trigger("highlightLine", data);
                     break;
                 case "reset":
-                    Manager.trigger("cpuRegistersPing");
+                    Manager.sequence(() => {
+                        Manager.trigger("ramReset");
+                        Manager.trigger("cpuRegistersPing");
+                        Manager.trigger("cpuRegistersCollectionUpdate", { collection: {} });
+                        Manager.trigger("ioRegistersPing");
+                        Manager.trigger("ioRegistersSlowPing");
+                        Manager.trigger("graphicsReset");
+                        Manager.trigger("unhighlightLine");
+                    });
+
                     break;
                 case "textDisplayPing":
                     Manager.trigger("textDisplayPing");
@@ -165,13 +174,6 @@ const Editor = () => {
                 Manager.set("isAssembleError", false);
                 Manager.set("isRunning", false);
                 Manager.set("isExecuted", false);
-
-                Manager.trigger("ramReset");
-                Manager.trigger("cpuRegistersCollectionUpdate", { collection: {} });
-                Manager.trigger("ioRegistersPing");
-                Manager.trigger("ioRegistersSlowPing");
-                Manager.trigger("graphicsReset");
-                Manager.trigger("unhighlightLine");
             });
             
             assemblerWorker.postMessage({ action: "reset" });
