@@ -97,6 +97,9 @@ const Editor = () => {
                     if(data === -1) Manager.set("isExecuted", true);
                     else Manager.trigger("highlightLine", data);
                     break;
+                case "reset":
+                    Manager.trigger("cpuRegistersPing");
+                    break;
                 case "textDisplayPing":
                     Manager.trigger("textDisplayPing");
                     break;
@@ -164,7 +167,6 @@ const Editor = () => {
                 Manager.set("isExecuted", false);
 
                 Manager.trigger("ramReset");
-                Manager.trigger("cpuRegistersPing");
                 Manager.trigger("cpuRegistersCollectionUpdate", { collection: {} });
                 Manager.trigger("ioRegistersPing");
                 Manager.trigger("ioRegistersSlowPing");
