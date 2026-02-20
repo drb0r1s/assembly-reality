@@ -14,8 +14,13 @@ const Editor = () => {
     const [codes, setCodes] = useState([""]);
     const [error, setError] = useState({ type: "", content: "" });
 
+    const [editingPage, setEditingPage] = useState(null);
+    const [editingValue, setEditingValue] = useState("");
+
     const pagesRef = useRef(pages);
     const codesRef = useRef(codes);
+
+    const editingInputRef = useRef(null);
 
     const speed = useManagerValue("speed");
     const speedRef = useRef(speed);
@@ -34,6 +39,10 @@ const Editor = () => {
 
         Manager.set("isAssembled", false);
     }, [codes[pages.active]]);
+
+    useEffect(() => {
+        if(editingPage !== null) editingInputRef.current?.focus();
+    }, [editingPage]);
 
     useEffect(() => {
         if(!assemblerWorker) return;
@@ -252,6 +261,33 @@ const Editor = () => {
         setPages(prevPages => { return {...prevPages, active} });
     }
 
+    function startRename(e, index) {
+        e.stopPropagation();
+
+        setEditingPage(index);
+        setEditingValue(pages.list[index]);
+    }
+
+    function submitRename() {
+        if(editingPage === null) return;
+
+        const trimmed = editingValue.trim();
+
+        setPages(prevPages => {
+            const newList = [...prevPages.list];
+            newList[editingPage] = trimmed.length > 0 ? trimmed : prevPages.list[editingPage];
+
+            return { ...prevPages, list: newList };
+        });
+
+        setEditingPage(null);
+    }
+
+    function handleRenameKeyDown(e) {
+        if(e.key === "Enter") submitRename();
+        if(e.key === "Escape") setEditingPage(null);
+    }
+
     function clearMemory() {
         Manager.trigger("reset");
     }
@@ -261,13 +297,22 @@ const Editor = () => {
             <div className="editor-pages">
                 {pages.list.map((page, index) => {
                     return <div
-                        key={page}
+                        key={index}
                         className={`editor-page ${index === pages.active ? "editor-active-page" : ""}`}
                         onClick={() => switchPage(index)}
                     >
                         <div className="editor-page-left-group">
                             <Images.PageIcon className="editor-page-icon" />
-                            <p>{page}</p>
+                            
+                            {editingPage === index ? <input
+                                className="editor-page-name-input"
+                                value={editingValue}
+                                ref={editingInputRef}
+                                onChange={e => setEditingValue(e.target.value)}
+                                onBlur={submitRename}
+                                onKeyDown={handleRenameKeyDown}
+                                onClick={e => e.stopPropagation()}
+                            /> : <p onDoubleClick={e => startRename(e, index)}>{page}</p>}
                         </div>
 
                         <button

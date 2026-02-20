@@ -49,12 +49,28 @@
                     height: 18px;
                     width: 18px;
                     object-fit: contain;
+                    flex-shrink: 0;
                 }
 
-                p {
+                .editor-page-name-input {
+                    width: 100px;
                     color: $primaryText;
                     font-size: 14px;
                     font-family: Roboto-Regular;
+                    background-color: $primaryBackground;
+                    border: 1px solid $borderColor;
+                    border-radius: 5px;
+                    outline: none;
+                    padding: 4px 6px;
+                }
+
+                p {
+                    max-width: 200px;
+                    color: $primaryText;
+                    font-size: 14px;
+                    font-family: Roboto-Regular;
+                    @include cut-text(1);
+                    word-break: break-all
                 }
             }
 

@@ -410,11 +410,32 @@ header .header-title {
   width: 18px;
   -o-object-fit: contain;
      object-fit: contain;
+  flex-shrink: 0;
 }
-.editor .editor-pages .editor-page .editor-page-left-group p {
+.editor .editor-pages .editor-page .editor-page-left-group .editor-page-name-input {
+  width: 100px;
   color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Regular;
+  background-color: var(--primaryBackground);
+  border: 1px solid var(--borderColor);
+  border-radius: 5px;
+  outline: none;
+  padding: 4px 6px;
+}
+.editor .editor-pages .editor-page .editor-page-left-group p {
+  max-width: 200px;
+  color: var(--primaryText);
+  font-size: 14px;
+  font-family: Roboto-Regular;
+  display: -webkit-box;
+  text-align: left;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 .editor .editor-pages .editor-page button {
   display: flex;
