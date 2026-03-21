@@ -9,6 +9,7 @@ const Header = () => {
     const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ view: false, speed: false });
 
     const speed = useManagerValue("speed");
+    const lockFileDropdown = useManagerValue("lockFileDropdown");
 
     return(
         <header>
@@ -28,7 +29,7 @@ const Header = () => {
                             onMouseOver={() => enableDropdown(key)}
                             onMouseLeave={() => disableDropdown(key)}
                         >
-                            {dropdown[key] && <HeaderDropdown
+                            {((key === "file" && lockFileDropdown) || dropdown[key]) && <HeaderDropdown
                                 type={key}
                                 ref={el => dropdownRefs.current[key] = el}
                             />}

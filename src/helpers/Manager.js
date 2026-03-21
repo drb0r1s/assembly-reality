@@ -14,7 +14,8 @@ export const Manager = (() => {
         ["isAssembled", false],
         ["isAssembleError", false],
         ["isRunning", false],
-        ["isExecuted", false]
+        ["isExecuted", false],
+        ["lockFileDropdown", false]
     ]);
     
     const listeners = new Map();

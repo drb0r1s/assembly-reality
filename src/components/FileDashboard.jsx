@@ -14,8 +14,20 @@ const FileDashboard = () => {
     const isAutosaveActive = useManagerValue("isAutosaveActive");
 
     useEffect(() => {
+        // Focus event happens when user closes the file picker (either a chosen file or simple closing).
+        const handleFocus = () => {
+            // setTimeout was specifically added because of Firefox, the browser needs time to start the file picker.
+            setTimeout(() => Manager.set("lockFileDropdown", false), 150);
+        }
+
+        window.addEventListener("focus", handleFocus);
+
         const unsubscribeCodeResponse = Manager.subscribe("codeResponse", setCodeFile);
-        return () => { unsubscribeCodeResponse() }
+
+        return () => {
+            window.removeEventListener("focus", handleFocus);
+            unsubscribeCodeResponse();
+        }
     }, []);
 
     useEffect(() => {
@@ -29,14 +41,19 @@ const FileDashboard = () => {
         file.href = url;
         file.download = `${codeFile.title}.txt`;
 
+        // Appending and removing file from body was added specifically because of Firefox, otherwise it does not work on that browser.
+        document.body.appendChild(file);
         file.click();
+        document.body.removeChild(file);
 
-        URL.revokeObjectURL(url);
+        setTimeout(() => URL.revokeObjectURL(url), 150);
         
         setCodeFile({ title: "", content: "" });
     }, [codeFile.content]);
 
     function handleImport(e) {
+        console.log(e)
+
         const file = e.target.files[0];
         if(!file) return;
 
@@ -60,7 +77,7 @@ const FileDashboard = () => {
             {buttons.map((button, index) => {
                 return <button
                     key={index}
-                    onClick={button === "Export" ? handleExport : () => {}}
+                    onClick={button === "Export" ? handleExport : () => Manager.set("lockFileDropdown", true)}
                 >
                     {button === "Import" && <input
                         type="file"
