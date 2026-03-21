@@ -32,6 +32,10 @@ import EditorIcon from "../images/editor-icon.svg?react";
 import HardwareIcon from "../images/hardware-icon.svg?react";
 import ReturnIcon from "../images/return-icon.svg?react";
 
+// NO HEADERS
+import NoHeadersErrorIcon from "../images/no-headers-error-icon.svg?react";
+import RefreshIcon from "../images/refresh-icon.svg?react";
+
 export const Images = {
     // ARy
     ARy,
@@ -42,5 +46,8 @@ export const Images = {
     MemoryIcon, IODevicesIcon, CPURegistersIcon, IORegistersIcon,
 
     // MOBILE
-    MenuIcon, EditorIcon, HardwareIcon, ReturnIcon
+    MenuIcon, EditorIcon, HardwareIcon, ReturnIcon,
+
+    // NO HEADERS
+    NoHeadersErrorIcon, RefreshIcon
 };
