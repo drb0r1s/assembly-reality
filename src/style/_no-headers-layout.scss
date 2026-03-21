@@ -1,0 +1,93 @@
+.no-headers-layout {
+    height: 100dvh;
+    width: 100vw;
+    @include center(column);
+    background-color: $mainBackground;
+    padding: 0 20px;
+
+    .no-headers-layout-logo {
+        height: 120px;
+        width: 120px;
+        object-fit: contain;
+    }
+
+    .no-headers-layout-content {
+        @include center(column);
+        gap: 12px;
+
+        .no-headers-layout-content-title {
+            @include center;
+            gap: 8px;
+
+            .no-headers-layout-error-icon {
+                height: 32px;
+                width: 32px;
+                object-fit: contain;
+                color: $primaryText;
+            }
+
+            h2 {
+                color: $primaryText;
+                text-align: center;
+                font-size: 26px;
+                font-family: SourceCodePro-Regular;
+                font-weight: normal;
+                margin-bottom: 6px;
+            }
+        }
+
+        .no-headers-layout-content-info {
+            @include center(column);
+            gap: 3px;
+            margin-bottom: 12px;
+
+            p {
+                color: $secondaryText;
+                font-size: 16px;
+                font-family: Roboto-Regular;
+                text-align: center;
+
+                span {
+                    font-family: SourceCodePro-Regular;
+                }
+            }
+        }
+
+        button {
+            @include center;
+            gap: 8px;
+            background-color: transparent;
+            border: 2px solid $borderColor;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 5px 7px;
+            transition: 300ms;
+
+            &:hover {
+                background-color: $blue;
+                border: 2px solid $blue;
+            }
+
+            .no-headers-refresh-icon {
+                height: 24px;
+                width: 24px;
+                object-fit: contain;
+                color: $primaryText;
+            }
+
+            p {
+                color: $primaryText;
+                font-size: 20px;
+                font-family: Roboto-Regular;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .no-headers-layout .no-headers-layout-content {
+        .no-headers-layout-content-title {
+            flex-direction: column;
+        }
+    }
+}
