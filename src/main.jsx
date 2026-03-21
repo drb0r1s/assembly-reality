@@ -6,7 +6,7 @@ import ContextWrapper from "./context/ContextWrapper";
 const root = document.getElementById("root");
 
 createRoot(root).render(
-    <ContextWrapper>
+    !crossOriginIsolated ? <App /> : <ContextWrapper>
         <App />
     </ContextWrapper>
 );
