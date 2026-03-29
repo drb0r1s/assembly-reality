@@ -57,6 +57,8 @@ export class Assembler {
             const tokens = Tokenizer.tokenize(text);
             let ast = AST.build(tokens);
 
+            if(ast.statements.length === 0) throw new AssemblerError("NoInstructions", [], null, this.cpuRegisters);
+
             this.reset(); // We need to reset assembler before reassembling the code.
 
             // Here we proceed to go through the AST twice:
