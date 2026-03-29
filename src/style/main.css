@@ -301,7 +301,7 @@ header .header-dropdown {
   left: 0;
   top: 48px;
   transition: 300ms;
-  z-index: 6;
+  z-index: 3000;
 }
 header .header-dropdown .header-dropdown-file {
   width: 200px;
@@ -600,7 +600,7 @@ header .header-title {
   bottom: -20px;
   padding: 20px 30px;
   transition: 300ms;
-  z-index: 5;
+  z-index: 50;
 }
 .editor .editor-error button {
   display: flex;
