@@ -134,6 +134,15 @@ body {
   overflow: hidden;
 }
 
+#assembly-reality {
+  height: 100dvh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
 button {
   outline: none;
 }

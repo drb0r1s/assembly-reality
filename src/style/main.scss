@@ -12,6 +12,12 @@ body {
     overflow: hidden;
 }
 
+#assembly-reality {
+    height: 100dvh;
+    width: 100vw;
+    @include center;
+}
+
 button {
     outline: none;
 }
