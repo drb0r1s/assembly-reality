@@ -23,6 +23,8 @@ const EditorError = ({ error, setError }) => {
     return(
         <div className="editor-error" ref={editorErrorRef}>
             <button onClick={disableEditorError}><Images.XIcon /></button>
+            
+            <Images.ErrorIcon className="editor-error-icon" />
             <p>{error.isRuntime ? "RUNTIME ": ""}ERROR ({error.type}): {error.content}{error.line ? ` @ line ${error.line}` : ""}</p>
         </div>
     );
