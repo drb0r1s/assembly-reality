@@ -3,6 +3,7 @@ import AssemblerButtons from "../AssemblerButtons";
 import SpeedDashboard from "../SpeedDashboard";
 import FileDashboard from "../FileDashboard";
 import LightThemeButton from "../LightThemeButton";
+import Version from "../Version";
 
 const MobileMenu = ({ componentName, style, onReturn }) => {
     return(
@@ -10,7 +11,10 @@ const MobileMenu = ({ componentName, style, onReturn }) => {
             {<MobileHeader title="Menu" onReturn={onReturn} />}
 
             <div className="mobile-menu-content">
-                <h1>Assembly Reality</h1>
+                <div className="mobile-menu-title-holder">
+                    <h1>Assembly Reality</h1>
+                    <Version />
+                </div>
 
                 <div className="mobile-menu-content-section">
                     <strong className="mobile-menu-content-section-title">Commands</strong>

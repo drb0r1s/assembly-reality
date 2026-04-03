@@ -15,12 +15,17 @@
         overflow-x: hidden;
         @include no-scrollbar;
 
-        h1 {
-            color: $primaryText;
-            font-size: 26px;
-            font-family: SourceCodePro-Regular;
-            font-weight: normal;
-            padding-bottom: 6px;
+        .mobile-menu-title-holder {
+            @include center(column);
+            gap: 7px;
+            
+            h1 {
+                color: $primaryText;
+                font-size: 26px;
+                font-family: SourceCodePro-Regular;
+                font-weight: normal;
+                padding-bottom: 6px;
+            }
         }
 
         .mobile-menu-content-section {

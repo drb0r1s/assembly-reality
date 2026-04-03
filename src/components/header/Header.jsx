@@ -1,5 +1,6 @@
 import HeaderDropdown from "./HeaderDropdown";
 import AssemblerButtons from "../AssemblerButtons";
+import Version from "../Version";
 import { useDropdown } from "../../hooks/useDropdown";
 import { headerButtons } from "../../data/headerButtons";
 import { useManagerValue } from "../../hooks/useManagerValue";
@@ -46,7 +47,10 @@ const Header = () => {
                 <AssemblerButtons className="header-buttons header-assembler-buttons" />
             </div>
 
-            <strong className="header-title">Assembly Reality</strong>
+            <div className="header-right-group">
+                <strong className="header-title">Assembly Reality</strong>
+                <Version />
+            </div>
         </header>
     );
 }

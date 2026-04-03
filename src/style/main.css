@@ -447,7 +447,14 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   -o-object-fit: contain;
      object-fit: contain;
 }
-header .header-title {
+header .header-right-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 7px;
+}
+header .header-right-group .header-title {
   color: var(--primaryText);
   font-size: 18px;
   font-family: SourceCodePro-Regular;
@@ -1638,7 +1645,14 @@ header .header-title {
 .mobile-menu .mobile-menu-content::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
-.mobile-menu .mobile-menu-content h1 {
+.mobile-menu .mobile-menu-content .mobile-menu-title-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+}
+.mobile-menu .mobile-menu-content .mobile-menu-title-holder h1 {
   color: var(--primaryText);
   font-size: 26px;
   font-family: SourceCodePro-Regular;
@@ -1840,4 +1854,19 @@ header .header-title {
   color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Regular;
+}
+
+.version {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: var(--primaryText);
+  border-radius: 5px;
+  padding: 3px 10px;
+}
+.version p {
+  color: var(--primaryBackground);
+  font-size: 16px;
+  font-family: SourceCodePro-Regular;
 }/*# sourceMappingURL=main.css.map */

@@ -1,0 +1,12 @@
+.version {
+    @include center;
+    background-color: $primaryText;
+    border-radius: 5px;
+    padding: 3px 10px;
+
+    p {
+        color: $primaryBackground;
+        font-size: 16px;
+        font-family: SourceCodePro-Regular;
+    }
+}

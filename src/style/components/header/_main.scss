@@ -77,10 +77,15 @@ header {
         }
     }
 
-    .header-title {
-        color: $primaryText;
-        font-size: 18px;
-        font-family: SourceCodePro-Regular;
-        font-weight: normal;
+    .header-right-group {
+        @include center;
+        gap: 7px;
+
+        .header-title {
+            color: $primaryText;
+            font-size: 18px;
+            font-family: SourceCodePro-Regular;
+            font-weight: normal;
+        }
     }
 }
