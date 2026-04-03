@@ -10,8 +10,9 @@ import { Images } from "../../data/Images";
 const Editor = () => {
     const { assemblerWorker } = useContext(GlobalContext);
     
-    const [pages, setPages] = useState({ list: ["New page"], active: 0, counter: 0 });
-    const [codes, setCodes] = useState([""]);
+    const [pages, setPages] = useState(() => Manager.get("editorPages"));
+    const [codes, setCodes] = useState(() => Manager.get("editorCodes"));
+
     const [error, setError] = useState({ type: "", content: "" });
 
     const [editingPage, setEditingPage] = useState(null);
@@ -29,8 +30,16 @@ const Editor = () => {
 
     useCodeAutosave({ pages, setPages, codes, setCodes });
     
-    useEffect(() => { pagesRef.current = pages }, [pages]);
-    useEffect(() => { codesRef.current = codes }, [codes]);
+    useEffect(() => {
+        Manager.set("editorPages", pages);
+        pagesRef.current = pages;
+    }, [pages]);
+
+    useEffect(() => {
+        Manager.set("editorCodes", codes);
+        codesRef.current = codes;
+    }, [codes]);
+
     useEffect(() => { speedRef.current = speed }, [speed]);
 
     useEffect(() => {

@@ -15,7 +15,9 @@ export const Manager = (() => {
         ["isAssembleError", false],
         ["isRunning", false],
         ["isExecuted", false],
-        ["lockFileDropdown", false]
+        ["lockFileDropdown", false],
+        ["editorPages", { list: ["New page"], active: 0, counter: 0 }],
+        ["editorCodes", [""]]
     ]);
     
     const listeners = new Map();
