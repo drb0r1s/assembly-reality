@@ -20,7 +20,8 @@ const RichEditor = React.memo(({ code, onChange }) => {
 
     const editorOptions = useMemo(() => { return {
         fontSize,
-        fontFamily: "SourceCodePro-Regular"
+        fontFamily: "SourceCodePro-Regular",
+        quickSuggestionsDelay: 200
     }}, [fontSize]);
 
     useEffect(() => {
