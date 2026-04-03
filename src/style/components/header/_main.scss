@@ -79,7 +79,7 @@ header {
 
     .header-right-group {
         @include center;
-        gap: 7px;
+        gap: 10px;
 
         .header-title {
             color: $primaryText;

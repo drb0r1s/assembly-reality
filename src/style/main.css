@@ -452,7 +452,7 @@ header .header-right-group {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  gap: 7px;
+  gap: 10px;
 }
 header .header-right-group .header-title {
   color: var(--primaryText);

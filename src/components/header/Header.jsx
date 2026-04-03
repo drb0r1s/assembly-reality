@@ -2,6 +2,7 @@ import HeaderDropdown from "./HeaderDropdown";
 import AssemblerButtons from "../AssemblerButtons";
 import Version from "../Version";
 import { useDropdown } from "../../hooks/useDropdown";
+import { useResize } from "../../hooks/useResize";
 import { headerButtons } from "../../data/headerButtons";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Images } from "../../data/Images";
@@ -11,6 +12,8 @@ const Header = () => {
 
     const speed = useManagerValue("speed");
     const lockFileDropdown = useManagerValue("lockFileDropdown");
+
+    const width = useResize();
 
     return(
         <header>
@@ -48,7 +51,7 @@ const Header = () => {
             </div>
 
             <div className="header-right-group">
-                <strong className="header-title">Assembly Reality</strong>
+                <strong className="header-title">{width < 1100 ? "ARy" : "Assembly Reality"}</strong>
                 <Version />
             </div>
         </header>
