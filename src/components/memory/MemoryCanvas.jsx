@@ -47,9 +47,21 @@ const MemoryCanvas = ({ ram }) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
 
-        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, ram, cellProps, hoveredCellRef.current, isLightTheme, registerColoring);
-        rendererRef.current.render();
-    }, [assembler, ram, isLightTheme, registerColoring]);
+        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, cellProps, hoveredCellRef.current, isLightTheme, registerColoring);
+        rendererRef.current.initRender(ram);
+        
+        Manager.subscribe("ramUpdate", ram => {
+            rendererRef.current.render(ram);
+        });
+
+        Manager.subscribe("ramReset", () => {
+            rendererRef.current.render({
+                instructions: new Set(),
+                stackStart: 0
+            });
+        });
+
+    }, [assembler, isLightTheme, registerColoring]);
 
     function handleClick(e) {
         if(isMemoryEmpty) return;
@@ -84,7 +96,7 @@ const MemoryCanvas = ({ ram }) => {
 
         if(cell !== hoveredCellRef.current) {
             hoveredCellRef.current = cell;
-            rendererRef.current?.hoverCell(cell);
+            rendererRef.current?.hoverCell(ram, cell);
         }
     }
 
@@ -92,7 +104,7 @@ const MemoryCanvas = ({ ram }) => {
         if(isMemoryEmpty) return;
 
         hoveredCellRef.current = -1;
-        rendererRef.current?.unhoverCell();
+        rendererRef.current?.unhoverCell(ram);
     }
     
     return(

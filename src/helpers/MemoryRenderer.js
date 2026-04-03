@@ -1,9 +1,8 @@
 export class MemoryRenderer {
-    constructor(canvas, ctx, assembler, ram, cellProps, hoveredCell, isLightTheme, registerColoring) {
+    constructor(canvas, ctx, assembler, cellProps, hoveredCell, isLightTheme, registerColoring) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.assembler = assembler;
-        this.ram = ram;
         this.cellProps = cellProps;
 
         this.hoveredCell = hoveredCell;
@@ -12,6 +11,12 @@ export class MemoryRenderer {
         this.registerColoring = registerColoring;
 
         this.matrix = assembler.ram.matrix.getMatrix();
+        this.prevMatrix = new Uint8Array(this.matrix.length);
+        
+        this.prevIP = -1;
+        this.prevSP = -1;
+
+        this.prevStackCells = new Set(); // We have to keep track of stack cells in the previous snapshot for synchronous coloring.
 
         this.hexTable = Array.from({ length: 256 }, (_, i) =>
             i.toString(16).toUpperCase().padStart(2, "0")
@@ -58,25 +63,66 @@ export class MemoryRenderer {
         };
     }
 
-    render() {
+    // ram is passed as a parameter of the method .render simply because we need updated properties of ram for this method
+    initRender(ram) {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
         const IP = this.assembler.cpuRegisters.getValue("IP");
         const SP = this.assembler.cpuRegisters.getValue("SP");
 
-        for(let i = 0; i < this.matrix.length; i++) this.renderCell(i, IP, SP);
+        for(let i = 0; i < this.matrix.length; i++) this.renderCell(ram, i, IP, SP);
 
         this.renderBorders();
     }
 
-    renderCell(cell, IP, SP) {
+    // ram is passed as a parameter of the method .render simply because we need updated properties of ram for this method
+    render(ram) {
+        const IP = this.assembler.cpuRegisters.getValue("IP");
+        const SP = this.assembler.cpuRegisters.getValue("SP");
+
+        const updatedCells = new Set();
+
+        for(let i = 0; i < this.matrix.length; i++) {
+            if(this.matrix[i] !== this.prevMatrix[i]) updatedCells.add(i);
+        }
+
+        // It is important to also update the coloring of IP and SP.
+        if(IP !== this.prevIP) {
+            updatedCells.add(IP);
+            updatedCells.add(this.prevIP);
+        }
+
+        if(SP !== this.prevSP) {
+            updatedCells.add(SP);
+            updatedCells.add(this.prevSP);
+        }
+
+        // We have to add all cells that are in stack in order to have synchronous coloring.
+        for(let stackCell = SP + 1; stackCell <= ram.stackStart; stackCell++) updatedCells.add(stackCell);
+
+        for(const prevStackCell of this.prevStackCells) {
+            updatedCells.add(prevStackCell);
+            this.prevStackCells.delete(prevStackCell);
+        }
+
+        for(const cell of updatedCells) this.renderCell(ram, cell, IP, SP);
+
+        this.prevMatrix.set(this.matrix);
+
+        this.prevIP = IP;
+        this.prevSP = SP;
+
+        this.renderBorders();
+    }
+
+    renderCell(ram, cell, IP, SP) {
         const row = Math.floor(cell / this.cellProps.columns);
         const column = cell % this.cellProps.columns;
 
         const x = column * this.cellProps.width;
         const y = row * this.cellProps.height;
 
-        const cellColor = this.getCellColor(cell, IP, SP);
+        const cellColor = this.getCellColor(ram, cell, IP, SP);
 
         this.ctx.fillStyle = cellColor;
         this.ctx.fillRect(x, y, this.cellProps.width, this.cellProps.height);
@@ -90,7 +136,7 @@ export class MemoryRenderer {
         );
     }
 
-    getCellColor(cell, IP, SP) {
+    getCellColor(ram, cell, IP, SP) {
         if(cell === SP && cell === IP) {
             if(cell === this.hoveredCell) return this.colors.instructionHover;
             return this.gradients.spIp;
@@ -103,9 +149,12 @@ export class MemoryRenderer {
             return this.colors.ip;
         }
 
-        if(cell > SP && cell <= this.ram.stackStart) return this.colors.stack;
+        if(cell > SP && cell <= ram.stackStart) {
+            this.prevStackCells.add(cell);
+            return this.colors.stack;
+        }
 
-        if(this.ram.instructions.has(cell)) {
+        if(ram.instructions.has(cell)) {
             if(cell === this.hoveredCell) return this.colors.instructionHover;
             return this.colors.instruction;
         }
@@ -131,11 +180,12 @@ export class MemoryRenderer {
         return gradient;
     }
 
-    hoverCell(cell) {
+    // ram is passed as a parameter of the method .render simply because we need updated properties of ram for this method
+    hoverCell(ram, cell) {
         const IP = this.assembler.cpuRegisters.getValue("IP");
         const SP = this.assembler.cpuRegisters.getValue("SP");
 
-        const isInteractive = cell === IP || this.ram.instructions.has(cell);
+        const isInteractive = cell === IP || ram.instructions.has(cell);
 
         if(isInteractive) {
             this.canvas.style.cursor = "pointer";
@@ -143,14 +193,14 @@ export class MemoryRenderer {
             const oldHoveredCell = this.hoveredCell;
             this.hoveredCell = cell;
 
-            this.renderCell(cell, IP, SP);
-            if(oldHoveredCell !== -1) this.renderCell(oldHoveredCell, IP, SP); // Resetting the previously hovered cell.
+            this.renderCell(ram, cell, IP, SP);
+            if(oldHoveredCell !== -1) this.renderCell(ram, oldHoveredCell, IP, SP); // Resetting the previously hovered cell.
         }
 
-        else if(this.hoveredCell !== 1) this.unhoverCell();
+        else if(this.hoveredCell !== 1) this.unhoverCell(ram);
     }
 
-    unhoverCell() {
+    unhoverCell(ram) {
         const IP = this.assembler.cpuRegisters.getValue("IP");
         const SP = this.assembler.cpuRegisters.getValue("SP");
 
@@ -159,7 +209,7 @@ export class MemoryRenderer {
         const oldHoveredCell = this.hoveredCell;
         this.hoveredCell = -1;
 
-        this.renderCell(oldHoveredCell, IP, SP);
+        this.renderCell(ram, oldHoveredCell, IP, SP);
     }
 
     renderBorders() {
