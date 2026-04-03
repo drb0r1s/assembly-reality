@@ -1,3 +1,5 @@
+import { AssemblerError } from "../AssemblerError";
+
 const CONSTANT_LENGTHS = {
     "register": 1,
     "half.register": 1,
@@ -21,6 +23,8 @@ export const LengthOf = {
     noOperands: () => 1,
 
     oneOperand: instruction => {
+        if(instruction.operands.length !== 1) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 1 }, instruction.line);
+
         const instructionLength = 1;
 
         const operand = instruction.operands[0];
@@ -30,6 +34,11 @@ export const LengthOf = {
     },
 
     twoOperands: instruction => {
+        const operands = instruction.operands.filter(operand => operand.type !== "Separator");
+        if(operands.length !== 2) throw new AssemblerError("InvalidNumberOfOperands", { name: instruction.name, operands: 2 }, instruction.line);
+
+        if(instruction.operands[1].type !== "Separator") throw new AssemblerError("MissingSeparator", { name: instruction.name }, instruction.line);
+
         const instructionLength = 1;
 
         const firstLength = getLength(instruction.operands[0], instruction.isHalf);
