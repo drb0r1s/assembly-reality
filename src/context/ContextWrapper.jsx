@@ -8,14 +8,15 @@ const ContextWrapper = ({ children }) => {
     const cpuRegistersBuffer = new SharedArrayBuffer(7 * 2);
     const ioRegistersBuffer = new SharedArrayBuffer(11 * 2);
     const ramBuffer = new SharedArrayBuffer(258 * 16);
+    const collectorRamBuffer = new SharedArrayBuffer(258 * 16);
     const graphicsBuffer = new SharedArrayBuffer(0x10000); // 65536B
 
-    const assembler = useRef(new Assembler(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer)).current;
+    const assembler = useRef(new Assembler(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, collectorRamBuffer, graphicsBuffer)).current;
     const assemblerWorker = useWorker();
     const sharedCanvas = useSharedCanvas();
 
     useEffect(() => {
-        if(assemblerWorker) assemblerWorker.postMessage({ action: "init", data: { cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer } });
+        if(assemblerWorker) assemblerWorker.postMessage({ action: "init", data: { cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, collectorRamBuffer, graphicsBuffer } });
     }, [assemblerWorker]);
 
     return(
