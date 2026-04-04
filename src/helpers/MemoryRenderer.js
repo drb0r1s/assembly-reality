@@ -125,7 +125,7 @@ export class MemoryRenderer {
         const cellColor = this.getCellColor(ram, cell, IP, SP);
 
         this.ctx.fillStyle = cellColor;
-        this.ctx.fillRect(x, y, this.cellProps.width, this.cellProps.height);
+        this.ctx.fillRect(x + 1, y, this.cellProps.width - 1, this.cellProps.height); // +-1 corrections are due to left border being over-drawn because of the cell's background.
 
         this.ctx.fillStyle = this.colors.text;
 
