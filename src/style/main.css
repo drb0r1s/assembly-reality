@@ -1814,7 +1814,14 @@ header .header-right-group .header-title {
   padding: 7px 0;
   cursor: default;
 }
-.speed-dashboard strong {
+.speed-dashboard .speed-dashboard-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 7px;
+}
+.speed-dashboard .speed-dashboard-title strong {
   color: var(--primaryText);
   font-size: 18px;
   font-family: Roboto-SemiBold;

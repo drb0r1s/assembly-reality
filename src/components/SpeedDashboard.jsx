@@ -3,6 +3,7 @@ import Range from "./Range";
 import { useManagerValue } from "../hooks/useManagerValue";
 import { Autosave } from "../helpers/Autosave";
 import { Manager } from "../helpers/Manager";
+import { Images } from "../data/Images";
 
 const SpeedDashboard = () => {
     const initialSpeed = useManagerValue("speed");
@@ -24,7 +25,10 @@ const SpeedDashboard = () => {
     
     return(
         <div className="speed-dashboard">
-            <strong>{speed < 1000 ? `${speed.toFixed(1)} Hz` : `${(speed / 1000).toFixed(2)} kHz`}</strong>
+            <div className="speed-dashboard-title">
+                <Images.SpeedIcon className="speed-dashboard-title-icon" />
+                <strong>{speed < 1000 ? `${speed.toFixed(1)} Hz` : `${(speed / 1000).toFixed(2)} kHz`}</strong>
+            </div>
             
             <Range
                 value={speed}
