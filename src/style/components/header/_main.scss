@@ -50,19 +50,31 @@ header {
             }
         }
 
-        .header-dropdown-buttons .header-dropdown-button {
-            position: relative;
+        .header-dropdown-buttons {
+            .header-dropdown-button {
+                position: relative;
+                transition: 300ms;
 
-            span {
-                @include center;
-                width: 83px;
-                color: $primaryText;
-                font-size: 14px;
-                font-family: SourceCodePro-Regular;
-                background-color: $darkBlue;
-                border-radius: 5px;
-                margin-left: 8px;
-                padding: 3px;
+                span {
+                    @include center;
+                    width: 83px;
+                    color: $primaryText;
+                    font-size: 14px;
+                    font-family: SourceCodePro-Regular;
+                    background-color: $darkBlue;
+                    border-radius: 5px;
+                    margin-left: 8px;
+                    padding: 3px;
+                }
+            }
+
+            .header-dropdown-button-disabled {
+                opacity: .5;
+                cursor: default;
+
+                &:hover {
+                    background-color: transparent;
+                }
             }
         }
 

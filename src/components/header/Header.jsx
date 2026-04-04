@@ -11,6 +11,7 @@ const Header = () => {
     const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ view: false, speed: false });
 
     const speed = useManagerValue("speed");
+    const isRunning = useManagerValue("isRunning");
     const lockFileDropdown = useManagerValue("lockFileDropdown");
 
     const width = useResize();
@@ -26,11 +27,13 @@ const Header = () => {
                     {headerButtons.dropdown.map(button => {
                         const { Icon } = button;
                         const key = button.title.toLowerCase();
+
+                        const isDisabled = key === "speed" && isRunning;
                         
                         return <div
                             key={key}
-                            className="header-dropdown-button"
-                            onMouseOver={() => enableDropdown(key)}
+                            className={`header-dropdown-button ${isDisabled ? "header-dropdown-button-disabled" : ""}`}
+                            onMouseOver={isDisabled ? () => {} : () => enableDropdown(key)}
                             onMouseLeave={() => disableDropdown(key)}
                         >
                             {((key === "file" && lockFileDropdown) || dropdown[key]) && <HeaderDropdown
