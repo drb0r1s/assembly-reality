@@ -4,6 +4,7 @@
     gap: 10px;
     padding: 7px 0;
     cursor: default;
+    transition: 300ms;
     
     .speed-dashboard-title {
         @include center;
@@ -40,4 +41,8 @@
             }
         }
     }
+}
+
+.speed-dashboard-disabled {
+    opacity: .5;
 }

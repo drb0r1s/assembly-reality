@@ -1813,6 +1813,7 @@ header .header-right-group .header-title {
   gap: 10px;
   padding: 7px 0;
   cursor: default;
+  transition: 300ms;
 }
 .speed-dashboard .speed-dashboard-title {
   display: flex;
@@ -1850,6 +1851,10 @@ header .header-right-group .header-title {
 }
 .speed-dashboard .speed-dashboard-buttons button:hover {
   border: 1px solid var(--primaryText);
+}
+
+.speed-dashboard-disabled {
+  opacity: 0.5;
 }
 
 .light-theme-button {

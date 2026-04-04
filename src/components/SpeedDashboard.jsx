@@ -7,6 +7,7 @@ import { Images } from "../data/Images";
 
 const SpeedDashboard = () => {
     const initialSpeed = useManagerValue("speed");
+    const isRunning = useManagerValue("isRunning");
 
     const [speed, setSpeed] = useState(initialSpeed);
 
@@ -24,7 +25,7 @@ const SpeedDashboard = () => {
     }, [speed]);
     
     return(
-        <div className="speed-dashboard">
+        <div className={`speed-dashboard ${isRunning ? "speed-dashboard-disabled" : ""}`}>
             <div className="speed-dashboard-title">
                 <Images.SpeedIcon className="speed-dashboard-title-icon" />
                 <strong>{speed < 1000 ? `${speed.toFixed(1)} Hz` : `${(speed / 1000).toFixed(2)} kHz`}</strong>
@@ -35,13 +36,14 @@ const SpeedDashboard = () => {
                 min={4}
                 max={50000}
                 onDrag={frequency => setSpeed(parseFloat(frequency))}
+                isDisabled={isRunning}
             />
 
             <div className="speed-dashboard-buttons">
                 {buttons.map((button, index) => {
                     return <button
                         key={index}
-                        onClick={() => setSpeed(button)}
+                        onClick={isRunning ? () => {} : () => setSpeed(button)}
                     >{button < 1000 ? `${button.toFixed(0)} Hz` : `${(button / 1000).toFixed(0)} kHz`}</button>;
                 })}
             </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useResize } from "../hooks/useResize";
 
-const Range = ({ value, min, max, onDrag }) => {
+const Range = ({ value, min, max, onDrag, isDisabled }) => {
     const [range, setRange] = useState({ position: 0, percent: 0 });
     
     const rangeLineRef = useRef(null);
@@ -14,7 +14,7 @@ const Range = ({ value, min, max, onDrag }) => {
     const circleWidth = (width < 900 ? 25 : 20);
 
     useEffect(() => {
-        if(!rangeLineRef.current) return;
+        if(!rangeLineRef.current || isDisabled) return;
 
         const rect = rangeLineRef.current.getBoundingClientRect();
         const usableWidth = rect.width - circleWidth;
@@ -51,6 +51,8 @@ const Range = ({ value, min, max, onDrag }) => {
     }
 
     function calculateValue(e, isDrag = false) {
+        if(isDisabled) return;
+
         const rect = rangeLineRef.current.getBoundingClientRect();
         const usableWidth = rect.width - circleWidth;
             
