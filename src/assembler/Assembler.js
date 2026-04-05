@@ -18,12 +18,11 @@ import { Interrupts } from "./helpers/Interrupts";
 const jumpInstructions = new Set(["JMP", "JC", "JB", "JNAE", "JNC", "JAE", "JNB", "JZ", "JE", "JNZ", "JNE", "JA", "JNBE", "JNA", "JBE", "CALL", "RET", "IRET"]);
 
 export class Assembler {
-    constructor(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, collectorRamBuffer, graphicsBuffer) {
+    constructor(cpuRegistersBuffer, ioRegistersBuffer, ramBuffer, graphicsBuffer) {
         this.speed = 4; // Default speed (4Hz).
         this.cpuRegisters = new CPURegisters(cpuRegistersBuffer);
         this.ioRegisters = new IORegisters(ioRegistersBuffer, this.cpuRegisters);
         this.ram = new RAM(ramBuffer);
-        this.collectorRam = new RAM(collectorRamBuffer);
         this.graphics = new Graphics(this, graphicsBuffer);
         this.labels = new Labels();
         this.lines = new Lines();
@@ -60,25 +59,17 @@ export class Assembler {
 
             if(ast.statements.length === 0) throw new AssemblerError("NoInstructions", [], null, this.cpuRegisters);
 
-            // There is a known state of assembler where a user can trigger an error, but the memory is still not empty.
-            // To prevent Real-RAM-Displayed-RAM conflicts, we will exlude RAM from the reseting here, we'll reset it after successful first pass.
-            this.reset(true); // We need to reset assembler before reassembling the code.
+            this.reset(); // We need to reset assembler before reassembling the code.
 
             // Here we proceed to go through the AST twice:
             // Pass 1: Simulate the memory shape, for assignment of addresses to labels.
             // Pass 2: Actual assembling of instructions.
 
             // Pass 1
-            this.instants.setRAM(this.collectorRam); // We need to bind instants to collectorRam, real ram has to be isolated.
-
             for(let i = 0; i < ast.statements.length; i++) this.observeStatement(ast.statements[i]);
             
             ast = this.labels.transform(ast);
-
-            this.ram.reset(); // Finally, first pass was successful, we're resetting the actual RAM here.
-            this.collectorRam.reset(); // We need to free the memory, free pointer need to be set to 0.
-            
-            this.instants.setRAM(this.ram); // Binding instants back to the real ram after the first pass.
+            this.ram.reset(); // We need to free the memory, free pointer need to be set to 0.
 
             // Pass 2
             for(let i = 0; i < ast.statements.length; i++) this.assembleStatement(ast.statements[i]);
@@ -107,15 +98,15 @@ export class Assembler {
 
     observeStatement(statement) {
         if(statement.type === "Label") {
-            this.labels.collect(statement, this.collectorRam);
+            this.labels.collect(statement, this.ram);
         }
 
         if(statement.type === "Instruction") {
             const lengthOfInstruction = Instructions[statement.name](statement, true);
             
-            this.cpuRegisters.collect(statement.operands, this.collectorRam, lengthOfInstruction); // Looking for A, B, C, D registers.
-            this.lines.collect(statement.line, this.collectorRam);
-            this.collectorRam.advance(lengthOfInstruction);
+            this.cpuRegisters.collect(statement.operands, this.ram, lengthOfInstruction); // Looking for A, B, C, D registers.
+            this.lines.collect(statement.line, this.ram);
+            this.ram.advance(lengthOfInstruction);
         }
 
         if(statement.type === "Instant") {
@@ -135,7 +126,7 @@ export class Assembler {
                 if(operand.valueType === "string.double") lengthOfInstant = 2 * operand.value.length;
                 else lengthOfInstant = statement.isHalf ? 1 : 2;
 
-                this.collectorRam.advance(lengthOfInstant);
+                this.ram.advance(lengthOfInstant);
             }
         }
     }
@@ -293,12 +284,11 @@ export class Assembler {
         };
     }
 
-    reset(excludeRam = false) {
+    reset() {
         this.speed = 4;
         this.cpuRegisters.reset();
         this.ioRegisters.reset();
-        if(!excludeRam) this.ram.reset();
-        this.collectorRam.reset();
+        this.ram.reset();
         this.graphics.reset();
         this.labels.reset();
         this.lines.reset();

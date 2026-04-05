@@ -10,7 +10,7 @@ self.onmessage = async e => {
     switch(action) {
         case "init":
             // Since we use SharedArrayBuffer class in order to use the same memory reference on both threads, it is important to pass that buffer into the assembler, before performing anything else.
-            assembler = new Assembler(data.cpuRegistersBuffer, data.ioRegistersBuffer, data.ramBuffer, data.collectorRamBuffer, data.graphicsBuffer);
+            assembler = new Assembler(data.cpuRegistersBuffer, data.ioRegistersBuffer, data.ramBuffer, data.graphicsBuffer);
             
             break;
         case "assemble":

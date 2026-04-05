@@ -36,10 +36,6 @@ export class Instants {
         this.ORG = this.ORG.bind(this);
     }
 
-    setRAM(newRam) {
-        this.ram = newRam;
-    }
-
     DW(instant) {
         const operand = instant.operands[0];
 
