@@ -35,13 +35,17 @@ self.onmessage = async e => {
 
             result = assembler.assemble(code);
             
-            if(result?.error) self.postMessage({ action, error: result.error });
-            else self.postMessage({ action: "assemble", data: result });
+            if(result?.error) {
+                self.postMessage({ action, error: result.error });
+                return; // If we don't cancel the action here, it will continue to the .execute method.
+            }
+            
+            else self.postMessage({ action: "assemble", data: {...result, isAssembleRun: true} });
 
             result = await assembler.execute(speed);
             
             if(result?.error) self.postMessage({ action, error: result.error });
-            else self.postMessage({ action: "run", data: result });
+            else self.postMessage({ action: "run", data: {...result, isAssembleRun: true} });
 
             break;
         case "pause":
