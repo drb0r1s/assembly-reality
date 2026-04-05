@@ -7,15 +7,14 @@ const AssemblerButtons = ({ className, isExpanded }) => {
     const isMemoryEmpty = useManagerValue("isMemoryEmpty");
 
     const isAssembled = useManagerValue("isAssembled");
-    const isAssembleError = useManagerValue("isAssembleError");
     const isRunning = useManagerValue("isRunning");
     const isExecuted = useManagerValue("isExecuted");
 
     const isAssembleDisabled = isCodeEmpty || isAssembled || isRunning;
-    const isAssembleRunDisabled = (isCodeEmpty && isMemoryEmpty) || isExecuted;
+    const isAssembleRunDisabled = (isCodeEmpty && isMemoryEmpty) || (isAssembled && isMemoryEmpty) || isExecuted;
 
-    const isRunDisabled = isMemoryEmpty || isAssembleError || isExecuted;
-    const isStepDisabled = isMemoryEmpty || isAssembleError || isRunning || isExecuted;
+    const isRunDisabled = isMemoryEmpty || isExecuted;
+    const isStepDisabled = isMemoryEmpty || isRunning || isExecuted;
     
     function handleButton(button) {
         return Manager.trigger(button);
