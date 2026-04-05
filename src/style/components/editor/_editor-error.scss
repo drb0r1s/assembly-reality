@@ -35,3 +35,10 @@
         @include cut-text(3);
     }
 }
+
+#editor-error-expanded-display {
+    border-radius: 5px;
+    top: -20px;
+    left: 10px;
+    bottom: auto;
+}

@@ -650,6 +650,12 @@ header .header-right-group .header-title {
   overflow: hidden;
   overflow-wrap: break-word;
 }
+.editor #editor-error-expanded-display {
+  border-radius: 5px;
+  top: -20px;
+  left: 10px;
+  bottom: auto;
+}
 
 @media screen and (max-width: 900px) {
   .editor-pages {
