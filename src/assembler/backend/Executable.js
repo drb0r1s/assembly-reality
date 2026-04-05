@@ -450,6 +450,7 @@ export class Executable {
                 break;
         }
 
+        if(value > 0x101F) return; // StackPointerLimit
         if(value > this.assembler.cpuRegisters.getValue("SP")) this.assembler.ram.stackStart = value;
     }
 
