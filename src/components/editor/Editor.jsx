@@ -60,7 +60,16 @@ const Editor = () => {
             const { action, data, error } = e.data;
 
             if(error) {
-                if(action === "assemble") Manager.set("isAssembleError", true);
+                // If an error happens in assembler.assemble, we'll just restart the assembler in order to avoid Real-RAM-Displayed-RAM confusion.
+                if(action === "assemble") {
+                    Manager.sequence(() => {
+                        Manager.set("isMemoryEmpty", true);
+                        Manager.set("isRunning", false);
+                        Manager.set("isExecuted", false);
+                    });
+                    
+                    assemblerWorker.postMessage({ action: "reset" });
+                }
 
                 setError(error);
                 if(e.data?.line) Manager.trigger("highlightLine", e.data.line); // This happens only if runtime error was triggered by the "step" mode.
@@ -71,9 +80,9 @@ const Editor = () => {
             switch(action) {
                 case "assemble":
                     Manager.sequence(() => {
-                        // We can safely update this property only when assembling the code has finished!
+                        // We can safely update the following two properties only when assembling the code has finished!
+                        if(data?.isAssembleRun) Manager.set("isRunning", true);
                         Manager.set("isMemoryEmpty", false);
-                        Manager.set("isAssembleError", false);
 
                         Manager.trigger("ramUpdate", data?.ram);
                         Manager.trigger("linesUpdate", data?.lines);
@@ -158,12 +167,7 @@ const Editor = () => {
         });
 
         const unsubscribeAssembleRun = Manager.subscribe("assembleRun", () => {
-            Manager.sequence(() => {
-                Manager.set("isMemoryEmpty", false);
-                Manager.set("isAssembled", true);
-                Manager.set("isRunning", true);
-            });
-
+            Manager.set("isAssembled", true);
             assemblerWorker.postMessage({ action: "assembleRun", data: { code: getActiveCode(), speed: parseInt(speedRef.current) } });
         });
 
@@ -180,7 +184,6 @@ const Editor = () => {
             Manager.sequence(() => {
                 Manager.set("isMemoryEmpty", true);
                 Manager.set("isAssembled", false);
-                Manager.set("isAssembleError", false);
                 Manager.set("isRunning", false);
                 Manager.set("isExecuted", false);
             });
