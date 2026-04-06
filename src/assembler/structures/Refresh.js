@@ -9,6 +9,8 @@ export class Refresh {
 
     startInterval() {
         if(this.intervalId !== null) return;
+
+        this.triggerSlow(); // We will allow one immediate slow refresh, to avoid the feeling of the "freezed" app.
         this.intervalId = setInterval(() => this.do(), 20);
     }
 
