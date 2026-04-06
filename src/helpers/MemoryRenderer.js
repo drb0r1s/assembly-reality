@@ -17,6 +17,7 @@ export class MemoryRenderer {
         this.prevSP = -1;
 
         this.prevStackCells = new Set(); // We have to keep track of stack cells in the previous snapshot for synchronous coloring.
+        this.prevHltInstructions = new Set();
 
         this.hexTable = Array.from({ length: 256 }, (_, i) =>
             i.toString(16).toUpperCase().padStart(2, "0")
@@ -82,8 +83,20 @@ export class MemoryRenderer {
 
         const updatedCells = new Set();
 
+        // Edge case: Marking detected HLT instructions.
+        for(const prevHltInstruction of this.prevHltInstructions) {
+            updatedCells.add(prevHltInstruction);
+            this.prevHltInstructions.delete(prevHltInstruction);
+        }
+
         for(let i = 0; i < this.matrix.length; i++) {
             if(this.matrix[i] !== this.prevMatrix[i]) updatedCells.add(i);
+            
+            // Edge case: HLT instruction
+            if(this.matrix[i] === 0 && ram.instructions.has(i)) {
+                updatedCells.add(i);
+                this.prevHltInstructions.add(i);
+            }
         }
 
         // It is important to also update the coloring of IP and SP.
