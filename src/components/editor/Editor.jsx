@@ -349,6 +349,9 @@ const Editor = () => {
             <RichEditor code={codes[pages.active]} onChange={newCode => {
                 const newCodes = [...codes];
                 newCodes[pages.active] = newCode;
+
+                codesRef.current = newCodes;
+
                 setCodes(newCodes);
             }} />
 
