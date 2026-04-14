@@ -52,8 +52,6 @@ const FileDashboard = () => {
     }, [codeFile.content]);
 
     function handleImport(e) {
-        console.log(e)
-
         const file = e.target.files[0];
         if(!file) return;
 
