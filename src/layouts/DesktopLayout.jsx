@@ -11,6 +11,8 @@ const DesktopLayout = () => {
 
     const view = useManagerValue("view");
     const isDisplayExpanded = useManagerValue("isDisplayExpanded");
+
+    const hardwareExistence = width >= 1300 ? (view.ioDevices || view.cpuRegisters || view.ioRegisters) : (view.memory || view.ioDevices || view.cpuRegisters || view.ioRegisters);
     
     return(
         <main>
@@ -21,7 +23,7 @@ const DesktopLayout = () => {
             <div className="workspace">
                 <Editor />
                 {width >= 1300 && view.memory && <Memory />}
-                {(view.ioDevices || view.cpuRegisters || view.ioRegisters) && <Hardware />}
+                {hardwareExistence && <Hardware />}
             </div>
         </main>
     );
