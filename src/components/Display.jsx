@@ -27,20 +27,35 @@ const Display = ({ style, isExpanded }) => {
     }}, [keyboard.isActive, isLightTheme]);
 
     const handleKeydown = useCallback(e => {
+        e.preventDefault();
+        
         if(e.repeat) return;
+        if(e.key.length > 1) return; // Ignore non-printable characters.
+        
+        const asciiKey = e.key.charCodeAt(0);
+
+        if(asciiKey < 0 || asciiKey > 255) return; // Ignore non-ASCII characters.
 
         assemblerWorker.postMessage({ action: "keyboardEvent", data: { 
             type: "keydown",
-            character: e.key.charCodeAt(0)
+            character: asciiKey
         }});
 
         setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: e.key} });
     }, [assemblerWorker]);
 
     const handleKeyup = useCallback(e => {
+        e.preventDefault();
+        
+        if(e.key.length > 1) return; // Ignore non-printable characters.
+        
+        const asciiKey = e.key.charCodeAt(0);
+
+        if(asciiKey < 0 || asciiKey > 255) return; // Ignore non-ASCII characters.
+
         assemblerWorker.postMessage({ action: "keyboardEvent", data: { 
             type: "keyup",
-            character: e.key.charCodeAt(0)
+            character: asciiKey
         }});
 
         setKeyboard(prevKeyboard => { return {...prevKeyboard, activeCharacter: ""} });
