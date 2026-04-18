@@ -8,7 +8,7 @@ import { useManagerValue } from "../../hooks/useManagerValue";
 import { Images } from "../../data/Images";
 
 const Header = () => {
-    const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ view: false, speed: false });
+    const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ file: false, view: false, speed: false });
 
     const speed = useManagerValue("speed");
     const isRunning = useManagerValue("isRunning");
