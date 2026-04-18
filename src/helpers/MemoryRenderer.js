@@ -1,5 +1,5 @@
 export class MemoryRenderer {
-    constructor(canvas, ctx, assembler, cellProps, hoveredCell, isLightTheme, registerColoring) {
+    constructor(canvas, ctx, assembler, cellProps, hoveredCell, theme, registerColoring) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.assembler = assembler;
@@ -7,7 +7,7 @@ export class MemoryRenderer {
 
         this.hoveredCell = hoveredCell;
 
-        this.isLightTheme = isLightTheme;
+        this.theme = theme;
         this.registerColoring = registerColoring;
 
         this.matrix = assembler.ram.matrix.getMatrix();
@@ -29,35 +29,7 @@ export class MemoryRenderer {
 
         this.textYOffset = Math.round(this.cellProps.height * 0.53); // 0.53 is a constant used to make cells exactly centered relative to rows.
 
-        this.colors = isLightTheme ? {
-            text: "#4D4D4D",
-            sp: "#E07AA8",
-            stack: "#F8C7DD",
-            ip: "#7FAED6",
-            instruction: "#B9DCF7",
-            instructionHover: "#7F9FCF",
-            A: "#8FC97A",
-            B: "#F2B36A",
-            C: "#B48AE3",
-            D: "#F58A8A",
-            textDisplay: "#CDCFCF",
-            background: "#F5F5F5",
-            divider: "#DADDE2" 
-        } : {
-            text: "#D4D4D4",
-            sp: "#BB3071",
-            stack: "#C77399",
-            ip: "#122A4A",
-            instruction: "#3D75A6",
-            instructionHover: "#071835",
-            A: "#3D691D",
-            B: "#C06A08",
-            C: "#60218E",
-            D: "#E81E1E",
-            textDisplay: "#0F0F0F",
-            background: "#000000",
-            divider: "#2F3336"
-        };
+        this.colors = this.getThemeColors(theme);
 
         this.gradients = {
             spIp: this.getGradient(this.colors.sp, this.colors.ip)
@@ -240,5 +212,46 @@ export class MemoryRenderer {
         }
 
         this.ctx.stroke();
+    }
+
+    getThemeColors(theme) {
+        switch(theme) {
+            case "dark": return {
+                text: "#D4D4D4",
+                sp: "#BB3071",
+                stack: "#C77399",
+                ip: "#122A4A",
+                instruction: "#3D75A6",
+                instructionHover: "#071835",
+                A: "#3D691D",
+                B: "#C06A08",
+                C: "#60218E",
+                D: "#E81E1E",
+                textDisplay: "#0F0F0F",
+                background: "#000000",
+                divider: "#2F3336"
+            }
+
+            case "light": return {
+                text: "#4D4D4D",
+                sp: "#E07AA8",
+                stack: "#F8C7DD",
+                ip: "#7FAED6",
+                instruction: "#B9DCF7",
+                instructionHover: "#7F9FCF",
+                A: "#8FC97A",
+                B: "#F2B36A",
+                C: "#B48AE3",
+                D: "#F58A8A",
+                textDisplay: "#CDCFCF",
+                background: "#F5F5F5",
+                divider: "#DADDE2" 
+            }
+
+            case "classic": return {}
+            case "ocean": return {}
+            case "forest": return {}
+            case "ruby": return {}
+        }
     }
 }
