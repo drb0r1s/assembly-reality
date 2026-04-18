@@ -2108,6 +2108,7 @@ header .header-right-group .header-title {
   color: var(--primaryText);
   font-size: 14px;
   font-family: Roboto-Regular;
+  text-transform: capitalize;
 }
 .theme-dashboard .theme-dashboard-button .theme-dashboard-button-arrow {
   height: 18px;
