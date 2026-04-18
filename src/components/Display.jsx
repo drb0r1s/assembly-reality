@@ -33,12 +33,12 @@ const Display = ({ style, isExpanded }) => {
         };
 
         const inactiveColor = {
-            dark: "#1A1A1A",
-            light: "#F4F4F4",
-            classic: "#FDF6E3",
-            ocean: "#050F18",
-            forest: "#060E07",
-            ruby: "#100508",
+            dark: "#F4F4F4",
+            light: "#1A1A1A",
+            classic: "#1A1A1A",
+            ocean: "#F4F4F4",
+            forest: "#F4F4F4",
+            ruby: "#F4F4F4",
         };
 
         return {
