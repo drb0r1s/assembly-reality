@@ -27,6 +27,7 @@ import CPURegistersIcon from "../images/cpu-registers-icon.svg?react";
 import IORegistersIcon from "../images/io-registers-icon.svg?react";
 import ErrorIcon from "../images/error-icon.svg?react";
 import SpeedIcon from "../images/speed-icon.svg?react";
+import LeftArrowIcon from "../images/left-arrow-icon.svg?react";
 
 // MOBILE
 import MenuIcon from "../images/menu-icon.svg?react";
@@ -38,6 +39,14 @@ import ReturnIcon from "../images/return-icon.svg?react";
 import NoHeadersErrorIcon from "../images/no-headers-error-icon.svg?react";
 import RefreshIcon from "../images/refresh-icon.svg?react";
 
+// THEME
+import DarkThemeIcon from "../images/dark-theme-icon.svg?react";
+import LightThemeIcon from "../images/light-theme-icon.svg?react";
+import ClassicThemeIcon from "../images/classic-theme-icon.svg?react";
+import OceanThemeIcon from "../images/ocean-theme-icon.svg?react";
+import ForestThemeIcon from "../images/forest-theme-icon.svg?react";
+import RubyThemeIcon from "../images/ruby-theme-icon.svg?react";
+
 export const Images = {
     // ARy
     ARy,
@@ -45,11 +54,14 @@ export const Images = {
     // GENERAL
     ArrowDownIcon, AssembleIcon, RunIcon, AssembleRunIcon, PauseIcon, StepIcon, ResetIcon, KeyboardIcon, CheckIcon,
     XIcon, VisibilityIcon, PageIcon, AddIcon, ExpandIcon, WindowIcon, ImportIcon, ExportIcon, SaveIcon, ThemeIcon,
-    MemoryIcon, IODevicesIcon, CPURegistersIcon, IORegistersIcon, ErrorIcon, SpeedIcon,
+    MemoryIcon, IODevicesIcon, CPURegistersIcon, IORegistersIcon, ErrorIcon, SpeedIcon, LeftArrowIcon,
 
     // MOBILE
     MenuIcon, EditorIcon, HardwareIcon, ReturnIcon,
 
     // NO HEADERS
-    NoHeadersErrorIcon, RefreshIcon
+    NoHeadersErrorIcon, RefreshIcon,
+
+    // THEME
+    DarkThemeIcon, LightThemeIcon, ClassicThemeIcon, OceanThemeIcon, ForestThemeIcon, RubyThemeIcon
 };
