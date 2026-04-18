@@ -3,20 +3,31 @@ import { useManagerValue } from "../../../hooks/useManagerValue";
 import { Manager } from "../../../helpers/Manager";
 
 const CPURegister = React.memo(({ name, value }) => {
-    const isLightTheme = useManagerValue("isLightTheme");
+    const theme = useManagerValue("theme");
     const registerColoring = useManagerValue("registerColoring");
 
-    const colors = useMemo(() => { return isLightTheme ? {
-        A: "#8FC97A",
-        B: "#F2B36A",
-        C: "#B48AE3",
-        D: "#F58A8A"
-    } : {
-        A: "#3D691D",
-        B: "#C06A08",
-        C: "#60218E",
-        D: "#E81E1E"
-    }}, [isLightTheme]);
+    const colors = useMemo(() => {
+        switch(theme) {
+            case "dark": return {
+                A: "#3D691D",
+                B: "#C06A08",
+                C: "#60218E",
+                D: "#E81E1E"
+            }
+
+            case "light": return {
+                A: "#8FC97A",
+                B: "#F2B36A",
+                C: "#B48AE3",
+                D: "#F58A8A"
+            }
+
+            case "classic": return {}
+            case "ocean": return {}
+            case "forest": return {}
+            case "ruby": return {}
+        }
+    }, [theme]);
 
     const getTitle = useCallback(() => {
         if(name.length === 1) return `General Purpose Register ${name}`;

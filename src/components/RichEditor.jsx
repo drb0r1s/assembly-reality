@@ -9,7 +9,7 @@ const RichEditor = React.memo(({ code, onChange }) => {
     const { handleEditorDidMount, isLoading } = useRichEditor();
 
     const width = useResize();
-    const isLightTheme = useManagerValue("isLightTheme"); 
+    const theme = useManagerValue("theme"); 
 
     const [fontSize, setFontSize] = useState(14);
 
@@ -55,7 +55,7 @@ const RichEditor = React.memo(({ code, onChange }) => {
             <Editor
                 height="100%"
                 defaultLanguage="assembly"
-                theme={`assembly-${isLightTheme ? "light" : "dark"}`}
+                theme={`assembly-${theme}`}
                 value={code}
                 onChange={onChange}
                 onMount={handleEditorDidMount}

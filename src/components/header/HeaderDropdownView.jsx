@@ -1,4 +1,4 @@
-import LightThemeButton from "../LightThemeButton";
+import ThemeDashboard from "../themeDashboard/ThemeDashboard";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../helpers/Manager";
 import { Images } from "../../data/Images";
@@ -41,7 +41,7 @@ const HeaderDropdownView = () => {
     
     return(
         <div className="header-dropdown-view">
-            <LightThemeButton />            
+            <ThemeDashboard />
 
             <div className="header-dropdown-view-divider"></div>
 

@@ -12,7 +12,7 @@ const App = () => {
     const [notIsolated, setNotIsolated] = useState(true);
 
     const width = useResize();
-    const isLightTheme = useManagerValue("isLightTheme");
+    const theme = useManagerValue("theme");
 
     useEffect(() => { Autosave.initialize() }, []);
 
@@ -22,8 +22,8 @@ const App = () => {
     }, [crossOriginIsolated]);
 
     useEffect(() => {
-        document.documentElement.setAttribute("data-theme", isLightTheme ? "light" : "dark");
-    }, [isLightTheme]);
+        document.documentElement.setAttribute("data-theme", theme);
+    }, [theme]);
 
     return(
         <div id="assembly-reality">

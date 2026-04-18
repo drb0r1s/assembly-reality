@@ -20,11 +20,11 @@ const Display = ({ style, isExpanded }) => {
 
     const displayRendererRef = useRef(null);    
 
-    const isLightTheme = useManagerValue("isLightTheme");
+    const theme = useManagerValue("theme");
 
     const keyboardStyle = useMemo(() => { return {
-        color: keyboard.isActive ? "#405A85" : isLightTheme ? "#1A1A1A" : "#F4F4F4"
-    }}, [keyboard.isActive, isLightTheme]);
+        color: keyboard.isActive ? "#405A85" : theme === "dark" ? "#1A1A1A" : "#F4F4F4"
+    }}, [keyboard.isActive, theme]);
 
     const handleKeydown = useCallback(e => {
         e.preventDefault();

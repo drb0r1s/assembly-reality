@@ -18,7 +18,7 @@ const MemoryCanvas = ({ ram }) => {
         columns: 16
     }}, []);
 
-    const isLightTheme = useManagerValue("isLightTheme");
+    const theme = useManagerValue("theme");
     const isMemoryEmpty = useManagerValue("isMemoryEmpty");
     const registerColoring = useManagerValue("registerColoring");
 
@@ -47,7 +47,7 @@ const MemoryCanvas = ({ ram }) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
 
-        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, cellProps, hoveredCellRef.current, isLightTheme, registerColoring);
+        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, cellProps, hoveredCellRef.current, theme, registerColoring);
         rendererRef.current.initRender(ram);
         
         Manager.subscribe("ramUpdate", ram => {
@@ -61,7 +61,7 @@ const MemoryCanvas = ({ ram }) => {
             });
         });
 
-    }, [assembler, isLightTheme, registerColoring]);
+    }, [assembler, theme, registerColoring]);
 
     function handleClick(e) {
         if(isMemoryEmpty) return;
