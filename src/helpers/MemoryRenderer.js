@@ -248,10 +248,69 @@ export class MemoryRenderer {
                 divider: "#DADDE2" 
             }
 
-            case "classic": return {}
-            case "ocean": return {}
-            case "forest": return {}
-            case "ruby": return {}
+            case "classic": return {
+                text: "#5C3828",
+                sp: "#A03060",
+                stack: "#D4809A",
+                ip: "#7A5C1E",
+                instruction: "#C4A050",
+                instructionHover: "#5C4014",
+                A: "#6A9E48",
+                B: "#C87A20",
+                C: "#7C4E9E",
+                D: "#C04040",
+                textDisplay: "#F8EDD1",
+                background: "#FDF6E3",
+                divider: "#E5D0A5"
+            }
+
+            case "ocean": return {
+                text: "#90C0D8",
+                sp: "#2080A0",
+                stack: "#50A8C0",
+                ip: "#0A2030",
+                instruction: "#2A5878",
+                instructionHover: "#060E18",
+                A: "#3D7855",
+                B: "#C07030",
+                C: "#5040A0",
+                D: "#D03040",
+                textDisplay: "#0A1A28",
+                background: "#050F18",
+                divider: "#1C3850"
+            }
+
+            case "forest": return {
+                text: "#90B880",
+                sp: "#7A6020",
+                stack: "#A88840",
+                ip: "#0C2810",
+                instruction: "#286840",
+                instructionHover: "#071808",
+                A: "#4A8828",
+                B: "#B07820",
+                C: "#5E2A8A",
+                D: "#C83030",
+                textDisplay: "#0A1A0C",
+                background: "#060E07",
+                divider: "#1C4A28"
+            }
+
+            case "ruby": return {
+                text: "#D8A0B0",
+                sp: "#C02850",
+                stack: "#E06080",
+                ip: "#28080E",
+                instruction: "#601828",
+                instructionHover: "#180408",
+                A: "#4A8228",
+                B: "#C07020",
+                C: "#6030A0",
+                D: "#E04060",
+                textDisplay: "#1A080F",
+                background: "#100508",
+                divider: "#48182A"
+            }
         }
     }
 }

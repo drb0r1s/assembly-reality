@@ -22,9 +22,29 @@ const Display = ({ style, isExpanded }) => {
 
     const theme = useManagerValue("theme");
 
-    const keyboardStyle = useMemo(() => { return {
-        color: keyboard.isActive ? "#405A85" : theme === "dark" ? "#1A1A1A" : "#F4F4F4"
-    }}, [keyboard.isActive, theme]);
+    const keyboardStyle = useMemo(() => {
+        const activeColor = {
+            dark: "#405A85",
+            light: "#6F8FC7",
+            classic: "#7A5C1E",
+            ocean: "#2A6888",
+            forest: "#285C40",
+            ruby: "#803060",
+        };
+
+        const inactiveColor = {
+            dark: "#1A1A1A",
+            light: "#F4F4F4",
+            classic: "#FDF6E3",
+            ocean: "#050F18",
+            forest: "#060E07",
+            ruby: "#100508",
+        };
+
+        return {
+            color: keyboard.isActive ? activeColor[theme] : inactiveColor[theme]
+        };
+    }, [keyboard.isActive, theme]);
 
     const handleKeydown = useCallback(e => {
         e.preventDefault();

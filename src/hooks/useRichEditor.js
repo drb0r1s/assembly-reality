@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { useMonaco } from "@monaco-editor/react";
 import { useManagerValue } from "./useManagerValue";
 import { tokenizer } from "../data/richEditor/tokenizer";
-import { dark, light } from "../data/richEditor/style";
+import { dark, light, classic, ocean, forest, ruby } from "../data/richEditor/style";
 import { Keywords } from "../assembler/frontend/Keywords";
 import { Manager } from "../helpers/Manager";
 
@@ -51,6 +51,34 @@ export const useRichEditor = () => {
             inherit: true,
             rules: light.rules,
             colors: light.colors,
+        });
+
+        monaco.editor.defineTheme("assembly-classic", {
+            base: "vs",
+            inherit: true,
+            rules: classic.rules,
+            colors: classic.colors,
+        });
+
+        monaco.editor.defineTheme("assembly-ocean", {
+            base: "vs-dark",
+            inherit: true,
+            rules: ocean.rules,
+            colors: ocean.colors,
+        });
+
+        monaco.editor.defineTheme("assembly-forest", {
+            base: "vs-dark",
+            inherit: true,
+            rules: forest.rules,
+            colors: forest.colors,
+        });
+
+        monaco.editor.defineTheme("assembly-ruby", {
+            base: "vs-dark",
+            inherit: true,
+            rules: ruby.rules,
+            colors: ruby.colors,
         });
 
         monaco.editor.setTheme(`assembly-${theme}`);

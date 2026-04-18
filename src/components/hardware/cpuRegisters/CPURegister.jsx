@@ -22,10 +22,33 @@ const CPURegister = React.memo(({ name, value }) => {
                 D: "#F58A8A"
             }
 
-            case "classic": return {}
-            case "ocean": return {}
-            case "forest": return {}
-            case "ruby": return {}
+            case "classic": return {
+            A: "#6A9E48",
+            B: "#C87A20",
+            C: "#7C4E9E",
+            D: "#C04040"
+        }
+
+            case "ocean": return {
+                A: "#3D7855",
+                B: "#C07030",
+                C: "#5040A0",
+                D: "#D03040"
+            }
+
+            case "forest": return {
+                A: "#4A8828",
+                B: "#B07820",
+                C: "#5E2A8A",
+                D: "#C83030"
+            }
+
+            case "ruby": return {
+                A: "#4A8228",
+                B: "#C07020",
+                C: "#6030A0",
+                D: "#E04060"
+            }
         }
     }, [theme]);
 

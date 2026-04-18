@@ -1,3 +1,4 @@
+// dark theme
 :root {
     --primaryText: #F4F4F4;
     --primaryTextRGB: 244, 244, 244;
@@ -60,6 +61,134 @@
     --ipHover: #7F9FCF;
     --spColor: #E07AA8;
     --spLightColor: #F8C7DD;
+}
+
+[data-theme="classic"] {
+    --primaryText: #2C1A0E;
+    --primaryTextRGB: 44, 26, 14;
+    --secondaryText: #5C3828;
+    --tertiaryText: #8B6347;
+
+    --mainBackground: #FDF6E3;
+    --mainBackgroundRGB: 253, 246, 227;
+    --primaryBackground: #F8EDD1;
+    --secondaryBackground: #F2E4BE;
+    --tertiaryBackground: #E5D0A5;
+    --textDisplayBackground: #D4BA84;
+
+    --borderColor: #C0A870;
+
+    --blue: #7A5C1E;
+    --darkBlue: #5C4216;
+
+    --red: #B83A2A;
+
+    --aColor: #6A9E48;
+    --bColor: #C87A20;
+    --cColor: #7C4E9E;
+    --dColor: #C04040;
+
+    --ipColor: #7A5C1E;
+    --ipLightColor: #C4A050;
+    --ipHover: #5C4014;
+    --spColor: #A03060;
+    --spLightColor: #D4809A;
+}
+
+[data-theme="ocean"] {
+    --primaryText: #C8E8F0;
+    --primaryTextRGB: 200, 232, 240;
+    --secondaryText: #90C0D8;
+    --tertiaryText: #6AA0B8;
+
+    --mainBackground: #050F18;
+    --mainBackgroundRGB: 5, 15, 24;
+    --primaryBackground: #0A1A28;
+    --secondaryBackground: #071420;
+    --tertiaryBackground: #10263A;
+    --textDisplayBackground: #183448;
+
+    --borderColor: #1C3850;
+
+    --blue: #2A6888;
+    --darkBlue: #1A4868;
+
+    --red: #C04050;
+
+    --aColor: #3D7855;
+    --bColor: #C07030;
+    --cColor: #5040A0;
+    --dColor: #D03040;
+
+    --ipColor: #0A2030;
+    --ipLightColor: #2A5878;
+    --ipHover: #060E18;
+    --spColor: #2080A0;
+    --spLightColor: #50A8C0;
+}
+
+[data-theme="forest"] {
+    --primaryText: #C8E0C0;
+    --primaryTextRGB: 200, 224, 192;
+    --secondaryText: #90B880;
+    --tertiaryText: #6A9858;
+
+    --mainBackground: #060E07;
+    --mainBackgroundRGB: 6, 14, 7;
+    --primaryBackground: #0A1A0C;
+    --secondaryBackground: #081408;
+    --tertiaryBackground: #10261A;
+    --textDisplayBackground: #183820;
+
+    --borderColor: #1C4A28;
+
+    --blue: #285C40;
+    --darkBlue: #1A4030;
+
+    --red: #B83830;
+
+    --aColor: #4A8828;
+    --bColor: #B07820;
+    --cColor: #5E2A8A;
+    --dColor: #C83030;
+
+    --ipColor: #0C2810;
+    --ipLightColor: #286840;
+    --ipHover: #071808;
+    --spColor: #7A6020;
+    --spLightColor: #A88840;
+}
+
+[data-theme="ruby"] {
+    --primaryText: #F0D0D8;
+    --primaryTextRGB: 240, 208, 216;
+    --secondaryText: #D8A0B0;
+    --tertiaryText: #C07888;
+
+    --mainBackground: #100508;
+    --mainBackgroundRGB: 16, 5, 8;
+    --primaryBackground: #1A080F;
+    --secondaryBackground: #14050A;
+    --tertiaryBackground: #280E1A;
+    --textDisplayBackground: #381828;
+
+    --borderColor: #48182A;
+
+    --blue: #803060;
+    --darkBlue: #601848;
+
+    --red: #D03848;
+
+    --aColor: #4A8228;
+    --bColor: #C07020;
+    --cColor: #6030A0;
+    --dColor: #E04060;
+
+    --ipColor: #28080E;
+    --ipLightColor: #601828;
+    --ipHover: #180408;
+    --spColor: #C02850;
+    --spLightColor: #E06080;
 }
 
 $primaryText: var(--primaryText);
