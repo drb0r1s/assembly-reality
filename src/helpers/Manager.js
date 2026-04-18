@@ -2,7 +2,7 @@ import { Autosave } from "./Autosave";
 
 export const Manager = (() => {
     const values = new Map([
-        ["theme", Autosave.getItem("THEME")],
+        ["theme", Autosave.getItem("THEME") ?? "dark"], // ?? "dark" in case Autosave is not fast enough (happens when "THEME" is not in localStorage).
         ["view", { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true }],
         ["speed", Autosave.conditionalGetItem("SPEED")],
         ["registerColoring", { A: false, B: false, C: false, D: false }],

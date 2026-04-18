@@ -81,11 +81,14 @@ export const useRichEditor = () => {
             colors: ruby.colors,
         });
 
-        monaco.editor.setTheme(`assembly-${theme}`);
-
         return () => {
             providerRef.current?.dispose();
         }
+    }, [monaco]);
+
+    useEffect(() => {
+        if(!monaco) return;
+        monaco.editor.setTheme(`assembly-${theme}`);
     }, [monaco, theme]);
 
     function handleEditorDidMount(editor, monacoInstance) {
