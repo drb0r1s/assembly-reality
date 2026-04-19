@@ -2,7 +2,7 @@ import MobileHeader from "./MobileHeader";
 import AssemblerButtons from "../AssemblerButtons";
 import SpeedDashboard from "../SpeedDashboard";
 import FileDashboard from "../FileDashboard";
-import LightThemeButton from "../LightThemeButton";
+import ThemeDashboard from "../themeDashboard/ThemeDashboard";
 import Version from "../Version";
 
 const MobileMenu = ({ componentName, style, onReturn }) => {
@@ -35,8 +35,8 @@ const MobileMenu = ({ componentName, style, onReturn }) => {
                 </div>
 
                 <div className="mobile-menu-content-section">
-                    <strong className="mobile-menu-content-section-title">View</strong>
-                    <LightThemeButton />
+                    <strong className="mobile-menu-content-section-title">Theme</strong>
+                    <ThemeDashboard />
                 </div>
             </div>
         </div>
