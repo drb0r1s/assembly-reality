@@ -9,6 +9,15 @@ const ThemeDashboardDropdown = ({ ref }) => {
     const buttons = ["Dark", "Light", "Classic", "Ocean", "Forest", "Ruby"];
     const ButtonIcons = [Images.DarkThemeIcon, Images.LightThemeIcon, Images.ClassicThemeIcon, Images.OceanThemeIcon, Images.ForestThemeIcon, Images.RubyThemeIcon];
     
+    function changeTheme(button) {
+        const newTheme = button.toLowerCase();
+
+        if(theme === newTheme) return;
+
+        Autosave.setItem("THEME", newTheme);
+        Manager.set("theme", newTheme);
+    }
+
     return(
         <div className="theme-dashboard-dropdown" ref={ref}>
             {buttons.map((button, index) => {
@@ -16,18 +25,17 @@ const ThemeDashboardDropdown = ({ ref }) => {
 
                 return <button
                     key={index}
-                    onClick={() => {
-                        Autosave.setItem("THEME", button.toLowerCase());
-                        Manager.set("theme", button.toLowerCase());
-                    }}
+                    id={theme === button.toLowerCase() ? "theme-dashboard-dropdown-theme-button" : ""}
+                    className={`theme-dashboard-dropdown-${button.toLowerCase()}-button`}
+                    onClick={() => changeTheme(button)}
                 >
-                    <div className="header-dropdown-view-button-left-group">
-                        <ButtonIcon />
+                    <div className="theme-dashboard-dropdown-button-left-group">
+                        <ButtonIcon className="theme-dashboard-dropdown-button-icon" />
                         <p>{button}</p>
                     </div>
 
                     <Images.CheckIcon
-                        className="header-dropdown-view-check-icon"
+                        className="theme-dashboard-dropdown-check-icon"
                         style={theme === button.toLowerCase() ? { opacity: "1" } : {}}
                     />
                 </button>;

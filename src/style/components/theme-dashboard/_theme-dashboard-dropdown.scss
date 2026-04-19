@@ -2,6 +2,7 @@
     width: 200px;
     @include center(column);
     align-items: flex-start;
+    gap: 5px;
     flex-shrink: 0;
     background-color: $primaryBackground;
     border-radius: 5px;
@@ -17,22 +18,18 @@
         width: 100%;
         @include center;
         justify-content: space-between;
-        background-color: transparent;
+        background: transparent;
         border: none;
         border-radius: 5px;
         padding: 5px;
         cursor: pointer;
         transition: 300ms;
 
-        &:hover {
-            background-color: $blue;
-        }
-
-        .header-dropdown-view-button-left-group {
+        .theme-dashboard-dropdown-button-left-group {
             @include center;
             gap: 10px;
 
-            .header-dropdown-file-autosave-button-icon {
+            .theme-dashboard-dropdown-button-icon {
                 height: 22px;
                 width: 22px;
                 object-fit: contain;
@@ -45,9 +42,136 @@
             }
         }
 
-        .header-dropdown-view-check-icon {
+        .theme-dashboard-dropdown-check-icon {
             opacity: 0;
             transition: 300ms;
+        }
+    }
+
+    .theme-dashboard-dropdown-dark-button:hover {
+        background: $darkHover;
+
+        .theme-dashboard-dropdown-button-left-group {
+            .theme-dashboard-dropdown-button-icon {
+                color: $darkText;
+            }
+
+            p {
+                color: $darkText;
+            }
+        }
+
+        .theme-dashboard-dropdown-check-icon {
+            color: $darkText;
+        }
+    }
+
+    .theme-dashboard-dropdown-light-button:hover {
+        background: $lightHover;
+
+        .theme-dashboard-dropdown-button-left-group {
+            .theme-dashboard-dropdown-button-icon {
+                color: $lightText;
+            }
+
+            p {
+                color: $lightText;
+            }
+        }
+
+        .theme-dashboard-dropdown-check-icon {
+            color: $lightText;
+        }
+    }
+
+    .theme-dashboard-dropdown-classic-button:hover {
+        background: $classicHover;
+
+        .theme-dashboard-dropdown-button-left-group {
+            .theme-dashboard-dropdown-button-icon {
+                color: $classicText;
+            }
+
+            p {
+                color: $classicText;
+            }
+        }
+
+        .theme-dashboard-dropdown-check-icon {
+            color: $classicText;
+        }
+    }
+
+    .theme-dashboard-dropdown-ocean-button:hover {
+        background: $oceanHover;
+
+        .theme-dashboard-dropdown-button-left-group {
+            .theme-dashboard-dropdown-button-icon {
+                color: $oceanText;
+            }
+
+            p {
+                color: $oceanText;
+            }
+        }
+
+        .theme-dashboard-dropdown-check-icon {
+            color: $oceanText;
+        }
+    }
+
+    .theme-dashboard-dropdown-forest-button:hover {
+        background: $forestHover;
+
+        .theme-dashboard-dropdown-button-left-group {
+            .theme-dashboard-dropdown-button-icon {
+                color: $forestText;
+            }
+
+            p {
+                color: $forestText;
+            }
+        }
+
+        .theme-dashboard-dropdown-check-icon {
+            color: $forestText;
+        }
+    }
+
+    .theme-dashboard-dropdown-ruby-button:hover {
+        background: $rubyHover;
+
+        .theme-dashboard-dropdown-button-left-group {
+            .theme-dashboard-dropdown-button-icon {
+                color: $rubyText;
+            }
+
+            p {
+                color: $rubyText;
+            }
+        }
+
+        .theme-dashboard-dropdown-check-icon {
+            color: $rubyText;
+        }
+    }
+
+    #theme-dashboard-dropdown-theme-button {
+        background: $blue;
+        cursor: default;
+
+        .theme-dashboard-dropdown-button-left-group {
+            .theme-dashboard-dropdown-button-icon {
+                color: $primaryText;
+            }
+
+            p {
+                color: $primaryText;
+            }
+        }
+
+        .theme-dashboard-dropdown-check-icon {
+            color: $primaryText;
         }
     }
 }
@@ -55,4 +179,19 @@
 .active-dropdown {
     opacity: 1;
     top: 0;
+}
+
+@media screen and (max-width: 900px) {
+    .theme-dashboard-dropdown {
+        width: 100%;
+        background-color: $mainBackground;
+        opacity: 1;
+        position: static;
+        padding-left: 0;
+        padding-right: 0;
+
+        button .theme-dashboard-dropdown-button-left-group p {
+            font-size: 16px;
+        }
+    }
 }

@@ -1,11 +1,14 @@
 import ThemeDashboardDropdown from "./ThemeDashboardDropdown";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { useDropdown } from "../../hooks/useDropdown";
+import { useResize } from "../../hooks/useResize";
 import { Images } from "../../data/Images";
 
 const ThemeDashboard = () => {
     const theme = useManagerValue("theme");
+
     const { dropdown, enableDropdown, disableDropdown, dropdownRefs } = useDropdown({ theme: false });
+    const width = useResize();
 
     const ThemeIcons = {
         dark: Images.DarkThemeIcon,
@@ -24,18 +27,18 @@ const ThemeDashboard = () => {
             onMouseOver={() => enableDropdown("theme")}
             onMouseLeave={() => disableDropdown("theme")}
         >
-            {dropdown.theme && <ThemeDashboardDropdown
+            {(dropdown.theme || width < 900) && <ThemeDashboardDropdown
                 ref={el => dropdownRefs.current.theme = el}
             />}
             
-            <div className="theme-dashboard-button">
+            {width >= 900 && <div className="theme-dashboard-button">
                 <div className="theme-dashboard-button-left-group">
                     <ThemeIcon />
                     <p>{theme} Theme</p>
                 </div>
             
                 <Images.LeftArrowIcon className="theme-dashboard-button-arrow" />
-            </div>
+            </div>}
         </div>
     );
 }
