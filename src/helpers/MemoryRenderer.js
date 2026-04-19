@@ -35,6 +35,15 @@ export class MemoryRenderer {
         };
     }
 
+    updateTheme(theme) {
+        this.theme = theme;
+        this.colors = this.getThemeColors(theme);
+
+        this.gradients = {
+            spIp: this.getGradient(this.colors.sp, this.colors.ip)
+        };
+    }
+
     // ram is passed as a parameter of the method .render simply because we need updated properties of ram for this method
     initRender(ram) {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
