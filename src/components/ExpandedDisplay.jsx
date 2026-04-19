@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import AppName from "./AppName";
 import Display from "./Display";
 import { Manager } from "../helpers/Manager";
 import { Images } from "../data/Images";
@@ -24,6 +25,10 @@ const ExpandedDisplay = () => {
     
     return(
         <div className="expanded-display" ref={expandedDisplayRef}>
+            <div className="expanded-display-app-name-holder">
+                <AppName />
+            </div>
+            
             <button
                 className="expanded-display-x-button"
                 onClick={disableExpandedDisplay}

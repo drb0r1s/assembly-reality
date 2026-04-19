@@ -565,19 +565,6 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   -o-object-fit: contain;
      object-fit: contain;
 }
-header .header-right-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 10px;
-}
-header .header-right-group .header-title {
-  color: var(--primaryText);
-  font-size: 18px;
-  font-family: SourceCodePro-Regular;
-  font-weight: normal;
-}
 
 .editor {
   height: 100%;
@@ -1514,6 +1501,12 @@ header .header-right-group .header-title {
   overflow-x: hidden;
   overflow-y: auto;
 }
+.expanded-display .expanded-display-app-name-holder {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  z-index: 1;
+}
 .expanded-display .expanded-display-x-button {
   display: flex;
   align-items: center;
@@ -2189,4 +2182,18 @@ header .header-right-group .header-title {
   width: 18px;
   -o-object-fit: contain;
      object-fit: contain;
+}
+
+.app-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+}
+.app-name .app-name-title {
+  color: var(--primaryText);
+  font-size: 18px;
+  font-family: SourceCodePro-Regular;
+  font-weight: normal;
 }/*# sourceMappingURL=main.css.map */

@@ -12,6 +12,13 @@
     overflow-x: hidden;
     overflow-y: auto;
 
+    .expanded-display-app-name-holder {
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        z-index: 1;
+    }
+
     .expanded-display-x-button {
         @include center;
         background-color: transparent;

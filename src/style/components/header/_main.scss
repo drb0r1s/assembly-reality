@@ -88,16 +88,4 @@ header {
             }
         }
     }
-
-    .header-right-group {
-        @include center;
-        gap: 10px;
-
-        .header-title {
-            color: $primaryText;
-            font-size: 18px;
-            font-family: SourceCodePro-Regular;
-            font-weight: normal;
-        }
-    }
 }

@@ -1,0 +1,11 @@
+.app-name {
+    @include center;
+    gap: 10px;
+
+    .app-name-title {
+        color: $primaryText;
+        font-size: 18px;
+        font-family: SourceCodePro-Regular;
+        font-weight: normal;
+    }
+}
