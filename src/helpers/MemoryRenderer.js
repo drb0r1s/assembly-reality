@@ -1,5 +1,5 @@
 export class MemoryRenderer {
-    constructor(canvas, ctx, assembler, cellProps, hoveredCell, theme, registerColoring) {
+    constructor(canvas, ctx, assembler, cellProps, hoveredCell, theme) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.assembler = assembler;
@@ -8,7 +8,6 @@ export class MemoryRenderer {
         this.hoveredCell = hoveredCell;
 
         this.theme = theme;
-        this.registerColoring = registerColoring;
 
         this.matrix = assembler.ram.matrix.getMatrix();
         this.prevMatrix = new Uint8Array(this.matrix.length);
@@ -100,14 +99,23 @@ export class MemoryRenderer {
         this.renderBorders();
     }
 
-    renderCell(ram, cell, IP, SP) {
+    renderRegisterCells(coloredRegisters) {
+        for(const cell in this.assembler.cpuRegisters.collection) {
+            if(Object.hasOwn(this.assembler.cpuRegisters.collection, cell)) {
+                const register = this.assembler.cpuRegisters.collection[cell];
+                this.renderCell(null, cell, null, null, register, coloredRegisters);
+            }
+        }
+    }
+
+    renderCell(ram, cell, IP, SP, register = null, coloredRegisters) {
         const row = Math.floor(cell / this.cellProps.columns);
         const column = cell % this.cellProps.columns;
 
         const x = column * this.cellProps.width;
         const y = row * this.cellProps.height;
 
-        const cellColor = this.getCellColor(ram, cell, IP, SP);
+        const cellColor = register !== null ? this.getRegisterCellColor(cell, register, coloredRegisters) : this.getCellColor(ram, cell, IP, SP);
 
         this.ctx.fillStyle = cellColor;
         this.ctx.fillRect(x + 1, y, this.cellProps.width - 1, this.cellProps.height); // +-1 corrections are due to left border being over-drawn because of the cell's background.
@@ -144,13 +152,14 @@ export class MemoryRenderer {
             return this.colors.instruction;
         }
 
-        if(this.assembler.cpuRegisters.collection[cell]) {
-            const register = this.assembler.cpuRegisters.collection[cell];
-            if(this.registerColoring[register]) return this.colors[register];
-        }
-
         if(cell >= 0x1000 && cell <= 0x101F) return this.colors.textDisplay;
 
+        return this.colors.background;
+    }
+
+    getRegisterCellColor(cell, register, coloredRegisters) {
+        if(coloredRegisters[register]) return this.colors[register];
+        if(cell >= 0x1000 && cell <= 0x101F) return this.colors.textDisplay;
         return this.colors.background;
     }
 

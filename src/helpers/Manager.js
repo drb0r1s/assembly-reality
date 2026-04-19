@@ -5,7 +5,7 @@ export const Manager = (() => {
         ["theme", Autosave.getItem("THEME") ?? "dark"], // ?? "dark" in case Autosave is not fast enough (happens when "THEME" is not in localStorage).
         ["view", { memory: true, ioDevices: true, cpuRegisters: true, ioRegisters: true }],
         ["speed", Autosave.conditionalGetItem("SPEED")],
-        ["registerColoring", { A: false, B: false, C: false, D: false }],
+        ["coloredRegisters", { A: false, B: false, C: false, D: false }],
         ["isAutosaveActive", Autosave.getItem("IS_AUTOSAVE_ACTIVE")],
         ["isDisplayExpanded", false],
         ["isHighSpeed", Autosave.conditionalGetItem("SPEED") >= 10000],

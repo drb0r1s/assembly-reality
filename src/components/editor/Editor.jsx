@@ -26,6 +26,9 @@ const Editor = () => {
     const speed = useManagerValue("speed");
     const speedRef = useRef(speed);
 
+    const coloredRegisters = useManagerValue("coloredRegisters");
+    const coloredRegistersRef = useRef(coloredRegisters);
+
     const isCodeEmpty = useManagerValue("isCodeEmpty");
 
     useCodeAutosave({ pages, setPages, codes, setCodes });
@@ -88,6 +91,7 @@ const Editor = () => {
                         Manager.trigger("linesUpdate", data?.lines);
                         Manager.trigger("cpuRegistersPing");
                         Manager.trigger("cpuRegistersCollectionUpdate", data?.cpuRegisters);
+                        Manager.trigger("colorRegisters", coloredRegistersRef.current); // There is a possibility that some register's color was already active, so we need to apply the color.
                         Manager.trigger("graphicsReset"); // If something was left on the canvas, it is a good idea to reset it, just in case.
                     });
 
@@ -119,7 +123,8 @@ const Editor = () => {
                     Manager.sequence(() => {
                         Manager.trigger("ramReset");
                         Manager.trigger("cpuRegistersPing");
-                        Manager.trigger("cpuRegistersCollectionUpdate", { collection: {} });
+                        // v1.3 update: This reset trigger is moved to MemoryCanvas, so that it can be called after MemoryRenderer resets register colors.
+                        //Manager.trigger("cpuRegistersCollectionUpdate", { collection: {} });
                         Manager.trigger("ioRegistersPing");
                         Manager.trigger("ioRegistersSlowPing");
                         Manager.trigger("graphicsReset");
@@ -222,6 +227,10 @@ const Editor = () => {
             unsubscribeCodeRequest();
         };
     }, [assemblerWorker, speed]);
+
+    useEffect(() => {
+        coloredRegistersRef.current = coloredRegisters;
+    }, [coloredRegisters]);
 
     function getActiveCode() {
         return codesRef.current[pagesRef.current.active];

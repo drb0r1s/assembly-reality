@@ -4,7 +4,7 @@ import { Manager } from "../../../helpers/Manager";
 
 const CPURegister = React.memo(({ name, value }) => {
     const theme = useManagerValue("theme");
-    const registerColoring = useManagerValue("registerColoring");
+    const coloredRegisters = useManagerValue("coloredRegisters");
 
     const colors = useMemo(() => {
         switch(theme) {
@@ -23,11 +23,11 @@ const CPURegister = React.memo(({ name, value }) => {
             }
 
             case "classic": return {
-            A: "#6A9E48",
-            B: "#C87A20",
-            C: "#7C4E9E",
-            D: "#C04040"
-        }
+                A: "#6A9E48",
+                B: "#C87A20",
+                C: "#7C4E9E",
+                D: "#C04040"
+            }
 
             case "ocean": return {
                 A: "#3D7855",
@@ -64,8 +64,11 @@ const CPURegister = React.memo(({ name, value }) => {
             <strong title={getTitle()}>{name}</strong>
 
             <p
-                style={registerColoring[name] ? { backgroundColor: colors[name] } : {}}
-                onClick={() => Manager.set("registerColoring", {...registerColoring, [name]: !registerColoring[name]})}
+                style={coloredRegisters[name] ? { backgroundColor: colors[name] } : {}}
+                onClick={() => Manager.sequence(() => {
+                    Manager.set("coloredRegisters", {...coloredRegisters, [name]: !coloredRegisters[name]});
+                    Manager.trigger("colorRegisters", {...coloredRegisters, [name]: !coloredRegisters[name]});
+                })}
             >{value}</p>
         </div>
     );

@@ -20,7 +20,6 @@ const MemoryCanvas = ({ ram }) => {
 
     const theme = useManagerValue("theme");
     const isMemoryEmpty = useManagerValue("isMemoryEmpty");
-    const registerColoring = useManagerValue("registerColoring");
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -47,21 +46,36 @@ const MemoryCanvas = ({ ram }) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
 
-        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, cellProps, hoveredCellRef.current, theme, registerColoring);
+        rendererRef.current = new MemoryRenderer(canvas, ctx, assembler, cellProps, hoveredCellRef.current, theme);
         rendererRef.current.initRender(ram);
         
-        Manager.subscribe("ramUpdate", ram => {
+        const unsubscribeRamUpdate = Manager.subscribe("ramUpdate", ram => {
             rendererRef.current.render(ram);
         });
 
-        Manager.subscribe("ramReset", () => {
+        const unsubscribeRamReset = Manager.subscribe("ramReset", () => {
             rendererRef.current.render({
                 instructions: new Set(),
                 stackStart: 0
             });
+
+            rendererRef.current.renderRegisterCells({ A: false, B: false, C: false, D: false });
+
+            // Only after reseting register cells is this trigger allowed to be called.
+            // The reason for that is because we don't want to lose the cpuRegisters.collection, we need to know which (register) cells to reset.
+            Manager.trigger("cpuRegistersCollectionUpdate", { collection: {} });
         });
 
-    }, [assembler, theme, registerColoring]);
+        const unsubscribeColorRegisters = Manager.subscribe("colorRegisters", coloredRegisters => {
+            rendererRef.current.renderRegisterCells(coloredRegisters);
+        });
+
+        return () => {
+            unsubscribeRamUpdate();
+            unsubscribeRamReset();
+            unsubscribeColorRegisters();
+        }
+    }, [assembler, theme]);
 
     function handleClick(e) {
         if(isMemoryEmpty) return;
