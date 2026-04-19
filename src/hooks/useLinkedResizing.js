@@ -7,7 +7,7 @@ export const useLinkedResizing = ({ headerRef, elementRefs, targetIndex, holderR
     const view = useManagerValue("view");
     
     const headerHeight = 27;
-    const mobileHeaderHeight = width < 900 ? 38 : 0;
+    const mobileHeaderHeight = width < 900 ? 45 : 0; // 45px - mobile header
     
     useEffect(() => {
         if((width < 900 || width >= 1300) && conditional) return;

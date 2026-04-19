@@ -27,7 +27,7 @@
         border-left: none;
 
         .hardware-content {
-            height: calc(100% - 38px);
+            height: calc(100% - 45px); // 45px - mobile header
         }
     }
 }
