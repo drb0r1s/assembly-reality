@@ -72,6 +72,7 @@
   --ipHover: #071835;
   --spColor: #BB3071;
   --spLightColor: #C77399;
+  --loadingSpinner: #405A85;
 }
 
 [data-theme=light] {
@@ -98,6 +99,7 @@
   --ipHover: #7F9FCF;
   --spColor: #E07AA8;
   --spLightColor: #F8C7DD;
+  --loadingSpinner: #6F8FC7;
 }
 
 [data-theme=classic] {
@@ -124,6 +126,7 @@
   --ipHover: #5C4014;
   --spColor: #A03060;
   --spLightColor: #D4809A;
+  --loadingSpinner: #7A5C1E;
 }
 
 [data-theme=ocean] {
@@ -150,6 +153,7 @@
   --ipHover: #060E18;
   --spColor: #2080A0;
   --spLightColor: #50A8C0;
+  --loadingSpinner: #2A6888;
 }
 
 [data-theme=forest] {
@@ -176,6 +180,7 @@
   --ipHover: #071808;
   --spColor: #7A6020;
   --spLightColor: #A88840;
+  --loadingSpinner: #285C40;
 }
 
 [data-theme=ruby] {
@@ -202,6 +207,7 @@
   --ipHover: #180408;
   --spColor: #C02850;
   --spLightColor: #E06080;
+  --loadingSpinner: #803060;
 }
 
 ::-webkit-scrollbar {
@@ -1637,7 +1643,7 @@ header .header-right-group .header-title {
   height: 46px;
   width: 46px;
   border: 8px solid transparent;
-  border-top: 8px solid var(--blue);
+  border-top: 8px solid var(--loadingSpinner);
   border-radius: 50%;
   position: absolute;
   animation: rotation 3s infinite;
