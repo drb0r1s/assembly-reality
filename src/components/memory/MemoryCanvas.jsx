@@ -19,6 +19,7 @@ const MemoryCanvas = ({ ram }) => {
     }}, []);
 
     const theme = useManagerValue("theme");
+    const coloredRegisters = useManagerValue("coloredRegisters");
     const isMemoryEmpty = useManagerValue("isMemoryEmpty");
 
     useEffect(() => {
@@ -75,7 +76,16 @@ const MemoryCanvas = ({ ram }) => {
             unsubscribeRamReset();
             unsubscribeColorRegisters();
         }
-    }, [assembler, theme]);
+    }, [assembler]);
+
+    useEffect(() => {
+        if(!rendererRef.current) return;
+
+        rendererRef.current.updateTheme(theme);
+
+        rendererRef.current.initRender(ram); // .initRender instead of .render because we need to update every cell
+        rendererRef.current.renderRegisterCells(coloredRegisters);
+    }, [theme]);
 
     function handleClick(e) {
         if(isMemoryEmpty) return;
