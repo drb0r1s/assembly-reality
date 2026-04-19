@@ -232,3 +232,17 @@ $spColor: var(--spColor);
 $spLightColor: var(--spLightColor);
 
 $loadingSpinner: var(--loadingSpinner);
+
+// THEME HOVER COLORS
+$darkHover: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+$darkText: #F4F4F4;
+$lightHover: linear-gradient(135deg, #e8eaf6, #e3f2fd, #f3e5f5);
+$lightText: #1A1A1A;
+$classicHover: linear-gradient(135deg, #c87a20, #d4a04a, #b85c10);
+$classicText: #F4F4F4;
+$oceanHover: linear-gradient(135deg, #0a2a4a, #1a6688, #00b4d8);
+$oceanText: #F4F4F4;
+$forestHover: linear-gradient(135deg, #0a2010, #1a5c30, #52b788);
+$forestText: #F4F4F4;
+$rubyHover: linear-gradient(135deg, #3a0010, #c0284a, #ff6b9d);
+$rubyText: #F4F4F4;
