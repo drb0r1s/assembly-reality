@@ -270,7 +270,7 @@ export class MemoryRenderer {
                 text: "#5C3828",
                 sp: "#df689c",
                 stack: "#d0879e",
-                ip: "#e6964f",
+                ip: "#7FAED6",
                 instruction: "#C4A050",
                 instructionHover: "#a97624",
                 A: "#6A9E48",
