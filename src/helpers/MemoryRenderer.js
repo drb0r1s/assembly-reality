@@ -300,9 +300,9 @@ export class MemoryRenderer {
 
             case "forest": return {
                 text: "#90B880",
-                sp: "#7A6020",
-                stack: "#A88840",
-                ip: "#0C2810",
+                sp: "#C02850",
+                stack: "#a34059",
+                ip: "#1f7e83",
                 instruction: "#286840",
                 instructionHover: "#071808",
                 A: "#4A8828",
