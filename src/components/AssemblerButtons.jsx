@@ -1,4 +1,5 @@
 import { useManagerValue } from "../hooks/useManagerValue";
+import { useResize } from "../hooks/useResize";
 import { Manager } from "../helpers/Manager";
 import { Images } from "../data/Images";
 
@@ -9,6 +10,8 @@ const AssemblerButtons = ({ className, isExpanded }) => {
     const isAssembled = useManagerValue("isAssembled");
     const isRunning = useManagerValue("isRunning");
     const isExecuted = useManagerValue("isExecuted");
+    
+    const width = useResize();
 
     const isAssembleDisabled = isCodeEmpty || isAssembled || isRunning;
     const isAssembleRunDisabled = (isCodeEmpty && isMemoryEmpty) || (isAssembled && isMemoryEmpty) || isExecuted;
@@ -28,7 +31,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     onClick={isAssembleRunDisabled ? () => {} : () => handleButton(isRunning ? "pause" : isMemoryEmpty ? "assembleRun" : "run")}
                 >
                     {isRunning ? <Images.PauseIcon className="assembler-button-icon" /> : isMemoryEmpty ? <Images.AssembleRunIcon className="assembler-button-icon" /> : <Images.RunIcon className="assembler-button-icon" />}
-                    <p>{isRunning ? "Pause" : isMemoryEmpty ? "Assemble & Run" : "Run"}</p>
+                    {width >= 1050 && <p>{isRunning ? "Pause" : isMemoryEmpty ? "Assemble & Run" : "Run"}</p>}
                 </button>
 
                 <button
@@ -36,7 +39,7 @@ const AssemblerButtons = ({ className, isExpanded }) => {
                     onClick={isMemoryEmpty ? () => {} : () => handleButton("reset")}
                 >
                     <Images.ResetIcon className="assembler-button-icon" />
-                    <p>Reset</p>
+                    {width >= 1050 && <p>Reset</p>}
                 </button>
             </> : <>
                 <button

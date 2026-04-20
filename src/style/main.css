@@ -1537,6 +1537,16 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   width: 512px;
 }
 
+@media screen and (max-height: 650px) {
+  .expanded-display .display {
+    justify-content: flex-start;
+  }
+}
+@media screen and (max-width: 1050px) {
+  .expanded-display .display .assembler-buttons {
+    width: auto;
+  }
+}
 .switch {
   height: 25px;
   width: 42px;
