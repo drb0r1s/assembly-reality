@@ -834,6 +834,8 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  will-change: transform;
+  transform: translateZ(0);
 }
 .memory .memory-matrix-holder .memory-matrix .memory-matrix-content .memory-matrix-rows span {
   height: 20px;

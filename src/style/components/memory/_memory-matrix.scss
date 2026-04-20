@@ -44,6 +44,8 @@
 
         .memory-matrix-rows {
             @include center(column);
+            will-change: transform;
+            transform: translateZ(0);
 
             span {
                 height: 20px;
