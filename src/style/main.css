@@ -68,8 +68,8 @@
   --cColor: #60218E;
   --dColor: #E81E1E;
   --ipColor: #122A4A;
-  --ipLightColor: #3D75A6;
   --spColor: #BB3071;
+  --rangeColor: #3D75A6;
   --lineHighlight: #071835;
   --loadingSpinner: #405A85;
 }
@@ -94,8 +94,8 @@
   --cColor: #B48AE3;
   --dColor: #F58A8A;
   --ipColor: #7FAED6;
-  --ipLightColor: #B9DCF7;
   --spColor: #E07AA8;
+  --rangeColor: #B9DCF7;
   --lineHighlight: #7F9FCF;
   --loadingSpinner: #6F8FC7;
 }
@@ -120,8 +120,8 @@
   --cColor: #9f67c7;
   --dColor: #e85b5b;
   --ipColor: #e6964f;
-  --ipLightColor: #C4A050;
   --spColor: #df689c;
+  --rangeColor: #C4A050;
   --lineHighlight: #e7c287;
   --loadingSpinner: #7A5C1E;
 }
@@ -145,10 +145,10 @@
   --bColor: #C07030;
   --cColor: #5040A0;
   --dColor: #D03040;
-  --ipColor: #0A2030;
-  --ipLightColor: #2A5878;
-  --spColor: #2080A0;
-  --lineHighlight: #060E18;
+  --ipColor: #102737;
+  --spColor: #C02850;
+  --rangeColor: #2A5878;
+  --lineHighlight: #1a2e46;
   --loadingSpinner: #2A6888;
 }
 
@@ -172,8 +172,8 @@
   --cColor: #5E2A8A;
   --dColor: #C83030;
   --ipColor: #0C2810;
-  --ipLightColor: #286840;
   --spColor: #7A6020;
+  --rangeColor: #286840;
   --lineHighlight: #071808;
   --loadingSpinner: #285C40;
 }
@@ -198,8 +198,8 @@
   --cColor: #6030A0;
   --dColor: #E04060;
   --ipColor: #28080E;
-  --ipLightColor: #601828;
   --spColor: #C02850;
+  --rangeColor: #601828;
   --lineHighlight: #180408;
   --loadingSpinner: #803060;
 }
@@ -1257,7 +1257,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
 .range .range-filled-line {
   height: 5px;
   width: 0;
-  background-color: var(--ipLightColor);
+  background-color: var(--rangeColor);
   border-radius: 10px;
   position: absolute;
   transition: 0;

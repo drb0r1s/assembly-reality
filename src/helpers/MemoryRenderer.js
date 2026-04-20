@@ -284,9 +284,9 @@ export class MemoryRenderer {
 
             case "ocean": return {
                 text: "#90C0D8",
-                sp: "#2080A0",
-                stack: "#50A8C0",
-                ip: "#0A2030",
+                sp: "#C02850",
+                stack: "#792b3e",
+                ip: "#102737",
                 instruction: "#2A5878",
                 instructionHover: "#060E18",
                 A: "#3D7855",
