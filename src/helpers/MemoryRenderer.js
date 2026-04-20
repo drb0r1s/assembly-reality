@@ -317,8 +317,8 @@ export class MemoryRenderer {
             case "ruby": return {
                 text: "#D8A0B0",
                 sp: "#C02850",
-                stack: "#E06080",
-                ip: "#28080E",
+                stack: "#a13d56",
+                ip: "#470c8b",
                 instruction: "#601828",
                 instructionHover: "#180408",
                 A: "#3c6920",
