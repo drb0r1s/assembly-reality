@@ -1959,7 +1959,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: 300ms;
 }
 .speed-dashboard .speed-dashboard-buttons button:hover {
-  border: 1px solid var(--primaryText);
+  border: 1px solid var(--borderColor);
 }
 
 .speed-dashboard-disabled {
