@@ -31,7 +31,7 @@
             transition: 300ms;
 
             &:hover {
-                background-color: $blue;
+                background-color: $mark;
             }
 
             .assembler-button-icon {
@@ -100,7 +100,7 @@
         transition: 300ms;
 
         &:hover {
-            border: 1px solid $blue;
+            border: 1px solid $mark;
         }
 
         .display-keyboard-left-group {
@@ -130,7 +130,7 @@
     }
 
     .display-keyboard-active {
-        border: 1px solid $blue;
+        border: 1px solid $mark;
     }
 }
 

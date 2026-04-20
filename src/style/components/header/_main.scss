@@ -39,7 +39,7 @@ header {
                 transition: 300ms;
 
                 &:hover {
-                    background-color: $blue;
+                    background-color: $mark;
                 }
 
                 p {
@@ -61,7 +61,7 @@ header {
                     color: $primaryText;
                     font-size: 14px;
                     font-family: SourceCodePro-Regular;
-                    background-color: $darkBlue;
+                    background-color: $darkMark;
                     border-radius: 5px;
                     margin-left: 8px;
                     padding: 3px;

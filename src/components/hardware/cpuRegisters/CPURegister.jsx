@@ -25,8 +25,8 @@ const CPURegister = React.memo(({ name, value }) => {
             case "classic": return {
                 A: "#6A9E48",
                 B: "#C87A20",
-                C: "#7C4E9E",
-                D: "#C04040"
+                C: "#9f67c7",
+                D: "#e85b5b"
             }
 
             case "ocean": return {
@@ -44,7 +44,7 @@ const CPURegister = React.memo(({ name, value }) => {
             }
 
             case "ruby": return {
-                A: "#4A8228",
+                A: "#3c6920",
                 B: "#C07020",
                 C: "#6030A0",
                 D: "#E04060"

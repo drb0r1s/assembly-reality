@@ -14,8 +14,8 @@
 
     --borderColor: #2F3336;
 
-    --blue: #405A85;
-    --darkBlue: #274677;
+    --mark: #405A85;
+    --darkMark: #274677;
 
     --red: #C41B08;
 
@@ -26,9 +26,9 @@
 
     --ipColor: #122A4A;
     --ipLightColor: #3D75A6;
-    --ipHover: #071835;
     --spColor: #BB3071;
-    --spLightColor: #C77399;
+
+    --lineHighlight: #071835;
 
     --loadingSpinner: #405A85;
 }
@@ -48,8 +48,8 @@
 
     --borderColor: #B4B7BC;
 
-    --blue: #6F8FC7;
-    --darkBlue: #4E6FA8;
+    --mark: #6F8FC7;
+    --darkMark: #4E6FA8;
 
     --red: #E04A3F;
 
@@ -60,9 +60,9 @@
 
     --ipColor: #7FAED6;
     --ipLightColor: #B9DCF7;
-    --ipHover: #7F9FCF;
     --spColor: #E07AA8;
-    --spLightColor: #F8C7DD;
+
+    --lineHighlight: #7F9FCF;
 
     --loadingSpinner: #6F8FC7;
 }
@@ -82,21 +82,21 @@
 
     --borderColor: #C0A870;
 
-    --blue: #7A5C1E;
-    --darkBlue: #5C4216;
+    --mark: #c9a04e;
+    --darkMark: #b78d45;
 
-    --red: #B83A2A;
+    --red: #d75e4e;
 
     --aColor: #6A9E48;
     --bColor: #C87A20;
-    --cColor: #7C4E9E;
-    --dColor: #C04040;
+    --cColor: #9f67c7;
+    --dColor: #e85b5b;
 
-    --ipColor: #7A5C1E;
+    --ipColor: #e6964f;
     --ipLightColor: #C4A050;
-    --ipHover: #5C4014;
-    --spColor: #A03060;
-    --spLightColor: #D4809A;
+    --spColor: #df689c;
+
+    --lineHighlight: #e7c287;
 
     --loadingSpinner: #7A5C1E;
 }
@@ -116,8 +116,8 @@
 
     --borderColor: #1C3850;
 
-    --blue: #2A6888;
-    --darkBlue: #1A4868;
+    --mark: #2A6888;
+    --darkMark: #1A4868;
 
     --red: #C04050;
 
@@ -128,10 +128,10 @@
 
     --ipColor: #0A2030;
     --ipLightColor: #2A5878;
-    --ipHover: #060E18;
     --spColor: #2080A0;
-    --spLightColor: #50A8C0;
 
+    --lineHighlight: #060E18;
+    
     --loadingSpinner: #2A6888;
 }
 
@@ -150,8 +150,8 @@
 
     --borderColor: #1C4A28;
 
-    --blue: #285C40;
-    --darkBlue: #1A4030;
+    --mark: #285C40;
+    --darkMark: #1A4030;
 
     --red: #B83830;
 
@@ -162,9 +162,9 @@
 
     --ipColor: #0C2810;
     --ipLightColor: #286840;
-    --ipHover: #071808;
     --spColor: #7A6020;
-    --spLightColor: #A88840;
+
+    --lineHighlight: #071808;
 
     --loadingSpinner: #285C40;
 }
@@ -184,21 +184,21 @@
 
     --borderColor: #48182A;
 
-    --blue: #803060;
-    --darkBlue: #601848;
+    --mark: #803060;
+    --darkMark: #601848;
 
     --red: #D03848;
 
-    --aColor: #4A8228;
+    --aColor: #3c6920;
     --bColor: #C07020;
     --cColor: #6030A0;
     --dColor: #E04060;
 
     --ipColor: #28080E;
     --ipLightColor: #601828;
-    --ipHover: #180408;
     --spColor: #C02850;
-    --spLightColor: #E06080;
+
+    --lineHighlight: #180408;
 
     --loadingSpinner: #803060;
 }
@@ -215,8 +215,8 @@ $textDisplayBackground: var(--textDisplayBackground);
 
 $borderColor: var(--borderColor);
 
-$blue: var(--blue);
-$darkBlue: var(--darkBlue);
+$mark: var(--mark);
+$darkMark: var(--darkMark);
 
 $red: var(--red);
 
@@ -227,9 +227,9 @@ $dColor: var(--dColor);
 
 $ipColor: var(--ipColor);
 $ipLightColor: var(--ipLightColor);
-$ipHover: var(--ipHover);
 $spColor: var(--spColor);
-$spLightColor: var(--spLightColor);
+
+$lineHightlight: var(--lineHighlight);
 
 $loadingSpinner: var(--loadingSpinner);
 

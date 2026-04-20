@@ -60,8 +60,8 @@
   --tertiaryBackground: #2B2A2A;
   --textDisplayBackground: #2F3336;
   --borderColor: #2F3336;
-  --blue: #405A85;
-  --darkBlue: #274677;
+  --mark: #405A85;
+  --darkMark: #274677;
   --red: #C41B08;
   --aColor: #3D691D;
   --bColor: #C06A08;
@@ -69,9 +69,8 @@
   --dColor: #E81E1E;
   --ipColor: #122A4A;
   --ipLightColor: #3D75A6;
-  --ipHover: #071835;
   --spColor: #BB3071;
-  --spLightColor: #C77399;
+  --lineHighlight: #071835;
   --loadingSpinner: #405A85;
 }
 
@@ -87,8 +86,8 @@
   --tertiaryBackground: #DADDE2;
   --textDisplayBackground: #CDCFCF;
   --borderColor: #B4B7BC;
-  --blue: #6F8FC7;
-  --darkBlue: #4E6FA8;
+  --mark: #6F8FC7;
+  --darkMark: #4E6FA8;
   --red: #E04A3F;
   --aColor: #8FC97A;
   --bColor: #F2B36A;
@@ -96,9 +95,8 @@
   --dColor: #F58A8A;
   --ipColor: #7FAED6;
   --ipLightColor: #B9DCF7;
-  --ipHover: #7F9FCF;
   --spColor: #E07AA8;
-  --spLightColor: #F8C7DD;
+  --lineHighlight: #7F9FCF;
   --loadingSpinner: #6F8FC7;
 }
 
@@ -114,18 +112,17 @@
   --tertiaryBackground: #E5D0A5;
   --textDisplayBackground: #D4BA84;
   --borderColor: #C0A870;
-  --blue: #7A5C1E;
-  --darkBlue: #5C4216;
-  --red: #B83A2A;
+  --mark: #c9a04e;
+  --darkMark: #b78d45;
+  --red: #d75e4e;
   --aColor: #6A9E48;
   --bColor: #C87A20;
-  --cColor: #7C4E9E;
-  --dColor: #C04040;
-  --ipColor: #7A5C1E;
+  --cColor: #9f67c7;
+  --dColor: #e85b5b;
+  --ipColor: #e6964f;
   --ipLightColor: #C4A050;
-  --ipHover: #5C4014;
-  --spColor: #A03060;
-  --spLightColor: #D4809A;
+  --spColor: #df689c;
+  --lineHighlight: #e7c287;
   --loadingSpinner: #7A5C1E;
 }
 
@@ -141,8 +138,8 @@
   --tertiaryBackground: #10263A;
   --textDisplayBackground: #183448;
   --borderColor: #1C3850;
-  --blue: #2A6888;
-  --darkBlue: #1A4868;
+  --mark: #2A6888;
+  --darkMark: #1A4868;
   --red: #C04050;
   --aColor: #3D7855;
   --bColor: #C07030;
@@ -150,9 +147,8 @@
   --dColor: #D03040;
   --ipColor: #0A2030;
   --ipLightColor: #2A5878;
-  --ipHover: #060E18;
   --spColor: #2080A0;
-  --spLightColor: #50A8C0;
+  --lineHighlight: #060E18;
   --loadingSpinner: #2A6888;
 }
 
@@ -168,8 +164,8 @@
   --tertiaryBackground: #10261A;
   --textDisplayBackground: #183820;
   --borderColor: #1C4A28;
-  --blue: #285C40;
-  --darkBlue: #1A4030;
+  --mark: #285C40;
+  --darkMark: #1A4030;
   --red: #B83830;
   --aColor: #4A8828;
   --bColor: #B07820;
@@ -177,9 +173,8 @@
   --dColor: #C83030;
   --ipColor: #0C2810;
   --ipLightColor: #286840;
-  --ipHover: #071808;
   --spColor: #7A6020;
-  --spLightColor: #A88840;
+  --lineHighlight: #071808;
   --loadingSpinner: #285C40;
 }
 
@@ -195,18 +190,17 @@
   --tertiaryBackground: #280E1A;
   --textDisplayBackground: #381828;
   --borderColor: #48182A;
-  --blue: #803060;
-  --darkBlue: #601848;
+  --mark: #803060;
+  --darkMark: #601848;
   --red: #D03848;
-  --aColor: #4A8228;
+  --aColor: #3c6920;
   --bColor: #C07020;
   --cColor: #6030A0;
   --dColor: #E04060;
   --ipColor: #28080E;
   --ipLightColor: #601828;
-  --ipHover: #180408;
   --spColor: #C02850;
-  --spLightColor: #E06080;
+  --lineHighlight: #180408;
   --loadingSpinner: #803060;
 }
 
@@ -365,8 +359,8 @@ main .workspace {
   transition: 300ms;
 }
 .no-headers-layout .no-headers-layout-content button:hover {
-  background-color: var(--blue);
-  border: 2px solid var(--blue);
+  background-color: var(--mark);
+  border: 2px solid var(--mark);
 }
 .no-headers-layout .no-headers-layout-content button .no-headers-refresh-icon {
   height: 24px;
@@ -452,7 +446,7 @@ header .header-dropdown .header-dropdown-view .header-dropdown-view-sections but
   transition: 300ms;
 }
 header .header-dropdown .header-dropdown-view .header-dropdown-view-sections button:hover {
-  background-color: var(--blue);
+  background-color: var(--mark);
 }
 header .header-dropdown .header-dropdown-view .header-dropdown-view-sections button .header-dropdown-view-button-left-group {
   display: flex;
@@ -523,7 +517,7 @@ header .header-left-group .header-buttons .header-dropdown-button {
 }
 header .header-left-group .header-buttons .assembler-button:hover,
 header .header-left-group .header-buttons .header-dropdown-button:hover {
-  background-color: var(--blue);
+  background-color: var(--mark);
 }
 header .header-left-group .header-buttons .assembler-button p,
 header .header-left-group .header-buttons .header-dropdown-button p {
@@ -544,7 +538,7 @@ header .header-left-group .header-dropdown-buttons .header-dropdown-button span 
   color: var(--primaryText);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
-  background-color: var(--darkBlue);
+  background-color: var(--darkMark);
   border-radius: 5px;
   margin-left: 8px;
   padding: 3px;
@@ -1013,7 +1007,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   z-index: 1;
 }
 .hardware .hardware-content .io-devices .io-devices-expand-button:hover {
-  background-color: var(--blue);
+  background-color: var(--mark);
   border: 1px solid #F4F4F4;
 }
 .hardware .hardware-content .cpu-registers {
@@ -1271,7 +1265,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
 .range .range-circle {
   height: 20px;
   width: 20px;
-  background-color: var(--blue);
+  background-color: var(--mark);
   border: 3px solid var(--primaryBackground);
   border-radius: 50%;
   position: absolute;
@@ -1280,7 +1274,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: background-color 300ms ease;
 }
 .range .range-circle:hover {
-  background-color: var(--darkBlue);
+  background-color: var(--darkMark);
 }
 
 @media screen and (max-width: 900px) {
@@ -1374,7 +1368,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: 300ms;
 }
 .display .display-buttons .assembler-button:hover {
-  background-color: var(--blue);
+  background-color: var(--mark);
 }
 .display .display-buttons .assembler-button .assembler-button-icon {
   height: 32px;
@@ -1443,7 +1437,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: 300ms;
 }
 .display .display-keyboard:hover {
-  border: 1px solid var(--blue);
+  border: 1px solid var(--mark);
 }
 .display .display-keyboard .display-keyboard-left-group {
   display: flex;
@@ -1472,7 +1466,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: 300ms;
 }
 .display .display-keyboard-active {
-  border: 1px solid var(--blue);
+  border: 1px solid var(--mark);
 }
 
 @media screen and (max-width: 900px) {
@@ -1567,7 +1561,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: 300ms;
 }
 .switch .switch-ball-active {
-  background-color: var(--blue);
+  background-color: var(--mark);
   left: calc(100% - 21px - 2px);
 }
 
@@ -1588,11 +1582,11 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
 }
 
 .rich-editor-highlighted-line {
-  background-color: var(--ipHover);
+  background-color: var(--lineHighlight);
 }
 
 .rich-editor-highlighted-line-gutter {
-  border-left: 3px solid var(--blue);
+  border-left: 3px solid var(--mark);
 }
 
 .loading {
@@ -1877,7 +1871,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: 300ms;
 }
 .file-dashboard button:hover {
-  background-color: var(--blue);
+  background-color: var(--mark);
 }
 .file-dashboard button .file-dashboard-button-icon {
   height: 22px;
@@ -2117,7 +2111,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   color: #F4F4F4;
 }
 .theme-dashboard .theme-dashboard-dropdown #theme-dashboard-dropdown-theme-button {
-  background: var(--blue);
+  background: var(--mark);
   cursor: default;
 }
 .theme-dashboard .theme-dashboard-dropdown #theme-dashboard-dropdown-theme-button .theme-dashboard-dropdown-button-left-group .theme-dashboard-dropdown-button-icon {
@@ -2162,7 +2156,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: 300ms;
 }
 .theme-dashboard .theme-dashboard-button:hover {
-  background-color: var(--blue);
+  background-color: var(--mark);
 }
 .theme-dashboard .theme-dashboard-button .theme-dashboard-button-left-group {
   display: flex;

@@ -3,9 +3,9 @@
 }
 
 .rich-editor-highlighted-line {
-    background-color: $ipHover;
+    background-color: $lineHightlight;
 }
 
 .rich-editor-highlighted-line-gutter {
-    border-left: 3px solid $blue;
+    border-left: 3px solid $mark;
 }
