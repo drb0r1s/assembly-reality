@@ -1,0 +1,30 @@
+.record-button {
+    height: 30px;
+    width: 30px;
+    @include center;
+    background-color: $primaryBackground;
+    border: 1px solid $borderColor;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 300ms;
+    z-index: 1;
+
+    &:hover {
+        background-color: $mark;
+        border: 1px solid #F4F4F4;
+    }
+
+    .record-button-recording-icon {
+        color: $red;
+    }
+}
+
+.record-button-recording {
+    border-color: $red;
+    cursor: default;
+
+    &:hover {
+        background-color: $primaryBackground;
+        border: 1px solid $red;
+    }
+}

@@ -2209,4 +2209,35 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   font-size: 18px;
   font-family: SourceCodePro-Regular;
   font-weight: normal;
+}
+
+.record-button {
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: var(--primaryBackground);
+  border: 1px solid var(--borderColor);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 300ms;
+  z-index: 1;
+}
+.record-button:hover {
+  background-color: var(--mark);
+  border: 1px solid #F4F4F4;
+}
+.record-button .record-button-recording-icon {
+  color: var(--red);
+}
+
+.record-button-recording {
+  border-color: var(--red);
+  cursor: default;
+}
+.record-button-recording:hover {
+  background-color: var(--primaryBackground);
+  border: 1px solid var(--red);
 }/*# sourceMappingURL=main.css.map */
