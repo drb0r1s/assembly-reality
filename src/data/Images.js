@@ -28,6 +28,7 @@ import IORegistersIcon from "../images/io-registers-icon.svg?react";
 import ErrorIcon from "../images/error-icon.svg?react";
 import SpeedIcon from "../images/speed-icon.svg?react";
 import LeftArrowIcon from "../images/left-arrow-icon.svg?react";
+import RecordIcon from "../images/record-icon.svg?react";
 
 // MOBILE
 import MenuIcon from "../images/menu-icon.svg?react";
@@ -54,7 +55,7 @@ export const Images = {
     // GENERAL
     ArrowDownIcon, AssembleIcon, RunIcon, AssembleRunIcon, PauseIcon, StepIcon, ResetIcon, KeyboardIcon, CheckIcon,
     XIcon, VisibilityIcon, PageIcon, AddIcon, ExpandIcon, WindowIcon, ImportIcon, ExportIcon, SaveIcon, ThemeIcon,
-    MemoryIcon, IODevicesIcon, CPURegistersIcon, IORegistersIcon, ErrorIcon, SpeedIcon, LeftArrowIcon,
+    MemoryIcon, IODevicesIcon, CPURegistersIcon, IORegistersIcon, ErrorIcon, SpeedIcon, LeftArrowIcon, RecordIcon,
 
     // MOBILE
     MenuIcon, EditorIcon, HardwareIcon, ReturnIcon,

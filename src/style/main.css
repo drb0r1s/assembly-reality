@@ -991,7 +991,17 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   position: absolute;
   bottom: 0;
 }
-.hardware .hardware-content .io-devices .io-devices-expand-button {
+.hardware .hardware-content .io-devices .io-devices-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  position: absolute;
+  top: 37px;
+  right: 10px;
+}
+.hardware .hardware-content .io-devices .io-devices-buttons .io-devices-button {
   height: 30px;
   width: 30px;
   display: flex;
@@ -1001,14 +1011,11 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   background-color: var(--primaryBackground);
   border: 1px solid var(--borderColor);
   border-radius: 50%;
-  position: absolute;
-  top: 37px;
-  right: 10px;
   cursor: pointer;
   transition: 300ms;
   z-index: 1;
 }
-.hardware .hardware-content .io-devices .io-devices-expand-button:hover {
+.hardware .hardware-content .io-devices .io-devices-buttons .io-devices-button:hover {
   background-color: var(--mark);
   border: 1px solid #F4F4F4;
 }

@@ -30,12 +30,23 @@ const IODevices = ({ hardwareRef, elements, allElementRefs }) => {
                 ref={headerRef}
             />
 
-            {width >= 900 && <button
-                className="io-devices-expand-button"
-                onClick={() => Manager.set("isDisplayExpanded", true)}
-            >
-                <Images.ExpandIcon />
-            </button>}
+            <div className="io-devices-buttons">
+                {width >= 900 && <button
+                    className="io-devices-button"
+                    title="Expand"
+                    onClick={() => Manager.set("isDisplayExpanded", true)}
+                >
+                    <Images.ExpandIcon />
+                </button>}
+
+                <button
+                    className="io-devices-button"
+                    title="Record"
+                    onClick={}
+                >
+                    <Images.RecordIcon />
+                </button>
+            </div>
             
             <Display
                 style={{ height: `${displayHeight}px` }}

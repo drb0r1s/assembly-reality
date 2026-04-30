@@ -7,23 +7,28 @@
     position: absolute;
     bottom: 0;
 
-    .io-devices-expand-button {
-        height: 30px;
-        width: 30px;
-        @include center;
-        background-color: $primaryBackground;
-        border: 1px solid $borderColor;
-        border-radius: 50%;
+    .io-devices-buttons {
+        @include center(column);
+        gap: 10px;
         position: absolute;
         top: 37px;
         right: 10px;
-        cursor: pointer;
-        transition: 300ms;
-        z-index: 1;
 
-        &:hover {
-            background-color: $mark;
-            border: 1px solid #F4F4F4;
+        .io-devices-button {
+            height: 30px;
+            width: 30px;
+            @include center;
+            background-color: $primaryBackground;
+            border: 1px solid $borderColor;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 300ms;
+            z-index: 1;
+
+            &:hover {
+                background-color: $mark;
+                border: 1px solid #F4F4F4;
+            }
         }
     }
 }
