@@ -1,6 +1,6 @@
 const Version = () => {
     return(
-        <div className="version" title="April 2026">
+        <div className="version" title="May 2026">
             <p>1.3</p>
         </div>
     );
