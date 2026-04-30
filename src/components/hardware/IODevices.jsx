@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import DraggableHeader from "../DraggableHeader";
 import Display from "../Display";
+import RecordButton from "../RecordButton";
 import { useResize } from "../../hooks/useResize";
 import { useLinkedResizing } from "../../hooks/useLinkedResizing";
 import { useLinkedResizeObserver } from "../../hooks/useLinkedResizeObserver";
@@ -39,13 +40,7 @@ const IODevices = ({ hardwareRef, elements, allElementRefs }) => {
                     <Images.ExpandIcon />
                 </button>}
 
-                <button
-                    className="io-devices-button"
-                    title="Record"
-                    onClick={}
-                >
-                    <Images.RecordIcon />
-                </button>
+                <RecordButton />
             </div>
             
             <Display
