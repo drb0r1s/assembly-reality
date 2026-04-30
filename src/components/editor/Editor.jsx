@@ -349,6 +349,7 @@ const Editor = () => {
 
                 <button
                     className="editor-add-button"
+                    title="New Page"
                     onClick={() => addPage("")}
                 >
                     <Images.AddIcon className="editor-add-button-icon" />
