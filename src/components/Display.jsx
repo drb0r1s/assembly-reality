@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useContext, useMemo, useCallback } from "r
 import AssemblerButtons from "./AssemblerButtons";
 import { GlobalContext } from "../context/GlobalContext";
 import { useManagerValue } from "../hooks/useManagerValue";
+import { useRecord } from "../hooks/useRecord";
 import { Manager } from "../helpers/Manager";
 import { DisplayRenderer } from "../helpers/DisplayRenderer";
 import { Images } from "../data/Images";
@@ -18,9 +19,11 @@ const Display = ({ style, isExpanded }) => {
     const canvasRef = useRef(null);
     const canvasStrongRef = useRef(null);
 
-    const displayRendererRef = useRef(null);    
+    const displayRendererRef = useRef(null);
 
     const theme = useManagerValue("theme");
+
+    const { handleRecord } = useRecord({ canvasRef });
 
     const keyboardStyle = useMemo(() => {
         const activeColor = {
@@ -115,6 +118,10 @@ const Display = ({ style, isExpanded }) => {
             canvasStrongRef.current.style.opacity = "";
             displayRenderer.resetCanvas();
         });
+
+        const unsubscribePingRecording = Manager.subscribe("pingRecording", () => {
+            handleRecord();
+        });
         
         return () => {
             unsubscribeTextDisplayPing();
@@ -126,6 +133,8 @@ const Display = ({ style, isExpanded }) => {
             unsubscribeGraphicsReset();
 
             displayRenderer.cleanup();
+
+            unsubscribePingRecording();
         };
     }, []);
     
