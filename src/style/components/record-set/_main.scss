@@ -1,0 +1,7 @@
+.record-set {
+    @include center(column);
+    gap: 7px;
+
+    @import "./record-set-button";
+    @import "./record-set-timer";
+}

@@ -2211,7 +2211,14 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   font-weight: normal;
 }
 
-.record-button {
+.record-set {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+}
+.record-set .record-set-button {
   height: 30px;
   width: 30px;
   display: flex;
@@ -2225,19 +2232,37 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   transition: 300ms;
   z-index: 1;
 }
-.record-button:hover {
+.record-set .record-set-button:hover {
   background-color: var(--mark);
   border: 1px solid #F4F4F4;
 }
-.record-button .record-button-recording-icon {
+.record-set .record-set-button .record-set-button-recording-icon {
   color: var(--red);
 }
-
-.record-button-recording {
+.record-set .record-set-button-recording {
   border-color: var(--red);
   cursor: default;
 }
-.record-button-recording:hover {
+.record-set .record-set-button-recording:hover {
   background-color: var(--primaryBackground);
   border: 1px solid var(--red);
+}
+.record-set .record-set-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  background-color: var(--primaryBackground);
+  border: 1px solid var(--red);
+  border-radius: 12px;
+  opacity: 0;
+  padding: 3px 5px;
+  position: relative;
+  top: 10px;
+  transition: 300ms;
+}
+.record-set .record-set-timer p {
+  color: var(--red);
+  font-size: 14px;
+  font-family: SourceCodePro-Regular;
 }/*# sourceMappingURL=main.css.map */
