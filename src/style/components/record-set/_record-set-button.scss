@@ -28,3 +28,37 @@
         border: 1px solid $red;
     }
 }
+
+.record-set-button-expanded {
+    height: auto;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 12px;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+
+    &:hover {
+        border: none;
+    }
+
+    .record-set-button-record-icon,
+    .record-set-button-recording-icon {
+        height: 32px;
+        width: 32px;
+        object-fit: contain;
+    }
+
+    p {
+        color: $primaryText;
+        font-size: 24px;
+        font-family: Roboto-Regular;
+    }
+}
+
+.record-set-button-recording.record-set-button-expanded {
+    p {
+        color: $red;
+    }
+}

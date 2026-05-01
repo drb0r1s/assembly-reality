@@ -1349,7 +1349,18 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   overflow-x: hidden;
   overflow-y: auto;
 }
-.display .display-buttons {
+.display .display-buttons-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 256px - 30px);
+  transform: translate(-100%, -50%);
+  z-index: 1;
+}
+.display .display-buttons-holder .display-buttons {
   width: 235px;
   display: flex;
   align-items: center;
@@ -1357,13 +1368,8 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  position: absolute;
-  top: 50%;
-  left: calc(50% - 256px - 30px);
-  transform: translate(-100%, -50%);
-  z-index: 1;
 }
-.display .display-buttons .assembler-button {
+.display .display-buttons-holder .display-buttons .assembler-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1376,16 +1382,16 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   padding: 5px;
   transition: 300ms;
 }
-.display .display-buttons .assembler-button:hover {
+.display .display-buttons-holder .display-buttons .assembler-button:hover {
   background-color: var(--mark);
 }
-.display .display-buttons .assembler-button .assembler-button-icon {
+.display .display-buttons-holder .display-buttons .assembler-button .assembler-button-icon {
   height: 32px;
   width: 32px;
   -o-object-fit: contain;
      object-fit: contain;
 }
-.display .display-buttons .assembler-button p {
+.display .display-buttons-holder .display-buttons .assembler-button p {
   color: var(--primaryText);
   font-size: 24px;
 }
@@ -2247,6 +2253,34 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   background-color: var(--primaryBackground);
   border: 1px solid var(--red);
 }
+.record-set .record-set-button-expanded {
+  height: auto;
+  width: 100%;
+  justify-content: flex-start;
+  gap: 12px;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+.record-set .record-set-button-expanded:hover {
+  border: none;
+}
+.record-set .record-set-button-expanded .record-set-button-record-icon,
+.record-set .record-set-button-expanded .record-set-button-recording-icon {
+  height: 32px;
+  width: 32px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.record-set .record-set-button-expanded p {
+  color: var(--primaryText);
+  font-size: 24px;
+  font-family: Roboto-Regular;
+}
+.record-set .record-set-button-recording.record-set-button-expanded p {
+  color: var(--red);
+}
 .record-set .record-set-timer {
   display: flex;
   align-items: center;
@@ -2265,4 +2299,14 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   color: var(--red);
   font-size: 14px;
   font-family: SourceCodePro-Regular;
+}
+.record-set .record-set-timer-expanded p {
+  font-size: 18px;
+}
+
+.record-set-expanded {
+  width: 100%;
+  border-top: 1px solid var(--borderColor);
+  margin-top: 15px;
+  padding-top: 10px;
 }/*# sourceMappingURL=main.css.map */

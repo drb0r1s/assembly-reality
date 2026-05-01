@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useContext, useMemo, useCallback } from "react";
 import AssemblerButtons from "./AssemblerButtons";
+import RecordSet from "./recordSet/RecordSet";
 import { GlobalContext } from "../context/GlobalContext";
 import { useManagerValue } from "../hooks/useManagerValue";
 import { useRecord } from "../hooks/useRecord";
@@ -161,10 +162,14 @@ const Display = ({ style, isExpanded }) => {
             className="display"
             style={style}
         >
-            {isExpanded && <AssemblerButtons
-                className="display-buttons"
-                isExpanded={isExpanded}
-            />}
+            {isExpanded && <div className="display-buttons-holder">
+                <AssemblerButtons
+                    className="display-buttons"
+                    isExpanded={isExpanded}
+                />
+
+                <RecordSet isExpanded={true} />
+            </div>}
 
             <div className="display-canvas-holder">
                 <canvas ref={canvasRef}></canvas>

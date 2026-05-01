@@ -5,3 +5,10 @@
     @import "./record-set-button";
     @import "./record-set-timer";
 }
+
+.record-set-expanded {
+    width: 100%;
+    border-top: 1px solid $borderColor;
+    margin-top: 15px;
+    padding-top: 10px;
+}

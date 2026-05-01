@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-const RecordSetTimer = ({ isRecording }) => {
-    const [seconds, setSeconds] = useState(0);
-
+const RecordSetTimer = ({ isExpanded, isRecording, seconds, setSeconds }) => {
     const recordSetTimerRef = useRef(null);
     const intervalRef = useRef(null);
+    const secondsRef = useRef(seconds);
 
     useEffect(() => {
         if(isRecording) {
@@ -13,7 +12,10 @@ const RecordSetTimer = ({ isRecording }) => {
                 recordSetTimerRef.current.style.top = "0";
             }, 100);
 
-            intervalRef.current = setInterval(() => { setSeconds(prevSeconds => prevSeconds + 1) }, 1000);
+            intervalRef.current = setInterval(() => {
+                setSeconds(secondsRef.current + 1);
+                secondsRef.current += 1;
+            }, 1000);
         }
         
         else {
@@ -32,7 +34,7 @@ const RecordSetTimer = ({ isRecording }) => {
     const displayedSeconds = String(seconds % 60).padStart(2, "0");
 
     return (
-        <div className="record-set-timer" ref={recordSetTimerRef}>
+        <div className={`record-set-timer ${isExpanded ? "record-set-timer-expanded" : ""}`} ref={recordSetTimerRef}>
             <p>{displayedMinutes}:{displayedSeconds}</p>
         </div>
     );
