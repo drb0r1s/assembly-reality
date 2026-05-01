@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RecordSetButton from "./RecordSetButton";
 import RecordSetTimer from "./RecordSetTimer";
 import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../helpers/Manager";
 
 const RecordSet = ({ isExpanded }) => {
+    const isRunning = useManagerValue("isRunning");
     const recording = useManagerValue("recording");
+
+    useEffect(() => { if(!isRunning) Manager.set("recording", { isActive: false, seconds: 0 }) }, [isRunning]);
     
     return(
         <div className={`record-set ${isExpanded ? "record-set-expanded" : ""}`}>

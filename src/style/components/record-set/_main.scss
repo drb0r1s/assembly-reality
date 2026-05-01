@@ -1,6 +1,8 @@
 .record-set {
     @include center(column);
     gap: 7px;
+    opacity: 1;
+    transition: 300ms;
 
     @import "./record-set-button";
     @import "./record-set-timer";

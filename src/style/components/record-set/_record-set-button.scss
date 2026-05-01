@@ -62,3 +62,20 @@
         color: $red;
     }
 }
+
+.record-set-button-disabled {
+    opacity: .5;
+    cursor: default;
+
+    &:hover {
+        background-color: $primaryBackground;
+        border: 1px solid $borderColor;
+    }
+}
+
+.record-set-button-expanded.record-set-button-disabled {
+    &:hover {
+        background-color: transparent;
+        border: none;
+    }
+}
