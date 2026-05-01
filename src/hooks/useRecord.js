@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from "react";
 
 export const useRecord = ({ canvasRef }) => {
     const isRecordingRef = useRef(false);
+    const hiddenCanvasRef = useRef(null);
     const recorderRef = useRef(null);
     const chunksRef = useRef([]);
 
@@ -10,10 +11,22 @@ export const useRecord = ({ canvasRef }) => {
         
         // Start recording.
         if(!isRecordingRef.current) {
-            const canvas = canvasRef.current;
+            const source = canvasRef.current;
+            const scale = 4; // Scalling up classic canvas size of 256px to 1024px.
+
+            // We need to create a hidden canvas that is going to be updated just like a real one, but scaled up.
+            const hiddenCanvas = document.createElement("canvas");
+            hiddenCanvasRef.current = hiddenCanvas;
+
+            hiddenCanvas.width = source.width * scale;
+            hiddenCanvas.height = source.height * scale;
+
+            const ctx = hiddenCanvas.getContext("2d");
+            ctx.imageSmoothingEnabled = false;
+
             chunksRef.current = [];
 
-            const stream = canvas.captureStream(30);
+            const stream = hiddenCanvas.captureStream(30);
             const recorder = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp9" });
 
             recorder.ondataavailable = e => chunksRef.current.push(e.data);
@@ -21,26 +34,37 @@ export const useRecord = ({ canvasRef }) => {
             recorder.onstop = () => {
                 const blob = new Blob(chunksRef.current, { type: "video/webm" });
 
-                const recording = document.createElement("a");
+                const recordingA = document.createElement("a");
 
-                recording.href = URL.createObjectURL(blob);
-                recording.download = "assembly-reality-recording.webm";
+                recordingA.href = URL.createObjectURL(blob);
+                recordingA.download = "assembly-reality-recording.webm";
 
-                recording.click();
+                recordingA.click();
 
-                URL.revokeObjectURL(recording.href);
+                URL.revokeObjectURL(recordingA.href);
+            };
+
+            const mirror = () => {
+                if(!isRecordingRef.current) return;
+
+                ctx.drawImage(source, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+                requestAnimationFrame(mirror);
             };
 
             recorder.start();
-            recorderRef.current = recorder;
 
+            recorderRef.current = recorder;
             isRecordingRef.current = true;
+
+            mirror();
         }
         
         // Stop recording.
         else {
             recorderRef.current?.stop();
+
             isRecordingRef.current = false;
+            hiddenCanvasRef.current = null; // This way GC is aware of the element and clears it.
         }
     }, [canvasRef]);
 

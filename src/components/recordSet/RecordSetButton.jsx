@@ -6,12 +6,12 @@ const RecordSetButton = ({ isExpanded, isRecording, setIsRecording }) => {
     const isRunning = useManagerValue("isRunning");
     
     function startRecording() {
-        //Manager.trigger("pingRecording");
+        Manager.trigger("pingRecording");
         setIsRecording(true);
     }
 
     function stopRecording() {
-        //Manager.trigger("pingRecording");
+        Manager.trigger("pingRecording");
         setIsRecording(false);
     }
     
