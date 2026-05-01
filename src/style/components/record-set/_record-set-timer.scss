@@ -1,0 +1,17 @@
+.record-set-timer {
+    @include center;
+    background-color: $primaryBackground;
+    border: 1px solid $red;
+    border-radius: 12px;
+    opacity: 0;
+    padding: 3px 5px;
+    position: relative;
+    top: 10px;
+    transition: 300ms;
+
+    p {
+        color: $red;
+        font-size: 14px;
+        font-family: SourceCodePro-Regular;
+    }
+}
