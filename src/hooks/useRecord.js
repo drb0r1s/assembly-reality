@@ -1,5 +1,11 @@
 import { useState, useRef, useCallback } from "react";
 
+const MIME_TYPE = [
+    "video/webm; codecs=vp9",
+    "video/webm; codecs=vp8",
+    "video/webm",
+].find(type => MediaRecorder.isTypeSupported(type));
+
 export const useRecord = ({ canvasRef }) => {
     const isRecordingRef = useRef(false);
     const hiddenCanvasRef = useRef(null);
@@ -27,7 +33,7 @@ export const useRecord = ({ canvasRef }) => {
             chunksRef.current = [];
 
             const stream = hiddenCanvas.captureStream(30);
-            const recorder = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp9" });
+            const recorder = new MediaRecorder(stream, { mimeType: MIME_TYPE });
 
             recorder.ondataavailable = e => chunksRef.current.push(e.data);
 
