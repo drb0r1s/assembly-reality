@@ -2225,6 +2225,7 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   gap: 7px;
   opacity: 1;
   transition: 300ms;
+  z-index: 1;
 }
 .record-set .record-set-button {
   height: 30px;

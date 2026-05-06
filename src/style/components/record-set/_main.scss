@@ -3,6 +3,7 @@
     gap: 7px;
     opacity: 1;
     transition: 300ms;
+    z-index: 1;
 
     @import "./record-set-button";
     @import "./record-set-timer";
