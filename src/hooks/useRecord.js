@@ -43,7 +43,7 @@ export const useRecord = ({ canvasRef }) => {
                 const recordingA = document.createElement("a");
 
                 recordingA.href = URL.createObjectURL(blob);
-                recordingA.download = "assembly-reality-recording.webm";
+                recordingA.download = "ary-recording.webm";
 
                 recordingA.click();
 

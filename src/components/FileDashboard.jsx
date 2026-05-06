@@ -39,7 +39,7 @@ const FileDashboard = () => {
         const file = document.createElement("a");
 
         file.href = url;
-        file.download = `${codeFile.title}.txt`;
+        file.download = `ary-${codeFile.title}.txt`;
 
         // Appending and removing file from body was added specifically because of Firefox, otherwise it does not work on that browser.
         document.body.appendChild(file);
