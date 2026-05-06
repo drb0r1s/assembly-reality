@@ -91,7 +91,7 @@ const Display = ({ style, isExpanded }) => {
 
     useEffect(() => {
         // Initializing DisplayRenderer.
-        const displayRenderer = new DisplayRenderer(canvasRef.current, sharedCanvas, assembler);
+        const displayRenderer = new DisplayRenderer(canvasRef.current, sharedCanvas, assembler, isExpanded ? 512 : 256);
 
         displayRenderer.initializeWebGL();
         displayRendererRef.current = displayRenderer;

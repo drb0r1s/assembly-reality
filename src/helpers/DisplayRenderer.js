@@ -1,8 +1,9 @@
 export class DisplayRenderer {
-    constructor(canvas, sharedCanvas, assembler) {
+    constructor(canvas, sharedCanvas, assembler, canvasSize) {
         this.canvas = canvas;
         this.sharedCanvas = sharedCanvas;
         this.assembler = assembler;
+        this.canvasSize = canvasSize;
         
         this.gl = null;
         this.program = null;
@@ -19,8 +20,8 @@ export class DisplayRenderer {
             preserveDrawingBuffer: true
         });
 
-        this.canvas.height = 256;
-        this.canvas.width = 256;
+        this.canvas.height = this.canvasSize;
+        this.canvas.width = this.canvasSize;
 
         this.gl = gl;
 
@@ -156,7 +157,7 @@ export class DisplayRenderer {
             this.sharedCanvas.current.imageData.data
         );
 
-        gl.viewport(0, 0, 256, 256);
+        gl.viewport(0, 0, this.canvasSize, this.canvasSize);
         gl.clearColor(0, 0, 0, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
