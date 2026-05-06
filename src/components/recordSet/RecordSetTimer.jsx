@@ -1,19 +1,24 @@
 import { useEffect, useRef } from "react";
+import { useManagerValue } from "../../hooks/useManagerValue";
+import { Manager } from "../../helpers/Manager";
 
-const RecordSetTimer = ({ isExpanded, isRecording, seconds, setSeconds }) => {
+const RecordSetTimer = ({ isExpanded }) => {
+    const recordingIsActive = useManagerValue("recordingIsActive");
+    const recordingSeconds = useManagerValue("recordingSeconds");
+    
     const recordSetTimerRef = useRef(null);
     const intervalRef = useRef(null);
-    const secondsRef = useRef(seconds);
+    const secondsRef = useRef(recordingSeconds);
 
     useEffect(() => {
-        if(isRecording) {
+        if(recordingIsActive) {
             setTimeout(() => {
                 recordSetTimerRef.current.style.opacity = "1";
                 recordSetTimerRef.current.style.top = "0";
             }, 100);
 
             intervalRef.current = setInterval(() => {
-                setSeconds(secondsRef.current + 1);
+                Manager.set("recordingSeconds", secondsRef.current + 1);
                 secondsRef.current += 1;
             }, 1000);
         }
@@ -22,16 +27,19 @@ const RecordSetTimer = ({ isExpanded, isRecording, seconds, setSeconds }) => {
             recordSetTimerRef.current.style.opacity = "";
             recordSetTimerRef.current.style.top = "";
 
-            setTimeout(() => { setSeconds(0) }, 300);
+            setTimeout(() => {
+                Manager.set("recordingSeconds", 0);
+                secondsRef.current = 0;
+            }, 300);
 
             clearInterval(intervalRef.current);
         }
 
         return () => clearInterval(intervalRef.current);
-    }, [isRecording]);
+    }, [recordingIsActive]);
 
-    const displayedMinutes = String(Math.floor(seconds / 60)).padStart(2, "0");
-    const displayedSeconds = String(seconds % 60).padStart(2, "0");
+    const displayedMinutes = String(Math.floor(secondsRef.current / 60)).padStart(2, "0");
+    const displayedSeconds = String(secondsRef.current % 60).padStart(2, "0");
 
     return (
         <div className={`record-set-timer ${isExpanded ? "record-set-timer-expanded" : ""}`} ref={recordSetTimerRef}>

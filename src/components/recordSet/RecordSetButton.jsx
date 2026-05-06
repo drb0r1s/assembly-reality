@@ -2,31 +2,38 @@ import { useManagerValue } from "../../hooks/useManagerValue";
 import { Manager } from "../../helpers/Manager";
 import { Images } from "../../data/Images";
 
-const RecordSetButton = ({ isExpanded, isRecording, setIsRecording }) => {
+const RecordSetButton = ({ isExpanded }) => {
     const isRunning = useManagerValue("isRunning");
+    const recordingIsActive = useManagerValue("recordingIsActive");
     
     function startRecording() {
         if(!isRunning) return;
 
-        Manager.trigger("pingRecording");
-        setIsRecording(true);
+        Manager.sequence(() => {
+            Manager.set("recordingIsActive", true);
+            Manager.trigger("pingRecording");
+        });
     }
 
     function stopRecording() {
         if(!isRunning) return;
 
-        Manager.trigger("pingRecording");
-        setIsRecording(false);
+        Manager.sequence(() => {
+            Manager.set("recordingIsActive", false);
+            Manager.set("recordingSeconds", 0);
+
+            Manager.trigger("pingRecording");
+        });
     }
     
     return(
         <button
-            className={`record-set-button ${isRecording ? "record-set-button-recording" : ""} ${isExpanded ? "record-set-button-expanded" : ""} ${!isRunning ? "record-set-button-disabled" : ""}`}
-            title={isRecording ? "Stop" : "Record"}
-            onClick={isRecording ? stopRecording : startRecording}
+            className={`record-set-button ${recordingIsActive ? "record-set-button-recording" : ""} ${isExpanded ? "record-set-button-expanded" : ""} ${!isRunning ? "record-set-button-disabled" : ""}`}
+            title={recordingIsActive ? "Stop" : "Record"}
+            onClick={recordingIsActive ? stopRecording : startRecording}
         >
-            {isRecording ? <Images.RecordingIcon className="record-set-button-recording-icon" /> : <Images.RecordIcon className="record-set-button-record-icon" />}
-            {isExpanded && <p>{isRecording ? "Recording..." : "Record"}</p>}
+            {recordingIsActive ? <Images.RecordingIcon className="record-set-button-recording-icon" /> : <Images.RecordIcon className="record-set-button-record-icon" />}
+            {isExpanded && <p>{recordingIsActive ? "Recording..." : "Record"}</p>}
         </button>
     );
 }

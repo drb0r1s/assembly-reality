@@ -6,24 +6,21 @@ import { Manager } from "../../helpers/Manager";
 
 const RecordSet = ({ isExpanded }) => {
     const isRunning = useManagerValue("isRunning");
-    const recording = useManagerValue("recording");
 
-    useEffect(() => { if(!isRunning) Manager.set("recording", { isActive: false, seconds: 0 }) }, [isRunning]);
+    const recordingIsActive = useManagerValue("recordingIsActive");
+    const recordingSeconds = useManagerValue("recordingSeconds");
+
+    useEffect(() => {
+        if(!isRunning) Manager.sequence(() => {
+            Manager.set("recordingIsActive", false);
+            Manager.set("recordingSeconds", 0);
+        });
+    }, [isRunning]);
     
     return(
         <div className={`record-set ${isExpanded ? "record-set-expanded" : ""}`}>
-            <RecordSetButton
-                isExpanded={isExpanded}
-                isRecording={recording.isActive}
-                setIsRecording={newValue => Manager.set("recording", {...recording, isActive: newValue})}
-            />
-
-            <RecordSetTimer
-                isExpanded={isExpanded}
-                isRecording={recording.isActive}
-                seconds={recording.seconds}
-                setSeconds={newValue => Manager.set("recording", {...recording, seconds: newValue})}
-            />
+            <RecordSetButton isExpanded={isExpanded} />
+            <RecordSetTimer isExpanded={isExpanded} />
         </div>
     );
 }

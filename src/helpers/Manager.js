@@ -17,7 +17,8 @@ export const Manager = (() => {
         ["lockFileDropdown", false],
         ["editorPages", { list: ["New page"], active: 0, counter: 0 }],
         ["editorCodes", [""]],
-        ["recording", { isActive: false, seconds: 0 }],
+        ["recordingIsActive", false],
+        ["recordingSeconds", 0]
     ]);
     
     const listeners = new Map();
