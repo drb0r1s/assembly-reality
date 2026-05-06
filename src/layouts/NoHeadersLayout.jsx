@@ -20,6 +20,10 @@ const NoHeadersLayout = () => {
                     <Images.RefreshIcon className="no-headers-refresh-icon" />
                     <p>Refresh</p>
                 </button>
+
+                <div className="no-headers-layout-footer">
+                    <i>(If the issue persists after refreshing the page, consider changing the browser)</i>
+                </div>
             </div>
         </div>
     );

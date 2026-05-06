@@ -4,10 +4,12 @@
     @include center(column);
     background-color: $mainBackground;
     padding: 0 20px;
+    overflow-y: auto;
 
     .no-headers-layout-logo {
         height: 120px;
         width: 120px;
+        flex-shrink: 0;
         object-fit: contain;
     }
 
@@ -79,6 +81,19 @@
                 color: $primaryText;
                 font-size: 20px;
                 font-family: Roboto-Regular;
+            }
+        }
+
+        .no-headers-layout-footer {
+            @include center;
+            padding-top: 10px;
+
+            i {
+                color: $secondaryText;
+                font-size: 12px;
+                font-family: Roboto-Regular;
+                text-align: center;
+                opacity: .5;
             }
         }
     }

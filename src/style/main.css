@@ -292,10 +292,12 @@ main .workspace {
   flex-direction: column;
   background-color: var(--mainBackground);
   padding: 0 20px;
+  overflow-y: auto;
 }
 .no-headers-layout .no-headers-layout-logo {
   height: 120px;
   width: 120px;
+  flex-shrink: 0;
   -o-object-fit: contain;
      object-fit: contain;
 }
@@ -373,6 +375,20 @@ main .workspace {
   color: var(--primaryText);
   font-size: 20px;
   font-family: Roboto-Regular;
+}
+.no-headers-layout .no-headers-layout-content .no-headers-layout-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  padding-top: 10px;
+}
+.no-headers-layout .no-headers-layout-content .no-headers-layout-footer i {
+  color: var(--secondaryText);
+  font-size: 12px;
+  font-family: Roboto-Regular;
+  text-align: center;
+  opacity: 0.5;
 }
 
 @media screen and (max-width: 900px) {

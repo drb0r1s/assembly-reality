@@ -27,7 +27,7 @@ const App = () => {
 
     return(
         <div id="assembly-reality">
-            {isLoading ? <Loading /> : notIsolated ? <NoHeadersLayout /> : width >= 900 ? <DesktopLayout /> : <MobileLayout />}
+            {isLoading ? <Loading /> : true ? <NoHeadersLayout /> : width >= 900 ? <DesktopLayout /> : <MobileLayout />}
         </div>
     );
 }
