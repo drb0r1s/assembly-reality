@@ -120,7 +120,10 @@ const Display = ({ style, isExpanded }) => {
             displayRenderer.resetCanvas();
         });
 
+        // This event has an edge case if isExpanded is true.
+        // We need to block isExpanded in order to prevent double trigger, since both Display components receive the trigger.
         const unsubscribePingRecording = Manager.subscribe("pingRecording", () => {
+            if(isExpanded) return;
             handleRecord();
         });
         
