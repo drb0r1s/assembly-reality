@@ -1,4 +1,5 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { useManagerValue } from "./useManagerValue";
 
 const MIME_TYPE = [
     "video/webm; codecs=vp9",
@@ -7,7 +8,9 @@ const MIME_TYPE = [
 ].find(type => MediaRecorder.isTypeSupported(type));
 
 export const useRecord = ({ canvasRef }) => {
-    const isRecordingRef = useRef(false);
+    const recordingIsActive = useManagerValue("recordingIsActive");
+
+    const isRecordingRef = useRef(recordingIsActive);
     const hiddenCanvasRef = useRef(null);
     const recorderRef = useRef(null);
     const chunksRef = useRef([]);
@@ -73,6 +76,8 @@ export const useRecord = ({ canvasRef }) => {
             hiddenCanvasRef.current = null; // This way GC is aware of the element and clears it.
         }
     }, [canvasRef]);
+
+    useEffect(() => { if(isRecordingRef.current !== recordingIsActive) isRecordingRef.current = recordingIsActive }, [recordingIsActive]);
 
     return { handleRecord };
 }
