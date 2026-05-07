@@ -12,6 +12,7 @@ const Editor = () => {
     
     const [pages, setPages] = useState(() => Manager.get("editorPages"));
     const [codes, setCodes] = useState(() => Manager.get("editorCodes"));
+    const [breakpoints, setBreakpoints] = useState(new Set());
 
     const [error, setError] = useState({ type: "", content: "" });
 
@@ -20,6 +21,7 @@ const Editor = () => {
 
     const pagesRef = useRef(pages);
     const codesRef = useRef(codes);
+    const breakpointsRef = useRef(breakpoints);
 
     const editingInputRef = useRef(null);
 
@@ -42,6 +44,10 @@ const Editor = () => {
         Manager.set("editorCodes", codes);
         codesRef.current = codes;
     }, [codes]);
+
+    useEffect(() => {
+        breakpointsRef.current = breakpoints;
+    }, [breakpoints]);
 
     useEffect(() => { speedRef.current = speed }, [speed]);
 
@@ -356,14 +362,19 @@ const Editor = () => {
                 </button>
             </div>
 
-            <RichEditor code={codes[pages.active]} onChange={newCode => {
-                const newCodes = [...codes];
-                newCodes[pages.active] = newCode;
+            <RichEditor
+                code={codes[pages.active]}
+                breakpoints={breakpoints}
+                setBreakpoints={setBreakpoints}
+                onChange={newCode => {
+                    const newCodes = [...codes];
+                    newCodes[pages.active] = newCode;
 
-                codesRef.current = newCodes;
+                    codesRef.current = newCodes;
 
-                setCodes(newCodes);
-            }} />
+                    setCodes(newCodes);
+                }}
+            />
 
             {error.type && <EditorError error={error} setError={setError} />}
         </div>

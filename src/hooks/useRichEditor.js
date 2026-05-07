@@ -6,12 +6,15 @@ import { dark, light, classic, ocean, forest, ruby } from "../data/richEditor/st
 import { Keywords } from "../assembler/frontend/Keywords";
 import { Manager } from "../helpers/Manager";
 
-export const useRichEditor = () => {
+export const useRichEditor = (breakpoints, setBreakpoints) => {
     const [isLoading, setIsLoading] = useState(true);
 
     const editorRef = useRef(null);
     const providerRef = useRef(null);
     const decorationIdsRef = useRef([]);
+    const breakpointDecorationsRef = useRef([]);
+    const breakpointHoverDecorationsRef = useRef([]);
+    const breakpointsRef = useRef(breakpoints);
     const highlightLineRef = useRef(() => {});
 
     const monaco = useMonaco();
@@ -91,6 +94,25 @@ export const useRichEditor = () => {
         monaco.editor.setTheme(`assembly-${theme}`);
     }, [monaco, theme]);
 
+    useEffect(() => {
+        const editor = editorRef.current;
+        if(!editor || !monaco) return;
+
+        breakpointDecorationsRef.current = editor.deltaDecorations(
+            breakpointDecorationsRef.current,
+            [...breakpoints].map(line => ({
+                range: new monaco.Range(line, 1, line, 1),
+                options: {
+                    linesDecorationsClassName: "rich-editor-breakpoint",
+                }
+            }))
+        );
+    }, [monaco, breakpoints]);
+
+    useEffect(() => {
+        breakpointsRef.current = breakpoints;
+    }, [breakpoints]);
+
     function handleEditorDidMount(editor, monacoInstance) {
         editorRef.current = editor;
 
@@ -146,8 +168,53 @@ export const useRichEditor = () => {
             editorRef.current.revealLineInCenterIfOutsideViewport(line);
         }
 
-        editor.onMouseDown(unhighlightLine);
-        return () => editor.offMouseDown(unhighlightLine);
+        const mouseDownDisposable = editor.onMouseDown(e => {
+            unhighlightLine();
+
+            const { type, position } = e.target;
+            if(type !== 2 && type !== 3) return; // 2 = glyph margin, 3 = line number
+
+            const line = position.lineNumber;
+
+            setBreakpoints(prevBreakpoints => {
+                const next = new Set(prevBreakpoints);
+                next.has(line) ? next.delete(line) : next.add(line);
+
+                return next;
+            });
+        });
+
+        const mouseMoveDisposable = editor.onMouseMove(e => {
+            const { type, position } = e.target;
+
+            if (type !== 2 && type !== 3) {
+                // Clear hover decoration when not over the line.
+                breakpointHoverDecorationsRef.current = editor.deltaDecorations(
+                    breakpointHoverDecorationsRef.current, []
+                );
+                return;
+            }
+
+            const line = position.lineNumber;
+
+            // Don't show hover if there's already a real breakpoint there.
+            if(breakpointsRef.current.has(line)) return;
+
+            breakpointHoverDecorationsRef.current = editor.deltaDecorations(
+                breakpointHoverDecorationsRef.current,
+                [{
+                    range: new monaco.Range(line, 1, line, 1),
+                    options: {
+                        linesDecorationsClassName: "rich-editor-breakpoint-hover",
+                    }
+                }]
+            );
+        });
+
+        return () => {
+            mouseDownDisposable.dispose();
+            mouseMoveDisposable.dispose();
+        }
     }
 
     function getLabel(text) {

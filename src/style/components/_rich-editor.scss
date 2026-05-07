@@ -9,3 +9,17 @@
 .rich-editor-highlighted-line-gutter {
     border-left: 3px solid $mark;
 }
+
+.rich-editor-breakpoint {
+    background-image: url("../images/breakpoint-icon.svg");
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.rich-editor-breakpoint-hover {
+    background-image: url("../images/breakpoint-hover-icon.svg");
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+}

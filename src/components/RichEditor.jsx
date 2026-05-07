@@ -5,8 +5,8 @@ import { useRichEditor } from "../hooks/useRichEditor";
 import { useResize } from "../hooks/useResize";
 import { useManagerValue } from "../hooks/useManagerValue";
 
-const RichEditor = React.memo(({ code, onChange }) => {
-    const { handleEditorDidMount, isLoading } = useRichEditor();
+const RichEditor = React.memo(({ code, breakpoints, setBreakpoints, onChange }) => {
+    const { handleEditorDidMount, isLoading } = useRichEditor(breakpoints, setBreakpoints);
 
     const width = useResize();
     const theme = useManagerValue("theme"); 

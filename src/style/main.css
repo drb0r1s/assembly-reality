@@ -1630,6 +1630,20 @@ header .header-left-group .header-assembler-buttons .header-assembler-button .as
   border-left: 3px solid var(--mark);
 }
 
+.rich-editor-breakpoint {
+  background-image: url("../images/breakpoint-icon.svg");
+  background-size: 18px 18px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.rich-editor-breakpoint-hover {
+  background-image: url("../images/breakpoint-hover-icon.svg");
+  background-size: 18px 18px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .loading {
   height: 100%;
   width: 100%;
