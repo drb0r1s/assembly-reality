@@ -154,7 +154,7 @@ export class Assembler {
     }
 
     execute(speed, breakpoints) {
-        this.speed = speed;
+        if(this.speed !== speed) this.speed = speed;
 
         this.refresh.startInterval();
 
@@ -203,7 +203,10 @@ export class Assembler {
         });
     }
 
-    executeOne() {
+    executeOne(speed) {
+        // This line is really important to prevent rare edge case where user pauses the execution and then changes the speed from high to low, then continues exeuction in "step" mode.
+        if(this.speed !== speed) this.speed = speed;
+
         if(!this.isActive()) return -1; // -1 = No line to be highlighted.
 
         const IP = this.cpuRegisters.getValue("IP");

@@ -190,7 +190,7 @@ const Editor = () => {
         });
 
         const unsubscribeStep = Manager.subscribe("step", () => {
-            assemblerWorker.postMessage({ action: "step" });
+            assemblerWorker.postMessage({ action: "step", data: parseInt(speedRef.current) });
         });
 
         const unsubscribeReset = Manager.subscribe("reset", () => {
