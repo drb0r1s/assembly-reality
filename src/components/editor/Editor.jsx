@@ -245,7 +245,7 @@ const Editor = () => {
     }
 
     function addPage(content) {
-        clearMemory();
+        Manager.trigger("reset");
 
         setPages(prevPages => {
             const newPagesList = [...prevPages.list, `New page (${prevPages.counter + 1})`];
@@ -264,7 +264,7 @@ const Editor = () => {
         e.stopPropagation();
         if(!target) return; // The first page cannot be deleted.
 
-        clearMemory();
+        Manager.trigger("reset");
 
         setPages(prevPages => {
             let newActive = prevPages.active;
@@ -290,7 +290,7 @@ const Editor = () => {
     }
 
     function switchPage(active) {
-        clearMemory();
+        Manager.trigger("reset");
 
         setPages(prevPages => { return {...prevPages, active} });
 
@@ -323,10 +323,6 @@ const Editor = () => {
     function handleRenameKeyDown(e) {
         if(e.key === "Enter") submitRename();
         if(e.key === "Escape") setEditingPage(null);
-    }
-
-    function clearMemory() {
-        Manager.trigger("reset");
     }
     
     return(
