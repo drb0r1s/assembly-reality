@@ -153,7 +153,7 @@ export class Assembler {
         }
     }
 
-    execute(speed) {
+    execute(speed, breakpoints) {
         this.speed = speed;
 
         this.refresh.startInterval();
@@ -175,7 +175,18 @@ export class Assembler {
                 const cell = this.ram.matrix.get(IP);
 
                 try {
-                    if(this.isActive()) this.executeInstruction(cell);
+                    if(this.isActive()) {
+                        const line = this.lines.collection[IP];
+
+                        if(breakpoints.has(line)) {
+                            this.stop();
+                            resolve({ executed: true, highlight: line });
+
+                            return;
+                        }
+
+                        this.executeInstruction(cell);
+                    }
                 }
 
                 catch(error) {

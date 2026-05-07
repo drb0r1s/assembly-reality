@@ -24,14 +24,14 @@ self.onmessage = async e => {
         // All interactions with the UI are done using "instructionExecuted" action.
         case "run":
             // This method is asynchronous, because of the speed simulation.
-            result = await assembler.execute(data); // data: speed
+            result = await assembler.execute(data.speed, data.breakpoints); // data: { speed, breakpoints }
 
             if(result?.error) self.postMessage({ action, error: result.error });
             else self.postMessage({ action, data: result });
 
             break;
         case "assembleRun":
-            const { code, speed } = data;
+            const { code, speed, breakpoints } = data;
 
             result = assembler.assemble(code);
             
@@ -42,7 +42,7 @@ self.onmessage = async e => {
             
             else self.postMessage({ action: "assemble", data: {...result, isAssembleRun: true} });
 
-            result = await assembler.execute(speed);
+            result = await assembler.execute(speed, breakpoints);
             
             if(result?.error) self.postMessage({ action, error: result.error });
             else self.postMessage({ action: "run", data: {...result, isAssembleRun: true} });

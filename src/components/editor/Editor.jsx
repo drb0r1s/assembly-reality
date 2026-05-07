@@ -109,6 +109,8 @@ const Editor = () => {
                     Manager.sequence(() => {
                         Manager.set("isRunning", false);
                         Manager.set("isExecuted", true);
+
+                        if(data?.highlight && data?.highlight !== -1) Manager.trigger("highlightLine", data.highlight);
                     });
                     
                     break;
@@ -174,12 +176,12 @@ const Editor = () => {
 
         const unsubscribeRun = Manager.subscribe("run", () => {
             Manager.set("isRunning", true);
-            assemblerWorker.postMessage({ action: "run", data: parseInt(speedRef.current) });
+            assemblerWorker.postMessage({ action: "run", data: { speed: parseInt(speedRef.current), breakpoints: breakpointsRef.current } });
         });
 
         const unsubscribeAssembleRun = Manager.subscribe("assembleRun", () => {
             Manager.set("isAssembled", true);
-            assemblerWorker.postMessage({ action: "assembleRun", data: { code: getActiveCode(), speed: parseInt(speedRef.current) } });
+            assemblerWorker.postMessage({ action: "assembleRun", data: { code: getActiveCode(), speed: parseInt(speedRef.current), breakpoints: breakpointsRef.current } });
         });
 
         const unsubscribePause = Manager.subscribe("pause", () => {
