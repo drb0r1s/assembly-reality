@@ -291,7 +291,11 @@ const Editor = () => {
 
     function switchPage(active) {
         clearMemory();
+
         setPages(prevPages => { return {...prevPages, active} });
+
+        setBreakpoints(new Set());
+        breakpointsRef.current = new Set();
     }
 
     function startRename(e, index) {

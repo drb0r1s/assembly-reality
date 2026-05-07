@@ -20,6 +20,9 @@ export const useRichEditor = (breakpoints, setBreakpoints) => {
     const monaco = useMonaco();
     const theme = useManagerValue("theme");
 
+    const isRunning = useManagerValue("isRunning");
+    const isRunningRef = useRef(isRunning);
+
     useEffect(() => {
         const unsubscribeHighlightLine = Manager.subscribe("highlightLine", line => {
             if(line === -1 || line === undefined) return;
@@ -113,6 +116,10 @@ export const useRichEditor = (breakpoints, setBreakpoints) => {
         breakpointsRef.current = breakpoints;
     }, [breakpoints]);
 
+    useEffect(() => {
+        isRunningRef.current = isRunning;
+    }, [isRunning]);
+
     function handleEditorDidMount(editor, monacoInstance) {
         editorRef.current = editor;
 
@@ -171,6 +178,8 @@ export const useRichEditor = (breakpoints, setBreakpoints) => {
         const mouseDownDisposable = editor.onMouseDown(e => {
             unhighlightLine();
 
+            if(isRunningRef.current) return; // This functionality is disabled while the code is being executed.
+
             const { type, position } = e.target;
             if(type !== 2 && type !== 3) return; // 2 = glyph margin, 3 = line number
 
@@ -185,6 +194,8 @@ export const useRichEditor = (breakpoints, setBreakpoints) => {
         });
 
         const mouseMoveDisposable = editor.onMouseMove(e => {
+            if(isRunningRef.current) return; // This functionality is disabled while the code is being executed.
+
             const { type, position } = e.target;
 
             if (type !== 2 && type !== 3) {
